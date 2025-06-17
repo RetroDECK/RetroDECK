@@ -770,7 +770,7 @@ finit() {
 
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
-  prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
 
@@ -1569,7 +1569,7 @@ source_component_functions() {
   if [[ -n "$choice" ]]; then
     case "$choice" in
 
-    "retrodeck" )
+    "framework" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
       source "$rd_components/framework/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run

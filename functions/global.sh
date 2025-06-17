@@ -53,7 +53,7 @@ done
 export rd_components="/app/retrodeck/components"
 export rd_shared_libs="/app/retrodeck/components/shared-libs"
 
-source_component_functions "retrodeck" # Source this first as future functions will need to know these paths
+source_component_functions "framework" # Source this first as future functions will need to know these paths
 source_component_functions "internal"
 source_component_functions "external"
 
@@ -134,7 +134,7 @@ else # If the config file is existing i just read the variables
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
     conf_read
-    prepare_component "postmove" "retrodeck"
+    prepare_component "postmove" "framework"
     prepare_component "postmove" "all"
     conf_write
   fi

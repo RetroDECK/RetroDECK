@@ -121,7 +121,7 @@ configurator_move_folder_dialog() {
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
               declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
               if [[ "$rd_dir_name" == "rd_home_path" ]]; then # If the whole retrodeck folder was moved...
-                prepare_component "postmove" "retrodeck"
+                prepare_component "postmove" "framework"
               fi
               prepare_component "postmove" "all" # Update all the appropriate emulator path settings
               conf_write # Write the settings to retrodeck.cfg
