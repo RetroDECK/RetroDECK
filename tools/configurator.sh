@@ -294,7 +294,7 @@ configurator_reset_dialog() {
       --title "RetroDECK Configurator - Factory Reset" \
       --text="This will reset all RetroDECK settings and configurations to their default state, RetroDECk will restart with the first time setup.\n\n<span foreground='$purple'><b>Your personal data, such as games, saves and scraped content will remain untouched.</b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
-      prepare_component --factory-reset
+      prepare_component "factory-reset"
       configurator_process_complete_dialog "performing a factory reset"
     else # User clicked "Cancel"
       configurator_welcome_dialog
