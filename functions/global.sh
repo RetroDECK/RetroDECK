@@ -27,6 +27,7 @@ fi
 system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
 system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+system_cpu_info=$(flatpak-spawn --host lscpu | grep 'Model name' | cut -d':' -f2 | xargs) # Get CPU model name
 system_cpu_cores=$(nproc)
 system_cpu_system_cpu_system_cpu_max_threads=$(echo $(($(nproc) / 2)))
 
@@ -36,15 +37,16 @@ log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $system_distro_name $
 if [[ -n $container ]]; then
   log i "Running inside $container environment"
 fi
+log i "CPU: Using $system_cpu_info,$system_cpu_max_threads out of $system_cpu_cores available CPU cores for multi-threaded operations"
 log i "GPU: $system_gpu_info"
 log i "Resolution: $system_display_width x $system_display_height"
 if [[ $sd_native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
-log i "CPU: Using $system_cpu_max_threads out of $system_cpu_cores available CPU cores for multi-threaded operations"
 
 for file in /app/libexec/*.sh; do
   if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" ]]; then
+    log d "Sourcing $file"
     source "$file"
   fi
 done
@@ -59,15 +61,18 @@ source_component_functions "external"
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_xdg_config_logs_path" ]; then
+    log d "Creating RetroDECK logs directory at $rd_xdg_config_logs_path"
     create_dir "$rd_xdg_config_logs_path"
 fi
 
 # Initialize the API location and required files, if they don't already exist
 if [[ ! -d "$api_path" ]]; then
+  log d "Creating RetroDECK API directory at $api_path"
   create_dir "$api_path"
 fi
 if [[ ! -e "$api_lockfile" ]]; then
-  touch "$api_lockfile"
+  log d "Creating RetroDECK API lockfile at $api_lockfile"
+  touch "$api_lockfile" || log e "Failed to create RetroDECK API lockfile at $api_lockfile"
 fi
 
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
@@ -77,8 +82,7 @@ fi
 
 # If there is no config file I initalize the file with the the default values
 if [[ ! -f "$rd_conf" ]]; then
-  log w "RetroDECK config file not found in $rd_conf"
-  log i "Initializing"
+  log w "RetroDECK config file not found in $rd_conf, initializing with default values"
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   # Initializing the variables
   if [[ -z "$version" ]]; then
@@ -89,16 +93,16 @@ if [[ ! -f "$rd_conf" ]]; then
       fi
     else
       version="$hard_version"
+      log d "Setting version to $version"
     fi
   fi
 
   # Check if SD card path has changed from SteamOS update
-  if [[ ! -d "$sd_sdcard_default_path" && "$(ls -A "/run/media/deck/")" ]]; then
-    if [[ $(find "/run/media/deck/"* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
-      sd_sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print)"
-    else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, let the user pick which one to use
-      configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the default location, and multiple drives were detected.\nPlease browse to the location of the desired SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
-      sd_sdcard_default_path="$(directory_browse "SD Card Location")"
+  if [[ ! -d "$sd_sdcard_default_path" && "$(ls -A "/run/media/deck/" 2>/dev/null)" ]]; then
+    if [[ $(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
+      sd_sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null)"
+    else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, pick the first one silently
+      sd_sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | head -n 1)"
     fi
   fi
 
