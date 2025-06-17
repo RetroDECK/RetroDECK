@@ -1591,6 +1591,7 @@ source_component_functions() {
 
     "framework" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      log d "Sourcing $rd_components/framework/component_functions.sh"
       source "$rd_components/framework/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
     ;;
@@ -1598,7 +1599,9 @@ source_component_functions() {
     "internal" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
       source "$rd_components/es-de/component_functions.sh"
+      log d "Sourcing $rd_components/es-de/component_functions.sh"
       source "$rd_components/steam-rom-manager/component_functions.sh"
+      log d "Sourcing $rd_components/steam-rom-manager/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
     ;;
 
@@ -1616,6 +1619,7 @@ source_component_functions() {
     * )
       if [[ -n $(find "$rd_components/$choice" -maxdepth 1 -mindepth 1 -type f -name "component_functions.sh") ]]; then
         set -o allexport # Export all the variables found during sourcing, for use elsewhere
+        log d "Sourcing $rd_components/$choice/component_functions.sh"
         source "$rd_components/$choice/component_functions.sh"
         set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
       else
