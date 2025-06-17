@@ -56,8 +56,6 @@ export rd_components="/app/retrodeck/components"
 export rd_shared_libs="/app/retrodeck/components/shared-libs"
 
 source_component_functions "framework" # Source this first as future functions will need to know these paths
-source_component_functions "internal"
-source_component_functions "external"
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_xdg_config_logs_path" ]; then
@@ -147,4 +145,7 @@ else # If the config file is existing i just read the variables
   multi_user_data_folder="$rd_home_path/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
+# Source other component functions after retrodeck.cfg paths have been read
+source_component_functions "internal"
+source_component_functions "external"
 export GLOBAL_SOURCED=true
