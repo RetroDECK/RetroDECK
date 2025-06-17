@@ -42,9 +42,9 @@ api_get_compressible_games() {
       sleep 0.1
     done
     (
-    if [[ -d "$rd_home_roms_path/$system" ]]; then
+    if [[ -d "$roms_path/$system" ]]; then
       local compression_candidates
-      compression_candidates=$(find "$rd_home_roms_path/$system" -type f -not -iname "*.txt")
+      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
           while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
@@ -288,11 +288,11 @@ api_get_bios_file_status() {
     bios_systems=$(jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
     bios_desc=$(jq -r '.value.description // "No description provided"' <<< "$entry")
     required=$(jq -r '.value.required // "No"' <<< "$entry")
-    bios_paths=$(jq -r '.value.paths // "'"$rd_home_bios_path"'" | if type=="array" then join(", ") else . end' <<< "$entry")
+    bios_paths=$(jq -r '.value.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$entry")
 
     log d "Checking entry $bios_entry"
 
-    # Expand any embedded shell variables (e.g. $rd_home_saves_path or $rd_home_bios_path) with their actual values
+    # Expand any embedded shell variables (e.g. $saves_path or $bios_path) with their actual values
     bios_paths=$(echo "$bios_paths" | envsubst)
 
     # Skip if bios_file is empty
@@ -362,7 +362,7 @@ api_get_multifile_game_structure() {
     if [[ "$parent_dir" != *.m3u ]]; then
         m3u_files+=("$file")
     fi
-  done < <(find "$rd_home_roms_path" -type d -name ".*" -prune -o -type f -name "*.m3u" -print)
+  done < <(find "$roms_path" -type d -name ".*" -prune -o -type f -name "*.m3u" -print)
 
   if [[ ${#m3u_files[@]} -gt 0 ]]; then
     problem_files='[]'
@@ -418,7 +418,7 @@ api_get_empty_rom_folders() {
       sleep 0.1
     done
     (
-    local dir="$rd_home_roms_path/$system"
+    local dir="$roms_path/$system"
     local files=$(ls -A1 "$dir")
     local count=$(ls -A "$dir" | wc -l)
     local folder_is_empty="false"
@@ -448,7 +448,7 @@ api_get_empty_rom_folders() {
     fi
   ) &
   wait # wait for background tasks to finish
-  done < <(find "$rd_home_roms_path" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+  done < <(find "$roms_path" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
 
   if [[ $(jq 'length' "$empty_rom_folders_list") -gt 0 ]]; then
     local final_json=$(cat "$empty_rom_folders_list" | jq -r 'sort_by(.system)')

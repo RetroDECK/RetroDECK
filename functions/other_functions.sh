@@ -310,11 +310,11 @@ dir_prep() {
 }
 
 update_rpcs3_firmware() {
-  create_dir "$rd_home_roms_path/ps3/tmp"
-  chmod 777 "$rd_home_roms_path/ps3/tmp"
-  download_file "$rpcs3_firmware_url" "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
-  rpcs3 --installfw "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP"
-  rm -rf "$rd_home_roms_path/ps3/tmp"
+  create_dir "$roms_path/ps3/tmp"
+  chmod 777 "$roms_path/ps3/tmp"
+  download_file "$rpcs3_firmware_url" "$roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
+  rpcs3 --installfw "$roms_path/ps3/tmp/PS3UPDAT.PUP"
+  rm -rf "$roms_path/ps3/tmp"
 }
 
 update_vita3k_firmware() {
@@ -333,12 +333,12 @@ backup_retrodeck_userdata() {
   # It will also rotate backups so that there are only 3 maximum of each type (complete, core or custom)
   # USAGE: backup_retrodeck_userdata complete
   #        backup_retrodeck_userdata core
-  #        backup_retrodeck_userdata custom rd_home_saves_path rd_home_states_path /some/other/path
+  #        backup_retrodeck_userdata custom saves_path states_path /some/other/path
 
   create_dir "$backups_folder"
 
   backup_date=$(date +"%0m%0d_%H%M")
-  backup_log_file="$rd_home_logs_path/${backup_date}_${backup_type}_backup_log.log"
+  backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
 
   # Check if first argument is the type
   if [[ "$1" == "complete" || "$1" == "core" || "$1" == "custom" ]]; then
@@ -421,7 +421,7 @@ backup_retrodeck_userdata() {
 
   elif [[ "$backup_type" == "core" ]]; then
     for folder_name in "${!config_paths[@]}"; do
-      if [[ $folder_name =~ (rd_home_saves_path|rd_home_states_path|rd_home_logs_path) ]]; then # Only include these paths
+      if [[ $folder_name =~ (saves_path|states_path|logs_path) ]]; then # Only include these paths
         path_value="${config_paths[$folder_name]}"
         if [[ -e "$path_value" ]]; then
           paths_to_backup+=("$path_value")
@@ -852,13 +852,13 @@ install_retrodeck_starterpack() {
   # USAGE: install_retrodeck_starterpack
 
   ## DOOM section ##
-  cp /app/retrodeck/extras/doom1.wad "$rd_home_roms_path/doom/doom1.wad" # No -f in case the user already has it
+  cp /app/retrodeck/extras/doom1.wad "$roms_path/doom/doom1.wad" # No -f in case the user already has it
   create_dir "$XDG_CONFIG_HOME/ES-DE/gamelists/doom"
   if [[ ! -f "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
     cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml"
   fi
-  create_dir "$rd_home_downloaded_media_path/doom"
-  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$rd_home_downloaded_media_path/doom/"
+  create_dir "$downloaded_media_path/doom"
+  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$downloaded_media_path/doom/"
 }
 
 install_retrodeck_controller_profile() {
@@ -1349,11 +1349,11 @@ convert_to_markdown() {
 portmaster_show(){
   log d "Setting PortMaster visibility in ES-DE"
   if [ "$1" = "true" ]; then
-      log d "\"$rd_home_roms_path/portmaster/PortMaster.sh\" is not found, installing it"
-      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$rd_home_roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      log d "\"$roms_path/portmaster/PortMaster.sh\" is not found, installing it"
+      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
       set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
   elif [ "$1" = "false" ]; then
-    rm -rf "$rd_home_roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
+    rm -rf "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
     set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
   else
     log e "\"$1\" is not a valid choice, quitting"
@@ -1493,7 +1493,7 @@ repair_paths() {
   if [[ $invalid_path_found == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
     conf_read
-    dir_prep "$rd_home_logs_path" "$rd_xdg_config_logs_path"
+    dir_prep "$logs_path" "$rd_xdg_config_logs_path"
     prepare_component "postmove" "all"
     configurator_generic_dialog "RetroDECK Path Repair" "One or more incorrectly configured paths were repaired."
   else
