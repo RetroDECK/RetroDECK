@@ -66,13 +66,13 @@ if [ ! -d "$rd_xdg_config_logs_path" ]; then
 fi
 
 # Initialize the API location and required files, if they don't already exist
-if [[ ! -d "$api_path" ]]; then
-  log d "Creating RetroDECK API directory at $api_path"
-  create_dir "$api_path"
+if [[ ! -d "$rd_api_dir" ]]; then
+  log d "Creating RetroDECK API directory at $rd_api_dir"
+  create_dir "$rd_api_dir"
 fi
-if [[ ! -e "$api_lockfile" ]]; then
-  log d "Creating RetroDECK API lockfile at $api_lockfile"
-  touch "$api_lockfile" || log e "Failed to create RetroDECK API lockfile at $api_lockfile"
+if [[ ! -e "$rd_file_lock" ]]; then
+  log d "Creating RetroDECK API lockfile at $rd_file_lock"
+  touch "$rd_file_lock" || log e "Failed to create RetroDECK API lockfile at $rd_file_lock"
 fi
 
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
