@@ -7,7 +7,7 @@ blue="#6fbfff"
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
-
+  log i "Debug dialog for: $1" # showing the command in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Debug Dialog" \
@@ -17,6 +17,7 @@ debug_dialog() {
 configurator_process_complete_dialog() {
   # This dialog shows when a process is complete.
   # USAGE: configurator_process_complete_dialog "process text"
+  log i "Process complete dialog for: $1" # showing the process in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
@@ -32,7 +33,7 @@ configurator_process_complete_dialog() {
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
   # USAGE: configurator_generic_dialog "title text" "info text"
-  log i "Showing a configurator_generic_dialog"
+  log i "$2" # showing the message in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "$1" \
@@ -43,6 +44,7 @@ configurator_generic_question_dialog() {
   # This dialog provides a generic dialog for getting a response from a user.
   # USAGE: $(configurator_generic_question_dialog "title text" "action text")
   # This function will return a "true" if the user clicks "Yes", and "false" if they click "No".
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -57,6 +59,7 @@ configurator_destination_choice_dialog() {
   # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
   # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -73,6 +76,7 @@ configurator_reset_confirmation_dialog() {
   # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
   # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
   # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -86,6 +90,7 @@ configurator_reset_confirmation_dialog() {
 configurator_move_folder_dialog() {
   # This dialog will take a folder variable name from retrodeck.cfg and move it to a new location. The variable will be updated in retrodeck.cfg as well as any emulator configs where it occurs.
   # USAGE: configurator_move_folder_dialog "folder_variable_name"
+  log i "Showing a configurator_move_folder_dialog for $1"
   local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
   local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")/" # The path of that folder variable
   local source_root="$(echo "$dir_to_move" | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
