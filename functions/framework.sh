@@ -50,7 +50,7 @@ set_setting_value() {
       fi
     ;;
 
-    "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
+    "melonds" | "yuzu" | "citra" | "libretro_scummvm" | "gzdoom" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -178,7 +178,7 @@ get_setting_value() {
     fi
   ;;
 
-  "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+  "melonds" | "yuzu" | "gzdoom" ) # For files with this syntax - setting_name=setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else
