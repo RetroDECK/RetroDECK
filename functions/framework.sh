@@ -694,8 +694,6 @@ prepare_component() {
   fi
   log d "Preparing component: \"$component\", action: \"$action\""
 
-  conf_read
-
   # If component is "all", iterate over all components in $rd_components
   if [[ "$component" == "all" ]]; then
     for comp_dir in "$rd_components"/*; do
