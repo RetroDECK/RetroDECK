@@ -13,7 +13,9 @@ if [ -h "$rd_xdg_config_logs_path" ]; then # Check if internal logging folder is
     unlink "$rd_xdg_config_logs_path" # Remove broken symlink so the folder is recreated when sourcing logger.sh
   fi
 fi
+set -o allexport # Export all the variables found during sourcing, for use elsewhere
 source /app/libexec/logger.sh
+set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
 rotate_logs
 
 # OS detection
