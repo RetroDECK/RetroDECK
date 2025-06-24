@@ -196,23 +196,23 @@
     },
     "mesen_textures": {
       "filename": "how-to-install-Mesen-textures.txt",
-      "location": "$texture_packs_path/RetroArch-Mesen"
+      "location": "$texture_packs_path/retroarch/Mesen"
     },
     "ppsspp_textures": {
       "filename": "how-to-install-PPSSPP-textures.txt",
-      "location": "$texture_packs_path/PPSSPP"
+      "location": "$texture_packs_path/PPSSPP-SA"
     },
     "pcsx2_textures": {
       "filename": "how-to-install-PCSX2-textures.txt",
-      "location": "$texture_packs_path/PCSX2"
+      "location": "$texture_packs_path/pcsx2"
     },
     "mupen64plus_cache_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_path/RetroArch-Mupen64Plus/cache"
+      "location": "$texture_packs_path/retroarch/Mupen64Plus/cache"
     },
     "mupen64plus_hires_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_path/RetroArch-Mupen64Plus/hires_texture"
+      "location": "$texture_packs_path/retroarch/Mupen64Plus/hires_texture"
     },
     "duckstation_textures": {
       "filename": "how-to-install-Duckstation-textures.txt",
