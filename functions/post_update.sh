@@ -103,6 +103,7 @@ post_update() {
   retroarch_updater
   update_splashscreens
   deploy_helper_files
+  update_component_presets
   build_retrodeck_current_presets
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \

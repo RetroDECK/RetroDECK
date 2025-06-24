@@ -810,6 +810,7 @@ finit() {
 
   (
   prepare_component "reset" "all"
+  update_component_presets
   build_retrodeck_current_presets
   deploy_helper_files
 
