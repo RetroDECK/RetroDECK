@@ -220,19 +220,40 @@ build_preset_config() {
 }
 
 build_retrodeck_current_presets() {
-  # This function will read the presets sections of the retrodeck.cfg file and build the default state
+  # This function will read the presets sections of the retrodeck.cfg file and build the default state if it is anything other than disabled
   # This can also be used to build the "current" state post-update after adding new systems
   # USAGE: build_retrodeck_current_presets
 
-  while IFS= read -r preset_name # Iterate all presets listed in retrodeck.cfg
+  while IFS= read -r preset # Iterate all presets listed in retrodeck.cfg
   do
-    while IFS= read -r system_name # Iterate all system names in this preset
+    while IFS= read -r component # Iterate all system names in this preset
     do
-      local system_enabled=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset_name") # Read the variables value from active retrodeck.cfg
-      if [[ "$system_enabled" == "true" ]]; then
-        build_preset_config "$system_name" "$current_section"
+      local parent_component="$(jq -r --arg preset "$preset" --arg component "$component" '
+                                                                                          .presets[$preset]
+                                                                                          | paths(scalars)
+                                                                                          | select(.[-1] == $component)
+                                                                                          | if length > 1 then .[-2] else $preset end
+                                                                                          ' "$rd_conf")"
+      if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
+        parent_component="${parent_component%.cores}"
+        child_component="$component"
+        component="$parent_component"
       fi
-    done < <(jq -r --arg preset "$preset_name" '.presets[$preset] | keys[]' "$rd_conf")
+
+      local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+                                if $core != "" then
+                                  .[$component].compatible_presets[$core][$preset].[0] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[0] // empty
+                                end
+                              ' "$rd_components/$component/component_manifest.json")
+      
+      local preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset") # Read the variables value from active retrodeck.cfg
+      
+      if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
+        api_set_preset_state "$component" "$preset" "$preset_current_state"
+      fi
+    done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
   done < <(jq -r '.presets | keys[]' "$rd_conf")
 }
 
