@@ -114,6 +114,7 @@ if [[ ! -f "$rd_conf" ]]; then
     set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
     set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
   fi
 
   log i "Setting config file permissions"
