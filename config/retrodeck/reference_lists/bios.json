@@ -2412,6 +2412,222 @@
         "$rd_home_roms_path/apple2gs"
       ],
       "required": "required"
+    },
+    "d32.rom": {
+      "md5": [
+        "d35177f73cf303c5565aa13ef8ca5251",
+        "3420b96031078a4ef408cad7bf21a33f"
+      ],
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware",
+      "required": "required"
+    },
+    "d64rom1.rom": {
+      "md5": [
+        "5f0bee59710e55f5880e74890912ed78",
+        "6ab639e65c6e8fd832cb0d8ad4da1b60"
+      ],
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware",
+      "required": "required"
+    },
+    "d64tano.rom": {
+      "md5": "be9bc86ee5eb401d0a40d0377f65fefa",
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware"
+    },
+    "d64tano2.rom": {
+      "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware"
+    },
+    "d200rom1.rom": {
+      "md5": "be9bc86ee5eb401d0a40d0377f65fefa",
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware"
+    },
+    "d200rom2.rom": {
+      "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
+      "system": "tanodragon",
+      "description": "Tano Dragon Basic OS Firmware"
+    },
+    "ddos10.rom": {
+      "md5": "1c965da49b6c5459b8353630aa1482e7",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware",
+      "required": "required"      
+    },
+    "ddos11c.rom": {
+      "md5": "d8429af1a12f7438a4bf88a5b934cb3a",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },
+    "ddos12a.rom": {
+      "md5": "55e2535dbbed7f1a26b5f263d7c72c63",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },                
+    "ddos40.rom": {
+      "md5": "9ddc388632cd3c376b164ba5cfc64329",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },         
+    "ddos42.rom": {
+      "md5": "c956a854cbc4b9d1e69c000f78368668",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },
+    "deltados.rom": {
+      "md5": "024eac3db20f1b5cf98c30a0e4743201",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },
+    "dplus48.rom": {
+      "md5": "ee6f24d893a52b8efea9f787855456b5",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },    
+    "dplus49b.rom": {
+      "md5": "56f1b97314e4ca82491c465bb887059e",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },  
+    "dplus50.rom": {
+      "md5": "35de5d28da507ebb213a26e04241d940",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },   
+    "sdose6.rom": {
+      "md5": "9d85e6b7133f915c021156f4b9cdb512",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    }, 
+    "sdose8.rom": {
+      "md5": "167f409b7a4b992faabb784b061ab4c6",
+      "system": "tanodragon",
+      "description": "Tano Dragon DOS OS Firmware"     
+    },   
+    "cp400bas.rom": {
+      "md5": "f73da4d73d6db5cdb8b3cb6a50415e38",
+      "system": "tanodragon",
+      "description": "Prológica CP-400 Basic OS Firmware"    
+    },   
+    "cp400extbas.rom": {
+      "md5": "091581001577b4a83ccfd511829de0f1",
+      "system": "coco",
+      "description": "Prológica CP-400 Basic OS Firmware"    
+    },
+    "cp400dsk.rom": {
+      "md5": "16d3ab9bc935f0d5651ca3f0e3030846",
+      "system": "coco",
+      "description": "Prológica CP-400 DOS OS Firmware"     
+    },
+    "color64extbas.rom": {
+      "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer 64 Basic OS Firmware"     
+    },
+    "xroarbios.rom": {
+      "md5": "28dc97df470fb8660ef61b81dfd34f4a",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer 64 Basic OS Firmware"     
+    },
+    "bas10.rom": {
+      "md5": "a74f3d95b395dad7cdca19d560eeea74",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "bas11.rom": {
+      "md5": "c73fb4bff9621c5ab17f6220b20db82f",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "bas12.rom": {
+      "md5": "c933316c7d939532a13648850c1c2aa6",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"    
+    },
+    "bas13.rom": {
+      "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware",
+      "required": "required"        
+    },    
+    "bas14.rom": {
+      "md5": "ac33e16f677b4db52548d426174b1aaa",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "coco3.rom": {
+      "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "extbas10.rom": {
+      "md5": "fda72f415afe99b36f953bb9bc1253da",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "extbas11.rom": {
+      "md5": "21070aa0496142b886c562bf76d7c113",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+    },
+    "disk10.rom": {
+      "md5": "a64b3ef9efcc066b18d35b134068d1cc",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer DOS OS Firmware"     
+    },
+    "disk11.rom": {
+      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer DOS OS Firmware",
+      "required": "required"        
+    },
+    "fd502.rom": {
+      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer DOS OS Single side RSDOS"     
+    },
+    "fd502ds.rom": {
+      "md5": "b2d43757dc6851d866021ff6c4f59205",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer DOS OS Double sided RSDOS"     
+    },
+    "CCNPATCH.cas": {
+      "md5": "2c395ad58a842711931679b554483a90",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "CCNPATCH.wav": {
+      "md5": "a17397fb5408647a11d23bab959d1f97",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "DBPATCH.cas": {
+      "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "DBPATCH.wav": {
+      "md5": "6a07aeee664d81047672e6ff3541a12a",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "disk.rom": {
+      "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "disk12.rom": {
+      "md5": "4f2ef107cbe3f6b8d34198d25c9acecd",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+    },
+    "fd502.dll": {
+      "md5": "256573beb9e91d27926325c7cc986e0f",
+      "system": "coco",
+      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
     }
   }
 }
