@@ -664,13 +664,13 @@
       "system": "switch",
       "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "$rd_home_bios_path/switch/keys"
+      "paths": "$bios_path/switch/keys"
     },
     "title.keys": {
       "system": "switch",
       "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "$rd_home_bios_path/switch/keys"
+      "paths": "$bios_path/switch/keys"
     },
     "pico8": {
       "system": "PICO-8",
@@ -709,7 +709,7 @@
       "md5": "e10c53c2f8b90bab96ead2d368858623",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
-      "paths": "$rd_home_bios_path/dc",
+      "paths": "$bios_path/dc",
       "required": "required"
     },
     "naomi.zip": {
@@ -719,13 +719,13 @@
       ],
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "naomi2.zip": {
       "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "naomi_boot.bin": {
       "md5": [
@@ -737,7 +737,7 @@
         "arcade"
       ],
       "description": "Naomi BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "hod2bios.zip": {
       "md5": [
@@ -746,7 +746,7 @@
       ],
       "system": "dreamcast",
       "description": "Naomi The House of the Dead 2 BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "f355dlx.zip": {
       "md5": [
@@ -755,7 +755,7 @@
       ],
       "system": "dreamcast",
       "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "f355bios.zip": {
       "md5": [
@@ -767,7 +767,7 @@
         "arcade"
       ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "airlbios.zip": {
       "md5": [
@@ -779,7 +779,7 @@
         "arcade"
       ],
       "description": "Naomi Airline Pilots Deluxe BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "awbios.zip": {
       "md5": [
@@ -791,7 +791,7 @@
         "arcade"
       ],
       "description": "Naomi Atomiswave BIOS",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "bios.sms": {
       "md5": "840481177270d5642a14ca71ee72844c",
@@ -1425,14 +1425,14 @@
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
-      "paths": "$rd_home_bios_path/dc"
+      "paths": "$bios_path/dc"
     },
     "bios_J.sms": {
       "md5": "24a519c53f67b00640d0048ef7089105",
