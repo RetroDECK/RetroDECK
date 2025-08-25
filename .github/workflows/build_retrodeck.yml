@@ -243,6 +243,19 @@ jobs:
           echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/feat/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
+          # Add components version information at the top
+          if [ -f retrodeck-artifacts/components/components-version ]; then
+            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+            echo "## Components Information" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION)" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
+          elif [ -f components/components-version ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+            echo "## Components Information" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION)" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
+          fi
+
           echo "Cooker channel is provided for the community to test fixes and explore new functionality." >> $RELEASE_BODY_FILE
           echo "Please DO NOT open issues or ask support on this build." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
@@ -272,8 +285,9 @@ jobs:
           echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
-          # Append components version list
+          # Append components version list (detailed)
           if [ -f retrodeck-artifacts/components/components_version_list.md ]; then
+            echo "## Detailed Components List" >> $RELEASE_BODY_FILE
             cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
           else
             echo "WARNING: components_version_list.md not found." >> $RELEASE_BODY_FILE
@@ -303,6 +317,7 @@ jobs:
 
       # Publish Release
       - name: Publish release
+        id: publish-release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.TAG }}
@@ -314,6 +329,60 @@ jobs:
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Display Job Summary
+      - name: Display Job Summary
+        run: |
+          RELEASE_URL="https://github.com/RetroDECK/${{ env.REPO_NAME }}/releases/tag/${{ env.TAG }}"
+          
+          # Read components version if available
+          COMPONENTS_VERSION=""
+          if [ -f "retrodeck-artifacts/components/components-version" ]; then
+            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+          elif [ -f "components/components-version" ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+          fi
+          
+          # Create job summary
+          echo "# Release Published Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Release URL** | [${{ env.TAG }}]($RELEASE_URL) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tag** | \`${{ env.TAG }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Repository** | \`${{ env.REPO_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ env.BRANCH_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$COMPONENTS_VERSION" ]; then
+            echo "| **Components Version** | [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION) |" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Direct Link:** $RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          
+          # Add components information if available
+          if [ -f "retrodeck-artifacts/components/components_version_list.md" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat retrodeck-artifacts/components/components_version_list.md >> $GITHUB_STEP_SUMMARY
+          elif [ -f "components/components_version_list.md" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat components/components_version_list.md >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Also log to console
+          echo "Release published successfully!"
+          echo "Release URL: $RELEASE_URL"
+          echo "Tag: ${{ env.TAG }}"
+          echo "Repository: ${{ env.REPO_NAME }}"
+          echo "Branch: ${{ env.BRANCH_NAME }}"
+          if [ -n "$COMPONENTS_VERSION" ]; then
+            echo "🔧 Components Version: $COMPONENTS_VERSION"
+          fi
+          
+          # Create notice
+          echo "::notice title=Release Published::Release ${{ env.TAG }} has been published to $RELEASE_URL"
 
       - name: Post PR comment with artifacts link
         if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
