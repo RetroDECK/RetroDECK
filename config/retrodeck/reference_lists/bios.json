@@ -3,70 +3,70 @@
     "panafz1.bin": {
       "md5": "f47264dd47fe30f73ab3c010015c155b",
       "system": "3do",
-      "description": "Panasonic FZ-1"
+      "description": "Panasonic FZ‑1 cartridge BIOS for the 3DO console"
     },
     "panafz10.bin": {
       "md5": "51f2f43ae2f3508a14d9f56597e2d3ce",
       "system": "3do",
-      "description": "Panasonic FZ-10"
+      "description": "Panasonic FZ‑10 cartridge BIOS for the 3DO console"
     },
     "panafz10-norsa.bin": {
       "md5": "1477bda80dc33731a65468c1f5bcbee9",
       "system": "3do",
-      "description": "Panasonic FZ-10 [RSA Patch]"
+      "description": "Panasonic FZ‑10 BIOS with RSA patch applied"
     },
     "panafz10e-anvil.bin": {
       "md5": "a48e6746bd7edec0f40cff078f0bb19f",
       "system": "3do",
-      "description": "Panasonic FZ-10-E [Anvil]"
+      "description": "Panasonic FZ‑10‑E BIOS (Anvil version) for 3DO"
     },
     "panafz10e-anvil-norsa.bin": {
       "md5": "cf11bbb5a16d7af9875cca9de9a15e09",
       "system": "3do",
-      "description": "Panasonic FZ-10-E [Anvil RSA Patch]"
+      "description": "Panasonic FZ‑10‑E BIOS (Anvil) with RSA patch"
     },
     "panafz1j.bin": {
       "md5": "a496cfdded3da562759be3561317b605",
       "system": "3do",
-      "description": "Panasonic FZ-1J"
+      "description": "Japanese version of Panasonic FZ‑1 BIOS for 3DO"
     },
     "panafz1j-norsa.bin": {
       "md5": "f6c71de7470d16abe4f71b1444883dc8",
       "system": "3do",
-      "description": "Panasonic FZ-1J [RSA Patch]"
+      "description": "Japanese Panasonic FZ‑1 BIOS with RSA patch"
     },
     "goldstar.bin": {
       "md5": "8639fd5e549bd6238cfee79e3e749114",
       "system": "3do",
-      "description": "Goldstar GDO-101M"
+      "description": "Goldstar GDO‑101M BIOS for 3DO"
     },
     "sanyotry.bin": {
       "md5": "35fa1a1ebaaeea286dc5cd15487c13ea",
       "system": "3do",
-      "description": "Sanyo IMP-21J TRY"
+      "description": "Sanyo IMP‑21J TRY BIOS for 3DO"
     },
     "3do_arcade_saot.bin": {
       "md5": "8970fc987ab89a7f64da9f8a8c4333ff",
       "system": "3do",
-      "description": "Shootout At Old Tucson"
+      "description": "‘Shootout At Old Tucson’ arcade BIOS for 3DO"
     },
     "panafz1-kanji.bin": {
       "md5": "b8dc97f778a6245c58e064b0312e8281",
       "system": "3do",
-      "description": "Panasonic FZ-1 Kanji Font ROM",
-      "required": "Required for some Japanese games. Optional otherwise"
+      "description": "Kanji font ROM for Panasonic FZ‑1 (optional for Japanese games)",
+      "required": "Required for some Japanese games."
     },
     "panafz10ja-anvil-kanji.bin": {
       "md5": "428577250f43edc902ea239c50d2240d",
       "system": "3do",
-      "description": "Panasonic FZ-10JA Kanji Font ROM",
-      "required": "Required for some Japanese games. Optional otherwise"
+      "description": "Kanji font ROM for Panasonic FZ‑10JA (Anvil) – needed for Japanese titles",
+      "required": "Required for some Japanese games."
     },
     "panafz1j-kanji.bin": {
       "md5": "c23fb5d5e6bb1c240d02cf968972be37",
       "system": "3do",
-      "description": "Panasonic FZ-1J Kanji Font ROM",
-      "required": "Required for some Japanese games. Optional otherwise"
+      "description": "Kanji font ROM for Panasonic FZ‑1J – required for Japanese games",
+      "required": "Required for some Japanese games."
     },
     "neogeo.zip": {
       "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
@@ -100,13 +100,13 @@
     "midssio.zip": {
       "md5": "5904b0de768d1d506e766aa7e18994c1",
       "system": "fbneo",
-      "description": "Midway SSIO Sound Board Internal ROM",
+      "description": "Midway SSIO sound board internal ROM",
       "required": "required"
     },
     "nmk004.zip": {
       "md5": "bfacf1a68792d5348f93cf724d2f1dda",
       "system": "fbneo",
-      "description": "NMK004 Internal ROM",
+      "description": "NMK004 internal ROM",
       "required": "required"
     },
     "pgm.zip": {
@@ -124,13 +124,13 @@
     "ym2608.zip": {
       "md5": "79ae0d2bb1901b7e606b6dc339b79a97",
       "system": "fbneo",
-      "description": "YM2608 Internal ROM",
+      "description": "YM2608 FM synthesis chip ROM",
       "required": "required"
     },
     "cchip.zip": {
       "md5": "df6f8a3d83c028a5cb9f2f2be60773f3",
       "system": "fbneo",
-      "description": "C-Chip Internal ROM",
+      "description": "C‑Chip internal ROM",
       "required": "required"
     },
     "bubsys.zip": {
@@ -156,17 +156,17 @@
     },
     "coleco.zip": {
       "system": "fbneo",
-      "description": "ColecoVision System BIOS",
+      "description": "ColecoVision system BIOS",
       "required": "required"
     },
     "fdsbios.zip": {
       "system": "fbneo",
-      "description": "FDS System BIOS",
+      "description": "Nintendo Famicom Disk System BIOS",
       "required": "required"
     },
     "msx.zip": {
       "system": "fbneo",
-      "description": "MSX1 System BIOS",
+      "description": "MSX1 system BIOS",
       "required": "required"
     },
     "ngp.zip": {
@@ -181,41 +181,41 @@
     },
     "spec128.zip": {
       "system": "fbneo",
-      "description": "ZX Spectrum 128 BIOS",
+      "description": "ZX Spectrum 128K BIOS",
       "required": "required"
     },
     "spec1282a.zip": {
       "system": "fbneo",
-      "description": "ZX Spectrum 128 +2a BIOS",
+      "description": "ZX Spectrum 128K +2A BIOS",
       "required": "required"
     },
     "channelf.zip": {
       "system": "fbneo",
-      "description": "Fairchild Channel F BIOS",
+      "description": "Fairchild Channel‑F BIOS",
       "required": "required"
     },
     "5200.rom": {
       "md5": "281f20ea4320404ec820fb7ec0693b38",
       "system": "atari5200",
-      "description": "Atari 5200 BIOS",
+      "description": "Atari 5200 console BIOS",
       "required": "required"
     },
     "ATARIXL.ROM": {
       "md5": "06daac977823773a3eea3422fd26a703",
       "system": "atari5200",
-      "description": "Atari XL/XE OS BIOS ",
+      "description": "Atari XL/XE operating system ROM",
       "required": "required"
     },
     "ATARIBAS.ROM": {
       "md5": "0bac0c6a50104045d902df4503a4c30b",
       "system": "atari5200",
-      "description": "BASIC interpreter BIOS ",
+      "description": "Atari BASIC interpreter ROM",
       "required": "required"
     },
     "ATARIOSA.ROM": {
       "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
       "system": "atari5200",
-      "description": "atari800",
+      "description": "Atari OS ROM",
       "required": "required"
     },
     "ATARIOSB.ROM": {
@@ -224,19 +224,19 @@
         "a3e8d617c95d08031fe1b20d541434b2"
       ],
       "system": "atari5200",
-      "description": "BIOS for Atari 400/800 NTSC ",
+      "description": "Atari 400/800 NTSC BIOS",
       "required": "required"
     },
     "tos.img": {
       "md5": "c1c57ce48e8ee4135885cee9e63a68a2",
       "system": "atarist",
-      "description": "TOS Boot Image",
+      "description": "Atari ST TOS boot image",
       "required": "required"
     },
     "lynxboot.img": {
       "md5": "fcd403db69f54290b51035d82f835e7b",
       "system": "atarilynx",
-      "description": "Atari Lynx Boot Image",
+      "description": "Atari Lynx boot ROM",
       "required": "required"
     },
     "o2rom.bin": {
@@ -245,7 +245,7 @@
         "odyssey2",
         "videopac"
       ],
-      "description": "Odyssey2 BIOS - G7000 model",
+      "description": "Odyssey 2 / Videopac G7000 BIOS",
       "required": "required"
     },
     "c52.bin": {
@@ -254,7 +254,7 @@
         "odyssey2",
         "videopac"
       ],
-      "description": "Videopac+ French BIOS - G7000 model",
+      "description": "Videopac+ French BIOS (G7000 model)",
       "required": "required"
     },
     "g7400.bin": {
@@ -263,7 +263,7 @@
         "odyssey2",
         "videopac"
       ],
-      "description": "Videopac+ European BIOS - G7400 model",
+      "description": "Videopac+ European BIOS (G7400 model)",
       "required": "required"
     },
     "jopac.bin": {
@@ -272,19 +272,19 @@
         "odyssey2",
         "videopac"
       ],
-      "description": "Videopac+ French BIOS - G7400 model",
+      "description": "Videopac+ French BIOS (G7400 model)",
       "required": "required"
     },
     "exec.bin": {
       "md5": "62e761035cb657903761800f4437b8af",
       "system": "intellivision",
-      "description": "Executive ROM",
+      "description": "Intellivision Executive ROM",
       "required": "required"
     },
     "grom.bin": {
       "md5": "0cd5946c6473e42e8e4c2137785e427f",
       "system": "intellivision",
-      "description": "Graphics ROM",
+      "description": "Intellivision Graphics ROM",
       "required": "required"
     },
     "MSX.ROM": {
@@ -293,19 +293,19 @@
         "aa95aea2563cd5ec0a0919b44cc17d47"
       ],
       "system": "msx",
-      "description": "MSX BIOS",
+      "description": "MSX 1 BIOS",
       "required": "required"
     },
     "MSX2.ROM": {
       "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef",
       "system": "msx",
-      "description": "MSX2 BIOS",
+      "description": "MSX 2 BIOS",
       "required": "required"
     },
     "MSX2EXT.ROM": {
       "md5": "2183c2aff17cf4297bdb496de78c2e8a",
       "system": "msx",
-      "description": "MSX2 ExtROM",
+      "description": "MSX 2 Extended ROM",
       "required": "required"
     },
     "MSX2P.ROM": {
@@ -314,61 +314,61 @@
         "6d8c0ca64e726c82a4b726e9b01cdf1e"
       ],
       "system": "msx",
-      "description": "MSX2+ BIOS",
+      "description": "MSX 2+ BIOS",
       "required": "required"
     },
     "MSX2PEXT.ROM": {
       "md5": "7c8243c71d8f143b2531f01afa6a05dc",
       "system": "msx",
-      "description": "MSX2+ ExtROM",
+      "description": "MSX 2+ Extended ROM",
       "required": "required"
     },
     "DISK.ROM": {
       "md5": "80dcd1ad1a4cf65d64b7ba10504e8190",
       "system": "msx",
-      "description": "MSX DiskROM/BDOS",
+      "description": "MSX Disk ROM / BDOS",
       "required": "required"
     },
     "FMPAC.ROM": {
       "md5": "6f69cc8b5ed761b03afd78000dfb0e19",
       "system": "msx",
-      "description": "MSX FMPAC BIOS",
+      "description": "MSX FMPAC floppy controller BIOS",
       "required": "required"
     },
     "MSXDOS2.ROM": {
       "md5": "6418d091cd6907bbcf940324339e43bb",
       "system": "msx",
-      "description": "MSX-DOS 2",
+      "description": "MSX‑DOS 2 kernel",
       "required": "required"
     },
     "PAINTER.ROM": {
       "md5": "403cdea1cbd2bb24fae506941f8f655e",
       "system": "msx",
-      "description": "MSX Yamaha Painter",
+      "description": "MSX Yamaha Painter ROM",
       "required": "required"
     },
     "KANJI.ROM": {
       "md5": "febe8782b466d7c3b16de6d104826b34",
       "system": "msx",
-      "description": "Kanji Font",
+      "description": "MSX Kanji font ROM",
       "required": "required"
     },
     "mcpx_1.0.bin": {
       "md5": "d49c52a4102f6df7bcf8d0617ac475ed",
       "system": "xbox",
-      "description": "Used by XEMU emulator"
+      "description": "XEMU Xbox BIOS v1.0 (core system firmware)"
     },
     "Complex.bin": {
       "system": "xbox",
-      "description": "Used by XEMU emulator"
+      "description": "XEMU Complex BIOS – supplemental firmware for advanced features"
     },
     "Complex_4627v1.03.bin": {
       "system": "xbox",
-      "description": "Used by XEMU emulator"
+      "description": "XEMU Complex BIOS version 1.03 (revision 4627) – enhanced compatibility"
     },
     "Complex_4627.bin": {
       "system": "xbox",
-      "description": "Used by XEMU emulator"
+      "description": "XEMU Complex BIOS revision 4627 – baseline complex firmware"
     },
     "syscard3.pce": {
       "md5": "38179df8f4ac870017db21ebcbf53114",
@@ -376,7 +376,7 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "Super CD-ROM2 System V3.xx",
+      "description": "PC Engine Super CD‑ROM² System V3.xx BIOS",
       "required": "required"
     },
     "syscard2.pce": {
@@ -385,7 +385,7 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "CD-ROM System V2.xx"
+      "description": "PC Engine CD‑ROM System V2.xx BIOS"
     },
     "syscard1.pce": {
       "md5": "2b7ccb3d86baa18f6402c176f3065082",
@@ -393,7 +393,7 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "CD-ROM System V1.xx"
+      "description": "PC Engine CD‑ROM System V1.xx BIOS"
     },
     "gexpress.pce": {
       "md5": "6d2cb14fc3e1f65ceb135633d1694122",
@@ -401,110 +401,112 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "Game Express CD Card"
+      "description": "PC Engine Game Express CD Card BIOS"
     },
     "font.bmp": {
       "md5": "7da1e5b7c482d4108d22a5b09631d967",
       "system": "pc98",
-      "description": "Needed to display text",
+      "description": "PC‑98 text font bitmap (required for on‑screen characters)",
       "required": "required"
     },
     "FONT.ROM": {
       "md5": "2af6179d7de4893ea0b705c00e9a98d6",
       "system": "pc98",
-      "description": "Alternative font file",
+      "description": "Alternate PC‑98 font ROM (fallback if primary font missing)",
       "required": "Required if normal font file is missing"
     },
     "itf.rom": {
       "md5": "72ea51443070f0e9212bfc9b793ee28e",
       "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
+      "description": "PC‑98 main BIOS ROM",
       "required": "required"
     },
     "sound.rom": {
       "md5": "524473c1a5a03b17e21d86a0408ff827",
       "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
+      "description": "PC‑98 sound BIOS (handles audio hardware)",
       "required": "required"
     },
     "bios9821.rom": {
       "system": "pc98",
-      "description": "Optional BIOS file"
+      "description": "Optional PC‑98 BIOS extension (model 9821)",
+      "required": "optional"
     },
     "d8000.rom": {
       "system": "pc98",
-      "description": "Optional BIOS file"
+      "description": "Optional PC‑98 BIOS extension (model D8000)",
+      "required": "optional"
     },
     "2608_BD.WAV": {
       "md5": "d94546e70f17fd899be8df3544ab6cbb",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Bass Drum"
     },
     "2608_SD.WAV": {
       "md5": "d71004351c8bbfdad53b18222c061d49",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Snare Drum"
     },
     "2608_TOP.WAV": {
       "md5": "593cff6597ab9380d822b8f824fd2c28",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Top Cymbal"
     },
     "2608_HH.WAV": {
       "md5": "08c54a0c1f774a5538a848a6665a34b4",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Hi‑Hat"
     },
     "2608_TOM.WAV": {
       "md5": "96a4ead13f364734f79b0c58af2f0e1f",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Tom Tom"
     },
     "2608_RIM.WAV": {
       "md5": "465ea0768b27da404aec45dfc501404b",
       "system": "pc98",
-      "description": "YM2608 RYTHM sample"
+      "description": "YM2608 drum sample – Rim Shot"
     },
     "n88.rom": {
       "md5": "4f984e04a99d56c4cfe36115415d6eb8",
       "system": "pc88",
-      "description": "BIOS File",
+      "description": "PC‑88 core BIOS",
       "required": "required"
     },
     "n88n.rom": {
       "md5": "2ff07b8769367321128e03924af668a0",
       "system": "pc88",
-      "description": "Required for PC-8000 series emulation. (N BASIC mode)"
+      "description": "PC‑8000 series BIOS (N‑BASIC mode) – required for those machines"
     },
     "disk.rom": {
       "md5": "793f86784e5608352a5d7f03f03e0858",
       "system": "pc88",
-      "description": "Required for loading disk images"
+      "description": "PC‑88 disk controller BIOS – needed for disk images"
     },
     "n88knj1.rom": {
       "md5": "d81c6d5d7ad1a4bbbd6ae22a01257603",
       "system": "pc88",
-      "description": "Required for viewing kanji"
+      "description": "Kanji font ROM for PC‑88 (required for Japanese text)"
     },
     "n88_0.rom": {
       "md5": "d675a2ca186c6efcd6277b835de4c7e5",
       "system": "pc88",
-      "description": "Required for viewing kanji"
+      "description": "Additional Kanji font ROM for PC‑88"
     },
     "n88_1.rom": {
       "md5": "e844534dfe5744b381444dbe61ef1b66",
       "system": "pc88",
-      "description": "Optional BIOS file"
+      "description": "Optional PC‑88 BIOS extension (variant 1)"
     },
     "n88_2.rom": {
       "md5": "6548fa45061274dee1ea8ae1e9e93910",
       "system": "pc88",
-      "description": "Optional BIOS file"
+      "description": "Optional PC‑88 BIOS extension (variant 2)"
     },
     "n88_3.rom": {
       "md5": "fc4b76a402ba501e6ba6de4b3e8b4273",
       "system": "pc88",
-      "description": "Optional BIOS file"
+      "description": "Optional PC‑88 BIOS extension (variant 3)"
     },
     "neocd_f.rom": {
       "md5": "8834880c33164ccbe6476b559f3e37de",
@@ -512,7 +514,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Front Loader BIOS",
+      "description": "Neo Geo CD front‑loader BIOS",
       "required": "at least one for this system"
     },
     "neocd_sf.rom": {
@@ -521,7 +523,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Front Loader BIOS (SMKDAN 0.7b DEC 2010)",
+      "description": "Neo Geo CD front‑loader BIOS (SMKDAN 0.7b, Dec 2010)",
       "required": "at least one for this system"
     },
     "neocd_t.rom": {
@@ -530,7 +532,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Top Loader BIOS",
+      "description": "Neo Geo CD top‑loader BIOS",
       "required": "at least one for this system"
     },
     "neocd_st.rom": {
@@ -539,7 +541,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Top Loader BIOS (SMKDAN 0.7b DEC 2010)",
+      "description": "Neo Geo CD top‑loader BIOS (SMKDAN 0.7b, Dec 2010)",
       "required": "at least one for this system"
     },
     "neocd_z.rom": {
@@ -548,7 +550,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "CDZ BIOS",
+      "description": "Neo Geo CDZ BIOS (required for CDZ discs)",
       "required": "at least one for this system"
     },
     "neocd_sz.rom": {
@@ -557,7 +559,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "CDZ BIOS (SMKDAN 0.7b DEC 2010)",
+      "description": "Neo Geo CDZ BIOS (SMKDAN 0.7b, Dec 2010)",
       "required": "at least one for this system"
     },
     "front-sp1.bin": {
@@ -566,7 +568,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Front Loader BIOS (MAME)",
+      "description": "MAME front‑loader BIOS (SP1 version)",
       "required": "at least one for this system"
     },
     "top-sp1.bin": {
@@ -575,7 +577,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Top Loader BIOS (MAME)",
+      "description": "MAME top‑loader BIOS (SP1 version)",
       "required": "at least one for this system"
     },
     "neocd.bin": {
@@ -584,7 +586,7 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "CDZ BIOS (MAME)",
+      "description": "MAME CDZ BIOS (generic)",
       "required": "at least one for this system"
     },
     "uni-bioscd.rom": {
@@ -593,58 +595,77 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "Universe BIOS CD 3.3"
+      "description": "Universal Neo Geo CD BIOS v3.3"
     },
     "gb_bios.bin": {
       "md5": "32fbbd84168d3482956eb3c5051637f5",
       "system": "gb",
-      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+      "description": "Game Boy BIOS (shows Nintendo logo at boot; optional)",
+      "required": "optional"
     },
     "gbc_bios.bin": {
       "md5": "dbfce9db9deaa2567f6a84fde55f9680",
       "system": "gbc",
-      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+      "description": "Game Boy Color BIOS (shows Nintendo logo at boot; optional)",
+      "required": "optional"
     },
     "gba_bios.bin": {
       "md5": "a860e8c0b6d573d191e4ec7db1b1e4f6",
       "system": "gba",
-      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+      "description": "Game Boy Advance BIOS (shows Nintendo logo at boot; optional)",
+      "required": "optional"
     },
     "aes_keys.txt": {
       "system": "n3ds",
-      "description": "Decryption keys used by Citra emulator"
+      "description": "Decryption keys for Citra 3DS",
+      "required": "required"
     },
     "bios7.bin": {
       "md5": "df692a80a5b1bc90728bc3dfc76cd948",
       "system": "nds",
-      "description": "Nintendo DS arm7 bios (Required only by MelonDS Standalone)"
+      "description": "Nintendo DS ARM7 BIOS",
+      "required": "required"
     },
     "bios9.bin": {
       "md5": "a392174eb3e572fed6447e956bde4b25",
       "system": "nds",
-      "description": "Nintendo DS arm9 bios (Required only by MelonDS Standalone)"
+      "description": "Nintendo DS ARM9 BIOS",
+      "required": "required"
     },
     "firmware.bin": {
       "md5": "e45033d9b0fa6b0de071292bba7c9d13",
       "system": "nds",
-      "description": "Nintendo DS firmware (Required only by MelonDS Standalone)"
+      "description": "Nintendo DS firmware",
+      "required": "required"
     },
     "biosdsi7.bin": {
       "sha256": "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2",
       "system": "nds",
-      "description": "Nintendo DSi arm7 bios (Required for DSi games)",
+      "description": "Nintendo DSi ARM7 BIOS - DSi",
       "required": "required"
     },
     "biosdsi9.bin": {
       "sha256": "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce",
       "system": "nds",
-      "description": "Nintendo DSi arm9 bios (Required for DSi games)",
+      "description": "Nintendo DSi ARM9 BIOS - DSi",
+      "required": "required"
+    },
+    "ps2-0200a-20040614.bin": {
+      "md5": "d333558cc14561c1fdc334c75d5f37b7",
+      "system": "ps2",
+      "description": "PlayStation 2 US BIOS",
+      "required": "required"
+    },
+    "ps2-0200e-20040614.bin": {
+      "md5": "dc752f160044f2ed5fc1f4964db2a095",
+      "system": "ps2",
+      "description": "PlayStation 2 EU BIOS",
       "required": "required"
     },
     "dsifirmware.bin": {
       "sha256": "11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99",
       "system": "nds",
-      "description": "Nintendo DSi firmware (Required for DSi games)",
+      "description": "Nintendo DSi firmware - DSi",
       "required": "required"
     },
     "disksys.rom": {
@@ -653,56 +674,56 @@
         "nes",
         "sfc"
       ],
-      "description": "Family Computer Disk System BIOS - Required for Family Computer Disk System emulation"
+      "description": "Family Computer Disk System BIOS"
     },
     "bios.min": {
       "md5": "1e4fb124a3a886865acb574f388c803d",
       "system": "pokemini",
-      "description": "Pokémon Mini BIOS"
+      "description": "Pokémon Mini BIOS"
     },
     "prod.keys": {
       "system": "switch",
-      "description": "A file required for Switch emulation",
+      "description": "Production keys for Switch emulation",
       "required": "required",
       "paths": "$bios_path/switch/keys"
     },
     "title.keys": {
       "system": "switch",
-      "description": "A file required for Switch emulation",
+      "description": "Title‑specific keys for Switch emulation",
       "required": "required",
       "paths": "$bios_path/switch/keys"
     },
     "pico8": {
       "system": "PICO-8",
-      "description": "The PICO-8 executable",
+      "description": "PICO‑8 executable",
       "required": "required"
     },
     "pico8.dat": {
       "system": "PICO-8",
-      "description": "A PICO-8 system file",
+      "description": "PICO‑8 system data file",
       "required": "required"
     },
     "pico8_dyn": {
       "system": "PICO-8",
-      "description": "A PICO-8 system file",
+      "description": "Dynamic library for PICO‑8",
       "required": "required"
     },
     "bios_CD_E.bin": {
       "md5": "e66fa1dc5820d254611fdcdba0662372",
       "system": "segacd",
-      "description": "MegaCD EU BIOS",
+      "description": "Sega Mega‑CD EU BIOS",
       "required": "at least one for this system"
     },
     "bios_CD_U.bin": {
       "md5": "2efd74e3232ff260e371b99f84024f7f",
       "system": "segacd",
-      "description": "SegaCD US BIOS",
+      "description": "Sega CD US BIOS",
       "required": "at least one for this system"
     },
     "bios_CD_J.bin": {
       "md5": "278a9397d192149e84e820ac621a8edd",
       "system": "segacd",
-      "description": "MegaCD JP BIOS",
+      "description": "Sega Mega‑CD JP BIOS",
       "required": "at least one for this system"
     },
     "dc_boot.bin": {
@@ -718,13 +739,13 @@
         "526eda1e2a7920c92c88178789d71d84"
       ],
       "system": "dreamcast",
-      "description": "Naomi BIOS",
+      "description": "Naomi arcade BIOS archive",
       "paths": "$bios_path/dc"
     },
     "naomi2.zip": {
       "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
       "system": "dreamcast",
-      "description": "Naomi BIOS",
+      "description": "Second Naomi BIOS set",
       "paths": "$bios_path/dc"
     },
     "naomi_boot.bin": {
@@ -736,7 +757,7 @@
         "dreamcast",
         "arcade"
       ],
-      "description": "Naomi BIOS",
+      "description": "Naomi boot BIOS (used by many arcade boards)",
       "paths": "$bios_path/dc"
     },
     "hod2bios.zip": {
@@ -745,7 +766,7 @@
         "f4011d3116500354edf7302a90402711"
       ],
       "system": "dreamcast",
-      "description": "Naomi The House of the Dead 2 BIOS",
+      "description": "House of the Dead 2 Naomi BIOS",
       "paths": "$bios_path/dc"
     },
     "f355dlx.zip": {
@@ -754,7 +775,7 @@
         "1028615bcac4c31634a3364ce5c04044"
       ],
       "system": "dreamcast",
-      "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
+      "description": "Ferrari F355 Challenge Deluxe Naomi BIOS",
       "paths": "$bios_path/dc"
     },
     "f355bios.zip": {
@@ -766,7 +787,7 @@
         "dreamcast",
         "arcade"
       ],
-      "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
+      "description": "Ferrari F355 Challenge Twin/Deluxe Naomi BIOS",
       "paths": "$bios_path/dc"
     },
     "airlbios.zip": {
@@ -778,7 +799,7 @@
         "dreamcast",
         "arcade"
       ],
-      "description": "Naomi Airline Pilots Deluxe BIOS",
+      "description": "Airline Pilots Deluxe Naomi BIOS",
       "paths": "$bios_path/dc"
     },
     "awbios.zip": {
@@ -790,28 +811,28 @@
         "dreamcast",
         "arcade"
       ],
-      "description": "Naomi Atomiswave BIOS",
+      "description": "Atomiswave Naomi BIOS",
       "paths": "$bios_path/dc"
     },
     "bios.sms": {
       "md5": "840481177270d5642a14ca71ee72844c",
       "system": "mastersystem",
-      "description": "SEGA Master System BIOS"
+      "description": "Sega Master System BIOS"
     },
     "bios.gg": {
       "md5": "672e104c3be3a238301aceffc3b23fd6",
       "system": "gamegear",
-      "description": "SEGA Game Gear BIOS"
+      "description": "Sega Game Gear BIOS"
     },
     "BIOS.col": {
       "md5": "2c66f5911e5b42b8ebe113403548eee7",
       "system": "colecovision",
-      "description": "Colecovision BIOS"
+      "description": "ColecoVision BIOS"
     },
     "colecovision.rom": {
       "md5": "2c66f5911e5b42b8ebe113403548eee7",
       "system": "colecovision",
-      "description": "Colecovision BIOS"
+      "description": "ColecoVision ROM image (identical to BIOS.col)"
     },
     "sega_101.bin": {
       "md5": "85ec9ca47d8f6807718151cbcca8b964",
@@ -828,7 +849,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Saturn US.mdEU - US/EU BIOS",
+      "description": "Saturn US/EU BIOS",
       "required": "required"
     },
     "mpr-18811-mx.ic1": {
@@ -837,7 +858,8 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "The King of Fighters 95 ROM Cartridge (Required for this game)"
+      "description": "The King of Fighters 95 cartridge",
+      "required": "required for this title"
     },
     "mpr-19367-mx.ic1": {
       "md5": "1cd19988d1d72a3e7caa0b73234c96b4",
@@ -845,280 +867,283 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Ultraman: Hikari no Kyojin Densetsu ROM Cartridge (Required for this game)"
+      "description": "Ultraman: Hikari no Kyojin Densetsu cartridge",
+      "required": "required for this title"
     },
     "iplrom.dat": {
       "md5": "7fd4caabac1d9169e289f0f7bbf71d8e",
       "system": "x68000",
-      "description": "X68000 BIOS",
+      "description": "X68000 IPL ROM",
       "required": "required"
     },
     "cgrom.dat": {
       "md5": "cb0a5cfcf7247a7eab74bb2716260269",
       "system": "x68000",
-      "description": "Font file",
+      "description": "X68000 character generator ROM",
       "required": "required"
     },
     "iplrom30.dat": {
       "md5": "f373003710ab4322642f527f567e020a",
       "system": "x68000",
-      "description": "X68000 BIOS 2"
+      "description": "X68000 secondary IPL ROM"
     },
     "iplromcdc_flash.bino.dat": {
       "md5": "cc78d4f4900f622bd6de1aed7f52592f",
       "system": "x68000",
-      "description": "X68000 BIOS 3"
+      "description": "X68000 flash IPL ROM variant"
     },
     "iplromxv.dat": {
       "md5": "0617321daa182c3f3d6f41fd02fb3275",
       "system": "x68000",
-      "description": "X68000 BIOS 4"
+      "description": "X68000 XV series IPL ROM"
     },
     "psxonpsp660.bin": {
       "md5": "c53ca5908936d412331790f4426c6c33",
       "system": "psx",
-      "description": "PS1 BIOS from PSP",
+      "description": "PlayStation BIOS extracted from PSP",
       "required": "at least one for this system"
     },
     "scph5500.bin": {
       "md5": "8dd7d5296a650fac7319bce665a6a53c",
       "system": "psx",
-      "description": "PS1 JP BIOS",
+      "description": "PlayStation JP BIOS",
       "required": "at least one for this system"
     },
     "scph5501.bin": {
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
-      "description": "PS1 US BIOS",
+      "description": "PlayStation US BIOS",
       "required": "at least one for this system"
     },
     "scph5502.bin": {
       "md5": "32736f17079d0b2b7024407c39bd3050",
       "system": "psx",
-      "description": "PS1 EU BIOS",
+      "description": "PlayStation EU BIOS",
       "required": "at least one for this system"
     },
     "scph7001.bin": {
       "md5": "1e68c231d0896b7eadcad1d7d8e76129",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation BIOS (generic, required for at least one region)",
       "required": "at least one for this system"
     },
     "scph7002.bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation BIOS (alternate, required for at least one region)",
       "required": "at least one for this system"
     },
     "scph7003.bin": {
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation BIOS duplicate",
       "required": "at least one for this system"
     },
     "scph7502.bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation BIOS (additional copy, required for at least one region)",
       "required": "at least one for this system"
     },
     "scph9002(7502).bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation BIOS (variant, required for at least one region)",
       "required": "at least one for this system"
     },
     "ps1_rom.bin": {
       "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "Generic PlayStation BIOS",
       "required": "at least one for this system"
     },
     "ps2-0200a-20040614.bin": {
       "md5": "d333558cc14561c1fdc334c75d5f37b7",
       "system": "ps2",
-      "description": "PS2 US BIOS",
-      "required": "at least one for this system"
+      "description": "PlayStation 2 US BIOS",
+      "required": "required"
     },
     "ps2-0200e-20040614.bin": {
       "md5": "dc752f160044f2ed5fc1f4964db2a095",
       "system": "ps2",
-      "description": "PS2 EU BIOS",
-      "required": "at least one for this system"
+      "description": "PlayStation 2 EU BIOS",
+      "required": "required"
     },
     "ps2-0200j-20040614.bin": {
       "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
       "system": "ps2",
-      "description": "PS2 JP BIOS",
+      "description": "Japanese PlayStation 2 BIOS (SCPH‑10000 series, released 14 Jun 2004)",
       "required": "at least one for this system"
     },
     "128p-0.rom": {
       "md5": "a249565f03b98d004ee7f019570069cd",
       "system": "zxspectrum",
-      "description": "Pentagon 128K/512K/1024 ROM",
+      "description": "Pentagon 128 KB/512 KB/1 MB ROM for ZX Spectrum +3",
       "required": "required"
     },
     "128p-1.rom": {
       "md5": "6e09e5d3c4aef166601669feaaadc01c",
       "system": "zxspectrum",
-      "description": "Pentagon 128K/512K/1024 ROM",
+      "description": "Duplicate of Pentagon 128 KB/512 KB/1 MB ROM (alternative dump)",
       "required": "required"
     },
     "trdos.rom": {
       "md5": "0da70a5d2a0e733398e005b96b7e4ba6",
       "system": "zxspectrum",
-      "description": "Pentagon 128K/512K/1024 ROM",
+      "description": "TR‑DOS disk operating system ROM for ZX Spectrum +3",
       "required": "required"
     },
     "gluck.rom": {
       "md5": "d5869034604dbfd2c1d54170e874fd0a",
       "system": "zxspectrum",
-      "description": "Pentagon 512K/1024 ROM",
+      "description": "Pentagon 512 KB/1 MB ROM (Glück variant) for Spectrum +3",
       "required": "required"
     },
     "256s-0.rom": {
       "md5": "b9fda5b6a747ff037365b0e2d8c4379a",
       "system": "zxspectrum",
-      "description": "Scorpion 256K ROM",
+      "description": "Scorpion 256 KB ROM – first bank",
       "required": "required"
     },
     "256s-1.rom": {
       "md5": "643861ad34831b255bf2eb64e8b6ecb8",
       "system": "zxspectrum",
-      "description": "Scorpion 256K ROM",
+      "description": "Scorpion 256 KB ROM – second bank",
       "required": "required"
     },
     "256s-2.rom": {
       "md5": "d8ad507b1c915a9acfe0d73957082926",
       "system": "zxspectrum",
-      "description": "Scorpion 256K ROM",
+      "description": "Scorpion 256 KB ROM – third bank",
       "required": "required"
     },
     "256s-3.rom": {
       "md5": "ce0723f9bc02f4948c15d3b3230ae831",
       "system": "zxspectrum",
-      "description": "Scorpion 256K ROM",
+      "description": "Scorpion 256 KB ROM – fourth bank",
       "required": "required"
     },
     "7800 BIOS (E).rom": {
       "md5": "397bb566584be7b9764e7a68974c4263",
       "system": "atari7800",
-      "description": "Atari 7800 Europe BIOS"
+      "description": "Atari 7800 European (PAL) BIOS for ProSystem emulator"
     },
     "7800 BIOS (U).rom": {
       "md5": "0763f1ffb006ddbe32e52d497ee848ae",
       "system": "atari7800",
-      "description": "Atari 7800 US BIOS"
+      "description": "Atari 7800 US (NTSC) BIOS for ProSystem emulator"
     },
     "kick34005.A500": {
       "md5": "82a21c1890cae844b3df741f2762d48d",
       "system": "amiga",
-      "description": "Amiga BIOS"
+      "description": "Kickstart 3.4 ROM for Amiga 500"
     },
     "kick40063.A600": {
       "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
       "system": "amiga",
-      "description": "Amiga BIOS"
+      "description": "Kickstart 4.0 ROM for Amiga 600"
     },
     "kick40068.A1200": {
       "md5": "646773759326fbac3b2311fd8c8793ee",
       "system": "amiga",
-      "description": "Amiga BIOS"
+      "description": "Kickstart 4.0 ROM for Amiga 1200"
     },
     "sl31253.bin": {
       "md5": "ac9804d4c0e9d07e33472e3726ed15c3",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS"
+      "description": "Fairchild Channel F BIOS – first revision"
     },
     "sl31254.bin": {
       "md5": "da98f4bb3242ab80d76629021bb27585",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS"
+      "description": "Fairchild Channel F BIOS – second revision"
     },
     "sl90025.bin": {
       "md5": "95d339631d867c8f1d15a5f2ec26069d",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS"
+      "description": "Fairchild Channel F BIOS – third revision"
     },
     "prboom.wad": {
       "md5": "72ae1b47820fcc93cc0df9c428d0face",
       "system": "doom",
-      "description": "PrBoom RetroArch Core"
+      "description": "PrBoom‑derived WAD containing the Doom engine assets for RetroArch"
     },
     "freej2me-lr.jar": {
       "md5": "ccd92e7156ce2f0ce14c88ffb68a16eb",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS",
+      "description": "FreeJ2ME BIOS – lightweight runtime (low‑res) version",
       "required": "required"
     },
     "freej2me-sdl.jar": {
       "md5": "4da74084fc1b1bd3d776ed8d3ee648de",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS",
+      "description": "FreeJ2ME BIOS – SDL‑based graphics backend",
       "required": "required"
     },
     "freej2me.jar": {
       "md5": "29a92d0867da2917275b7c6c805d256f",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS",
+      "description": "FreeJ2ME BIOS – default full‑feature build",
       "required": "required"
     },
     "MacII.ROM": {
       "md5": "66223be1497460f1e60885eeb35e03cc",
       "system": "mac2",
-      "description": "Macintosh II BIOS",
+      "description": "Macintosh II ROM image (original 128 KB firmware)",
       "required": "required"
     },
     "CARTS.SHA": {
       "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3",
       "system": "msx",
-      "description": "MSX Carts BIOS"
+      "description": "MSX cartridge slot BIOS (handles external cart loading)",
+      "required": "required"
     },
     "FMPAC16.ROM": {
       "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3",
       "system": "msx",
-      "description": "MSX FMPAC 16 BIOS",
+      "description": "MSX‑FMPAC 16‑bit floppy controller BIOS",
       "required": "required"
     },
     "RS232.ROM": {
       "md5": "279efd1eae0d358eecd4edc7d9adedf3",
       "system": "msx",
-      "description": "MSX RS232 BIOS"
+      "description": "MSX RS‑232 serial port BIOS",
+      "required": "required"
     },
     "CYRILLIC.FNT": {
       "md5": "85b38e4128bbc300e675f55b278683a8",
       "system": "msx",
-      "description": "MSX Cyrillic Font"
+      "description": "MSX Cyrillic character font"
     },
     "DEFAULT.FNT": {
       "md5": "85b38e4128bbc300e675f55b278683a8",
       "system": "msx",
-      "description": "MSX Default Font"
+      "description": "MSX default Latin‑1 character font"
     },
     "INTERNAT.FNT": {
       "md5": "ac4f4a90c1b1887db48ded39c9d9c847",
       "system": "msx",
-      "description": "MSX Internal Font"
+      "description": "MSX international (multilingual) font set"
     },
     "ITALIC.FNT": {
       "md5": "c83e50e9f33b8dd893c414691822740d",
       "system": "msx",
-      "description": "MSX Italic Font"
+      "description": "MSX italic style font"
     },
     "JAPANESE.FNT": {
       "md5": "aa28f0703b951a6be8df3e28e20d263d",
       "system": "msx",
-      "description": "MSX Japanese Font"
+      "description": "MSX Japanese Katakana/Hiragana font"
     },
     "KOREAN.FNT": {
       "md5": "73291e76638a2f5aa2eceb843df468f4",
       "system": "msx",
-      "description": "MSX Korean Font"
+      "description": "MSX Korean Hangul font"
     },
     "syscard2u.pce": {
       "md5": "94279f315e8b52904f65ab3108542afe",
       "system": "turbografx16",
-      "description": "TurboGrafx-16 BIOS"
+      "description": "TurboGrafx‑16 (PC‑Engine) system card BIOS"
     },
     "bios.rom": {
       "md5": [
@@ -1126,43 +1151,43 @@
         "e246140dec5124c5e404869a84caefce"
       ],
       "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
+      "description": "NEC PC‑9800 series BIOS (dual‑dump for compatibility)",
       "required": "required"
     },
     "font.rom": {
       "md5": "38d32748ae49d1815b0614970849fd40",
       "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
+      "description": "NEC PC‑9800 font ROM (character glyph set)",
       "required": "required"
     },
     "fx-scsi.rom": {
       "md5": "430e9745f9235c515bc8e652d6ca3004",
       "system": "pcfx",
-      "description": "NEC PC-FX BIOS",
+      "description": "PC‑FX SCSI controller BIOS",
       "required": "required"
     },
     "pcfx.rom": {
       "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
       "system": "pcfx",
-      "description": "NEC PC-FX BIOS",
+      "description": "Core NEC PC‑FX BIOS image",
       "required": "required"
     },
     "pcfxbios.bin": {
       "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
       "system": "pcfx",
-      "description": "NEC PC-FX BIOS",
+      "description": "Duplicate of pcfx.rom – primary PC‑FX BIOS",
       "required": "required"
     },
     "pcfxga.rom": {
       "md5": "5885bc9a64bf80d4530b9b9b978ff587",
       "system": "pcfx",
-      "description": "NEC PC-FX BIOS",
+      "description": "PC‑FX graphics accelerator BIOS",
       "required": "required"
     },
     "pcfxv101.bin": {
       "md5": "e2fb7c7220e3a7838c2dd7e401a7f3d8",
       "system": "pcfx",
-      "description": "NEC PC-FX BIOS",
+      "description": "PC‑FX v1.01 BIOS update",
       "required": "required"
     },
     "gc-dvd-20010608.bin": {
@@ -1173,17 +1198,17 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube DVD BIOS"
+      "description": "GameCube DVD BIOS (June 2001 release) – universal version"
     },
     "gc-dvd-20010831.bin": {
       "md5": "b953eb1a8fc9922b3f7051c1cdc451f1",
+      "system": "gc",
       "paths": [
         "$rd_home_saves_path/gc/dolphin/EU",
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "system": "gc",
-      "description": "Gamecube DVD BIOS"
+      "description": "GameCube DVD BIOS (August 2001) – updated checksum"
     },
     "gc-dvd-20020402.bin": {
       "md5": "413154dd0e2c824c9b18b807fd03ec4e",
@@ -1193,7 +1218,7 @@
         "$rd_home_saves_paths_paths_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube DVD BIOS"
+      "description": "GameCube DVD BIOS (April 2002) – latest public release"
     },
     "gc-dvd-20020823.bin": {
       "md5": "c03f6bbaf644eb9b3ee261dbe199eb42",
@@ -1203,7 +1228,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube DVD BIOS"
+      "description": "GameCube DVD BIOS (August 2002) – final revision"
     },
     "gc-ntsc-10.bin": {
       "md5": "fc924a7c879b661abc37cec4f018fdf3",
@@ -1212,7 +1237,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube NTSC BIOS"
+      "description": "GameCube NTSC (US/Japan) BIOS – version 10"
     },
     "gc-ntsc-11.bin": {
       "md5": "019e39822a9ca3029124f74dd4d55ac4",
@@ -1221,7 +1246,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube NTSC BIOS"
+      "description": "GameCube NTSC BIOS – version 11 (minor bug‑fix)"
     },
     "gc-ntsc-12.bin": {
       "md5": "b17148254a5799684c7d783206504926",
@@ -1230,35 +1255,35 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "Gamecube NTSC BIOS"
+      "description": "GameCube NTSC BIOS – version 12 (latest NTSC build)"
     },
     "gc-pal-10.bin": {
       "md5": "0cdda509e2da83c85bfe423dd87346cc",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "Gamecube PAL BIOS"
+      "description": "GameCube PAL (EU) BIOS – version 10"
     },
     "gc-pal-11.bin": {
       "md5": "339848a0b7c2124cf155276c1e79cbd0",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "Gamecube PAL BIOS"
+      "description": "GameCube PAL BIOS – version 11 (bug‑fix update)"
     },
     "gc-pal-12.bin": {
       "md5": "db92574caab77a7ec99d4605fd6f2450",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "Gamecube PAL BIOS"
+      "description": "GameCube PAL BIOS – version 12 (current EU release)"
     },
     "64DD_IPL.bin": {
       "md5": "8d3d9f294b6e174bc7b1d2fd1c727530",
       "system": "n64dd",
-      "description": "Nintendo 64 64DD BIOS"
+      "description": "Nintendo 64 64DD IPL (initial program loader) BIOS"
     },
     "NstDatabase.xml": {
       "md5": "7bfe8c0540ed4bd6a0f1e2a0f0118ced",
       "system": "nes",
-      "description": "NES Nestopia NstDatabase"
+      "description": "Nestopia NES database (game metadata and mapper info)"
     },
     "BS-X.bin": {
       "md5": "fed4d8242cfbed61343d53d48432aced",
@@ -1266,7 +1291,7 @@
         "snes",
         "satellaview"
       ],
-      "description": "Satellaview BIOS"
+      "description": "Satellaview BS‑X BIOS (Japanese broadcast cartridge interface)"
     },
     "BS-X (En).bin": {
       "md5": "33b62505da6ca4525e3839db4e1a7bca",
@@ -1274,7 +1299,7 @@
         "snes",
         "satellaview"
       ],
-      "description": "Satellaview EN BIOS"
+      "description": "Satellaview BS‑X BIOS – English language version"
     },
     "BS-X (En) (DRM-Free).bin": {
       "md5": "4ed9648505ab33a4daec93707b16caba",
@@ -1282,7 +1307,7 @@
         "snes",
         "satellaview"
       ],
-      "description": "Satellaview EN DRM-Free BIOS"
+      "description": "Satellaview BS‑X BIOS – English version without DRM"
     },
     "STBIOS.bin": {
       "md5": "d3a44ba7d42a74d3ac58cb9c14c6a5ca",
@@ -1290,7 +1315,7 @@
         "snes",
         "sufami"
       ],
-      "description": "SuFami Turbo BIOS"
+      "description": "SuFami Turbo BIOS (supports both SuFami Turbo cartridges)"
     },
     "SGB1.sfc": {
       "md5": "b15ddb15721c657d82c5bab6db982ee9",
@@ -1298,7 +1323,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – first version"
     },
     "SGB2.sfc": {
       "md5": "8ecd73eb4edf7ed7e81aef1be80031d5",
@@ -1306,7 +1331,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – second version (updated checksum)"
     },
     "sgb1.boot.rom": {
       "md5": "d574d4f9c12f305074798f54c091a8b4",
@@ -1314,7 +1339,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – boot ROM (identical to SGB1.sfc)"
     },
     "sgb1.program.rom": {
       "md5": "b15ddb15721c657d82c5bab6db982ee9",
@@ -1322,7 +1347,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – program ROM (core functionality)"
     },
     "sgb2.boot.rom": {
       "md5": "e0430bca9925fb9882148fd2dc2418c1",
@@ -1330,7 +1355,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – second‑generation boot ROM"
     },
     "sgb_bios.bin": {
       "md5": "e0430bca9925fb9882148fd2dc2418c1",
@@ -1338,106 +1363,106 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Gameboy BIOS"
+      "description": "Super Game Boy BIOS – combined boot/program binary"
     },
     "cx4.data.rom": {
       "md5": "037ac4296b6b6a5c47c440188d3c72e3",
       "system": "snes",
-      "description": "SNES CX4 BIOS"
+      "description": "SNES CX4 co‑processor BIOS (used by Star Fox 2, etc.)"
     },
     "dsp1.data.rom": {
       "md5": "3d81b45fa0c2aa8b852dfb1ece7c0971",
       "system": "snes",
-      "description": "SNES dsp1 BIOS"
+      "description": "SNES DSP‑1 audio/graphics accelerator BIOS"
     },
     "dsp1b.data.rom": {
       "md5": "1e3f568634a7d8284020dddc0ae905bc",
       "system": "snes",
-      "description": "SNES DSP1 BIOS"
+      "description": "SNES DSP‑1B variant BIOS (enhanced DSP‑1)"
     },
     "dsp1b.program.rom": {
       "md5": "d10f446888e097cbf500f3f663cf4f6d",
       "system": "snes",
-      "description": "SNES DSP1 BIOS"
+      "description": "SNES DSP‑1B program ROM (core processing code)"
     },
     "dsp2.data.rom": {
       "md5": "e9417e29223b139c3c4b635a2a3b8744",
       "system": "snes",
-      "description": "SNES DSP2 BIOS"
+      "description": "SNES DSP‑2 BIOS (used by Star Ocean, etc.)"
     },
     "dsp2.program.rom": {
       "md5": "aa6e5922a3ed5ded54f24247c11143c5",
       "system": "snes",
-      "description": "SNES DSP2 BIOS"
+      "description": "SNES DSP‑2 program ROM (processing routines)"
     },
     "dsp3.data.rom": {
       "md5": "0a81210c0a940b997dd9843281008ee6",
       "system": "snes",
-      "description": "SNES DSP3 BIOS"
+      "description": "SNES DSP‑3 BIOS (used by Super Mario RPG, etc.)"
     },
     "dsp3.program.rom": {
       "md5": "d99ca4562818d49cee1f242705bba6f8",
       "system": "snes",
-      "description": "SNES DSP3 BIOS"
+      "description": "SNES DSP‑3 program ROM (algorithmic core)"
     },
     "dsp4.data.rom": {
       "md5": "ee4990879eb68e3cbca239c5bc20303d",
       "system": "snes",
-      "description": "SNES DSP4 BIOS"
+      "description": "SNES DSP‑4 BIOS (used by Metal Max, etc.)"
     },
     "dsp4.program.rom": {
       "md5": "a151023b948b90ffc23a5b594bb6fef2",
       "system": "snes",
-      "description": "SNES DSP4 BIOS"
+      "description": "SNES DSP‑4 program ROM (processing logic)"
     },
     "st010.data.rom": {
       "md5": "254d70762b6f59f99c27c395aba7d07d",
       "system": "snes",
-      "description": "SNES ST010 BIOS"
+      "description": "SNES ST‑010 BIOS (Super FX‑style co‑processor)"
     },
     "st010.program.rom": {
       "md5": "1d70019179a59a566a0bb5d3f2845544",
       "system": "snes",
-      "description": "SNES ST010 BIOS"
+      "description": "SNES ST‑010 program ROM (core functions)"
     },
     "st011.data.rom": {
       "md5": "10bd3f4aa949737ab9836512c35bcc29",
       "system": "snes",
-      "description": "SNES ST011 BIOS"
+      "description": "SNES ST‑011 BIOS (enhanced ST‑010 variant)"
     },
     "st011.program.rom": {
       "md5": "95222ebf1c0c2990bcf25db43743f032",
       "system": "snes",
-      "description": "SNES ST011 BIOS"
+      "description": "SNES ST‑011 program ROM (processing code)"
     },
     "snes:st018.data.rom": {
       "md5": "49c898b60d0f15e90d0ba780dd12f366",
       "system": "snes",
-      "description": "SNES ST018 BIOS"
+      "description": "SNES ST‑018 BIOS (late‑generation co‑processor)"
     },
     "st018.program.rom": {
       "md5": "dda40ccd57390c96e49d30a041f9a9e7",
       "system": "snes",
-      "description": "SNES ST018 BIOS"
+      "description": "SNES ST‑018 program ROM (core algorithms)"
     },
     "dc_flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
-      "description": "Dreamcast BIOS",
+      "description": "Dreamcast flash BIOS",
       "required": "required",
       "paths": "$bios_path/dc"
     },
     "flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
-      "description": "Dreamcast BIOS",
+      "description": "Dreamcast flash BIOS (duplicate of dc_flash.bin)",
       "required": "required",
       "paths": "$bios_path/dc"
     },
     "bios_J.sms": {
       "md5": "24a519c53f67b00640d0048ef7089105",
       "system": "sms",
-      "description": "SEGA Master System J BIOS"
+      "description": "Sega Master System Japanese BIOS"
     },
     "areplay.bin": {
       "md5": "a0028b3043f9d59ceeb03da5b073b30d",
@@ -1445,7 +1470,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (standard version)"
     },
     "bios_MD.bin": {
       "md5": "d3293ebaaa7f4eb2a6766b68a0fb4609",
@@ -1453,7 +1478,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (alternate dump)"
     },
     "ggenie.bin": {
       "md5": "e8af7fe115a75c849f6aab3701e7799b",
@@ -1461,7 +1486,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (Game Genie compatible)"
     },
     "rom.db": {
       "md5": "ff4a3572475236e859e3e9ac5c87d1f1",
@@ -1469,7 +1494,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (database version)"
     },
     "sk.bin": {
       "md5": "4ea493ea4e9f6c9ebfccbdb15110367e",
@@ -1477,7 +1502,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (SK‑type chip)"
     },
     "sk2chip.bin": {
       "md5": "b4e76e416b887f4e7413ba76fa735f16",
@@ -1485,7 +1510,7 @@
         "megadrive",
         "genesis"
       ],
-      "description": "SEGA Genesis / Mega Drive BIOS"
+      "description": "Sega Genesis/Mega Drive BIOS (SK‑2 chip variant)"
     },
     "hisaturn.bin": {
       "md5": "3ea3202e2634cb47cb90f3a05c015010",
@@ -1493,7 +1518,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS"
+      "description": "Sega Saturn BIOS (Japanese region)"
     },
     "mpr-18100.bin": {
       "md5": "cb2cebc1b6e573b7c44523d037edcd45",
@@ -1501,7 +1526,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS"
+      "description": "Sega Saturn BIOS (MPR‑18100 revision)"
     },
     "saturn_bios.bin": {
       "md5": "af5828fdff51384f99b3c4926be27762",
@@ -1509,7 +1534,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS",
+      "description": "Sega Saturn BIOS (primary required version)",
       "required": "required"
     },
     "stvbios.zip": {
@@ -1518,7 +1543,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS",
+      "description": "Sega Saturn BIOS archive (contains multiple revisions)",
       "required": "required"
     },
     "sega1003.bin": {
@@ -1527,7 +1552,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS",
+      "description": "Sega Saturn BIOS (version 1003, Japanese)",
       "required": "required"
     },
     "sega_100a.bin": {
@@ -1536,7 +1561,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS"
+      "description": "Sega Saturn BIOS (version 100A, alternate region)"
     },
     "sega_100.bin": {
       "md5": "af5828fdff51384f99b3c4926be27762",
@@ -1544,7 +1569,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS"
+      "description": "Sega Saturn BIOS (version 100, generic) "
     },
     "vsaturn.bin": {
       "md5": "ac4e4b6522e200c0d23d371a8cecbfd3",
@@ -1552,209 +1577,209 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "SEGA Saturn BIOS"
+      "description": "Sega Saturn BIOS (virtual/experimental build)"
     },
     "iplrom.x1": {
       "md5": "eeeea1cd29c6e0e8b094790ae969bfa7",
       "system": "x1",
-      "description": "Sharp X1 BIOS",
+      "description": "Sharp X1 IPL ROM (initial program loader)",
       "required": "required"
     },
     "iplrom.x1t": {
       "md5": "851e4a5936f17d13f8c39a980cf00d77",
       "system": "x1",
-      "description": "Sharp X1 BIOS",
+      "description": "Sharp X1T IPL ROM (compatible with X1)",
       "required": "required"
     },
     "128-0.rom": {
       "md5": "b4d2692115a9f2924df92a3cbfb358fb",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 48 KB BASIC ROM (original UK version)"
     },
     "128-spanish-0.rom": {
       "md5": "c1231a70b8129311216acb7479b031d5",
       "system": "zxspectrum",
-      "description": "ZX Spectrum Spanish BIOS"
+      "description": "ZX Spectrum 48 KB BASIC ROM (Spanish localization)"
     },
     "128-spanish-1.rom": {
       "md5": "4f341936594cbcab75cfa62ce96e3682",
       "system": "zxspectrum",
-      "description": "ZX Spectrum Spanish BIOS"
+      "description": "ZX Spectrum 48 KB BASIC ROM (second Spanish dump)"
     },
     "zxs:48.rom": {
       "md5": "4c42a2f075212361c3117015b107ff68",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 48 KB BASIC ROM (generic label)"
     },
     "disciple.rom": {
       "md5": "78e61a2a02121873c1756b21fd1398b1",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum Disciple ROM (custom firmware variant)"
     },
     "disk_plus3.szx": {
       "md5": "e6db6b9f6ad15012851115a7bc4b31d8",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Plus 3 disk interface ROM (used for +3 floppy support)"
     },
     "zxs:if1-2.rom": {
       "md5": "31b704ae925305e74f50699271fddd9a",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Interface 1 ROM – second revision (adds extra I/O ports)"
     },
     "if1-1.rom": {
       "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Interface 1 ROM – original revision"
     },
     "plus2-0.rom": {
       "md5": "4ed7af4636308b8a48d7a35e6c5b546b",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +2 ROM (48 KB BASIC, PAL version)"
     },
     "plus2-1.rom": {
       "md5": "b3db95931cc844efaeb82db9c171b9f3",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +2 ROM (48 KB BASIC, NTSC version)"
     },
     "plus3-0.rom": {
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3 ROM – first half (48 KB BASIC + disk support)"
     },
     "plus3-1.rom": {
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3 ROM – second half (disk controller firmware)"
     },
     "plus3-2.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3 ROM – third segment (additional utilities)"
     },
     "plus3-3.rom": {
       "md5": "a148bcc575e51389e84fdf5d555c3196",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3 ROM – fourth segment (final firmware block)"
     },
     "plus3e-0.rom": {
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3e ROM – first half (enhanced +3 version)"
     },
     "plus3e-1.rom": {
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3e ROM – second half (enhanced disk firmware)"
     },
     "plus3e-2.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3e ROM – third segment (extra utilities)"
     },
     "plus3e-3.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +3e BIOS – final firmware block"
     },
     "plusd.rom": {
       "md5": "42e5de16fb5e50082bb954ec7ce45851",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum +D disk interface BIOS"
     },
     "se-0.rom": {
       "md5": "fb3f86eb1e5a695d9c50c124e7cfb875",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum SE (Special Edition) BIOS – first half"
     },
     "se-1.rom": {
       "md5": "88de4a3129086f34bb9ca559acc51e6c",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum SE BIOS – second half"
     },
     "speccyboot-1.4.rom": {
       "md5": "c54aa8f374b0971f51546c29d5d1eba1",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "SpeccyBoot 1.4 bootloader ROM for ZX Spectrum"
     },
     "tape_128.sz": {
       "md5": "8942b43b73ed4eb7f32bd1741709a4dc",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 128 KB tape loading ROM"
     },
     "tape_16.szx": {
       "md5": "fec97eb9ea1b017cae84de78508feb4a",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 16 KB tape loading ROM"
     },
     "tape_2048.szx": {
       "md5": "116f732bbae4e49d625aaf2f311474d0",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 2048 KB tape loading ROM"
     },
     "tape_2068.szx": {
       "md5": "0b0f267b95d556318bb652af2e8dc25c",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 2068 KB tape loading ROM"
     },
     "tape_48.szx": {
       "md5": "0b0f267b95d556318bb652af2e8dc25c",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "ZX Spectrum 48 KB tape loading ROM"
     },
     "tape_pentagon.szx": {
       "md5": "bd7698603bd9079d337cdedfb04942d9",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Pentagon tape loading ROM for ZX Spectrum"
     },
     "tape_plus2.szx": {
       "md5": "166d4aa1a5aa4fbd99cc963b4e7c19cc",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for ZX Spectrum +2"
     },
     "tape_plus2a.szx": {
       "md5": "445d4817d5557bb363a216fbd6eeaa84",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for ZX Spectrum +2A"
     },
     "tape_plus3.szx": {
       "md5": "0dc8828ac1db2e0efa915ac55191e96f",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for ZX Spectrum +3"
     },
     "tape_plus3e.szx": {
       "md5": "bf07537f028bbcb3309464bd30da779c",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for ZX Spectrum +3E"
     },
     "tape_scorpion.szx": {
       "md5": "c10e677d3deb5a445689d3a599880745",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Scorpion tape loading ROM (TurboR variant)"
     },
     "tape_se.szx": {
       "md5": "2518f9334bef8c44804a4185085579b5",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for ZX Spectrum SE"
     },
     "tape_ts2068.szx": {
       "md5": "1d360c09d370bb52a9a44b30cc7c59e6",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "Tape loading ROM for Timex Sinclair 2068"
     },
     "tc2048.rom": {
       "md5": "9dd7ecf784a6c04265c073c236f5fadb",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "TC2048 ROM – core BASIC firmware"
     },
     "tc2068-0.rom": {
       "md5": "55d462fccc6c536037404ef4ced08bec",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "TC2068 ROM – first half (Timex Sinclair 2068)"
     },
     "tc2068-1.rom": {
       "md5": "575d203c6e15e679fba0b73f854ec7a2",
       "system": "zxspectrum",
-      "description": "ZX Spectrum BIOS"
+      "description": "TC2068 ROM – second half (Timex Sinclair 2068)"
     },
     "000-lo.lo": {
       "md5": "fc7599f3f871578fe9a0453662d1c966",
@@ -1762,656 +1787,626 @@
         "neogeocd",
         "neogeocdjp"
       ],
-      "description": "NeoGeo CD BIOS"
+      "description": "NeoGeo CD BIOS (default LO version)"
     },
     "scph1000.bin": {
       "md5": "239665b1a3dade1b5a52c06338011044",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.00 (NTSC-U)",
       "required": "at least one for this system"
     },
     "scph1001.bin": {
       "md5": "924e392ed05558ffdb115408c263dccf",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.01 (PAL)",
       "required": "at least one for this system"
     },
     "scph1002.bin": {
       "md5": "54847e693405ffeb0359c6287434cbef",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.02 (NTSC-J)",
       "required": "at least one for this system"
     },
     "scph100.bin": {
       "md5": "8abc1b549a4a80954addc48ef02c4521",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – generic early release",
       "required": "at least one for this system"
     },
     "scph101.bin": {
       "md5": "6e3735ff4c7dc899ee98981385f6f3d0",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.01 (NTSC-U)",
       "required": "at least one for this system"
     },
     "scph102A.bin": {
       "md5": "b10f5e0e3d9eb60e5159690680b1e774",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.02A (PAL)",
       "required": "at least one for this system"
     },
     "scph102B.bin": {
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.02B (NTSC-J)",
       "required": "at least one for this system"
     },
     "scph102C.bin": {
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 1.02C (regional variant)",
       "required": "at least one for this system"
     },
     "scph3000.bin": {
       "md5": "849515939161e62f6b866f6853006780",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 3.00 (later release)",
       "required": "at least one for this system"
     },
     "scph3500.bin": {
       "md5": "cba733ceeff5aef5c32254f1d617fa62",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 3.50 (enhanced)",
       "required": "at least one for this system"
     },
     "scph5000.bin": {
       "md5": "eb201d2d98251a598af467d4347bb62f",
       "system": "psx",
-      "description": "PS1 BIOS",
+      "description": "PlayStation 1 BIOS – version 5.00 (final official release)",
       "required": "at least one for this system"
     },
     "ppge_atlas.zim": {
       "md5": "866855cc330b9b95cc69135fb7b41d38",
       "system": "psp",
-      "description": "PSP Assets"
+      "description": "PSP Atlas ZIM – asset package for PSP homebrew"
     },
     "ecwolf.pk3": {
       "md5": "c011b428819eea4a80b455c245a5a04d",
       "system": "wolfenstein",
-      "description": "Wolfenstein PK3"
+      "description": "Wolfenstein: Enemy Territory PK3 data archive"
     },
     "scummvm.zip": {
       "md5": "a17e0e0150155400d8cced329563d9c8",
       "system": "scummvm",
-      "description": "SCUMMVM"
+      "description": "SCUMMVM engine bundle (games and interpreter)"
     },
     "cpc464.rom": {
       "md5": "a17e0e0150155400d8cced329563d9c8",
       "system": "amstradcpc",
-      "description": "AMSTRAD CPC BIOS"
+      "description": "Amstrad CPC 464 BIOS"
     },
     "cpc664.rom": {
       "md5": "5a384a2310f472c7857888371c00ed66",
       "system": "amstradcpc",
-      "description": "AMSTRAD CPC BIOS"
+      "description": "Amstrad CPC 664 BIOS"
     },
     "cpc6128.rom": {
       "md5": "b96280dc6c95a48857b4b8eb931533ae",
       "system": "amstradcpc",
-      "description": "AMSTRAD CPC BIOS"
+      "description": "Amstrad CPC 6128 BIOS"
     },
     "cpc_amsdos.rom": {
       "md5": "25629dfe870d097469c217b95fdc1c95",
       "system": "amstradcpc",
-      "description": "AMSTRAD CPC BIOS"
+      "description": "Amstrad CPC AMSDOS extension ROM"
     },
     "hun.rom": {
       "md5": "22167938f142c222f40992839aa21a06",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – HUN BIOS variant"
     },
     "brd.rom": {
       "md5": "6af0402906944fd134004b85097c8524",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – BRD BIOS variant"
     },
     "exos20.rom": {
       "md5": "5ad3baaad3b5156d6b60b34229a676fb",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EXOS 2.0 BIOS"
     },
     "exos21.rom": {
       "md5": "f36f24cbb87745fbd2714e4df881db09",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EXOS 2.1 BIOS"
     },
     "zt19uk.rom": {
       "md5": "228540b6be83ae2acd7569c8ff0f91d0",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – ZT19UK BIOS"
     },
     "basic20.rom": {
       "md5": "8e18edce4a7acb2c33cc0ab18f988482",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – BASIC 2.0 ROM"
     },
     "basic21.rom": {
       "md5": "e972fe42b398c9ff1d93ff014786aec6",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – BASIC 2.1 ROM"
     },
     "exdos13.rom": {
       "md5": "ddff70c014d1958dc75378b6c9aab6f8",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EXDOS 1.3 ROM"
     },
     "epd19hft.rom": {
       "md5": "12cfc9c7e48c8a16c2e09edbd926d467",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EP D19HFT ROM"
     },
     "zt18hfnt.rom": {
       "md5": "3082dc488d32f30a612761b99074199b",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – ZT18HFNT ROM"
     },
     "epfileio.rom": {
       "md5": "a68ebcbc73a4d2178d755b7755bf18fe",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EP File I/O ROM"
     },
     "exos24uk.rom": {
       "md5": "55af78f877a21ca45eb2df68a74fcc60",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Enterprise 64/128 – EXOS 2.4 UK ROM"
     },
     "ps2-0100jd-20000117.bin": {
       "md5": "32f2e4d5ff5ee11072a6bc45530f5765",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0100JD (2000‑01‑17)",
       "required": "at least one for this system"
     },
     "ps2-0100j-20000117.bin": {
       "md5": "acf4730ceb38ac9d8c7d8e21f2614600",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0100J (2000‑01‑17)",
       "required": "at least one for this system"
     },
     "ps2-0101jd-20000217.bin": {
       "md5": "acf9968c8f596d2b15f42272082513d1",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0101JD (2000‑02‑17)",
       "required": "at least one for this system"
     },
     "ps2-0101j-20000217.bin": {
       "md5": "b1459d7446c69e3e97e6ace3ae23dd1c",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0101J (2000‑02‑17)",
       "required": "at least one for this system"
     },
     "ps2-0101xd-20000224.bin": {
       "md5": "d3f1853a16c2ec18f3cd1ae655213308",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0101XD (2000‑02‑24)",
       "required": "at least one for this system"
     },
     "ps2-0110ad-20000727.bin": {
       "md5": "63e6fd9b3c72e0d7b920e80cf76645cd",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0110AD (2000‑07‑27)",
       "required": "at least one for this system"
     },
     "ps2-0110a-20000727.bin": {
       "md5": "a20c97c02210f16678ca3010127caf36",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0110A (2000‑07‑27)",
       "required": "at least one for this system"
     },
     "ps2-0120a-20000902.bin": {
       "md5": "8db2fbbac7413bf3e7154c1e0715e565",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120A (2000‑09‑02)",
       "required": "at least one for this system"
     },
     "ps2-0120ed-20000902.bin": {
       "md5": "91c87cb2f2eb6ce529a2360f80ce2457",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120ED (2000‑09‑02)",
       "required": "at least one for this system"
     },
     "ps2-0120ed-20000902-20030110.bin": {
       "md5": "3016b3dd42148a67e2c048595ca4d7ce",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120ED rev (2003‑01‑10)",
       "required": "at least one for this system"
     },
     "ps2-0120e-20000902.bin": {
       "md5": "b7fa11e87d51752a98b38e3e691cbf17",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120E (2000‑09‑02)",
       "required": "at least one for this system"
     },
     "ps2-0120j-20001027-185015.bin": {
       "md5": "f63bc530bd7ad7c026fcd6f7bd0d9525",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120J (2000‑10‑27, 18:50:15)",
       "required": "at least one for this system"
     },
     "ps2-0120j-20001027-191435.bin": {
       "md5": "cee06bd68c333fc5768244eae77e4495",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0120J (2000‑10‑27, 19:14:35)",
       "required": "at least one for this system"
     },
     "ps2-0150ad-20001228-20030520.bin": {
       "md5": "0bf988e9c7aaa4c051805b0fa6eb3387",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150AD (2000‑12‑28, updated 2003‑05‑20)",
       "required": "at least one for this system"
     },
     "ps2-0150a-20001228.bin": {
       "md5": "8accc3c49ac45f5ae2c5db0adc854633",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150A (2000‑12‑28)",
       "required": "at least one for this system"
     },
     "ps2-0150ed-20001228-20030520.bin": {
       "md5": "6f9a6feb749f0533aaae2cc45090b0ed",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150ED (2000‑12‑28, updated 2003‑05‑20)",
       "required": "at least one for this system"
     },
     "ps2-0150e-20001228.bin": {
       "md5": "838544f12de9b0abc90811279ee223c8",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150E (2000‑12‑28)",
       "required": "at least one for this system"
     },
     "ps2-0150jd-20010118.bin": {
       "md5": "bb6bbc850458fff08af30e969ffd0175",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150JD (2001‑01‑18)",
       "required": "at least one for this system"
     },
     "ps2-0150j-20010118.bin": {
       "md5": "815ac991d8bc3b364696bead3457de7d",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0150J (2001‑01‑18)",
       "required": "at least one for this system"
     },
     "ps2-0160a-20010427.bin": {
       "md5": "b107b5710042abe887c0f6175f6e94bb",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160A (2001‑04‑27)",
       "required": "at least one for this system"
     },
     "ps2-0160j-20010427.bin": {
       "md5": "ab55cceea548303c22c72570cfd4dd71",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160J (2001‑04‑27)",
       "required": "at least one for this system"
     },
     "ps2-0160a-20010704.bin": {
       "md5": "18bcaadb9ff74ed3add26cdf709fff2e",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160A (2001‑07‑04)",
       "required": "at least one for this system"
     },
     "ps2-0160e-20010704.bin": {
       "md5": "491209dd815ceee9de02dbbc408c06d6",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160E (2001‑07‑04)",
       "required": "at least one for this system"
     },
     "ps2-0160a-20011004.bin": {
       "md5": "7200a03d51cacc4c14fcdfdbc4898431",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160A (2001‑10‑04)",
       "required": "at least one for this system"
     },
     "ps2-0160e-20011004.bin": {
       "md5": "8359638e857c8bc18c3c18ac17d9cc3c",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160E (2001‑10‑04)",
       "required": "at least one for this system"
     },
     "ps2-0160h-20010730.bin": {
       "md5": "352d2ff9b3f68be7e6fa7e6dd8389346",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160H (2001‑07‑30)",
       "required": "at least one for this system"
     },
     "ps2-0160a-20020207.bin": {
       "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160A (2002‑02‑07)",
       "required": "at least one for this system"
     },
     "ps2-0160e-20020319.bin": {
       "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160E (2002‑03‑19)",
       "required": "at least one for this system"
     },
     "ps2-0160j-20020426.bin": {
       "md5": "72da56fccb8fcd77bba16d1b6f479914",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160J (2002‑04‑26)",
       "required": "at least one for this system"
     },
     "ps2-0160e-20020426.bin": {
       "md5": "5b1f47fbeb277c6be2fccdd6344ff2fd",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160E (2002‑04‑26)",
       "required": "at least one for this system"
     },
     "ps2-0160h-20020426.bin": {
       "md5": "315a4003535dfda689752cb25f24785c",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0160H (2002‑04‑26)",
       "required": "at least one for this system"
     },
     "ps2-0170j-20030206.bin": {
       "md5": "312ad4816c232a9606e56f946bc0678a",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0170J (2003‑02‑06)",
       "required": "at least one for this system"
     },
     "ps2-0170ed-20030227.bin": {
       "md5": "666018ffec65c5c7e04796081295c6c7",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0170ED (2003‑02‑27)",
       "required": "at least one for this system"
     },
     "ps2-0170e-20030227.bin": {
       "md5": "666018ffec65c5c7e04796081295c6c7",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0170E (2003‑02‑27)",
       "required": "at least one for this system"
     },
     "ps2-0170ad-20030325.bin": {
       "md5": "eb960de68f0c0f7f9fa083e9f79d0360",
       "system": "ps2",
-      "description": "PS2 BIOS",
-      "required": "at least one for this system"
-    },
-    "ps2-0170a-20030325.bin": {
-      "md5": "8aa12ce243210128c5074552d3b86251",
-      "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0170AD (2003‑03‑25)",
       "required": "at least one for this system"
     },
     "ps2-0180cd-20030224.bin": {
       "md5": "240d4c5ddd4b54069bdc4a3cd2faf99d",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0180CD (2003‑02‑24)",
       "required": "at least one for this system"
     },
     "ps2-0180j-20031028.bin": {
       "md5": "1c6cd089e6c83da618fbf2a081eb4888",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0180J (2003‑10‑28)",
       "required": "at least one for this system"
     },
     "ps2-0190j-20030623.bin": {
       "md5": "463d87789c555a4a7604e97d7db545d1",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190J (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190a-20030623.bin": {
       "md5": "35461cecaa51712b300b2d6798825048",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190A (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190e-20030623.bin": {
       "md5": "bd6415094e1ce9e05daabe85de807666",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190E (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190h-20030623.bin": {
       "md5": "2e70ad008d4ec8549aada8002fdf42fb",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190H (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190r-20030623.bin": {
       "md5": "b53d51edc7fc086685e31b811dc32aad",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190R (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190c-20030623.bin": {
       "md5": "1b6e631b536247756287b916f9396872",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190C (2003‑06‑23)",
       "required": "at least one for this system"
     },
     "ps2-0190j-20030822.bin": {
       "md5": "00da1b177096cfd2532c8fa22b43e667",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190J (2003‑08‑22)",
       "required": "at least one for this system"
     },
     "ps2-0190e-20030822.bin": {
       "md5": "afde410bd026c16be605a1ae4bd651fd",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190E (2003‑08‑22)",
       "required": "at least one for this system"
     },
     "ps2-0190a-20040329.bin": {
       "md5": "81f4336c1de607dd0865011c0447052e",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0190A (2004‑03‑29)",
       "required": "at least one for this system"
     },
     "ps2-0200ed-20040614.bin": {
       "md5": "63ead1d74893bf7f36880af81f68a82d",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0200ED (2004‑06‑14)",
       "required": "at least one for this system"
     },
     "ps2-0200h-20040614.bin": {
       "md5": "3e3e030c0f600442fa05b94f87a1e238",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0200H (2004‑06‑14)",
       "required": "at least one for this system"
     },
     "ps2-0210j-20040917.bin": {
       "md5": "1ad977bb539fc9448a08ab276a836bbc",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0210J (2004‑09‑17)",
       "required": "at least one for this system"
     },
     "ps2-0220j-20050620.bin": {
       "md5": "eb4f40fcf4911ede39c1bbfe91e7a89a",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220J (2005‑06‑20)",
       "required": "at least one for this system"
     },
     "ps2-0220ad-20050620.bin": {
       "md5": "9959ad7a8685cad66206e7752ca23f8b",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220AD (2005‑06‑20)",
       "required": "at least one for this system"
     },
     "ps2-0220a-20050620.bin": {
       "md5": "929a14baca1776b00869f983aa6e14d2",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220A (2005‑06‑20)",
       "required": "at least one for this system"
     },
     "ps2-0220e-20050620.bin": {
       "md5": "573f7d4a430c32b3cc0fd0c41e104bbd",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220E (2005‑06‑20)",
       "required": "at least one for this system"
     },
     "ps2-0220h-20050620.bin": {
       "md5": "df63a604e8bff5b0599bd1a6c2721bd0",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220H (2005‑06‑20)",
       "required": "at least one for this system"
     },
     "ps2-0220j-20060210.bin": {
       "md5": "5b1ba4bb914406fae75ab8e38901684d",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220J (2006‑02‑10)",
       "required": "at least one for this system"
     },
     "ps2-0220a-20060210.bin": {
       "md5": "cb801b7920a7d536ba07b6534d2433ca",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220A (2006‑02‑10)",
       "required": "at least one for this system"
     },
     "ps2-0220e-20060210.bin": {
       "md5": "af60e6d1a939019d55e5b330d24b1c25",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220E (2006‑02‑10)",
       "required": "at least one for this system"
     },
     "ps2-0220h-20060210.bin": {
       "md5": "549a66d0c698635ca9fa3ab012da7129",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220H (2006‑02‑10)",
       "required": "at least one for this system"
     },
     "ps2-0220j-20060905.bin": {
       "md5": "5de9d0d730ff1e7ad122806335332524",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220J (2006‑09‑05)",
       "required": "at least one for this system"
     },
     "ps2-0220ad-20060905.bin": {
       "md5": "21fe4cad111f7dc0f9af29477057f88d",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220AD (2006‑09‑05)",
       "required": "at least one for this system"
     },
     "ps2-0220a-20060905.bin": {
       "md5": "40c11c063b3b9409aa5e4058e984e30c",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220A (2006‑09‑05)",
       "required": "at least one for this system"
     },
     "ps2-0220e-20060905.bin": {
       "md5": "80bbb237a6af9c611df43b16b930b683",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220E (2006‑09‑05)",
       "required": "at least one for this system"
     },
     "ps2-0220h-20060905.bin": {
       "md5": "c37bce95d32b2be480f87dd32704e664",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0220H (2006‑09‑05)",
       "required": "at least one for this system"
     },
     "ps2-0230j-20080220.bin": {
       "md5": "80ac46fa7e77b8ab4366e86948e54f83",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0230J (2008‑02‑20)",
       "required": "at least one for this system"
     },
     "ps2-0230a-20080220.bin": {
       "md5": "21038400dc633070a78ad53090c53017",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0230A (2008‑02‑20)",
       "required": "at least one for this system"
     },
     "ps2-0230e-20080220.bin": {
       "md5": "dc69f0643a3030aaa4797501b483d6c4",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0230E (2008‑02‑20)",
       "required": "at least one for this system"
     },
     "ps2-0230h-20080220.bin": {
       "md5": "30d56e79d89fbddf10938fa67fe3f34e",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0230H (2008‑02‑20)",
       "required": "at least one for this system"
     },
     "ps2-0250e-20100415.bin": {
       "md5": "93ea3bcee4252627919175ff1b16a1d9",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0250E (2010‑04‑15)",
       "required": "at least one for this system"
     },
     "ps2-0250j-20100415.bin": {
       "md5": "d3e81e95db25f5a86a7b7474550a2155",
       "system": "ps2",
-      "description": "PS2 BIOS",
+      "description": "PS2 BIOS – 0250J (2010‑04‑15)",
       "required": "at least one for this system"
     },
-    "tvcfileio.romn": {
+    "tvcfileio.rom": {
       "md5": "a2cf86ba8e7fc58b242137fe59036832",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "File‑I/O extension ROM for Enterprise"
     },
     "tvc22_ext.rom": {
       "md5": "5ce95a26ceed5bec73995d83568da9cf",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "Extension ROM for Enterprise TVC‑22 hardware, adds extra firmware features"
     },
     "tvc22_sys.rom": {
       "md5": "8c54285f541930cde766069942bad0f2",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "System ROM for Enterprise TVC‑22, provides core OS routines"
     },
     "tvc_dos12d.rom": {
       "md5": "88dc7876d584f90e4106f91444ab23b7",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS"
+      "description": "DOS 12D ROM for Enterprise, supplies disk‑operating system firmware"
     },
     "a2diskiing.zip": {
       "system": "apple2",
-      "description": "Holds the ROM(s) for the Disk II interface",
-      "paths": [
-        "$rd_home_roms_path/apple2"
-      ],
-      "required": "required"
+      "description": "Disk II interface ROMs for Apple II floppy controller"
     },
     "apple2e.zip": {
       "system": "apple2",
-      "description": "Contains the main BIOS ROM images for the Apple IIe system",
-      "paths": [
-        "$rd_home_roms_path/apple2"
-      ],
-      "required": "required"
+      "description": "Apple IIe BIOS ROM containing monitor and BASIC interpreter"
     },
     "d2fdc.zip": {
       "system": "apple2",
-      "description": "Provides the ROM for the floppy disk controller itself",
-      "paths": [
-        "$rd_home_roms_path/apple2"
-      ],
-      "required": "required"
+      "description": "Floppy‑disk controller ROM for Apple II drives"
     },
     "votrsc01.zip": {
       "system": "apple2",
-      "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
-      "paths": [
-        "$rd_home_roms_path/apple2"
-      ],
-      "required": "required"
+      "description": "Votrax SC‑01 speech‑synthesizer ROM for Apple II"
     },
     "votrsc01a.zip": {
       "system": "apple2",
-      "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
-      "paths": [
-        "$rd_home_roms_path/apple2"
-      ],
-      "required": "required"
+      "description": "Alternate Votrax SC‑01 speech‑synthesizer ROM for Apple II"
     },
     "apple2gs.zip": {
       "system": "apple2",
-      "description": "Apple IIGS system bios",
-      "paths": [
-        "$rd_home_roms_path/apple2gs"
-      ],
-      "required": "required"
+      "description": "Apple IIGS system BIOS ROM"
     },
     "d32.rom": {
       "md5": [
@@ -2419,7 +2414,7 @@
         "3420b96031078a4ef408cad7bf21a33f"
       ],
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware",
+      "description": "Tano Dragon BASIC OS firmware (dual‑checksum version)",
       "required": "required"
     },
     "d64rom1.rom": {
@@ -2428,206 +2423,206 @@
         "6ab639e65c6e8fd832cb0d8ad4da1b60"
       ],
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware",
+      "description": "Tano Dragon BASIC OS firmware (dual‑checksum version)",
       "required": "required"
     },
     "d64tano.rom": {
       "md5": "be9bc86ee5eb401d0a40d0377f65fefa",
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware"
+      "description": "Tano Dragon BASIC OS firmware"
     },
     "d64tano2.rom": {
       "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware"
+      "description": "Tano Dragon BASIC OS firmware (alternate version)"
     },
     "d200rom1.rom": {
       "md5": "be9bc86ee5eb401d0a40d0377f65fefa",
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware"
+      "description": "Tano Dragon BASIC OS firmware (variant for 200‑series)"
     },
     "d200rom2.rom": {
       "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
       "system": "tanodragon",
-      "description": "Tano Dragon Basic OS Firmware"
+      "description": "Tano Dragon BASIC OS firmware (alternate 200‑series variant)"
     },
     "ddos10.rom": {
       "md5": "1c965da49b6c5459b8353630aa1482e7",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware",
-      "required": "required"      
+      "description": "Tano Dragon DOS OS firmware (version 10)",
+      "required": "required"
     },
     "ddos11c.rom": {
       "md5": "d8429af1a12f7438a4bf88a5b934cb3a",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
+      "description": "Tano Dragon DOS OS firmware (version 11c)"
     },
     "ddos12a.rom": {
       "md5": "55e2535dbbed7f1a26b5f263d7c72c63",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },                
+      "description": "Tano Dragon DOS OS firmware (version 12a)"
+    },
     "ddos40.rom": {
       "md5": "9ddc388632cd3c376b164ba5cfc64329",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },         
+      "description": "Tano Dragon DOS OS firmware (version 40)"
+    },
     "ddos42.rom": {
       "md5": "c956a854cbc4b9d1e69c000f78368668",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
+      "description": "Tano Dragon DOS OS firmware (version 42)"
     },
     "deltados.rom": {
       "md5": "024eac3db20f1b5cf98c30a0e4743201",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
+      "description": "Tano Dragon DOS OS firmware (Delta release)"
     },
     "dplus48.rom": {
       "md5": "ee6f24d893a52b8efea9f787855456b5",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },    
+      "description": "Tano Dragon DOS OS firmware (plus 48)"
+    },
     "dplus49b.rom": {
       "md5": "56f1b97314e4ca82491c465bb887059e",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },  
+      "description": "Tano Dragon DOS OS firmware (plus 49b)"
+    },
     "dplus50.rom": {
       "md5": "35de5d28da507ebb213a26e04241d940",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },   
+      "description": "Tano Dragon DOS OS firmware (plus 50)"
+    },
     "sdose6.rom": {
       "md5": "9d85e6b7133f915c021156f4b9cdb512",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    }, 
+      "description": "Tano Dragon DOS OS firmware (SD‑6)"
+    },
     "sdose8.rom": {
       "md5": "167f409b7a4b992faabb784b061ab4c6",
       "system": "tanodragon",
-      "description": "Tano Dragon DOS OS Firmware"     
-    },   
+      "description": "Tano Dragon DOS OS firmware (SD‑8)"
+    },
     "cp400bas.rom": {
       "md5": "f73da4d73d6db5cdb8b3cb6a50415e38",
       "system": "tanodragon",
-      "description": "Prológica CP-400 Basic OS Firmware"    
-    },   
+      "description": "Prológica CP‑400 BASIC OS firmware"
+    },
     "cp400extbas.rom": {
       "md5": "091581001577b4a83ccfd511829de0f1",
       "system": "coco",
-      "description": "Prológica CP-400 Basic OS Firmware"    
+      "description": "Prológica CP‑400 extended BASIC firmware"
     },
     "cp400dsk.rom": {
       "md5": "16d3ab9bc935f0d5651ca3f0e3030846",
       "system": "coco",
-      "description": "Prológica CP-400 DOS OS Firmware"     
+      "description": "Prológica CP‑400 DOS firmware"
     },
     "color64extbas.rom": {
       "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer 64 Basic OS Firmware"     
+      "description": "Extended Color BASIC ROM for CoCo 64 – adds disk‑handling commands"
     },
     "xroarbios.rom": {
       "md5": "28dc97df470fb8660ef61b81dfd34f4a",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer 64 Basic OS Firmware"     
+      "description": "XRoar emulator BIOS for the CoCo series – core system initialization"
     },
     "bas10.rom": {
       "md5": "a74f3d95b395dad7cdca19d560eeea74",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "Color BASIC 1.0 ROM (4 KB) – original BASIC interpreter for CoCo 1"
     },
     "bas11.rom": {
       "md5": "c73fb4bff9621c5ab17f6220b20db82f",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "Color BASIC 1.1 ROM – minor bug‑fix update for CoCo 1/2"
     },
     "bas12.rom": {
       "md5": "c933316c7d939532a13648850c1c2aa6",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"    
+      "description": "Color BASIC 1.2 ROM – adds support for additional I/O devices"
     },
     "bas13.rom": {
       "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware",
-      "required": "required"        
-    },    
+      "description": "Color BASIC 1.3 ROM – includes extended string handling",
+      "required": "required"
+    },
     "bas14.rom": {
       "md5": "ac33e16f677b4db52548d426174b1aaa",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "Color BASIC 1.4 ROM – final revision before CoCo 3 transition"
     },
     "coco3.rom": {
       "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "CoCo 3 system ROM – provides 6809 CPU support and enhanced graphics"
     },
     "extbas10.rom": {
       "md5": "fda72f415afe99b36f953bb9bc1253da",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "Extended BASIC 1.0 ROM – adds disk commands to Color BASIC"
     },
     "extbas11.rom": {
       "md5": "21070aa0496142b886c562bf76d7c113",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS Firmware"     
+      "description": "Extended BASIC 1.1 ROM – refined disk I/O and error handling"
     },
     "disk10.rom": {
       "md5": "a64b3ef9efcc066b18d35b134068d1cc",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer DOS OS Firmware"     
+      "description": "Disk Operating System (DOS) ROM for CoCo 1/2 – basic file management"
     },
     "disk11.rom": {
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer DOS OS Firmware",
-      "required": "required"        
+      "description": "DOS 1.1 ROM – adds directory listings and larger file support",
+      "required": "required"
     },
     "fd502.rom": {
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer DOS OS Single side RSDOS"     
+      "description": "Single‑sided RSDOS ROM – early CoCo disk OS (FD‑502 format)"
     },
     "fd502ds.rom": {
       "md5": "b2d43757dc6851d866021ff6c4f59205",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer DOS OS Double sided RSDOS"     
+      "description": "Double‑sided RSDOS ROM – supports 2‑side floppy media"
     },
     "CCNPATCH.cas": {
       "md5": "2c395ad58a842711931679b554483a90",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Cassette patch – improves BASIC directory display (CAS format)"
     },
     "CCNPATCH.wav": {
       "md5": "a17397fb5408647a11d23bab959d1f97",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Audio version of the CCN directory‑display patch (WAV format)"
     },
     "DBPATCH.cas": {
       "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Cassette patch – adds DB‑style directory enhancements"
     },
     "DBPATCH.wav": {
       "md5": "6a07aeee664d81047672e6ff3541a12a",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Audio version of the DB directory‑enhancement patch (WAV format)"
     },
     "disk.rom": {
       "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Generic disk ROM – base driver used by several CoCo variants"
     },
     "disk12.rom": {
       "md5": "4f2ef107cbe3f6b8d34198d25c9acecd",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Disk ROM for CoCo 12 – adds support for newer drive controllers"
     },
     "fd502.dll": {
       "md5": "256573beb9e91d27926325c7cc986e0f",
       "system": "coco",
-      "description": "Tandy TRS-80 Color Computer Basic OS - Enhanced Directory Display"     
+      "description": "Dynamic library version of the single‑sided RSDOS driver"
     }
   }
 }
