@@ -71,7 +71,7 @@
     "neogeo.zip": {
       "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
       "system": "fbneo",
-      "description": "Neo Geo BIOS (required for Neo Geo emulation)",
+      "description": "Neo Geo BIOS",
       "required": "required",
       "paths": [
         "$rd_home_roms_path/neogeo",
@@ -82,7 +82,7 @@
     "neocdz.zip": {
       "md5": "c733b4b7bd30fa849874d96c591c8639",
       "system": "fbneo",
-      "description": "Neo Geo CDZ BIOS (required for CDZ emulation)",
+      "description": "Neo Geo CDZ BIOS",
       "required": "required"
     },
     "decocass.zip": {
@@ -617,55 +617,55 @@
     },
     "aes_keys.txt": {
       "system": "n3ds",
-      "description": "Decryption keys for Citra 3DS emulator (required for encrypted titles)",
+      "description": "Decryption keys for Citra 3DS",
       "required": "required"
     },
     "bios7.bin": {
       "md5": "df692a80a5b1bc90728bc3dfc76cd948",
       "system": "nds",
-      "description": "Nintendo DS ARM7 BIOS (needed by MelonDS standalone)",
+      "description": "Nintendo DS ARM7 BIOS",
       "required": "required"
     },
     "bios9.bin": {
       "md5": "a392174eb3e572fed6447e956bde4b25",
       "system": "nds",
-      "description": "Nintendo DS ARM9 BIOS (needed by MelonDS standalone)",
+      "description": "Nintendo DS ARM9 BIOS",
       "required": "required"
     },
     "firmware.bin": {
       "md5": "e45033d9b0fa6b0de071292bba7c9d13",
       "system": "nds",
-      "description": "Nintendo DS firmware (required for MelonDS standalone)",
+      "description": "Nintendo DS firmware",
       "required": "required"
     },
     "biosdsi7.bin": {
       "sha256": "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2",
       "system": "nds",
-      "description": "Nintendo DSi ARM7 BIOS (required for DSi games)",
+      "description": "Nintendo DSi ARM7 BIOS - DSi",
       "required": "required"
     },
     "biosdsi9.bin": {
       "sha256": "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce",
       "system": "nds",
-      "description": "Nintendo DSi ARM9 BIOS (required for DSi games)",
+      "description": "Nintendo DSi ARM9 BIOS - DSi",
       "required": "required"
     },
     "ps2-0200a-20040614.bin": {
       "md5": "d333558cc14561c1fdc334c75d5f37b7",
       "system": "ps2",
-      "description": "PlayStation 2 US BIOS (required for PS2 emulation)",
+      "description": "PlayStation 2 US BIOS",
       "required": "required"
     },
     "ps2-0200e-20040614.bin": {
       "md5": "dc752f160044f2ed5fc1f4964db2a095",
       "system": "ps2",
-      "description": "PlayStation 2 EU BIOS (required for PS2 emulation)",
+      "description": "PlayStation 2 EU BIOS",
       "required": "required"
     },
     "dsifirmware.bin": {
       "sha256": "11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99",
       "system": "nds",
-      "description": "Nintendo DSi firmware (required for DSi games)",
+      "description": "Nintendo DSi firmware - DSi",
       "required": "required"
     },
     "disksys.rom": {
@@ -674,7 +674,7 @@
         "nes",
         "sfc"
       ],
-      "description": "Family Computer Disk System BIOS (required for Famicom Disk System emulation)"
+      "description": "Family Computer Disk System BIOS"
     },
     "bios.min": {
       "md5": "1e4fb124a3a886865acb574f388c803d",
@@ -1448,7 +1448,7 @@
     "dc_flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
-      "description": "Dreamcast flash BIOS (required for boot)",
+      "description": "Dreamcast flash BIOS",
       "required": "required",
       "paths": "$bios_path/dc"
     },
@@ -2367,7 +2367,7 @@
     "tvcfileio.rom": {
       "md5": "a2cf86ba8e7fc58b242137fe59036832",
       "system": "enterprise",
-      "description": "File‑I/O extension ROM for Enterprise; enables loading files in the emulator"
+      "description": "File‑I/O extension ROM for Enterprise"
     },
     "tvc22_ext.rom": {
       "md5": "5ce95a26ceed5bec73995d83568da9cf",
