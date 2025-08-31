@@ -195,21 +195,22 @@ modules:
       - type: dir
         path: .
 
-  - name: "[DEBUG] libzip finder pre-LibMan"
-    buildsystem: simple
-    build-commands:
-      - find ${FLATPAK_DEST} -name "libzip.so*"
-      - ls -lah /app/retrodeck/components/ruffle/lib
+  # - name: "[DEBUG] libzip finder pre-LibMan"
+  #   buildsystem: simple
+  #   build-commands:
+  #     - find ${FLATPAK_DEST} -name "libzip.so*"
+  #     - ls -lah /app/retrodeck/components/ruffle/lib
 
-  - name: deduplication
-    buildsystem: simple
-    build-commands:
-      - bash libman.sh
-    sources:
-      - type: file
-        path: automation_tools/libman.sh
+  # Temporary disabled for testing the new lib system
+  # - name: "LibMan - Deduplication"
+  #   buildsystem: simple
+  #   build-commands:
+  #     - bash libman.sh
+  #   sources:
+  #     - type: file
+  #       path: automation_tools/libman.sh
 
-  - name: "[DEBUG] libzip finder after LibMan"
+  - name: "[DEBUG] libzip finder"
     buildsystem: simple
     build-commands:
       - find ${FLATPAK_DEST} -name "libzip.so*"
