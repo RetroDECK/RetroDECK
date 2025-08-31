@@ -199,6 +199,7 @@ modules:
     buildsystem: simple
     build-commands:
       - find ${FLATPAK_DEST} -name "libzip.so*"
+      - ls -lah /app/retrodeck/components/ruffle/lib
 
   - name: deduplication
     buildsystem: simple
@@ -212,6 +213,7 @@ modules:
     buildsystem: simple
     build-commands:
       - find ${FLATPAK_DEST} -name "libzip.so*"
+      - ls -lah /app/retrodeck/components/ruffle/lib
 
   - name: finisher
     buildsystem: simple
