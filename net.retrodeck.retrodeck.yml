@@ -195,6 +195,11 @@ modules:
       - type: dir
         path: .
 
+  - name: "[DEBUG] libzip finder pre-LibMan"
+    buildsystem: simple
+    build-commands:
+      - find ${FLATPAK_DEST} -name "libzip.so*"
+
   - name: deduplication
     buildsystem: simple
     build-commands:
@@ -202,6 +207,11 @@ modules:
     sources:
       - type: file
         path: automation_tools/libman.sh
+
+  - name: "[DEBUG] libzip finder after LibMan"
+    buildsystem: simple
+    build-commands:
+      - find ${FLATPAK_DEST} -name "libzip.so*"
 
   - name: finisher
     buildsystem: simple
