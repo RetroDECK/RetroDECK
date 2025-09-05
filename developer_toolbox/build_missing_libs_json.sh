@@ -23,6 +23,7 @@ while [[ $# -gt 1 ]]; do
     -o|--output)
       component_libs_file="$2"
       shift 2
+    ;;
   esac
 done
 
