@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # The purpose of this script is to help determine which libraries for a component do not exist in the base flatpak and need to be included in some way.
-# The script will identify the dependencies of the given binary via ldd, then generate a JSON file containing the libraries that must be found.
-# Optionally a Qt version (-q) can be supplied which will be included in the library JSON object for future reference and processing.
+# The script will identify the dependencies of the given binary via objdump, then generate a JSON file containing the libraries that must be found.
+# Optionally a Qt version (-q) can be supplied which will be included in the library JSON object for future reference and processing, if a Qt version cannot be otherwise automatically determined.
 # A path (-p) to the libraries (such as ones included in an AppImage) can also optionally be specified for future reference and processing.
 # A path (-o) for the subsequent output file can also optionally be supplied, otherwise the file will be output into the directory from which the script was run.
-# USAGE: build_missing_libs_json.sh [-qpo] /path/to/binary
+# USAGE: hunt_libraries.sh [-qpo] /path/to/binary
+# NOTE: The script should be run OUTSIDE of the Flatpak environment, and it will search through any installed Flatpak runtimes, so you should have a semi-similar environment to the build environment for best accuracy.
 
 flatpak_runtimes_root="/var/lib/flatpak/runtime"
 flatpak_freedesktop_runtime_root="$flatpak_runtimes_root/org.freedesktop.Platform"
