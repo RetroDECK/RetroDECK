@@ -127,8 +127,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
     continue-on-error: true
-    # Only run on cooker branches
-    if: startsWith(github.ref, 'refs/heads/cooker')
+    # Only run if not on main branch
+    if: github.ref != 'refs/heads/main'
     outputs:
       HUNT_STATUS: ${{ steps.hunt-summary.outputs.HUNT_STATUS }}
       HUNT_MESSAGE: ${{ steps.hunt-summary.outputs.HUNT_MESSAGE }}
