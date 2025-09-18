@@ -122,9 +122,265 @@ jobs:
             ${{ env.OUT_FOLDER }}/*
             components/components_version_list.md
 
-  GitHub-publish:
+  # Library Hunter Job - Analyzes component binaries for library dependencies
+  Library_Hunter:
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
+    continue-on-error: true
+    # Only run on cooker branches
+    if: startsWith(github.ref, 'refs/heads/cooker')
+    outputs:
+      HUNT_STATUS: ${{ steps.hunt-summary.outputs.HUNT_STATUS }}
+      HUNT_MESSAGE: ${{ steps.hunt-summary.outputs.HUNT_MESSAGE }}
+
+    steps:
+      # Generate a token for accessing Components repository
+      - name: Generate a token for Rekku
+        id: generate-rekku-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.REKKU_APP_ID }}
+          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+          repositories: "RetroDECK,Cooker,components"
+          owner: "RetroDECK"
+
+      # Clone RetroDECK repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+        with:
+          path: /tmp/RetroDECK/RetroDECK
+          token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Download RetroDECK artifacts (needed for flatpak installation)
+      - name: Download RetroDECK artifacts
+        uses: actions/download-artifact@v4.1.8
+
+      # Clone Components repository using cooker branch
+      - name: Clone Components repo
+        uses: actions/checkout@v4
+        with:
+          repository: RetroDECK/components
+          ref: cooker # we are executing this on cooker only as we expect that main is already fine
+          path: /tmp/RetroDECK/components
+          token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak git jq
+
+      # Install RetroDECK Flatpak
+      - name: Install RetroDECK Flatpak
+        run: |
+          # Find the flatpak file
+          FLATPAK_FILE=$(find retrodeck-artifacts -name "RetroDECK*.flatpak" | head -n 1)
+          if [ -z "$FLATPAK_FILE" ]; then
+            echo "ERROR: No RetroDECK flatpak file found in artifacts"
+            exit 1
+          fi
+          
+          echo "Installing RetroDECK flatpak: $FLATPAK_FILE"
+          flatpak install --user --bundle --noninteractive -y "$FLATPAK_FILE"
+
+      # Run Library Hunter
+      - name: Hunt Libraries
+        id: hunt-libraries
+        run: |
+          set +e  # Don't exit on errors, we'll handle them
+          
+          # Set environment variables for the script
+          export RETRODECK_REPO_DIR="/tmp/RetroDECK/RetroDECK"
+          export COMPONENTS_REPO_DIR="/tmp/RetroDECK/components"
+          export FLATPAK_DIR="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components"
+          export HUNT_LOG="/tmp/hunt_libraries.log"
+          export HUNT_ERRORS="/tmp/hunt_errors.log"
+          
+          # Run the library hunter script
+          echo "Running Library Hunter script..."
+          SCRIPT_OUTPUT=$(/tmp/RetroDECK/RetroDECK/automation_tools/library_hunter_cicd.sh hunt 2>&1)
+          SCRIPT_EXIT_CODE=$?
+          
+          echo "$SCRIPT_OUTPUT"
+          
+          # Parse the script output to get the results
+          COMPONENTS_UPDATED=$(echo "$SCRIPT_OUTPUT" | grep "COMPONENTS_UPDATED=" | cut -d'=' -f2 | tail -n1)
+          COMPONENTS_PROCESSED=$(echo "$SCRIPT_OUTPUT" | grep "COMPONENTS_PROCESSED=" | cut -d'=' -f2 | tail -n1)
+          COMPONENTS_FAILED=$(echo "$SCRIPT_OUTPUT" | grep "COMPONENTS_FAILED=" | cut -d'=' -f2 | tail -n1)
+          
+          # Set default values if parsing failed
+          COMPONENTS_UPDATED=${COMPONENTS_UPDATED:-0}
+          COMPONENTS_PROCESSED=${COMPONENTS_PROCESSED:-0}
+          COMPONENTS_FAILED=${COMPONENTS_FAILED:-0}
+          
+          echo "COMPONENTS_UPDATED=$COMPONENTS_UPDATED" >> $GITHUB_ENV
+          echo "COMPONENTS_PROCESSED=$COMPONENTS_PROCESSED" >> $GITHUB_ENV
+          echo "COMPONENTS_FAILED=$COMPONENTS_FAILED" >> $GITHUB_ENV
+          
+          # Set script status based on exit code
+          if [ $SCRIPT_EXIT_CODE -eq 0 ]; then
+            echo "SCRIPT_STATUS=success" >> $GITHUB_ENV
+          elif [ $SCRIPT_EXIT_CODE -eq 2 ]; then
+            echo "SCRIPT_STATUS=warning" >> $GITHUB_ENV
+          else
+            echo "SCRIPT_STATUS=error" >> $GITHUB_ENV
+          fi
+          
+          echo "Library Hunter script completed with exit code: $SCRIPT_EXIT_CODE"
+
+      # Commit and create PR if there are changes
+      - name: Create Pull Request for Components
+        id: create-pr
+        if: env.COMPONENTS_UPDATED != '0'
+        run: |
+          cd /tmp/RetroDECK/components
+          
+          # Configure git
+          git config --global user.name "RetroDECK Library Hunter"
+          git config --global user.email "retrodeck@retrodeck.net"
+          
+          # Check if there are any changes
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes detected in components repository"
+            echo "PR_CREATED=false" >> $GITHUB_ENV
+            exit 0
+          fi
+          
+          # Create branch name
+          BRANCH_NAME="automated/library-hunter-updates"
+          echo "Using branch: $BRANCH_NAME"
+          
+          # Check if branch already exists and switch to it, or create new one
+          if git show-ref --verify --quiet refs/remotes/origin/$BRANCH_NAME; then
+            echo "Branch $BRANCH_NAME already exists, switching to it"
+            git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
+          else
+            echo "Creating new branch: $BRANCH_NAME"
+            git checkout -b "$BRANCH_NAME"
+          fi
+          
+          # Add all changes
+          git add .
+          
+          # Commit with automated message
+          git commit -m "chore: automated library listing update [AUTOMATED] - Updated ${{ env.COMPONENTS_UPDATED }} components via Library Hunter ($(date '+%Y-%m-%d %H:%M:%S'))"
+          
+          # Push the branch (force push if it already exists)
+          git push origin "$BRANCH_NAME" --force
+          
+          # Create PR body content
+          PR_BODY="## Automated Library Dependencies Update - This PR contains automated updates to component_libs.json files generated by the Library Hunter automation. - Components Updated: ${{ env.COMPONENTS_UPDATED }} - Source Build: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) - Workflow Run: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) - Library dependency information (component_libs.json) for components that had their binaries analyzed. This PR was created automatically by the Library Hunter process. This is an automated PR. Please review the changes before merging."
+
+          # Check if a PR already exists for library hunter updates
+          EXISTING_PR=$(gh pr list --repo RetroDECK/components --head "$BRANCH_NAME" --json number --jq '.[0].number' 2>/dev/null || echo "")
+          
+          if [ -n "$EXISTING_PR" ] && [ "$EXISTING_PR" != "null" ]; then
+            echo "Updating existing PR #$EXISTING_PR"
+            gh pr edit "$EXISTING_PR" --repo RetroDECK/components --body "$PR_BODY"
+            echo "PR_NUMBER=$EXISTING_PR" >> $GITHUB_ENV
+            echo "PR_CREATED=updated" >> $GITHUB_ENV
+          else
+            # Create new PR
+            echo "Creating new PR"
+            PR_NUMBER=$(gh pr create \
+              --repo RetroDECK/components \
+              --title "chore: automated library listing update [AUTOMATED]" \
+              --body "$PR_BODY" \
+              --head "$BRANCH_NAME" \
+              --base main \
+              --label "automated" \
+              --label "dependencies" \
+              --json number --jq '.number')
+            
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "PR_CREATED=created" >> $GITHUB_ENV
+          fi
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Generate summary
+      - name: Generate Hunt Summary
+        id: hunt-summary
+        run: |
+          HUNT_STATUS="success"
+          HUNT_MESSAGE=""
+          
+          # Check for errors
+          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+            HUNT_STATUS="warning"
+          fi
+          
+          # Build summary message
+          if [ "${{ env.COMPONENTS_UPDATED }}" = "0" ]; then
+            HUNT_MESSAGE="Library Hunter completed with no component updates needed."
+          else
+            HUNT_MESSAGE="Library Hunter completed successfully. Updated ${{ env.COMPONENTS_UPDATED }} components."
+            
+            if [ "${{ env.PR_CREATED }}" = "created" ]; then
+              HUNT_MESSAGE="$HUNT_MESSAGE Created PR #${{ env.PR_NUMBER }} in components repository."
+            elif [ "${{ env.PR_CREATED }}" = "updated" ]; then
+              HUNT_MESSAGE="$HUNT_MESSAGE Updated existing PR #${{ env.PR_NUMBER }} in components repository."
+            fi
+          fi
+          
+          # Add warnings if any
+          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+            HUNT_MESSAGE="$HUNT_MESSAGE Warning: Some components had issues during analysis."
+          fi
+          
+          echo "HUNT_STATUS=$HUNT_STATUS" >> $GITHUB_OUTPUT
+          echo "HUNT_MESSAGE=$HUNT_MESSAGE" >> $GITHUB_OUTPUT
+          
+          # Create step summary
+          echo "# 🔍 Library Hunter Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Status** | $HUNT_STATUS |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Components Updated** | ${{ env.COMPONENTS_UPDATED }} |" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -n "${{ env.PR_NUMBER }}" ]; then
+            echo "| **Components PR** | [#${{ env.PR_NUMBER }}](https://github.com/RetroDECK/components/pull/${{ env.PR_NUMBER }}) |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Result:** $HUNT_MESSAGE" >> $GITHUB_STEP_SUMMARY
+          
+          # Add logs if there were warnings
+          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## ⚠️ Warnings" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            head -50 /tmp/hunt_errors.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Add full log
+          if [ -f "/tmp/hunt_libraries.log" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 📋 Full Log" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '<details><summary>Click to expand</summary>' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -100 /tmp/hunt_libraries.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '</details>' >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Cleanup
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up temporary directories..."
+          rm -rf /tmp/RetroDECK || true
+          echo "Cleanup completed"
+
+  GitHub-publish:
+    runs-on: ubuntu-latest
+    needs: [Build_RetroDECK, Library_Hunter]
     env:
       VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
     steps:
@@ -357,6 +613,16 @@ jobs:
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Direct Link:** $RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          
+          # Add Library Hunter status if available
+          if [ -n "${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 🔍 Library Hunter Status" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Status:** ${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "${{ needs.Library_Hunter.outputs.HUNT_MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+          fi
           
           # Add components information if available
           if [ -f "retrodeck-artifacts/components/components_version_list.md" ]; then
