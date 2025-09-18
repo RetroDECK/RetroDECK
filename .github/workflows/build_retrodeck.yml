@@ -173,10 +173,16 @@ jobs:
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
         run: |
-          # Find the flatpak file
-          FLATPAK_FILE=$(find retrodeck-artifacts -name "RetroDECK*.flatpak" | head -n 1)
-          if [ -z "$FLATPAK_FILE" ]; then
-            echo "ERROR: No RetroDECK flatpak file found in artifacts"
+          echo "Looking for RetroDECK flatpak files..."
+          ls -la retrodeck-artifacts/
+          
+          # Find the flatpak file in out directory
+          FLATPAK_FILE=$(find retrodeck-artifacts/out -name "*.flatpak" 2>/dev/null | head -n 1)
+          
+          if [ -z "$FLATPAK_FILE" ] || [ ! -f "$FLATPAK_FILE" ]; then
+            echo "ERROR: No RetroDECK flatpak file found"
+            echo "Available files in out directory:"
+            find retrodeck-artifacts/out -type f 2>/dev/null | head -20
             exit 1
           fi
           
