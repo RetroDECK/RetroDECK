@@ -148,7 +148,7 @@ jobs:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
-          path: /tmp/RetroDECK/RetroDECK
+          path: temp-retrodeck
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
       # Download RetroDECK artifacts (needed for flatpak installation)
@@ -161,7 +161,7 @@ jobs:
         with:
           repository: RetroDECK/components
           ref: cooker # we are executing this on cooker only as we expect that main is already fine
-          path: /tmp/RetroDECK/components
+          path: temp-components
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
       # Install dependencies
@@ -190,15 +190,15 @@ jobs:
           set +e  # Don't exit on errors, we'll handle them
           
           # Set environment variables for the script
-          export RETRODECK_REPO_DIR="/tmp/RetroDECK/RetroDECK"
-          export COMPONENTS_REPO_DIR="/tmp/RetroDECK/components"
+          export RETRODECK_REPO_DIR="$GITHUB_WORKSPACE/temp-retrodeck"
+          export COMPONENTS_REPO_DIR="$GITHUB_WORKSPACE/temp-components"
           export FLATPAK_DIR="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components"
-          export HUNT_LOG="/tmp/hunt_libraries.log"
-          export HUNT_ERRORS="/tmp/hunt_errors.log"
+          export RD_LOGGING_LEVEL="debug"
+          export RD_XDG_CONFIG_LOGS_PATH="$GITHUB_WORKSPACE"
           
           # Run the library hunter script
           echo "Running Library Hunter script..."
-          SCRIPT_OUTPUT=$(/tmp/RetroDECK/RetroDECK/automation_tools/library_hunter_cicd.sh hunt 2>&1)
+          SCRIPT_OUTPUT=$($GITHUB_WORKSPACE/temp-retrodeck/automation_tools/library_hunter_cicd.sh hunt 2>&1)
           SCRIPT_EXIT_CODE=$?
           
           echo "$SCRIPT_OUTPUT"
@@ -233,7 +233,7 @@ jobs:
         id: create-pr
         if: env.COMPONENTS_UPDATED != '0'
         run: |
-          cd /tmp/RetroDECK/components
+          cd $GITHUB_WORKSPACE/temp-components
           
           # Configure git
           git config --global user.name "RetroDECK Library Hunter"
@@ -306,7 +306,7 @@ jobs:
           HUNT_MESSAGE=""
           
           # Check for errors
-          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+          if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
             HUNT_STATUS="warning"
           fi
           
@@ -324,7 +324,7 @@ jobs:
           fi
           
           # Add warnings if any
-          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+          if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
             HUNT_MESSAGE="$HUNT_MESSAGE Warning: Some components had issues during analysis."
           fi
           
@@ -347,24 +347,24 @@ jobs:
           echo "**Result:** $HUNT_MESSAGE" >> $GITHUB_STEP_SUMMARY
           
           # Add logs if there were warnings
-          if [ -f "/tmp/hunt_errors.log" ] && [ -s "/tmp/hunt_errors.log" ]; then
+          if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## ⚠️ Warnings" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            head -50 /tmp/hunt_errors.log >> $GITHUB_STEP_SUMMARY
+            head -50 $GITHUB_WORKSPACE/retrodeck.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           
           # Add full log
-          if [ -f "/tmp/hunt_libraries.log" ]; then
+          if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## 📋 Full Log" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo '<details><summary>Click to expand</summary>' >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -100 /tmp/hunt_libraries.log >> $GITHUB_STEP_SUMMARY
+            tail -100 $GITHUB_WORKSPACE/retrodeck.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo '</details>' >> $GITHUB_STEP_SUMMARY
@@ -375,7 +375,7 @@ jobs:
         if: always()
         run: |
           echo "Cleaning up temporary directories..."
-          rm -rf /tmp/RetroDECK || true
+          rm -rf temp-retrodeck temp-components || true
           echo "Cleanup completed"
 
   GitHub-publish:

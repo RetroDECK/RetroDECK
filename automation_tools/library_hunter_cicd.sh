@@ -8,8 +8,8 @@ set -euo pipefail
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RETRODECK_REPO_DIR="${RETRODECK_REPO_DIR:-/tmp/RetroDECK/RetroDECK}"
-COMPONENTS_REPO_DIR="${COMPONENTS_REPO_DIR:-/tmp/RetroDECK/components}"
+RETRODECK_REPO_DIR="${RETRODECK_REPO_DIR:-$(dirname "$SCRIPT_DIR")}"
+COMPONENTS_REPO_DIR="${COMPONENTS_REPO_DIR:-$HOME/temp-components}"
 FLATPAK_DIR="${FLATPAK_DIR:-$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components}"
 
 # Import RetroDECK logging system
@@ -20,7 +20,7 @@ source "$SCRIPT_DIR/../functions/logger.sh" || {
 
 # Configure logging
 rd_logging_level="${RD_LOGGING_LEVEL:-info}"
-rd_xdg_config_logs_path="${RD_XDG_CONFIG_LOGS_PATH:-/tmp}"
+rd_xdg_config_logs_path="${RD_XDG_CONFIG_LOGS_PATH:-$HOME}"
 
 # Function to extract exec command from component launcher
 extract_exec_command() {
@@ -258,7 +258,7 @@ prepare_pr_changes() {
 # Function to cleanup
 cleanup() {
     log i "Cleaning up temporary directories..."
-    rm -rf /tmp/RetroDECK || true
+    rm -rf temp-retrodeck temp-components || true
     log i "Cleanup completed"
 }
 
@@ -276,8 +276,8 @@ Commands:
     help        Show this help message
 
 Options:
-    --retrodeck-repo DIR    RetroDECK repository directory (default: /tmp/RetroDECK/RetroDECK)
-    --components-repo DIR   Components repository directory (default: /tmp/RetroDECK/components)
+    --retrodeck-repo DIR    RetroDECK repository directory (default: script parent directory)
+    --components-repo DIR   Components repository directory (default: $HOME/temp-components)
     --flatpak-dir DIR       Flatpak installation directory (default: ~/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components)
 
 Environment Variables:
