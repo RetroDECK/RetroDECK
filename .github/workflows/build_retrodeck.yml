@@ -168,7 +168,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y flatpak git jq
+          sudo apt-get install -y flatpak git jq p7zip-full
 
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
@@ -179,8 +179,34 @@ jobs:
           # Find the flatpak file in out directory
           FLATPAK_FILE=$(find retrodeck-artifacts/out -name "*.flatpak" 2>/dev/null | head -n 1)
           
+          # If no direct flatpak found, try to reconstruct from 7z split files
           if [ -z "$FLATPAK_FILE" ] || [ ! -f "$FLATPAK_FILE" ]; then
-            echo "ERROR: No RetroDECK flatpak file found"
+            echo "No direct flatpak found, looking for split 7z files..."
+            
+            # Look for .flatpak.7z.001 files (split flatpak archives)
+            SPLIT_FILE=$(find retrodeck-artifacts/out -name "*.flatpak.7z.001" 2>/dev/null | head -n 1)
+            
+            if [ -n "$SPLIT_FILE" ]; then
+              echo "Found split flatpak archive: $SPLIT_FILE"
+              
+              # Extract base name without .001 extension
+              BASE_NAME=$(echo "$SPLIT_FILE" | sed 's/.001$//')
+              # Extract original flatpak name without .7z extension
+              ORIGINAL_NAME=$(echo "$BASE_NAME" | sed 's/.7z$//')
+              
+              echo "Reconstructing flatpak: $(basename "$BASE_NAME") -> $(basename "$ORIGINAL_NAME")"
+              
+              # Change to out directory and reconstruct
+              cd retrodeck-artifacts/out
+              7z x "$(basename "$BASE_NAME")"
+              cd ../..
+              
+              FLATPAK_FILE="$ORIGINAL_NAME"
+            fi
+          fi
+          
+          if [ -z "$FLATPAK_FILE" ] || [ ! -f "$FLATPAK_FILE" ]; then
+            echo "ERROR: Cannot find or reconstruct RetroDECK flatpak file"
             echo "Available files in out directory:"
             find retrodeck-artifacts/out -type f 2>/dev/null | head -20
             exit 1
