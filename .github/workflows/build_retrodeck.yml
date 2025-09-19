@@ -179,29 +179,47 @@ jobs:
           # Find the flatpak file in out directory
           FLATPAK_FILE=$(find retrodeck-artifacts/out -name "*.flatpak" 2>/dev/null | head -n 1)
           
-          # If no direct flatpak found, try to reconstruct from 7z split files
+          # If no direct flatpak found, try to reconstruct from 7z files
           if [ -z "$FLATPAK_FILE" ] || [ ! -f "$FLATPAK_FILE" ]; then
-            echo "No direct flatpak found, looking for split 7z files..."
+            echo "No direct flatpak found, looking for 7z files..."
             
-            # Look for .flatpak.7z.001 files (split flatpak archives)
+            # First look for .flatpak.7z.001 files (split flatpak archives)
             SPLIT_FILE=$(find retrodeck-artifacts/out -name "*.flatpak.7z.001" 2>/dev/null | head -n 1)
             
             if [ -n "$SPLIT_FILE" ]; then
               echo "Found split flatpak archive: $SPLIT_FILE"
               
-              # Extract base name without .001 extension
-              BASE_NAME=$(echo "$SPLIT_FILE" | sed 's/.001$//')
-              # Extract original flatpak name without .7z extension
+              # Extract base name without .001 extension and get original flatpak name
+              BASE_NAME=$(basename "$SPLIT_FILE" .001)
               ORIGINAL_NAME=$(echo "$BASE_NAME" | sed 's/.7z$//')
               
-              echo "Reconstructing flatpak: $(basename "$BASE_NAME") -> $(basename "$ORIGINAL_NAME")"
+              echo "Extracting split archive: $BASE_NAME -> $ORIGINAL_NAME"
               
-              # Change to out directory and reconstruct
+              # Change to out directory and extract (7z automatically handles all parts)
               cd retrodeck-artifacts/out
-              7z x "$(basename "$BASE_NAME")"
+              7z x "$BASE_NAME"
               cd ../..
               
-              FLATPAK_FILE="$ORIGINAL_NAME"
+              FLATPAK_FILE="retrodeck-artifacts/out/$ORIGINAL_NAME"
+            else
+              # Look for regular .flatpak.7z files (single archive)
+              ARCHIVE_FILE=$(find retrodeck-artifacts/out -name "*.flatpak.7z" 2>/dev/null | head -n 1)
+              
+              if [ -n "$ARCHIVE_FILE" ]; then
+                echo "Found regular flatpak archive: $ARCHIVE_FILE"
+                
+                # Get original flatpak name without .7z extension
+                ORIGINAL_NAME=$(basename "$ARCHIVE_FILE" .7z)
+                
+                echo "Extracting archive: $(basename "$ARCHIVE_FILE") -> $ORIGINAL_NAME"
+                
+                # Change to out directory and extract
+                cd retrodeck-artifacts/out
+                7z x "$(basename "$ARCHIVE_FILE")"
+                cd ../..
+                
+                FLATPAK_FILE="retrodeck-artifacts/out/$ORIGINAL_NAME"
+              fi
             fi
           fi
           
