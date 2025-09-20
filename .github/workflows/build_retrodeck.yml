@@ -186,13 +186,13 @@ jobs:
             cd retrodeck-artifacts/out
             
             # First try to extract .7z.001 files (split archives)
-            if ls RetroDECK*.7z.001 1> /dev/null 2>&1; then
-              echo "Found split archive, extracting..."
-              7z x RetroDECK*.7z.001
+            if ls RetroDECK*.flatpak.7z.001 1> /dev/null 2>&1; then
+              echo "Found split flatpak archive, extracting..."
+              7z x RetroDECK*.flatpak.7z.001
             # Otherwise try regular .7z files  
-            elif ls RetroDECK*.7z 1> /dev/null 2>&1; then
-              echo "Found regular archive, extracting..."
-              7z x RetroDECK*.7z
+            elif ls RetroDECK*.flatpak.7z 1> /dev/null 2>&1; then
+              echo "Found regular flatpak archive, extracting..."
+              7z x RetroDECK*.flatpak.7z
             fi
             
             cd ../..
@@ -764,7 +764,7 @@ jobs:
         continue-on-error: true
         run: |
           ls -lah retrodeck-artifacts
-          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak
+          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak"
 
       # Run Post Build Checks
       - name: Run Post Build Checks
