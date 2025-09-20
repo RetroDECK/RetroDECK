@@ -183,7 +183,7 @@ jobs:
           BASE_VERSION=$(grep '^base-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d '"')
 
           echo "Adding Flathub remote"
-          flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           
           echo "Installing runtime: $RUNTIME//$RUNTIME_VERSION"
           flatpak install --user --noninteractive -y "$RUNTIME//$RUNTIME_VERSION" || true
