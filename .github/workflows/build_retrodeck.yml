@@ -209,7 +209,7 @@ jobs:
           fi
           
           echo "Installing RetroDECK flatpak: $FLATPAK_FILE"
-          flatpak install --user --bundle --noninteractive -y "$FLATPAK_FILE"
+          flatpak install --user --bundle --noninteractive -y --install-deps-from=flathub --install-deps-from=flathub-beta "$FLATPAK_FILE"
 
       # Run Library Hunter
       - name: Hunt Libraries
@@ -404,6 +404,10 @@ jobs:
         run: |
           echo "Cleaning up temporary directories..."
           rm -rf temp-retrodeck temp-components || true
+          echo "Uninstalling RetroDECK..."
+          flatpak uninstall --user net.retrodeck.retrodeck || true
+          echo "Uninstalling unused runtimes..."
+          flatpak uninstall --user --unused || true
           echo "Cleanup completed"
 
   GitHub-publish:
