@@ -170,6 +170,31 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y flatpak git jq p7zip-full
 
+      # Install required runtimes
+      - name: Install required runtimes
+        run: |
+          # Parse runtime information from manifest
+          MANIFEST_FILE="$GITHUB_WORKSPACE/temp-retrodeck/net.retrodeck.retrodeck.yml"
+          
+          RUNTIME=$(grep '^runtime:' "$MANIFEST_FILE" | cut -d' ' -f2)
+          RUNTIME_VERSION=$(grep '^runtime-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d "'")
+          SDK=$(grep '^sdk:' "$MANIFEST_FILE" | cut -d' ' -f2)
+          BASE=$(grep '^base:' "$MANIFEST_FILE" | cut -d' ' -f2)
+          BASE_VERSION=$(grep '^base-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d '"')
+          
+          echo "Installing runtime: $RUNTIME//$RUNTIME_VERSION"
+          flatpak install --user --noninteractive -y "$RUNTIME//$RUNTIME_VERSION" || true
+          
+          echo "Installing SDK: $SDK//$RUNTIME_VERSION"
+          flatpak install --user --noninteractive -y "$SDK//$RUNTIME_VERSION" || true
+          
+          echo "Installing base: $BASE//$BASE_VERSION"
+          flatpak install --user --noninteractive -y "$BASE//$BASE_VERSION" || true
+          
+          # Install ffmpeg extension
+          echo "Installing ffmpeg extension"
+          flatpak install --user --noninteractive -y org.freedesktop.Platform.ffmpeg-full//$RUNTIME_VERSION || true
+
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
         run: |
@@ -209,7 +234,8 @@ jobs:
           fi
           
           echo "Installing RetroDECK flatpak: $FLATPAK_FILE"
-          flatpak install --user --bundle --noninteractive -y --install-deps-from=flathub --install-deps-from=flathub-beta "$FLATPAK_FILE"
+          
+          flatpak install --user --bundle --noninteractive -y "$FLATPAK_FILE"
 
       # Run Library Hunter
       - name: Hunt Libraries
