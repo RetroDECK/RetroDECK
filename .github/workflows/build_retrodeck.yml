@@ -181,6 +181,9 @@ jobs:
           SDK=$(grep '^sdk:' "$MANIFEST_FILE" | cut -d' ' -f2)
           BASE=$(grep '^base:' "$MANIFEST_FILE" | cut -d' ' -f2)
           BASE_VERSION=$(grep '^base-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d '"')
+
+          echo "Adding Flathub remote"
+          flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           
           echo "Installing runtime: $RUNTIME//$RUNTIME_VERSION"
           flatpak install --user --noninteractive -y "$RUNTIME//$RUNTIME_VERSION" || true
@@ -191,7 +194,6 @@ jobs:
           echo "Installing base: $BASE//$BASE_VERSION"
           flatpak install --user --noninteractive -y "$BASE//$BASE_VERSION" || true
           
-          # Install ffmpeg extension
           echo "Installing ffmpeg extension"
           flatpak install --user --noninteractive -y org.freedesktop.Platform.ffmpeg-full//$RUNTIME_VERSION || true
 
