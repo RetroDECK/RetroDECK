@@ -175,6 +175,7 @@ jobs:
         run: |
           # Parse runtime information from manifest
           MANIFEST_FILE="$GITHUB_WORKSPACE/temp-retrodeck/net.retrodeck.retrodeck.yml"
+          ARCH='x86_64'
           
           RUNTIME=$(grep '^runtime:' "$MANIFEST_FILE" | cut -d' ' -f2)
           RUNTIME_VERSION=$(grep '^runtime-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d "'")
@@ -184,18 +185,19 @@ jobs:
 
           echo "Adding Flathub remote"
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-          
-          echo "Installing runtime: $RUNTIME//$RUNTIME_VERSION"
-          flatpak install --user --noninteractive -y "$RUNTIME//$RUNTIME_VERSION" || true
-          
-          echo "Installing SDK: $SDK//$RUNTIME_VERSION"
-          flatpak install --user --noninteractive -y "$SDK//$RUNTIME_VERSION" || true
-          
-          echo "Installing base: $BASE//$BASE_VERSION"
-          flatpak install --user --noninteractive -y "$BASE//$BASE_VERSION" || true
-          
+
+          echo "Installing runtime: $RUNTIME/$ARCH/$RUNTIME_VERSION"
+          flatpak install --user --noninteractive -y "$RUNTIME/$ARCH/$RUNTIME_VERSION" || true
+
+          echo "Installing SDK: $SDK/$ARCH/$RUNTIME_VERSION"
+          flatpak install --user --noninteractive -y "$SDK/$ARCH/$RUNTIME_VERSION" || true
+
+          echo "Installing base: $BASE/$ARCH/$BASE_VERSION"
+          flatpak install --user --noninteractive -y "$BASE/$ARCH/$BASE_VERSION" || true
+
+          # Install ffmpeg extension
           echo "Installing ffmpeg extension"
-          flatpak install --user --noninteractive -y org.freedesktop.Platform.ffmpeg-full//$RUNTIME_VERSION || true
+          flatpak install --user --noninteractive -y org.freedesktop.Platform.ffmpeg-full/$ARCH/$RUNTIME_VERSION || true
 
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
