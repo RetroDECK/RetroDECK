@@ -132,6 +132,8 @@ jobs:
     outputs:
       HUNT_STATUS: ${{ steps.hunt-summary.outputs.HUNT_STATUS }}
       HUNT_MESSAGE: ${{ steps.hunt-summary.outputs.HUNT_MESSAGE }}
+    env:
+      INSTALLATION_TYPE: 'user' # can be user or system
 
     steps:
       # Generate a token for accessing Components repository
@@ -184,20 +186,20 @@ jobs:
           BASE_VERSION=$(grep '^base-version:' "$MANIFEST_FILE" | cut -d' ' -f2 | tr -d '"')
 
           echo "Adding Flathub remote"
-          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak remote-add --$INSTALLATION_TYPE --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
           echo "Installing runtime: $RUNTIME/$ARCH/$RUNTIME_VERSION"
-          flatpak install --user --noninteractive -y "$RUNTIME/$ARCH/$RUNTIME_VERSION" || true
+          flatpak install --$INSTALLATION_TYPE --noninteractive -y "$RUNTIME/$ARCH/$RUNTIME_VERSION" || true
 
           echo "Installing SDK: $SDK/$ARCH/$RUNTIME_VERSION"
-          flatpak install --user --noninteractive -y "$SDK/$ARCH/$RUNTIME_VERSION" || true
+          flatpak install --$INSTALLATION_TYPE --noninteractive -y "$SDK/$ARCH/$RUNTIME_VERSION" || true
 
           echo "Installing base: $BASE/$ARCH/$BASE_VERSION"
-          flatpak install --user --noninteractive -y "$BASE/$ARCH/$BASE_VERSION" || true
+          flatpak install --$INSTALLATION_TYPE --noninteractive -y "$BASE/$ARCH/$BASE_VERSION" || true
 
           # Install ffmpeg extension
           echo "Installing ffmpeg extension"
-          flatpak install --user --noninteractive -y org.freedesktop.Platform.ffmpeg-full/$ARCH/$RUNTIME_VERSION || true
+          flatpak install --$INSTALLATION_TYPE --noninteractive -y org.freedesktop.Platform.ffmpeg-full/$ARCH/$RUNTIME_VERSION || true
 
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
@@ -238,8 +240,8 @@ jobs:
           fi
           
           echo "Installing RetroDECK flatpak: $FLATPAK_FILE"
-          
-          flatpak install --user --bundle --noninteractive -y "$FLATPAK_FILE"
+
+          flatpak install --$INSTALLATION_TYPE --bundle --noninteractive -y "$FLATPAK_FILE"
 
       # Run Library Hunter
       - name: Hunt Libraries
