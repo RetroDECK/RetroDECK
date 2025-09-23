@@ -102,7 +102,7 @@ log() {
     log_message="$timestamp $prefix [$caller] $message"
 
     # If silent mode is not active, print the message to the terminal
-    if [[ "$LOG_SILENT" != "true" ]]; then
+    if [[ "${LOG_SILENT:-false}" != "true" ]]; then
       echo -e "$colored_message" >&2
     fi
 
