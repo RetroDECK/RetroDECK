@@ -100,7 +100,11 @@ process_component() {
     log i "  Running hunt_libraries.sh for binary: $binary_path"
     
     # Run the hunt script and capture its output
-    if /bin/bash "$hunt_script" "$binary_path" 2>&1 | log d; then
+    if hunt_output=$(/bin/bash "$hunt_script" "$binary_path" 2>&1); then
+        # Log the output line by line at debug level
+        echo "$hunt_output" | while IFS= read -r line; do
+            [ -n "$line" ] && log d "$line"
+        done
         log i "  Library hunting completed successfully for $component_name"
         
         # Check if component_libs.json was created/updated
