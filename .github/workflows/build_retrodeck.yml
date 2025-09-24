@@ -269,13 +269,13 @@ jobs:
           # Debug, list directories - Probably between steps the runner is cleaned?
           echo "Debug: Listing $HOME/.local/share/flatpak/app/"
           ls -lah $HOME/.local/share/flatpak/app/
-          echo "Debug: Listing $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components"
-          ls -lah $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components
+          echo "Debug: Listing $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/files/retrodeck/components"
+          ls -lah $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/files/retrodeck/components
           
           # Set environment variables for the script
           export RETRODECK_REPO_DIR="$GITHUB_WORKSPACE/temp-retrodeck"
           export COMPONENTS_REPO_DIR="$GITHUB_WORKSPACE/temp-components"
-          export FLATPAK_DIR="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components"
+          export FLATPAK_DIR="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/files/retrodeck/components"
           export RD_LOGGING_LEVEL="debug"
           export RD_XDG_CONFIG_LOGS_PATH="$GITHUB_WORKSPACE"
           
