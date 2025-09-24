@@ -121,23 +121,24 @@ process_component() {
     fi
 }
 
-# Function to stage changes for a component
-stage_component_changes() {
+# Function to commit changes for a component
+commit_component_changes() {
     local component_name="$1"
     local components_component_dir="$COMPONENTS_REPO_DIR/$component_name"
     
     cd "$components_component_dir"
     
-    # Check if there are changes to stage
+    # Check if there are changes to commit
     if git diff --quiet component_libs.json; then
-        log d "No changes to stage for $component_name"
+        log d "No changes to commit for $component_name"
         return 1
     fi
     
-    # Add changes
+    # Add and commit changes
     git add component_libs.json
+    git commit -m "chore($component_name): update $component_name libraries [AUTOMATED]"
     
-    log i "Staged changes for $component_name"
+    log i "Committed changes for $component_name"
     return 0
 }
 
@@ -192,7 +193,7 @@ main() {
             0)
                 # Component was updated successfully
                 component_name=$(basename "$(dirname "$launcher_script")")
-                if stage_component_changes "$component_name"; then
+                if commit_component_changes "$component_name"; then
                     components_updated=$((components_updated + 1))
                 fi
                 ;;
@@ -219,6 +220,8 @@ main() {
     echo "COMPONENTS_PROCESSED=$components_processed"
     echo "COMPONENTS_UPDATED=$components_updated"
     echo "COMPONENTS_FAILED=$components_failed"
+    
+    # All commits are already made individually for each component
     
     # Exit with appropriate code
     if [ "$components_failed" -gt 0 ]; then

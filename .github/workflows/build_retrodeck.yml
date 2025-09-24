@@ -322,9 +322,9 @@ jobs:
           git config --global user.name "RetroDECK Library Hunter"
           git config --global user.email "retrodeck@retrodeck.net"
           
-          # Check if there are any changes (commits ahead of origin/cooker)
+          # Check if there are any commits ahead of origin/cooker
           if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/cooker)" ]; then
-            echo "No changes detected in components repository"
+            echo "No new commits detected in components repository"
             echo "PR_CREATED=false" >> $GITHUB_ENV
             exit 0
           fi
@@ -342,11 +342,8 @@ jobs:
             git checkout -b "$BRANCH_NAME"
           fi
           
-          # Add all changes
-          git add .
-          
-          # Commit with automated message
-          git commit -m "chore: automated library listing update [AUTOMATED] - Updated ${{ env.COMPONENTS_UPDATED }} components via Library Hunter ($(date '+%Y-%m-%d %H:%M:%S'))"
+          # All changes are already committed individually by the library hunter script
+          # No additional commit needed
           
           # Push the branch (force push if it already exists)
           git push origin "$BRANCH_NAME" --force
