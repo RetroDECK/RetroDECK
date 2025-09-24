@@ -265,6 +265,12 @@ jobs:
         id: hunt-libraries
         run: |
           set +e  # Don't exit on errors, we'll handle them
+
+          # Debug, list directories - Probably between steps the runner is cleaned?
+          echo "Debug: Listing $HOME/.local/share/flatpak/app/"
+          ls -lah $HOME/.local/share/flatpak/app/
+          echo "Debug: Listing $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components"
+          ls -lah $HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/retrodeck/components
           
           # Set environment variables for the script
           export RETRODECK_REPO_DIR="$GITHUB_WORKSPACE/temp-retrodeck"
