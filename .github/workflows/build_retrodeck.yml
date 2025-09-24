@@ -322,8 +322,8 @@ jobs:
           git config --global user.name "RetroDECK Library Hunter"
           git config --global user.email "retrodeck@retrodeck.net"
           
-          # Check if there are any changes
-          if git diff --quiet && git diff --staged --quiet; then
+          # Check if there are any changes (commits ahead of origin/cooker)
+          if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/cooker)" ]; then
             echo "No changes detected in components repository"
             echo "PR_CREATED=false" >> $GITHUB_ENV
             exit 0
@@ -421,6 +421,8 @@ jobs:
           echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| **Status** | $HUNT_STATUS |" >> $GITHUB_STEP_SUMMARY
           echo "| **Components Updated** | ${{ env.COMPONENTS_UPDATED }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Components Processed** | ${{ env.COMPONENTS_PROCESSED }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Components Failed** | ${{ env.COMPONENTS_FAILED }} |" >> $GITHUB_STEP_SUMMARY
           
           if [ -n "${{ env.PR_NUMBER }}" ]; then
             echo "| **Components PR** | [#${{ env.PR_NUMBER }}](https://github.com/RetroDECK/components/pull/${{ env.PR_NUMBER }}) |" >> $GITHUB_STEP_SUMMARY
@@ -429,13 +431,35 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Result:** $HUNT_MESSAGE" >> $GITHUB_STEP_SUMMARY
           
+          # Add updated components details
+          if [ "${{ env.COMPONENTS_UPDATED }}" != "0" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 📦 Components Updated" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            git diff --name-only origin/cooker | grep "component_libs.json" | sed 's|.*/||' | sed 's|/component_libs.json||' | while read component; do
+              echo "- $component" >> $GITHUB_STEP_SUMMARY
+            done
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Libraries Added" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            git diff --name-only origin/cooker | grep "component_libs.json" | while read file; do
+              component=$(basename "$(dirname "$file")")
+              echo "#### $component" >> $GITHUB_STEP_SUMMARY
+              echo '```diff' >> $GITHUB_STEP_SUMMARY
+              git diff origin/cooker "$file" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            done
+          fi
+          
           # Add logs if there were warnings
           if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## ⚠️ Warnings" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            head -50 $GITHUB_WORKSPACE/retrodeck.log >> $GITHUB_STEP_SUMMARY
+            grep "\[WARN\]" "$GITHUB_WORKSPACE/retrodeck.log" | head -20 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           

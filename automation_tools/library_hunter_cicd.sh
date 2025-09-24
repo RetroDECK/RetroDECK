@@ -121,24 +121,23 @@ process_component() {
     fi
 }
 
-# Function to commit changes for a component
-commit_component_changes() {
+# Function to stage changes for a component
+stage_component_changes() {
     local component_name="$1"
     local components_component_dir="$COMPONENTS_REPO_DIR/$component_name"
     
     cd "$components_component_dir"
     
-    # Check if there are changes to commit
-    if git diff --quiet && git diff --staged --quiet; then
-        log d "No changes to commit for $component_name"
+    # Check if there are changes to stage
+    if git diff --quiet component_libs.json; then
+        log d "No changes to stage for $component_name"
         return 1
     fi
     
-    # Add and commit changes
+    # Add changes
     git add component_libs.json
-    git commit -m "chore($component_name): updated library listing component_libs.json for $component_name [AUTOMATED]"
     
-    log i "Committed changes for $component_name"
+    log i "Staged changes for $component_name"
     return 0
 }
 
@@ -193,7 +192,7 @@ main() {
             0)
                 # Component was updated successfully
                 component_name=$(basename "$(dirname "$launcher_script")")
-                if commit_component_changes "$component_name"; then
+                if stage_component_changes "$component_name"; then
                     components_updated=$((components_updated + 1))
                 fi
                 ;;
