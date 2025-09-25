@@ -362,15 +362,17 @@ jobs:
           else
             # Create new PR
             echo "Creating new PR"
-            PR_NUMBER=$(gh pr create \
+            gh pr create \
               --repo RetroDECK/components \
               --title "chore: automated library listing update [AUTOMATED]" \
               --body "$PR_BODY" \
               --head "$BRANCH_NAME" \
               --base main \
               --label "automated" \
-              --label "dependencies" \
-              --json number --jq '.number')
+              --label "dependencies"
+            
+            # Get the PR number after creation
+            PR_NUMBER=$(gh pr list --repo RetroDECK/components --head "$BRANCH_NAME" --json number --jq '.[0].number')
             
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             echo "PR_CREATED=created" >> $GITHUB_ENV
