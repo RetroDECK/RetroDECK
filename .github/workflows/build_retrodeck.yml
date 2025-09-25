@@ -364,12 +364,10 @@ jobs:
             echo "Creating new PR"
             gh pr create \
               --repo RetroDECK/components \
-              --title "chore: automated library listing update [AUTOMATED]" \
+              --title "update(lib): update needed libraries for components [AUTOMATED]" \
               --body "$PR_BODY" \
               --head "$BRANCH_NAME" \
               --base main \
-              --label "automated" \
-              --label "dependencies"
             
             # Get the PR number after creation
             PR_NUMBER=$(gh pr list --repo RetroDECK/components --head "$BRANCH_NAME" --json number --jq '.[0].number')
