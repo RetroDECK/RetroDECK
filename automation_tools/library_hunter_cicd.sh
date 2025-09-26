@@ -22,6 +22,80 @@ source "$SCRIPT_DIR/../functions/logger.sh" || {
 rd_logging_level="${RD_LOGGING_LEVEL:-info}"
 rd_xdg_config_logs_path="${RD_XDG_CONFIG_LOGS_PATH:-$HOME}"
 
+# Function to recursively search for exec commands in scripts
+find_exec_in_script() {
+    local script_file="$1"
+    local component_path="$2"
+    local max_depth="${3:-3}"  # Prevent infinite recursion
+    
+    if [ ! -f "$script_file" ]; then
+        return 1
+    fi
+    
+    if [ "$max_depth" -le 0 ]; then
+        log w "Maximum recursion depth reached while searching for exec in $script_file"
+        return 1
+    fi
+    
+    log d "Searching for exec command in: $script_file (depth: $((4-max_depth)))"
+    
+    # First, try to find exec at the beginning of a line
+    local exec_command
+    exec_command=$(grep -E "^exec " "$script_file" | head -n 1)
+    
+    # If not found, try fallback: search for " exec " anywhere in the line
+    if [ -z "$exec_command" ]; then
+        exec_command=$(grep -E " exec " "$script_file" | head -n 1)
+        log d "Using fallback search for ' exec ' in $script_file"
+    fi
+    
+    if [ -n "$exec_command" ]; then
+        log d "Found exec command: $exec_command"
+        
+        # Extract binary path from exec command and expand variables
+        # Replace $component_path with actual path
+        local binary_path
+        binary_path=$(echo "$exec_command" | sed -E 's/.*exec +//' | sed "s|\$component_path|$component_path|g" | cut -d' ' -f1)
+        binary_path=$(eval echo "$binary_path")  # Expand any remaining variables
+        
+        # Check if the extracted path is a binary or another script
+        if [ -f "$binary_path" ]; then
+            # Check if it's executable
+            if [ -x "$binary_path" ]; then
+                # Check if it's an AppRun file or appears to be a script
+                local filename=$(basename "$binary_path")
+                local is_script=false
+                
+                # Check if it's AppRun or has shebang or contains shell script patterns
+                if [[ "$filename" == "AppRun" ]] || head -n 1 "$binary_path" | grep -q "^#!" || head -n 5 "$binary_path" | grep -qE "(exec |/bin/|/usr/bin/)"; then
+                    is_script=true
+                fi
+                
+                if [ "$is_script" = true ]; then
+                    # It's a script (including AppRun), search recursively
+                    log d "Target is a script/AppRun, searching recursively: $binary_path"
+                    find_exec_in_script "$binary_path" "$component_path" $((max_depth - 1))
+                    return $?
+                else
+                    # It's likely a binary, return it
+                    echo "$binary_path"
+                    return 0
+                fi
+            else
+                # File exists but not executable, return it anyway
+                echo "$binary_path"
+                return 0
+            fi
+        else
+            log w "Extracted binary path does not exist: $binary_path"
+            return 1
+        fi
+    else
+        log w "No exec command found in $script_file"
+        return 1
+    fi
+}
+
 # Function to extract exec command from component launcher
 extract_exec_command() {
     local launcher_script="$1"
@@ -32,24 +106,8 @@ extract_exec_command() {
         return 1
     fi
     
-    # Extract exec command from launcher script
-    local exec_command
-    exec_command=$(grep -E "^exec " "$launcher_script" | head -n 1)
-    
-    if [ -z "$exec_command" ]; then
-        log w "No exec command found in $launcher_script"
-        return 1
-    fi
-    
-    log d "Found exec command: $exec_command"
-    
-    # Extract binary path from exec command and expand variables
-    # Replace $component_path with actual path
-    local binary_path
-    binary_path=$(echo "$exec_command" | sed "s|^exec ||" | sed "s|\$component_path|$component_path|g" | cut -d' ' -f1)
-    binary_path=$(eval echo "$binary_path")  # Expand any remaining variables
-    
-    echo "$binary_path"
+    # Use the recursive helper function to find the actual binary
+    find_exec_in_script "$launcher_script" "$component_path"
 }
 
 # Function to process a single component
