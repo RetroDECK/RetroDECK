@@ -488,7 +488,7 @@ jobs:
 
   GitHub-publish:
     runs-on: ubuntu-latest
-    needs: [Build_RetroDECK, Library_Hunter]
+    needs: [Build_RetroDECK]
     env:
       VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
     steps:
