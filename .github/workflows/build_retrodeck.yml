@@ -394,18 +394,18 @@ jobs:
           if [ "${{ env.COMPONENTS_UPDATED }}" = "0" ]; then
             HUNT_MESSAGE="Library Hunter completed with no component updates needed."
           else
-            HUNT_MESSAGE="Library Hunter completed successfully. Updated ${{ env.COMPONENTS_UPDATED }} components."
+            HUNT_MESSAGE="Library Hunter completed successfully.\nUpdated ${{ env.COMPONENTS_UPDATED }} components."
             
             if [ "${{ env.PR_CREATED }}" = "created" ]; then
-              HUNT_MESSAGE="$HUNT_MESSAGE Created PR #${{ env.PR_NUMBER }} in components repository."
+              HUNT_MESSAGE="$HUNT_MESSAGE\nCreated PR #${{ env.PR_NUMBER }} in components repository."
             elif [ "${{ env.PR_CREATED }}" = "updated" ]; then
-              HUNT_MESSAGE="$HUNT_MESSAGE Updated existing PR #${{ env.PR_NUMBER }} in components repository."
+              HUNT_MESSAGE="$HUNT_MESSAGE\nUpdated existing PR #${{ env.PR_NUMBER }} in components repository."
             fi
           fi
           
           # Add warnings if any
           if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
-            HUNT_MESSAGE="$HUNT_MESSAGE Warning: Some components had issues during analysis."
+            HUNT_MESSAGE="$HUNT_MESSAGE\n\n>[!WARNING]\n> Some components had issues during analysis."
           fi
           
           echo "HUNT_STATUS=$HUNT_STATUS" >> $GITHUB_OUTPUT
