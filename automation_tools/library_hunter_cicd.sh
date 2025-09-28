@@ -56,7 +56,20 @@ find_exec_in_script() {
         # Replace $component_path with actual path
         local binary_path
         binary_path=$(echo "$exec_command" | sed -E 's/.*exec +//' | sed "s|\$component_path|$component_path|g" | cut -d' ' -f1)
-        binary_path=$(eval echo "$binary_path")  # Expand any remaining variables
+        
+        # Skip if binary_path is empty or contains only whitespace
+        if [ -z "$binary_path" ] || [[ "$binary_path" =~ ^[[:space:]]*$ ]]; then
+            log w "Empty or whitespace-only binary path extracted from: $exec_command"
+            return 1
+        fi
+        
+        binary_path=$(eval echo "$binary_path" 2>/dev/null)  # Expand any remaining variables, suppress errors
+        
+        # Double-check after variable expansion
+        if [ -z "$binary_path" ] || [[ "$binary_path" =~ ^[[:space:]]*$ ]]; then
+            log w "Binary path became empty after variable expansion"
+            return 1
+        fi
         
         # Check if the extracted path is a binary or another script
         if [ -f "$binary_path" ]; then
@@ -87,11 +100,16 @@ find_exec_in_script() {
                 return 0
             fi
         else
-            log w "Extracted binary path does not exist: $binary_path"
+            log w "Extracted binary path does not exist: '$binary_path' (from exec: $exec_command)"
             return 1
         fi
     else
         log w "No exec command found in $script_file"
+        # Log first few lines for debugging
+        log d "Script content preview:"
+        head -n 10 "$script_file" | while IFS= read -r line; do
+            log d "  $line"
+        done
         return 1
     fi
 }
@@ -126,18 +144,29 @@ process_component() {
     
     # Extract binary path
     if ! binary_path=$(extract_exec_command "$launcher_script" "$component_path"); then
+        log w "Failed to extract binary path from launcher script"
         return 1
     fi
-    
+
+    # Validate binary path is not empty
+    if [ -z "$binary_path" ] || [[ "$binary_path" =~ ^[[:space:]]*$ ]]; then
+        log w "Empty binary path extracted from launcher script"
+        return 1
+    fi
+
     log d "  Binary path: $binary_path"
-    
+
     # Check if binary exists
     if [ ! -f "$binary_path" ]; then
         log w "Binary not found: $binary_path"
         return 1
     fi
     
-    # Check if component directory exists in components repo
+    # Check if binary is readable and appears to be a valid ELF file
+    if ! file "$binary_path" | grep -q "ELF"; then
+        log w "Binary does not appear to be a valid ELF file: $binary_path"
+        # Still continue as some binaries might not be detected properly
+    fi    # Check if component directory exists in components repo
     local components_component_dir="$COMPONENTS_REPO_DIR/$component_name"
     if [ ! -d "$components_component_dir" ]; then
         log w "Component directory not found in components repo: $components_component_dir"
@@ -156,6 +185,18 @@ process_component() {
     fi
     
     log i "  Running hunt_libraries.sh for binary: $binary_path"
+    
+    # Final validation before running hunt script
+    if [ ! -f "$binary_path" ] || [ ! -r "$binary_path" ]; then
+        log e "Binary is not readable or does not exist: $binary_path"
+        return 1
+    fi
+    
+    # Test if objdump can process the binary
+    if ! objdump -p "$binary_path" >/dev/null 2>&1; then
+        log w "objdump cannot process binary (not an ELF file?): $binary_path"
+        return 2  # No update needed - binary not compatible
+    fi
     
     # Run the hunt script and capture its output
     if hunt_output=$(/bin/bash "$hunt_script" "$binary_path" 2>&1); then
