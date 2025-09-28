@@ -399,32 +399,29 @@ jobs:
             HUNT_STATUS="warning"
           fi
           
-          # Build summary message
+          # Build summary message (single line format to avoid GitHub Actions parsing issues)
           if [ "${{ env.COMPONENTS_UPDATED }}" = "0" ]; then
             HUNT_MESSAGE="Library Hunter completed with no component updates needed."
           else
-            HUNT_MESSAGE="Library Hunter completed successfully.
-            Updated ${{ env.COMPONENTS_UPDATED }} components."
+            HUNT_MESSAGE="Library Hunter completed successfully. Updated ${{ env.COMPONENTS_UPDATED }} components."
             
             if [ "${{ env.PR_CREATED }}" = "created" ]; then
-              HUNT_MESSAGE="$HUNT_MESSAGE
-              Created PR #${{ env.PR_NUMBER }} in components repository."
+              HUNT_MESSAGE="$HUNT_MESSAGE Created PR #${{ env.PR_NUMBER }} in components repository."
             elif [ "${{ env.PR_CREATED }}" = "updated" ]; then
-              HUNT_MESSAGE="$HUNT_MESSAGE
-              Updated existing PR #${{ env.PR_NUMBER }} in components repository."
+              HUNT_MESSAGE="$HUNT_MESSAGE Updated existing PR #${{ env.PR_NUMBER }} in components repository."
             fi
           fi
           
           # Add warnings if any
           if [ -f "$GITHUB_WORKSPACE/retrodeck.log" ] && [ -s "$GITHUB_WORKSPACE/retrodeck.log" ]; then
-            HUNT_MESSAGE="$HUNT_MESSAGE
-            
-            >[!WARNING]
-            > Some components had issues during analysis."
+            HUNT_MESSAGE="$HUNT_MESSAGE Some components had issues during analysis."
           fi
           
           echo "HUNT_STATUS=$HUNT_STATUS" >> $GITHUB_OUTPUT
-          echo "HUNT_MESSAGE=$HUNT_MESSAGE" >> $GITHUB_OUTPUT
+          # Use multiline format for GitHub Actions output
+          echo "HUNT_MESSAGE<<EOF" >> $GITHUB_OUTPUT
+          echo "$HUNT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           
           # Create step summary
           echo "# 🔍 Library Hunter Results" >> $GITHUB_STEP_SUMMARY
@@ -448,21 +445,36 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## 📦 Components Updated" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            git diff --name-only origin/cooker | grep "component_libs.json" | sed 's|.*/||' | sed 's|/component_libs.json||' | while read component; do
-              echo "- $component" >> $GITHUB_STEP_SUMMARY
-            done
             
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Libraries Added" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            git diff --name-only origin/cooker | grep "component_libs.json" | while read file; do
-              component=$(basename "$(dirname "$file")")
-              echo "#### $component" >> $GITHUB_STEP_SUMMARY
-              echo '```diff' >> $GITHUB_STEP_SUMMARY
-              git diff origin/cooker "$file" >> $GITHUB_STEP_SUMMARY
-              echo '```' >> $GITHUB_STEP_SUMMARY
+            # Change to components directory and run git commands
+            cd $GITHUB_WORKSPACE/temp-components || {
+              echo "- Unable to access components repository for detailed diff" >> $GITHUB_STEP_SUMMARY
+              cd $GITHUB_WORKSPACE
+            }
+            
+            if [ -d "$GITHUB_WORKSPACE/temp-components/.git" ]; then
+              git diff --name-only origin/cooker 2>/dev/null | grep "component_libs.json" | sed 's|.*/||' | sed 's|/component_libs.json||' | while read component; do
+                echo "- $component" >> $GITHUB_STEP_SUMMARY
+              done || echo "- No detailed component list available" >> $GITHUB_STEP_SUMMARY
+              
               echo "" >> $GITHUB_STEP_SUMMARY
-            done
+              echo "### Libraries Added" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              git diff --name-only origin/cooker 2>/dev/null | grep "component_libs.json" | while read file; do
+                component=$(basename "$(dirname "$file")")
+                echo "#### $component" >> $GITHUB_STEP_SUMMARY
+                echo '```diff' >> $GITHUB_STEP_SUMMARY
+                git diff origin/cooker "$file" 2>/dev/null >> $GITHUB_STEP_SUMMARY || echo "Unable to show diff for $file" >> $GITHUB_STEP_SUMMARY
+                echo '```' >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+              done 2>/dev/null || echo "- No detailed diff available" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- Components repository not available for detailed analysis" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            # Return to workspace
+            cd $GITHUB_WORKSPACE
           fi
           
           # Add logs if there were warnings
