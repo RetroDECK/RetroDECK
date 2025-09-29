@@ -279,9 +279,9 @@ jobs:
           export RD_LOGGING_LEVEL="debug"
           export RD_XDG_CONFIG_LOGS_PATH="$GITHUB_WORKSPACE"
           
-          # Run the library hunter script
+          # Run the library hunter script in CI/CD mode
           echo "Running Library Hunter script..."
-          SCRIPT_OUTPUT=$($GITHUB_WORKSPACE/temp-retrodeck/automation_tools/library_hunter_cicd.sh hunt 2>&1)
+          SCRIPT_OUTPUT=$($GITHUB_WORKSPACE/temp-retrodeck/developer_toolbox/hunt_libraries.sh --cicd hunt 2>&1)
           SCRIPT_EXIT_CODE=$?
           
           echo "$SCRIPT_OUTPUT"
