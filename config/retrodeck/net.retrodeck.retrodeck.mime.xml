@@ -158,7 +158,9 @@
 		<glob pattern="*.k7"/>
 		<glob pattern="*.kcr"/>
 		<glob pattern="*.lha"/>
+		<glob pattern="*.lindbergh"/>
 		<glob pattern="*.lnx"/>
+		<glob pattern="*.lyx"/>
 		<glob pattern="*.lst"/>
 		<glob pattern="*.lua"/>
 		<glob pattern="*.lutro"/>
@@ -176,6 +178,7 @@
 		<glob pattern="*.mgw"/>
 		<glob pattern="*.min"/>
 		<glob pattern="*.minipsf"/>
+		<glob pattern="*.mmi"/>
 		<glob pattern="*.msa"/>
 		<glob pattern="*.mugen"/>
 		<glob pattern="*.mx1"/>
@@ -320,6 +323,7 @@
 		<glob pattern="*.z1"/>
 		<glob pattern="*.z2"/>
 		<glob pattern="*.z3"/>
+		<glob pattern="*.z3dsx"/>
 		<glob pattern="*.z4"/>
 		<glob pattern="*.z5"/>
 		<glob pattern="*.z6"/>
@@ -333,5 +337,7 @@
 		<glob pattern="*.zlb"/>
 		<glob pattern="*.znx"/>
 		<glob pattern="*.zso"/>
+		<glob pattern="*.zcci"/>
+		<glob pattern="*.zcxi"/>
 	</mime-type>
 </mime-info>
