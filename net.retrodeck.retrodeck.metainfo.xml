@@ -78,9 +78,24 @@
        <release version="0.10.0b" date="2025-12-12">
            <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.10.0b</url>
            <description>
-               <p>Fixes:</p>
+               <p>Changes:</p>
+                  <ul>
+                      <li>RetroDECK’s core has been fully re-engineered with a modular infrastructure. While this is mostly behind-the-scenes, it makes RetroDECK more robust, maintainable, and much easier for contributors to extend and improve.</li>
+                  </ul>
+               <p>Additions and Updates:</p>
                <ul>
-                   <li>WIP: Some WIP HERE</li>
+                   <li>New system: Sega Mark III runnable via RetroArch cores.</li>
+                   <li>New system: TI99 via MAME (Standalone)</li>
+                   <li>New libretro core: NooDS</li>
+                   <li>Added/expanded extensions on several systems:</li>
+               </ul>
+               <ul>
+                   <li>`n64` now includes `.AppImage`, `.desktop`, `.sh`</li>
+                   <li>`pcengine` / `tg16` / `supergrafx` now accept `.rom .ROM` for PCE/SGX related systems</li>
+                   <li>`daphne` and `laserdisc` extensions now include `.mmi`</li>
+                   <li>`mame` extension list added `lindbergh`</li>
+                   <li>`tic80` now also accepts `.png`</li>
+                   <li>`n3ds` extension list expanded (desktop/sh/AppImage-like entries)</li>
                </ul>
            </description>
        </release>
