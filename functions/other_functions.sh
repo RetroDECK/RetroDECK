@@ -1363,18 +1363,6 @@ portmaster_show(){
 
 open_component(){
 
-  # if [[ -z "$1" ]]; then
-  #   cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
-  #   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-  #     cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
-  #   fi
-  #   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-  #     cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
-  #   fi
-  #   echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd")"
-  #   return
-  # fi
-
   components_list(){
       log i "Available components:"
       components=()
@@ -1392,47 +1380,187 @@ open_component(){
       exit 0
   }
 
-  if [[ "$1" == "--list" ]]; then
+  if [[ -z "$1" || "$1" == "--list" ]]; then
     components_list
   fi
 
-  # TODO: do this via API?
-  # if [[ "$1" == "--getdesc" ]]; then
-  #   cmd=$(jq -r '.emulator[] | select(.ponzu != true) | "\(.description)"' "$features")
-  #   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-  #     cmd+="\n$(jq -r '.emulator.citra | "\(.description)"' "$features")"
-  #   fi
-  #   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-  #     cmd+="\n$(jq -r '.emulator.yuzu | "\(.description)"' "$features")"
-  #   fi
-  #   echo -e "$cmd"
-  #   return
-  # fi
 
-  # Check if the component_launcher.sh exists for the given component
-  if [[ -n "$1" && -f "$rd_components/$1/component_launcher.sh" ]]; then
+  # If open is called with any argument other than --list, try to open that component
+  local manifest="$rd_components/$1/component_manifest.json"
+
+  if [[ -n "$1" && -f "$manifest" ]]; then
+
+    log d "Found component_manifest.json for '$1', checking for exec entry"
+    exec_entry=$(jq -r --arg name "$1" '.[ $name ].exec // ""' "$manifest" 2>/dev/null)
+
+    # Prefer relative exec inside the component if it exists and is executable
+    if [[ ! "$exec_entry" = /* ]]; then
+      candidate_exec="$rd_components/$1/$exec_entry"
+      if [[ -x "$candidate_exec" ]]; then
+        exec_entry="$candidate_exec"
+      fi
+    fi
+
+    # If we have an exec entry, build the command
+    if [[ -n "$exec_entry" ]]; then
+
+      # If framework is specified in manifest, handle it
+      if jq -e --arg name "$1" '.[$name].framework? | length > 0' "$manifest" >/dev/null 2>&1; then
+        
+        # Gather any manifest-provided args (as a single string): support array or string, fallback to empty
+        local manifest_args=$(jq -r --arg name "$1" '.[ $name ].args? | if . == null then "" elif type=="array" then map(tostring) | join(" ") elif type=="string" then . else "" end' "$manifest" 2>/dev/null || echo "")
+
+        # Read framework array once from the manifest
+        mapfile -t _manifest_fw < <(jq -r --arg name "$1" '.[ $name ].framework? // [] | .[]' "$manifest" 2>/dev/null)
+
+        local manifest_framework=()
+        local needed_plugins=()
+        local needed_platforms=()
+
+        for fw in "${_manifest_fw[@]}"; do
+
+          if [[ "$fw" =~ ^qt([0-9]+)\.([0-9]+)$ ]]; then
+            # Exact qtX.Y -> use matching KDE runtime path
+            manifest_framework+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}")
+            needed_plugins+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/plugins")
+            needed_platforms+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/platforms")
+
+          elif [[ "$fw" =~ ^qt([0-9]+)$ ]]; then
+
+            # qtX -> pick highest available minor (e.g. 6.9 > 6.5)
+            major="${BASH_REMATCH[1]}"
+            candidate_versions=()
+
+            # Find all matching versions
+            for d in "$rd_shared_libs/org.kde.Platform/$major".*; do
+              [[ -d "$d" ]] || continue
+                ver="${d##*/}"
+              [[ "$ver" =~ ^$major\.[0-9]+$ ]] || continue
+                candidate_versions+=("$ver")
+            done
+
+            # Select best candidate if any found
+            if (( ${#candidate_versions[@]} > 0 )); then
+              best="$(printf "%s\n" "${candidate_versions[@]}" | sort -V | tail -n1)"
+              manifest_framework+=("$rd_shared_libs/org.kde.Platform/$best")
+              needed_plugins+=("$rd_shared_libs/org.kde.Platform/$best/lib/plugins")
+              needed_platforms+=("$rd_shared_libs/org.kde.Platform/$best/lib/platforms")
+            elif [[ -d "$rd_shared_libs/org.kde.Platform/${major}.0" ]]; then
+              # fallback to major.0 if present
+              manifest_framework+=("$rd_shared_libs/org.kde.Platform/${major}.0")
+              needed_plugins+=("$rd_shared_libs/org.kde.Platform/${major}.0/lib/plugins")
+              needed_platforms+=("$rd_shared_libs/org.kde.Platform/${major}.0/lib/platforms")
+            else
+              # keep original token if nothing matched
+              manifest_framework+=("$fw")
+              needed_plugins+=("$fw/lib/plugins")
+              needed_platforms+=("$fw/lib/platforms")
+            fi
+
+          else
+            # pass through any non-qt framework tokens
+            manifest_framework+=("$fw")
+            needed_plugins+=("$fw/lib/plugins")
+            needed_platforms+=("$fw/lib/platforms")
+          fi
+        done
+
+        # Build LD_LIBRARY_PATH, PLUGIN_PATH, and PLATFORM_PATH by joining manifest_framework with ':' and appending existing variables if present
+        if (( ${#manifest_framework[@]} > 0 )); then
+          # Build LD_LIBRARY_PATH prefix
+          ld_prefix="$(printf "%s:" "${manifest_framework[@]}")"
+          ld_prefix=${ld_prefix%:}
+          if [[ -n "${LD_LIBRARY_PATH:-}" ]]; then
+            ldpath="${ld_prefix}:${LD_LIBRARY_PATH}"
+          else
+            ldpath="${ld_prefix}"
+          fi
+
+          # Build plugin path prefix (for Qt plugins)
+          if (( ${#needed_plugins[@]} > 0 )); then
+            plugin_prefix="$(printf "%s:" "${needed_plugins[@]}")"
+            plugin_prefix=${plugin_prefix%:}
+            if [[ -n "${QT_PLUGIN_PATH:-}" ]]; then
+              pluginpath="${plugin_prefix}:${QT_PLUGIN_PATH}"
+            else
+              pluginpath="${plugin_prefix}"
+            fi
+          else
+            pluginpath="${QT_PLUGIN_PATH:-}"
+          fi
+
+          # Build platform plugin path prefix (for Qt platform plugins)
+          if (( ${#needed_platforms[@]} > 0 )); then
+            platform_prefix="$(printf "%s:" "${needed_platforms[@]}")"
+            platform_prefix=${platform_prefix%:}
+            if [[ -n "${QT_QPA_PLATFORM_PLUGIN_PATH:-}" ]]; then
+              platformpath="${platform_prefix}:${QT_QPA_PLATFORM_PLUGIN_PATH}"
+            else
+              platformpath="${platform_prefix}"
+            fi
+          else
+            platformpath="${QT_QPA_PLATFORM_PLUGIN_PATH:-}"
+          fi
+
+          # Export so the launched process sees them (cmd may also prefix LD_LIBRARY_PATH)
+          export LD_LIBRARY_PATH="$ldpath"
+          export QT_PLUGIN_PATH="$pluginpath"
+          export QT_QPA_PLATFORM_PLUGIN_PATH="$platformpath"
+        else # no frameworks resolved, keep existing env vars
+          ldpath="${LD_LIBRARY_PATH:-}"
+          pluginpath="${QT_PLUGIN_PATH:-}"
+          platformpath="${QT_QPA_PLATFORM_PLUGIN_PATH:-}"
+        fi
+        
+      fi # end framework handling
+
+      log d "Component '$1' manifest exec entry: '$exec_entry'"
+      log d "Component '$1' manifest args: '$manifest_args'"
+      log d "Component '$1' manifest framework: '${manifest_framework[*]}'"
+      log d "With:"
+      log d "LD_LIBRARY_PATH: '$ldpath'"
+      log d "QT_PLUGIN_PATH: '$pluginpath'"
+      log d "QT_QPA_PLATFORM_PLUGIN_PATH: '$platformpath'"
+
+      # If the manifest got a run_extras entry, and it's true, we run $component/component_launcher_extras.sh before the exec
+      local run_extras=$(jq -r --arg name "$1" '.[ $name ].run_extras // "false"' "$manifest" 2>/dev/null)
+      if [[ "$run_extras" == "true" && -f "$rd_components/$1/component_launcher_extras.sh" ]]; then
+        log d "Running component_launcher_extras.sh for component '$1' as requested by manifest"
+        source "$rd_components/$1/component_launcher_extras.sh"
+      fi
+
+      # At this point we have exec_entry, manifest_args, and possibly framework info including ld_libs/plugin/path settings
+      cmd="$rd_components/$1/$exec_entry $manifest_args"
+
+      log d "Using exec from manifest (component-local): $cmd"
+
+    else
+      log w "No exec entry present in component_manifest.json for '$1'"
+    fi
+
+  fi
+
+  # If no cmd from manifest, fallback to component_launcher.sh if it exists
+  elif [[ -n "$1" && -f "$rd_components/$1/component_launcher.sh" ]]; then
+
+    log d "Launching component '$1' via component_launcher.sh"
     "$rd_components/$1/component_launcher.sh" "${@:2}"
-    return
+
+  # If we reach here and have no cmd, log error
   else
-    echo "Error: The component '$1' cannot be opened."
+    log e "Component '$1' cannot be opened: missing component_launcher.sh or component_manifest.json run entry."
     components_list
     return 1
   fi
 
-  # cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")
-  # if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" && "$1" == "citra" ]]; then
-  #   cmd=$(jq -r '.emulator.citra | .launch' "$features")
-  # fi
-  # if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" && "$1" == "yuzu" ]]; then
-  #   cmd=$(jq -r '.emulator.yuzu | .launch' "$features")
-  # fi
-
+  # Finally, execute the command if we have one
   if [[ -n "$cmd" ]]; then
     eval "$cmd" "${@:2}"
   else
-    echo "Invalid component name: $1"
-    echo "Please ensure the name is correctly spelled (case sensitive) and quoted if it contains spaces."
+    log e "Component '$1' cannot be opened with the defined exec command: '$cmd'"
+    return 1
   fi
+
 }
 
 add_retrodeck_to_steam(){
