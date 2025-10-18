@@ -18476,7 +18476,7 @@ XRick	GPLv3
 YabaSanshiro	GPLv2
 Yabause	GPLv2
 
---- GZDOOM ---
+--- GZDOOM / UZDOOM ---
 
             GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
