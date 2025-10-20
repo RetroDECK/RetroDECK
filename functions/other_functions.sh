@@ -1384,18 +1384,48 @@ open_component(){
     components_list
   fi
 
+  # Support passing "component args..." as a single first argument, e.g. "azahar --fullscreen"
+  if [[ -n "$1" ]]; then
+    # Preserve any originally provided additional positional args
+    shift_extra=()
+    if [[ $# -gt 0 ]]; then
+      shift_extra=("$@")
+    fi
+
+    first_raw="$1"
+    # If caller passed the component+args as a single quoted string, split into name and remaining args
+    running_component="${first_raw%% *}"
+
+    # exporting the running component variable for other scripts to use
+    export RD_RUNNING_COMPONENT="$running_component"
+
+    mkdir -p "$runtime_dir"
+    printf '%s\n' "$RD_RUNNING_COMPONENT" > "$runtime_dir/retrodeck_running_component"
+    chmod 644 "$runtime_dir/retrodeck_running_component" || true
+
+    if [[ "$first_raw" == "$running_component" ]]; then
+      component_args=()
+    else
+      rest="${first_raw#"$running_component"}"
+      rest="${rest# }" # trim leading space
+      read -r -a component_args <<< "$rest"
+    fi
+
+    # Rebuild positional parameters: component name becomes $1, then its args, then any originally provided extra args
+    set -- "$component_name" "${component_args[@]}" "${shift_extra[@]}"
+  fi
 
   # If open is called with any argument other than --list, try to open that component
-  local manifest="$rd_components/$1/component_manifest.json"
+  local manifest="$rd_components/$running_component/component_manifest.json"
 
-  if [[ -n "$1" && -f "$manifest" ]]; then
+  if [[ -n "$running_component" && -f "$manifest" ]]; then
 
-    log d "Found component_manifest.json for '$1', checking for exec entry"
-    exec_entry=$(jq -r --arg name "$1" '.[ $name ].exec // ""' "$manifest" 2>/dev/null)
+    log d "Found component_manifest.json for '$running_component', checking for exec entry"
+    exec_entry=$(jq -r --arg name "$running_component" '.[ $name ].exec // ""' "$manifest" 2>/dev/null)
 
     # Prefer relative exec inside the component if it exists and is executable
     if [[ ! "$exec_entry" = /* ]]; then
-      candidate_exec="$rd_components/$1/$exec_entry"
+      candidate_exec="$rd_components/$running_component/$exec_entry"
       if [[ -x "$candidate_exec" ]]; then
         exec_entry="$candidate_exec"
       fi
@@ -1405,13 +1435,13 @@ open_component(){
     if [[ -n "$exec_entry" ]]; then
 
       # If framework is specified in manifest, handle it
-      if jq -e --arg name "$1" '.[$name].framework? | length > 0' "$manifest" >/dev/null 2>&1; then
+      if jq -e --arg name "$running_component" '.[$name].framework? | length > 0' "$manifest" >/dev/null 2>&1; then
         
         # Gather any manifest-provided args (as a single string): support array or string, fallback to empty
-        local manifest_args=$(jq -r --arg name "$1" '.[ $name ].args? | if . == null then "" elif type=="array" then map(tostring) | join(" ") elif type=="string" then . else "" end' "$manifest" 2>/dev/null || echo "")
+        local manifest_args=$(jq -r --arg name "$running_component" '.[ $name ].args? | if . == null then "" elif type=="array" then map(tostring) | join(" ") elif type=="string" then . else "" end' "$manifest" 2>/dev/null || echo "")
 
         # Read framework array once from the manifest
-        mapfile -t _manifest_fw < <(jq -r --arg name "$1" '.[ $name ].framework? // [] | .[]' "$manifest" 2>/dev/null)
+        mapfile -t _manifest_fw < <(jq -r --arg name "$running_component" '.[ $name ].framework? // [] | .[]' "$manifest" 2>/dev/null)
 
         local manifest_framework=()
         local needed_plugins=()
@@ -1515,6 +1545,9 @@ open_component(){
       fi # end framework handling
 
       log d "Component '$1' manifest exec entry: '$exec_entry'"
+      if [[ ${#component_args[@]} -gt 0 ]]; then
+        log d "Component '$1' called with additional args: '${component_args[*]}'"
+      fi
       log d "Component '$1' manifest args: '$manifest_args'"
       log d "Component '$1' manifest framework: '${manifest_framework[*]}'"
       log d "With:"
@@ -1530,25 +1563,25 @@ open_component(){
       fi
 
       # At this point we have exec_entry, manifest_args, and possibly framework info including ld_libs/plugin/path settings
-      cmd="$rd_components/$1/$exec_entry $manifest_args"
+      cmd="$rd_components/$1/$exec_entry $manifest_args ${component_args[*]}"
 
       log d "Using exec from manifest (component-local): $cmd"
 
     else
-      log w "No exec entry present in component_manifest.json for '$1'"
+      log w "No exec entry present in component_manifest.json for '$running_component'"
     fi
 
   fi
 
   # If no cmd from manifest, fallback to component_launcher.sh if it exists
-  elif [[ -n "$1" && -f "$rd_components/$1/component_launcher.sh" ]]; then
+  elif [[ -n "$running_component" && -f "$rd_components/$running_component/component_launcher.sh" ]]; then
 
-    log d "Launching component '$1' via component_launcher.sh"
-    "$rd_components/$1/component_launcher.sh" "${@:2}"
+    log d "Launching component '$running_component' via component_launcher.sh"
+    "$rd_components/$running_component/component_launcher.sh" "${@:2}"
 
   # If we reach here and have no cmd, log error
   else
-    log e "Component '$1' cannot be opened: missing component_launcher.sh or component_manifest.json run entry."
+    log e "Component '$running_component' cannot be opened: missing component_launcher.sh or component_manifest.json run entry."
     components_list
     return 1
   fi
@@ -1557,7 +1590,7 @@ open_component(){
   if [[ -n "$cmd" ]]; then
     eval "$cmd" "${@:2}"
   else
-    log e "Component '$1' cannot be opened with the defined exec command: '$cmd'"
+    log e "Component '$running_component' cannot be opened with the defined exec command: '$cmd'"
     return 1
   fi
 
