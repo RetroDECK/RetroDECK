@@ -7,9 +7,8 @@
 # A path (-o) for the subsequent output file can also optionally be supplied, otherwise the file will be output into the directory from which the script was run.
 # USAGE: build_missing_libs_json.sh [-qpo] /path/to/binary
 
-flatpak_runtimes_root="/var/lib/flatpak/runtime"
-flatpak_freedesktop_runtime_root="$flatpak_runtimes_root/org.freedesktop.Platform"
-flatpak_kde_runtime_root="$flatpak_runtimes_root/org.kde.Platform"
+flatpak_system_runtimes_root="/var/lib/flatpak/runtime"
+flatpak_user_runtimes_root="$HOME/.local/share/flatpak/runtime"
 
 component_libs_file="./component_libs.json"
 component_libs='[]'
@@ -51,9 +50,18 @@ while read -r lib; do
   # PHASE 1 - Locating component dependency
 
   # Check if lib is already provided by RetroDECK runtime
-  if [[ -n $(find "$flatpak_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib") ]]; then
-    echo "Library $lib found in RetroDECK base runtime, skipping..."
-    continue
+  if [[ -d "$flatpak_user_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version" ]]; then
+    if [[ -n $(find "$flatpak_user_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib") ]]; then
+      echo "Library $lib found in RetroDECK base runtime, skipping..."
+      continue
+    fi
+  elif [[ -d "$flatpak_system_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version" ]]; then
+    if [[ -n $(find "$flatpak_system_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib") ]]; then
+      echo "Library $lib found in RetroDECK base runtime, skipping..."
+      continue
+    fi
+  else
+    echo "ERROR: RetroDECK base runtime not installed, unable to check if library is included."
   fi
 
   if [[ "$lib" =~ "libQt" ]]; then # If library is a Qt lib, which we know the location of already
@@ -65,18 +73,32 @@ while read -r lib; do
         qt_version="$latest_kde6_runtime_version"
       fi
     fi
-    found_lib_path=$(find "$flatpak_runtimes_root/$runtime_name/x86_64/$qt_version/active/files" -name "$lib")
-    json_obj=$(jq -n --arg lib "$lib" --arg runtime_name "$runtime_name" --arg runtime_version "$qt_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
-    component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
-    lib_found="true"
+    found_lib_path=$(find "$flatpak_user_runtimes_root/$runtime_name/x86_64/$qt_version/active/files" -name "$lib" 2>/dev/null)
+    if [[ ! -n "$found_lib_path" ]]; then # If library was not found in a user-mode runtime
+      found_lib_path=$(find "$flatpak_system_runtimes_root/$runtime_name/x86_64/$qt_version/active/files" -name "$lib" 2>/dev/null)
+    fi
+    if [[ ! -n "$found_lib_path" ]]; then
+      echo "ERROR: Library $lib could not be found in the expected KDE runtime, the runtime may not be installed."
+    else
+      json_obj=$(jq -n --arg lib "$lib" --arg runtime_name "$runtime_name" --arg runtime_version "$qt_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
+      component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
+      lib_found="true"
+    fi
   fi
   if [[ "$lib_found" == "false" ]]; then
-    # Check if lib is provided by any Freedesktop or KDE runtime, starting with the latest
-    found_lib_all_runtimes=$(find "$flatpak_runtimes_root" -name "$lib")
-    if [[ -n "$found_lib_all_runtimes" ]]; then # Library was found in some Flatpak runtime
-      found_lib_runtime=$(find "$flatpak_runtimes_root" -name "$lib" | awk -F/ '{print $6, $8}' | sort -k1,1 -k2,2Vr | head -n1)
+    # Check if lib is provided by any installed runtime, starting with the latest
+
+    if [[ -n "$(find "$flatpak_user_runtimes_root" -name "$lib" 2>/dev/null)" ]]; then # Library was found in some user-mode Flatpak runtime
+      found_lib_runtime=$(find "$flatpak_user_runtimes_root" -name "$lib" | awk -F/ '{print $8, $10}' | sort -k1,1 -k2,2Vr | head -n1)
       read runtime_name runtime_version <<< "$found_lib_runtime"
-      found_lib_path=$(find "$flatpak_runtimes_root/$runtime_name/x86_64/$runtime_version/active/files" -name "$lib")
+      found_lib_path=$(find "$flatpak_user_runtimes_root/$runtime_name/x86_64/$runtime_version/active/files" -name "$lib")
+      json_obj=$(jq -n --arg lib "$lib" --arg runtime_name "$runtime_name" --arg runtime_version "$runtime_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
+      component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
+      lib_found="true"
+    elif [[ -n "$(find "$flatpak_system_runtimes_root" -name "$lib" 2>/dev/null)" ]]; then
+      found_lib_runtime=$(find "$flatpak_system_runtimes_root" -name "$lib" | awk -F/ '{print $6, $8}' | sort -k1,1 -k2,2Vr | head -n1)
+      read runtime_name runtime_version <<< "$found_lib_runtime"
+      found_lib_path=$(find "$flatpak_system_runtimes_root/$runtime_name/x86_64/$runtime_version/active/files" -name "$lib")
       json_obj=$(jq -n --arg lib "$lib" --arg runtime_name "$runtime_name" --arg runtime_version "$runtime_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
       component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
       lib_found="true"
@@ -108,9 +130,18 @@ while read -r lib; do
     fi
 
     # Check if lib dependency is already provided by RetroDECK runtime
-    if [[ -n $(find "$flatpak_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib_dep") ]]; then
-      echo "Library dependency $lib_dep found in RetroDECK base runtime, skipping..."
-      continue
+    if [[ -d "$flatpak_user_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version" ]]; then
+      if [[ -n $(find "$flatpak_user_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib_dep") ]]; then
+        echo "Library dependency $lib_dep found in RetroDECK base runtime, skipping..."
+        continue
+      fi
+    elif [[ -d "$flatpak_system_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version" ]]; then
+      if [[ -n $(find "$flatpak_system_runtimes_root/org.freedesktop.Platform/x86_64/$retrodeck_runtime_version/active/files" -name "$lib_dep") ]]; then
+        echo "Library dependency $lib_dep found in RetroDECK base runtime, skipping..."
+        continue
+      fi
+    else
+      echo "ERROR: RetroDECK base runtime not installed, unable to check if library is included."
     fi
 
     if [[ "$lib_dep" =~ "libQt" ]]; then # If library dependency is a Qt lib
@@ -122,21 +153,33 @@ while read -r lib; do
           qt_version="$latest_kde6_runtime_version"
         fi
       fi
-      found_lib_dep_path=$(find "$flatpak_kde_runtime_root/x86_64/$qt_version/active/files" -name "$lib_dep")
-      json_obj=$(jq -n --arg lib "$lib_dep" --arg runtime_name "$runtime_name" --arg runtime_version "$qt_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
+      found_lib_dep_path=$(find "$flatpak_user_runtimes_root/$runtime_name/x86_64/$qt_version/active/files" -name "$lib_dep" 2>/dev/null)
+      if [[ ! -n "$found_lib_dep_path" ]]; then # If library was not found in a user-mode runtime
+        found_lib_dep_path=$(find "$flatpak_system_runtimes_root/$runtime_name/x86_64/$qt_version/active/files" -name "$lib" 2>/dev/null)
+      fi
+      if [[ ! -n "$found_lib_dep_path" ]]; then
+        echo "ERROR: Library dependency $lib_dep could not be found in the expected KDE runtime, the runtime may not be installed."
+      else
+        json_obj=$(jq -n --arg lib "$lib_dep" --arg runtime_name "$runtime_name" --arg runtime_version "$qt_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
+        component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
+        continue
+      fi
+    fi
+    # Check if library dependency is provided by any installed runtime, starting with the latest
+    if [[ -n "$(find "$flatpak_user_runtimes_root" -name "$lib_dep" 2>/dev/null)" ]]; then
+      found_lib_dep_runtime=$(find "$flatpak_user_runtimes_root" -name "$lib_dep" | awk -F/ '{print $8, $10}' | sort -k1,1 -k2,2Vr | head -n1)
+      read dep_runtime_name dep_runtime_version <<< "$found_lib_dep_runtime"
+      json_obj=$(jq -n --arg lib "$lib_dep" --arg runtime_name "$dep_runtime_name" --arg runtime_version "$dep_runtime_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
       component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
       continue
-    fi
-    # Check if library dependency is provided by any Freedesktop or KDE runtime, starting with the latest
-    found_lib_dep_runtime=$(find "$flatpak_runtimes_root" -name "$lib_dep" | awk -F/ '{print $6, $8}' | sort -k1,1 -k2,2Vr | head -n1)
-    if [[ -n "$found_lib_dep_runtime" ]]; then # Library was found in some Flatpak runtime
+    elif [[ -n "$(find "$flatpak_system_runtimes_root" -name "$lib_dep" 2>/dev/null)" ]]; then
+      found_lib_dep_runtime=$(find "$flatpak_system_runtimes_root" -name "$lib_dep" | awk -F/ '{print $6, $8}' | sort -k1,1 -k2,2Vr | head -n1)
       read dep_runtime_name dep_runtime_version <<< "$found_lib_dep_runtime"
-      found_lib_dep_path=$(find "$dep_runtime_name/x86_64/$dep_runtime_version/active/files" -name "$lib_dep")
       json_obj=$(jq -n --arg lib "$lib_dep" --arg runtime_name "$dep_runtime_name" --arg runtime_version "$dep_runtime_version" --arg dest "$default_dest" '{ library: $lib, runtime_name: $runtime_name, runtime_version: $runtime_version, dest: $dest }')
       component_libs=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$component_libs")
       continue
     elif [[ -n "$path_to_search" ]]; then # Search optional provided path
-      found_lib_dep_custom_path=$(find "$path_to_search" -name "$lib_dep")
+      found_lib_dep_custom_path=$(find "$path_to_search" -name "$lib_dep" 2>/dev/null)
       if [[ -n "$found_lib_dep_custom_path" ]]; then # Library dependency was found in provided path
         found_lib_dep_src="$(find "$path_to_search" -name "$lib_dep" -exec dirname {} \; | xargs -I{} realpath --relative-to="$(pwd)" "{}")"
         json_obj=$(jq -n --arg lib "$lib_dep" --arg source "$found_lib_dep_src" --arg dest "$default_dest" '{ library: $lib, source: $source, dest: $dest }')
