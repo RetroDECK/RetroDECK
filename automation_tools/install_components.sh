@@ -5,73 +5,79 @@ ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && e
 
 CICD="false"
 if [[ "$1" == "--cicd" ]]; then
-    echo "Running in CI/CD mode (--cicd argument detected)."
-    CICD="true"
+  echo "Running in CI/CD mode (--cicd argument detected)."
+  CICD="true"
 fi
 
 if [ -z "$FLATPAK_DEST" ]; then
-    echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
-    exit 1
+  echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
+  exit 1
 fi
 
 shopt -s nullglob
 archives=(components/*.tar.gz)
 if [ ${#archives[@]} -eq 0 ]; then
-    echo "Error: No components found in components directory."
-    exit 1
+  echo "Error: No components found in components directory."
+  exit 1
 fi
 
 for archive in "${archives[@]}"; do
+  component_name="$(basename "${archive%.tar.gz}")"
+  component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
 
-    component_name="$(basename "${archive%.tar.gz}")"
-    component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
+  echo "-------------------------------------"
+  echo "Installing component $component_name"
+  echo "-------------------------------------"
 
-    echo "-------------------------------------"
-    echo "Installing component $component_name"
-    echo "-------------------------------------"
+  # Skip if archive does not exist
+  if [ ! -e "$archive" ]; then
+      continue
+  fi
 
-    # Skip if archive does not exist
-    if [ ! -e "$archive" ]; then
-        continue
-    fi
+  echo "Extracting $archive..."
+  mkdir -p "$component_path"
 
-    echo "Extracting $archive..."
-    mkdir -p "$component_path"
+  if tar -xzf "$archive" -C "$component_path"; then
+    echo "$archive extracted successfully in $component_path."
+    echo "Contents of $component_path:"
+    ls "$component_path"
 
-    if tar -xzf "$archive" -C "$component_path"; then
-        echo "$archive extracted successfully in $component_path."
-        echo "Contents of $component_path:"
-        ls "$component_path"
+    if [[ -d "$component_path/shared-libs" ]]; then # If component includes a shared-libs folder
+      echo "$component_path/shared-libs folder found, merging with core shared-libs"
+      
+      if [[ ! -d "components/shared-libs" ]]; then
+        mkdir -p "components/shared-libs"
+      fi
 
-        # If running in CI/CD, delete the components folder to reclaim space
-        # This solves an issue where the  runner runs out of space and some components are not installed
-
-        if [ "$CICD" == "true" ]; then
-            echo "Running in CI/CD mode, deleting components folder to reclaim space."
-            rm -rf "$archive"
-            echo "Deleted $archive to reclaim space."
+      while read -r source_file; do
+        relative_filepath="${source_file##$component_path/shared-libs/}"
+        if [[ ! -e "components/shared-libs/$relative_filepath" ]]; then
+            echo "$relative_filepath not found in core shared-libs, copying..."
+            if [[ ! -d "$(dirname "components/shared-libs/$relative_filepath")" ]]; then
+              mkdir -p "$(dirname "components/shared-libs/$relative_filepath")"
+            fi
+            cp -a "$source_file" "components/shared-libs/$relative_filepath"
+        else
+            echo "components/shared-libs/$relative_filepath already exists in core shared-libs, skipping..."
         fi
+      done < <(find "$component_path/shared-libs" -not -type d)
 
+      rm -f "$component_path/shared-libs" # Cleanup leftover shared-libs folder in component folder
     else
-        echo "Failed to extract $archive."
+      echo "Component $component_path does not contain any shared-libs, no merge needed."
     fi
 
-    # # Symlink component_launcher.sh if it exists
-    # launcher_path="$component_path/component_launcher.sh"
-    # if [ -f "$launcher_path" ]; then
-    #     # Check if FLATPAK_DEST contains 'current/active/files' (i.e., injecting into a Flatpak)
-    #     if [[ "$FLATPAK_DEST" == *current/active/files* ]]; then
-    #         # Use Flatpak's virtual path for the symlink target
-    #         virtual_launcher_path="/app/retrodeck/components/${component_name}/component_launcher.sh"
-    #         echo "Creating symlink for $component_name from $virtual_launcher_path to ${FLATPAK_DEST}/bin/${component_name} (Flatpak injection context)"
-    #         ln -sf "$virtual_launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
-    #     else
-    #         echo "Creating symlink for $component_name from $launcher_path to ${FLATPAK_DEST}/bin/${component_name}"
-    #         ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
-    #     fi
-    # else
-    #     echo "Warning: component_launcher.sh not found for $component_name, skipping symlink creation."
-    # fi
+    # If running in CI/CD, delete the components folder to reclaim space
+    # This solves an issue where the  runner runs out of space and some components are not installed
+
+    if [ "$CICD" == "true" ]; then
+      echo "Running in CI/CD mode, deleting components folder to reclaim space."
+      rm -rf "$archive"
+      echo "Deleted $archive to reclaim space."
+    fi
+  else
+    echo "Failed to extract $archive."
+  fi
 done
 
 echo "-------------------------------------"
@@ -84,15 +90,15 @@ ls -1 "${FLATPAK_DEST}/retrodeck/components" || echo "No components installed."
 
 # Check if components_version_list.md file exists and copy or warn
 if [ -f components_version_list.md ]; then
-    found_file=$(find . -name components_version_list.md | head -n 1)
-    if [ -n "$found_file" ]; then
-        cp "$found_file" "${FLATPAK_DEST}/retrodeck/components_version_list.md"
-    else
-        echo "Warning: components_version_list.md file not found by find, skipping."
-    fi
-    echo "Component version file copied successfully."
-    echo "Component version:"
-    cat "${FLATPAK_DEST}/retrodeck/components_version_list.md"
+  found_file=$(find . -name components_version_list.md | head -n 1)
+  if [ -n "$found_file" ]; then
+      cp "$found_file" "${FLATPAK_DEST}/retrodeck/components_version_list.md"
+  else
+      echo "Warning: components_version_list.md file not found by find, skipping."
+  fi
+  echo "Component version file copied successfully."
+  echo "Component version:"
+  cat "${FLATPAK_DEST}/retrodeck/components_version_list.md"
 else
-    echo "Warning: components_version_list.md file not found, skipping."
+  echo "Warning: components_version_list.md file not found, skipping."
 fi
