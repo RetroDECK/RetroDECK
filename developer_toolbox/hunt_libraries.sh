@@ -16,9 +16,9 @@ component_libs='[]'
 
 # Update these variables over time as needed
 
-retrodeck_runtime_version="24.08"
-latest_kde5_runtime_version="5.15-24.08"
-latest_kde6_runtime_version="6.9"
+retrodeck_runtime_version="25.08"
+latest_kde5_runtime_version="5.15-25.08"
+latest_kde6_runtime_version="6.10"
 default_dest="shared-libs"
 
 while [[ $# -gt 1 ]]; do
