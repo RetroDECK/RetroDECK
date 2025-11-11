@@ -1451,9 +1451,9 @@ open_component(){
 
           if [[ "$fw" =~ ^qt([0-9]+)\.([0-9]+)$ ]]; then
             # Exact qtX.Y -> use matching KDE runtime path
-            manifest_framework+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}")
-            needed_plugins+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/plugins")
-            needed_platforms+=("$rd_shared_libs/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/platforms")
+            manifest_framework+=("$rd_shared_libs_path/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}")
+            needed_plugins+=("$rd_shared_libs_path/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/plugins")
+            needed_platforms+=("$rd_shared_libs_path/org.kde.Platform/${BASH_REMATCH[1]}.${BASH_REMATCH[2]}/lib/platforms")
 
           elif [[ "$fw" =~ ^qt([0-9]+)$ ]]; then
 
@@ -1462,7 +1462,7 @@ open_component(){
             candidate_versions=()
 
             # Find all matching versions
-            for d in "$rd_shared_libs/org.kde.Platform/$major".*; do
+            for d in "$rd_shared_libs_path/org.kde.Platform/$major".*; do
               [[ -d "$d" ]] || continue
                 ver="${d##*/}"
               [[ "$ver" =~ ^$major\.[0-9]+$ ]] || continue
@@ -1472,14 +1472,14 @@ open_component(){
             # Select best candidate if any found
             if (( ${#candidate_versions[@]} > 0 )); then
               best="$(printf "%s\n" "${candidate_versions[@]}" | sort -V | tail -n1)"
-              manifest_framework+=("$rd_shared_libs/org.kde.Platform/$best")
-              needed_plugins+=("$rd_shared_libs/org.kde.Platform/$best/lib/plugins")
-              needed_platforms+=("$rd_shared_libs/org.kde.Platform/$best/lib/platforms")
-            elif [[ -d "$rd_shared_libs/org.kde.Platform/${major}.0" ]]; then
+              manifest_framework+=("$rd_shared_libs_path/org.kde.Platform/$best")
+              needed_plugins+=("$rd_shared_libs_path/org.kde.Platform/$best/lib/plugins")
+              needed_platforms+=("$rd_shared_libs_path/org.kde.Platform/$best/lib/platforms")
+            elif [[ -d "$rd_shared_libs_path/org.kde.Platform/${major}.0" ]]; then
               # fallback to major.0 if present
-              manifest_framework+=("$rd_shared_libs/org.kde.Platform/${major}.0")
-              needed_plugins+=("$rd_shared_libs/org.kde.Platform/${major}.0/lib/plugins")
-              needed_platforms+=("$rd_shared_libs/org.kde.Platform/${major}.0/lib/platforms")
+              manifest_framework+=("$rd_shared_libs_path/org.kde.Platform/${major}.0")
+              needed_plugins+=("$rd_shared_libs_path/org.kde.Platform/${major}.0/lib/plugins")
+              needed_platforms+=("$rd_shared_libs_path/org.kde.Platform/${major}.0/lib/platforms")
             else
               # keep original token if nothing matched
               manifest_framework+=("$fw")
