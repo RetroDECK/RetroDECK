@@ -1,47 +1,75 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
-base-version: "24.08"
+base-version: "25.08"
 command: retrodeck
 
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
     directory: lib/ffmpeg
     add-ld-path: .
-    version: '24.08'
+    version: '25.08'
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
+add-extensions:
+  org.freedesktop.Platform.VulkanLayer.MangoHud:
+    directory: mangohud
+    add-ld-path: .
+    version: '25.08'
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/mangohud
+
 finish-args:
+  # Allow Wayland display server access
   - --socket=wayland
+  # Allow X11 display server access
   - --socket=x11
+  # Give the app access to PulseAudio for sound output/input
   - --socket=pulseaudio
+  # Share the IPC namespace (needed for things like DBus communication)
   - --share=ipc
+  # Share the network namespace (allows internet/network access)
   - --share=network
+  # Give the app unrestricted device access (e.g., /dev/*)
   - --device=all
+  # Give read/write access to the host filesystem (use with care)
   - --filesystem=host
+  # Access the Steam Flatpak data directory in the user’s home
   - --filesystem=home/.var/app/com.valvesoftware.Steam
+  # Enable multi‑arch support (e.g., 32‑bit libraries on 64‑bit systems)
   - --allow=multiarch
+  # Talk to the screen‑saver DBus service (e.g., inhibit suspend)
   - --talk-name=org.freedesktop.ScreenSaver
+  # Talk to the power‑management inhibit service
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
+  # Talk to systemd‑logind manager (session control)
   - --talk-name=org.freedesktop.login1.Manager
+  # Create a writable runtime directory for Discord (used for sockets, etc.)
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  # Read‑only access to GTK‑3 configuration files
   - --filesystem=xdg-config/gtk-3.0:ro
+  # Force Qt applications to use Wayland/EGL/XCB backends
   - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
-  # Dolphin
+
+# Dolphin
+  # Allow Bluetooth device access
   - --allow=bluetooth
-  # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
-  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
-  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
-  # Steam ROM Manager
-  - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
-  - --filesystem=~/.steam:rw # Steam (Non-flatpak)
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
-  - --talk-name=org.freedesktop.DBus
-  # PPSSPP, DOLPHIN
-  - --filesystem=xdg-run/gamescope-0:ro
+
+# SDL window‑class hints (help window managers group windows)
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck   # X11
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck # Wayland
+
+# Steam ROM Manager
+  - --filesystem=xdg-data/Steam:rw          # Flatpak‑installed Steam data
+  - --filesystem=~/.steam:rw                # Non‑Flatpak Steam data
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Flatpak Steam data
+  - --talk-name=org.freedesktop.DBus        # General DBus communication
+
+# PPSSPP, Dolphin (gamescope integration)
+  - --filesystem=xdg-run/gamescope-0:ro    # Read‑only access to gamescope socket
 
 cleanup:
   # ES-DE
