@@ -132,11 +132,26 @@ modules:
 
   # START: Internal RetroDECK tools
 
+    # Required for xmlstarlet
+  - name: libxml2-compat
+    config-opts:
+      - --prefix=/app/compat/xmlstarlet
+      - --disable-static
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.9.tar.xz
+        sha256: a2c9ae7b770da34860050c309f903221c67830c86e4a7e760692b803df95143a
+    cleanup:
+    - /compat/xmlstarlet/include
+    - /compat/xmlstarlet/lib/pkgconfig
+    - /compat/xmlstarlet/share
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
-      - --with-libxml-libs-prefix=/usr/lib
-      - --with-libxml-include-prefix=/usr/include/libxml2
+      - --with-libxml-libs-prefix=/app/compat/xmlstarlet/lib
+      - --with-libxml-include-prefix=/app/compat/xmlstarlet/include/libxml2
+      - --disable-build-docs
     sources:
       - type: archive
         url: https://downloads.sourceforge.net/xmlstar/xmlstarlet-1.6.1.tar.gz
@@ -146,7 +161,19 @@ modules:
           - cp -p /usr/share/automake-*/config.{sub,guess} .
           - autoreconf -vfi
     post-install:
-      - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
+      # Include xmllint
+      - mv "${FLATPAK_DEST}/compat/xmlstarlet/bin/xmllint" "${FLATPAK_DEST}/bin/xmllint"
+      # Rename the actual binary
+      - mv "${FLATPAK_DEST}/bin/xml" "${FLATPAK_DEST}/bin/xml.bin"
+      # Create wrapper script
+      - |
+        cat > "${FLATPAK_DEST}/bin/xml" << 'EOF'
+        #!/bin/sh
+        export LD_LIBRARY_PATH="/app/compat/xmlstarlet/lib:${LD_LIBRARY_PATH}"
+        exec /app/bin/xml.bin "$@"
+        EOF
+      - chmod +x "${FLATPAK_DEST}/bin/xml"
+      - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet"
 
   - name: rclone
     buildsystem: simple
