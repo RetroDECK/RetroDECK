@@ -1,26 +1,35 @@
 app-id: net.retrodeck.retrodeck
+
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
+
 sdk: org.freedesktop.Sdk
-base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
-base-version: "25.08"
+
+# Base image needed for Steam ROM Manager (Electron‑based)
+base: org.electronjs.Electron2.BaseApp
+base-version: '25.08'
+
 command: retrodeck
 
+# ------------------------------------------------------------------
+# Extensions – additional runtime components 
+# ------------------------------------------------------------------
 add-extensions:
+  # Full FFmpeg libraries 
   org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg
-    add-ld-path: .
+    directory: lib/ffmpeg     
+    add-ld-path: . 
     version: '25.08'
-cleanup-commands:
-  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+    cleanup-commands:
+      - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
 
-add-extensions:
+  # MangoHUD Vulkan layer (on‑screen overlay)
   org.freedesktop.Platform.VulkanLayer.MangoHud:
     directory: mangohud
     add-ld-path: .
     version: '25.08'
-cleanup-commands:
-  - mkdir -p ${FLATPAK_DEST}/mangohud
+    cleanup-commands:
+      - mkdir -p "${FLATPAK_DEST}/mangohud"
 
 finish-args:
   # Allow Wayland display server access
@@ -53,21 +62,20 @@ finish-args:
   - --filesystem=xdg-config/gtk-3.0:ro
   # Force Qt applications to use Wayland/EGL/XCB backends
   - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
-
-# Dolphin
-  # Allow Bluetooth device access
+  # Read‑only access to udev information (detecting input devices)
+  - --filesystem=/run/udev:ro 
+  # Access PipeWire socket for low‑latency audio/video (if used)               
+  - --filesystem=xdg-run/pipewire-0       
+# Bluetooth for Dolphin
   - --allow=bluetooth
-
 # SDL window‑class hints (help window managers group windows)
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck   # X11
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck # Wayland
-
 # Steam ROM Manager
   - --filesystem=xdg-data/Steam:rw          # Flatpak‑installed Steam data
   - --filesystem=~/.steam:rw                # Non‑Flatpak Steam data
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Flatpak Steam data
   - --talk-name=org.freedesktop.DBus        # General DBus communication
-
 # PPSSPP, Dolphin (gamescope integration)
   - --filesystem=xdg-run/gamescope-0:ro    # Read‑only access to gamescope socket
 
