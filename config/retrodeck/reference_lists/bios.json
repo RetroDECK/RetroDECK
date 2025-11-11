@@ -478,11 +478,6 @@
       "system": "pc88",
       "description": "PC‑8000 series BIOS (N‑BASIC mode) – required for those machines"
     },
-    "disk.rom": {
-      "md5": "793f86784e5608352a5d7f03f03e0858",
-      "system": "pc88",
-      "description": "PC‑88 disk controller BIOS – needed for disk images"
-    },
     "n88knj1.rom": {
       "md5": "d81c6d5d7ad1a4bbbd6ae22a01257603",
       "system": "pc88",
@@ -654,12 +649,6 @@
       "md5": "d333558cc14561c1fdc334c75d5f37b7",
       "system": "ps2",
       "description": "PlayStation 2 US BIOS",
-      "required": "required"
-    },
-    "ps2-0200e-20040614.bin": {
-      "md5": "dc752f160044f2ed5fc1f4964db2a095",
-      "system": "ps2",
-      "description": "PlayStation 2 EU BIOS",
       "required": "required"
     },
     "dsifirmware.bin": {
@@ -956,12 +945,6 @@
       "system": "psx",
       "description": "Generic PlayStation BIOS",
       "required": "at least one for this system"
-    },
-    "ps2-0200a-20040614.bin": {
-      "md5": "d333558cc14561c1fdc334c75d5f37b7",
-      "system": "ps2",
-      "description": "PlayStation 2 US BIOS",
-      "required": "required"
     },
     "ps2-0200e-20040614.bin": {
       "md5": "dc752f160044f2ed5fc1f4964db2a095",
@@ -2613,6 +2596,11 @@
       "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
       "system": "coco",
       "description": "Generic disk ROM – base driver used by several CoCo variants"
+    },
+    "disk.rom": {
+      "md5": "793f86784e5608352a5d7f03f03e0858",
+      "system": "pc88",
+      "description": "PC‑88 disk controller BIOS – needed for disk images"
     },
     "disk12.rom": {
       "md5": "4f2ef107cbe3f6b8d34198d25c9acecd",

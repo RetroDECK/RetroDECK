@@ -56,6 +56,9 @@ done
 # Base dir for all installed RetroDECK components
 export rd_components="/app/retrodeck/components"
 export rd_shared_libs="/app/retrodeck/components/shared-libs"
+export rd_shared_libs_kde_path="/app/retrodeck/components/shared-libs/org.kde.Platform"
+export rd_shared_libs_gnome_path="/app/retrodeck/components/shared-libs/org.gnome.Platform"
+export rd_shared_libs_freedesktop_path="/app/retrodeck/components/shared-libs/org.freedesktop.Platform" 
 export runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/retrodeck"
 
 source_component_functions "framework" # Source this first as future functions will need to know these paths
