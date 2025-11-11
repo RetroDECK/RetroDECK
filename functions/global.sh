@@ -31,7 +31,7 @@ system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release
 system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
 system_cpu_info=$(flatpak-spawn --host lscpu | grep 'Model name' | cut -d':' -f2 | xargs) # Get CPU model name
 system_cpu_cores=$(nproc)
-system_cpu_system_cpu_system_cpu_max_threads=$(echo $(($(nproc) / 2)))
+system_cpu_max_threads=$(echo $(($(nproc) / 2)))
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
