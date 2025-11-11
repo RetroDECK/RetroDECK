@@ -45,24 +45,24 @@ for archive in "${archives[@]}"; do
     if [[ -d "$component_path/shared-libs" ]]; then # If component includes a shared-libs folder
       echo "$component_path/shared-libs folder found, merging with core shared-libs"
       
-      if [[ ! -d "components/shared-libs" ]]; then
-        mkdir -p "components/shared-libs"
+      if [[ ! -d "${FLATPAK_DEST}/retrodeck/components/shared-libs" ]]; then
+        mkdir -p "${FLATPAK_DEST}/retrodeck/components/shared-libs"
       fi
 
       while read -r source_file; do
         relative_filepath="${source_file##$component_path/shared-libs/}"
-        if [[ ! -e "components/shared-libs/$relative_filepath" ]]; then
+        if [[ ! -e "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath" ]]; then
             echo "$relative_filepath not found in core shared-libs, copying..."
-            if [[ ! -d "$(dirname "components/shared-libs/$relative_filepath")" ]]; then
-              mkdir -p "$(dirname "components/shared-libs/$relative_filepath")"
+            if [[ ! -d "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath")" ]]; then
+              mkdir -p "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath")"
             fi
-            cp -a "$source_file" "components/shared-libs/$relative_filepath"
+            cp -a "$source_file" "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath"
         else
-            echo "components/shared-libs/$relative_filepath already exists in core shared-libs, skipping..."
+            echo "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath already exists in core shared-libs, skipping..."
         fi
       done < <(find "$component_path/shared-libs" -not -type d)
 
-      rm -f "$component_path/shared-libs" # Cleanup leftover shared-libs folder in component folder
+      rm -rf "$component_path/shared-libs" # Cleanup leftover shared-libs folder in component folder
     else
       echo "Component $component_path does not contain any shared-libs, no merge needed."
     fi
