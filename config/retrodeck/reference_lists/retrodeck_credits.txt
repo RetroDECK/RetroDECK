@@ -1,65 +1,53 @@
-=========================================================
-                     RETRODECK TEAM
-=========================================================
+=====================================================================
+                        ★ RETRODECK TEAM ★
+=====================================================================
 
-►  XargonWan
-    • Founder – RetroDECK & co‑founder of AmberELEC
-    • Primary backend work
+▶ XARGONWAN
+   • Founder – RetroDECK & Co‑founder of AmberELEC
+   • Primary Backend Architect (Framework, RetroENGINE, Configurator)
 
-►  Lazorne
-    • Community management & outreach
-    • Testing
-    • Wiki documentation
-    • Component configuration
-    • Steam Input and various Input things.
+▶ LAZORNE
+   • Community Manager & Outreach Lead
+   • Testing Coordinator
+   • Wiki Author & Maintainer
+   • Component‑Configuration Specialist
+   • Steam Input & Miscellaneous Input Integrations
 
-►  jiannazzone
-    • Web development
-    • Godot programming
-    • Community management & outreach
-    • Testing & documentation
+▶ JIANNAZZONE
+   • Web Development & Site Maintenance
+   • Godot Programming & UI/UX Design
+   • Community Outreach & Engagement
+   • Art & Asset Creation
 
-►  IceNine451
-    • Backend wizard
-    • Created the RetroDECK Configurator & Framework
-    • Various other cool tools
+▶ ICENINE451
+   • Lead Technical Architect
+   • Creator of RetroDECK Configurator & Framework
+   • Backend Development & API Design
 
-►  WallK
-    • Godot development
-    • Testing
+▶ WALLK
+   • Godot Development Specialist
 
-►  Lahrs
-    • Community support
-    • Iconography & other art assets
-    • Testing
-    • Wiki documentation
-
-
----------------------------------------------------------
-                RETRODECK ALUMNI
----------------------------------------------------------
-
-►  dottormac
-    • Bleeding‑edge cooker testing
-    • Valuable feedback provider
-
-►  Lx32
-    • Integrated SRM & Steam Sync into RetroDECK
-
-►  MonkeyX
-    • Godot configurator enhancements
-    • Backend improvements
+▶ LAHRS
+   • Arcade Veteran & Retro Knowledge Authority
+   • Component Configurations
+   • Community Management & Support
+   • Feature Requests & Issue Handling
+   • Testing, Art & Assets, Wiki Documentation
 
 
-=========================================================
-               SPECIAL THANKS TO…
-=========================================================
+=====================================================================
+                         ★ SPECIAL THANKS ★
+=====================================================================
 
-• Our donors that – keep the build servers alive and give feedback
-• All upstream emulation, frontend, and software projects we rely on
-• Contributors who invest time + money into emulation efforts
-• Community members who provide support, guidance, and good spirit
-• Testers who report bugs and help us improve stability
-• Artists & creators who supply graphics, icons, and other assets
+We are deeply grateful to everyone who powers RetroDECK:
 
-YOU ARE THE REASON THIS PROJECT EXISTS. THANK YOU!
+  • Donors – Keep our build servers humming and supply vital feedback.
+  • Upstream Projects – The emulators, front‑ends, engines, other components and libraries we rely on.
+  • Contributors – Those who donate time, code, expertise, love and financial support.
+  • Community Helpers – Users offering support, guidance, and a welcoming spirit.
+  • Testers & Bug Reporters – Helping us squash issues and improve stability.
+  • Artists & Asset Creators – Enriching the ecosystem with graphics, sounds, and more.
+
+Your collective effort makes RetroDECK possible. Thank you!
+
+=====================================================================
