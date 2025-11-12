@@ -153,7 +153,6 @@ conf_read() {
 
   if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
     while IFS== read -r name value; do
-      #log d "Setting $name has value $value"
       printf -v "$name" '%s' "$value"
       export "${name}"
     done < <(jq -r '
