@@ -32,52 +32,80 @@ add-extensions:
       - mkdir -p "${FLATPAK_DEST}/mangohud"
 
 finish-args:
-  # Allow Wayland display server access
-  - --socket=wayland
-  # Allow X11 display server access
-  - --socket=x11
-  # Give the app access to PulseAudio for sound output/input
-  - --socket=pulseaudio
-  # Share the IPC namespace (needed for things like DBus communication)
-  - --share=ipc
-  # Share the network namespace (allows internet/network access)
-  - --share=network
-  # Give the app unrestricted device access (e.g., /dev/*)
-  - --device=all
-  # Give read/write access to the host filesystem (use with care)
-  - --filesystem=host
-  # Access the Steam Flatpak data directory in the user’s home
-  - --filesystem=home/.var/app/com.valvesoftware.Steam
-  # Enable multi‑arch support (e.g., 32‑bit libraries on 64‑bit systems)
-  - --allow=multiarch
-  # Talk to the screen‑saver DBus service (e.g., inhibit suspend)
+  # DBus: screen‑saver inhibition
   - --talk-name=org.freedesktop.ScreenSaver
-  # Talk to the power‑management inhibit service
+
+  # DBus: Power‑management inhibition
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
-  # Talk to systemd‑logind manager (session control)
+
+  # DBus: Session control (systemd‑logind)
   - --talk-name=org.freedesktop.login1.Manager
-  # Create a writable runtime directory for Discord (used for sockets, etc.)
-  - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  # Read‑only access to GTK‑3 configuration files
-  - --filesystem=xdg-config/gtk-3.0:ro
-  # Force Qt applications to use Wayland/EGL/XCB backends
+
+  # DBus: Generic communication
+  - --talk-name=org.freedesktop.DBus
+
+  # Dbus: (and more): IPC namespace 
+  - --share=ipc
+
+  # Wayland: Display server 
+  - --socket=wayland
+
+  # Wayland: SDL window‑class
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
+
+  #  Wayland/EGL/XCB: Qt platform selection
   - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
-  # Read‑only access to udev information (detecting input devices)
-  - --filesystem=/run/udev:ro 
-  # Access PipeWire socket for low‑latency audio/video (if used)               
-  - --filesystem=xdg-run/pipewire-0       
-# Bluetooth for Dolphin
+
+  # X11: Display server
+  - --socket=x11
+
+  # X11: SDL window‑class
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
+
+  # Sound: PulseAudio - Sound I/O
+  - --socket=pulseaudio
+
+  # Sound: PipeWire socket (low‑latency audio/video)
+  - --filesystem=xdg-run/pipewire-0
+
+  # Network 
+  - --share=network
+
+  # Devices: All device access (e.g., /dev/*, used for various inputs)
+  - --device=all
+
+  # Devices: Bluetooth access 
   - --allow=bluetooth
-# SDL window‑class hints (help window managers group windows)
-  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck   # X11
-  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck # Wayland
-# Steam ROM Manager
-  - --filesystem=xdg-data/Steam:rw          # Flatpak‑installed Steam data
-  - --filesystem=~/.steam:rw                # Non‑Flatpak Steam data
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Flatpak Steam data
-  - --talk-name=org.freedesktop.DBus        # General DBus communication
-# PPSSPP, Dolphin (gamescope integration)
-  - --filesystem=xdg-run/gamescope-0:ro    # Read‑only access to gamescope socket
+
+  # Multi‑arch support (32‑bit libs on 64‑bit)
+  - --allow=multiarch
+
+  # Filesystem: Host 
+  - --filesystem=host
+
+  # Filesystem: Discord
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create
+
+  # Filesystem: GTK‑3 configuration (read‑only)
+  - --filesystem=xdg-config/gtk-3.0:ro
+
+  # Filesystem: Udev information (read‑only, for inputs)
+  - --filesystem=/run/udev:ro
+
+  # Filesystem: Gamescope integration (read‑only, for components that support it)
+  - --filesystem=xdg-run/gamescope-0:ro
+
+  # Filesystem: Steam ROM Manager – Flatpak‑installed Steam data
+  - --filesystem=xdg-data/Steam:rw
+
+  # Filesystem: Steam ROM Manager – Non‑Flatpak Steam data
+  - --filesystem=~/.steam:rw
+
+  # Filesystem: Steam ROM Manager - Steam Flatpak
+  - --filesystem=home/.var/app/com.valvesoftware.Steam
+
+  # Filesystem: Steam ROM Manager – Flatpak Steam data
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
 cleanup:
   # ES-DE
