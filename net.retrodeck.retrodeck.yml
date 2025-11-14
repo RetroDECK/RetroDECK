@@ -160,9 +160,20 @@ modules:
       - type: dir
         path: .
 
-  # START: Internal RetroDECK tools
 
-    # Required for xmlstarlet
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+#                               START:
+#
+#                     RetroDECK: Internal Tools
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+  # -------------------------------------------------------------------------
+  # xmlstarlet – XML toolkit.
+  # -------------------------------------------------------------------------
+
   - name: libxml2-compat
     config-opts:
       - --prefix=/app/compat/xmlstarlet
@@ -204,6 +215,10 @@ modules:
         EOF
       - chmod +x "${FLATPAK_DEST}/bin/xml"
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet"
+
+  # -------------------------------------------------------------------------
+  # rclone – file sync operations.
+  # -------------------------------------------------------------------------
 
   - name: rclone
     buildsystem: simple
@@ -247,6 +262,10 @@ modules:
               stable-only: true
               tag-template: v$version
 
+  # -------------------------------------------------------------------------
+  # jq – JSON processor.
+  # -------------------------------------------------------------------------
+
   - name: jq
     buildsystem: simple
     build-commands:
@@ -256,6 +275,10 @@ modules:
         url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux64
         sha256: 5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5
 
+  # -------------------------------------------------------------------------
+  # yq – YAML processor.
+  # -------------------------------------------------------------------------
+
   - name: yq
     buildsystem: simple
     build-commands:
@@ -264,6 +287,10 @@ modules:
       - type: file
         url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
+
+  # -------------------------------------------------------------------------
+  # p7zip – 7‑Zip compression utilities.
+  # -------------------------------------------------------------------------
 
   - name: p7zip
     no-autogen: true
@@ -279,7 +306,19 @@ modules:
     cleanup:
       - /man
 
-  # This installs all the RetroDECK components found in the components directory that is populated by retrodeck_builder.sh
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+#                               START:
+#
+#                     RetroDECK: Specific Tools
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  # -------------------------------------------------------------------------
+  # install-components – runs the RetroDECK component installer script retrodeck_builder.sh.
+  # -------------------------------------------------------------------------
+  
   - name: install-components
     buildsystem: simple
     build-commands:
@@ -288,14 +327,10 @@ modules:
       - type: dir
         path: .
 
-  # Temporary disabled, we will review this later
-  # - name: "LibMan - Deduplication"
-  #   buildsystem: simple
-  #   build-commands:
-  #     - bash libman.sh
-  #   sources:
-  #     - type: file
-  #       path: automation_tools/libman.sh
+  # -------------------------------------------------------------------------
+  # finisher – final tidy‑up steps: move files, create icons, install desktop
+  #            entries, copy resources, and clean up temporary bits.
+  # -------------------------------------------------------------------------
 
   - name: finisher
     buildsystem: simple
