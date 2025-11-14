@@ -85,9 +85,9 @@ if [[ -f "$HOME/retrodeck/.lock" ]]; then
 fi
 
 # To handle crossover to new config file style
-if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.json" ]]; then
-  log i "New-style RetroDECK config file found, setting to load"
-  rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.json"
+if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" ]]; then
+  log i "Old-style RetroDECK config file found, setting to load for conversion"
+  rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg"
 fi
 
 # If there is no config file I initalize the file with the the default values
