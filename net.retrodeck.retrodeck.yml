@@ -1,9 +1,8 @@
 app-id: net.retrodeck.retrodeck
 
-runtime: org.freedesktop.Platform
-runtime-version: '25.08'
-
-sdk: org.freedesktop.Sdk
+runtime: org.kde.Platform
+runtime-version: '6.10'
+sdk: org.kde.Sdk
 
 # Base image needed for Steam ROM Manager (Electron‑based)
 base: org.electronjs.Electron2.BaseApp
