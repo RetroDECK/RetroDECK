@@ -124,6 +124,9 @@ finish-args:
   # Filesystem: Steam ROM Manager – Flatpak Steam data
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
+  # Xemu: openSUSE QEMU_AUDIO_DRV fix
+  - --unset-env=QEMU_AUDIO_DRV
+
 cleanup:
   # ES-DE
   - /include
