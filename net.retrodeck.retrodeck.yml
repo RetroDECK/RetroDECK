@@ -61,10 +61,10 @@ finish-args:
   # X11: SDL window‑class
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
 
-  # Sound: PulseAudio - Sound I/O
+  # Sound: PulseAudio
   - --socket=pulseaudio
 
-  # Sound: PipeWire socket (low‑latency audio/video)
+  # Sound: PipeWire socket
   - --filesystem=xdg-run/pipewire-0
 
   # Network 
@@ -73,7 +73,7 @@ finish-args:
   # Devices: All device access (e.g., /dev/*, used for various inputs)
   - --device=all
 
-  # Devices: Bluetooth access 
+  # Devices: Bluetooth access (used for various inputs)
   - --allow=bluetooth
 
   # Multi‑arch support (32‑bit libs on 64‑bit)
@@ -83,8 +83,13 @@ finish-args:
   - --filesystem=xdg-run/gamescope-0:ro
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
 
-  # Filesystem: Host 
-  - --filesystem=host
+  # Filesystem: General 
+  - --filesystem=home
+
+  # Filesystem: External Drives
+  - --filesystem=/run/media
+  - --filesystem=/mnt
+  - --filesystem=/media
 
   # Filesystem: Discord
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
