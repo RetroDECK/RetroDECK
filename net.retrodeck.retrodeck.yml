@@ -101,9 +101,6 @@ finish-args:
   # Filesystem: Steam ROM Manager – Non‑Flatpak Steam data
   - --filesystem=~/.steam:rw
 
-  # Filesystem: Steam ROM Manager - Steam Flatpak
-  - --filesystem=home/.var/app/com.valvesoftware.Steam
-
   # Filesystem: Steam ROM Manager – Flatpak Steam data
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
