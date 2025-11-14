@@ -204,7 +204,7 @@ modules:
   - name: rclone
     buildsystem: simple
     build-commands:
-      - cp rclone ${FLATPAK_DEST}/bin/
+      - install -Dm755 rclone "${FLATPAK_DEST}/bin/rclone"
     sources:
       - type: archive
         url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
