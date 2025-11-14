@@ -14,10 +14,11 @@ runtime-version: '6.10'
 sdk: org.kde.Sdk
 command: retrodeck
 
-
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
 #                             Extensions
 #                     Additional runtime components
+#
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 add-extensions:
@@ -38,8 +39,10 @@ add-extensions:
       - mkdir -p "${FLATPAK_DEST}/mangohud"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
 #                             finish-args
 #                         Runtime permissions
+#
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 finish-args:
@@ -139,7 +142,6 @@ cleanup:
   - '*.a'
   - '*.la'
 
-
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                              Modules
@@ -192,9 +194,77 @@ modules:
 #
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  # -------------------------------------------------------------------------
+  # rclone – manage files on cloud storage.
+  # -------------------------------------------------------------------------
+
+  - name: rclone
+    buildsystem: simple
+    build-commands:
+      - cp rclone ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
+        sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
 
   # -------------------------------------------------------------------------
-  # xmlstarlet – XML toolkit.
+  # rsync – utility for transferring and synchronizing files.
+  # -------------------------------------------------------------------------
+
+  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
+  - name: rsync
+    no-autogen: true
+    config-opts:
+      - --with-included-popt
+      - --with-included-zlib
+      - --disable-debug
+    sources:
+      - type: archive
+        url: https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz
+        sha256: 2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
+        x-checker-data:
+          type: anitya
+          project-id: 4217
+          stable-only: true
+          url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
+    modules:
+      - name: xxhash
+        no-autogen: true
+        make-install-args:
+          - PREFIX=${FLATPAK_DEST}
+          - DISPATCH=1
+        sources:
+          - type: git
+            url: https://github.com/Cyan4973/xxHash/
+            tag: v0.8.3
+            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
+            x-checker-data:
+              type: anitya
+              project-id: 17583
+              stable-only: true
+              tag-template: v$version
+
+
+  # -------------------------------------------------------------------------
+  # p7zip – 7‑Zip compression utilities.
+  # -------------------------------------------------------------------------
+
+  - name: p7zip
+    no-autogen: true
+    sources:
+      - type: archive
+        url: https://github.com/p7zip-project/p7zip/archive/v17.04/p7zip-v17.04.tar.gz
+        sha256: ea029a2e21d2d6ad0a156f6679bd66836204aa78148a4c5e498fe682e77127ef
+      - type: shell
+        commands:
+          - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
+    post-install:
+      - mv "${FLATPAK_DEST}/bin/7za" "${FLATPAK_DEST}/bin/7z"
+    cleanup:
+      - /man
+
+  # -------------------------------------------------------------------------
+  # xmlstarlet – XML processor & toolkit.
   # -------------------------------------------------------------------------
 
   - name: libxml2-compat
@@ -239,51 +309,6 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/xml"
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet"
 
-  # -------------------------------------------------------------------------
-  # rclone – file sync operations.
-  # -------------------------------------------------------------------------
-
-  - name: rclone
-    buildsystem: simple
-    build-commands:
-      - cp rclone ${FLATPAK_DEST}/bin/
-    sources:
-      - type: archive
-        url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
-        sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
-
-  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
-  - name: rsync
-    no-autogen: true
-    config-opts:
-      - --with-included-popt
-      - --with-included-zlib
-      - --disable-debug
-    sources:
-      - type: archive
-        url: https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz
-        sha256: 2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
-        x-checker-data:
-          type: anitya
-          project-id: 4217
-          stable-only: true
-          url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
-    modules:
-      - name: xxhash
-        no-autogen: true
-        make-install-args:
-          - PREFIX=${FLATPAK_DEST}
-          - DISPATCH=1
-        sources:
-          - type: git
-            url: https://github.com/Cyan4973/xxHash/
-            tag: v0.8.3
-            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
-            x-checker-data:
-              type: anitya
-              project-id: 17583
-              stable-only: true
-              tag-template: v$version
 
   # -------------------------------------------------------------------------
   # jq – JSON processor.
@@ -310,25 +335,6 @@ modules:
       - type: file
         url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
-
-  # -------------------------------------------------------------------------
-  # p7zip – 7‑Zip compression utilities.
-  # -------------------------------------------------------------------------
-
-  - name: p7zip
-    no-autogen: true
-    sources:
-      - type: archive
-        url: https://github.com/p7zip-project/p7zip/archive/v17.04/p7zip-v17.04.tar.gz
-        sha256: ea029a2e21d2d6ad0a156f6679bd66836204aa78148a4c5e498fe682e77127ef
-      - type: shell
-        commands:
-          - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
-    post-install:
-      - mv "${FLATPAK_DEST}/bin/7za" "${FLATPAK_DEST}/bin/7z"
-    cleanup:
-      - /man
-
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
