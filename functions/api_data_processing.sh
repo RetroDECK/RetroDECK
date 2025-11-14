@@ -567,10 +567,7 @@ api_set_preset_state() {
         .[$component].compatible_presets[$preset] | index($state) != null
       end
       ' "$rd_components/$component/component_manifest.json" > /dev/null; then # Check if requested state is a valid option
-        if [[ "$current_preset_state" == "$state" ]]; then # Preset is already in desired state
-          echo "component $component is already in state $state for preset $preset"
-          return 1
-        elif [[ "$state" == "$preset_disabled_state" ]]; then # Preset is being disabled and is not currently disabled
+        if [[ "$state" == "$preset_disabled_state" ]]; then # Preset is being disabled and is not currently disabled
           if [[ -n "$child_component" ]]; then
             log d "Disabling preset $preset for component $component core $child_component"
             set_setting_value "$rd_conf" "$child_component" "$state" "retrodeck" "$preset"
@@ -691,22 +688,14 @@ api_set_preset_state() {
   fi
   log d "Config file format: $config_format"
 
-  while IFS= read -r preset_setting_name; do
-    current_preset_object=$(jq -r --arg component "$component" \
-                                  --arg core "$child_component" \
-                                  --arg preset "$preset" \
-                                  --arg preset_setting_name "$preset_setting_name" \
-                            'if $core != "" then
-                              .[$component].preset_actions[$core][$preset][$preset_setting_name]
-                            else
-                              .[$component].preset_actions[$preset][$preset_setting_name]
-                            end' "$rd_components/$component/component_manifest.json")
+  while IFS= read -r current_preset_object; do
+    preset_setting_name=$(echo "$current_preset_object" | jq -r '.setting_name')
     action=$(echo "$current_preset_object" | jq -r '.action')
 
     case "$action" in
 
       "change" )
-        log d "Changing config file for preset: $preset_setting_name"
+        log d "Changing config file for preset $preset setting name $preset_setting_name"
         new_setting_value=$(jq -r '.new_setting_value // empty' <<< "$current_preset_object")
         section=$(jq -r '.section // empty' <<< "$current_preset_object")
         target_file=$(jq -r '.target_file // empty' <<< "$current_preset_object")
@@ -722,30 +711,32 @@ api_set_preset_state() {
         fi
 
         if [[ ! "$state" == "$preset_disabled_state" ]]; then # Preset is being enabled
-          if [[ "$new_setting_value" = \$* ]]; then
-            eval new_setting_value=$new_setting_value
-            log d "New setting value is a variable. Actual setting value is $new_setting_value"
-          fi
-          if [[ "$config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
-            if [[ ! -f "$target_file" ]]; then
-              log d "RetroArch per-system override file $target_file not found, creating and adding setting"
-              create_dir "$(realpath "$(dirname "$target_file")")"
-              echo "$preset_setting_name = \""$new_setting_value"\"" > "$target_file"
-            else
-              if [[ -z $(grep -o -P "^$preset_setting_name\b" "$target_file") ]]; then
-                log d "RetroArch per-system override file $target_file does not contain setting $preset_setting_name, adding and assigning value $new_setting_value"
-                add_setting "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
-              else
-                log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
-                set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
-              fi
+          if echo "$current_preset_object" | jq -e --arg state "$state" '.enabled_states | contains([$state])' > /dev/null; then # If the desired state should process this action
+            if [[ "$new_setting_value" = \$* ]]; then
+              eval new_setting_value=$new_setting_value
+              log d "New setting value is a variable. Actual setting value is $new_setting_value"
             fi
-          elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
-            log d "Creating cheevos token file $ppssppcheevosconf"
-            echo "$new_setting_value" > "$target_file"
-          else
-            log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
-            set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
+            if [[ "$config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
+              if [[ ! -f "$target_file" ]]; then
+                log d "RetroArch per-system override file $target_file not found, creating and adding setting"
+                create_dir "$(realpath "$(dirname "$target_file")")"
+                echo "$preset_setting_name = \""$new_setting_value"\"" > "$target_file"
+              else
+                if [[ -z $(grep -o -P "^$preset_setting_name\b" "$target_file") ]]; then
+                  log d "RetroArch per-system override file $target_file does not contain setting $preset_setting_name, adding and assigning value $new_setting_value"
+                  add_setting "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
+                else
+                  log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
+                  set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
+                fi
+              fi
+            elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+              log d "Creating cheevos token file $ppssppcheevosconf"
+              echo "$new_setting_value" > "$target_file"
+            else
+              log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
+              set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
+            fi
           fi
         else # Preset is being disabled
           if [[ "$config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
@@ -775,8 +766,10 @@ api_set_preset_state() {
       "enable" )
         target_file=$(jq -r '.target_file // empty' <<< "$current_preset_object")
         if [[ ! "$state" == "$preset_disabled_state" ]]; then
-          log d "Enabling file: $preset_setting_name"
-          enable_file "$target_file"
+          if echo "$current_preset_object" | jq -e --arg state "$state" '.enabled_states | contains([$state])' > /dev/null; then # If the desired state should process this action
+            log d "Enabling file: $preset_setting_name"
+            enable_file "$target_file"
+          fi
         else
           log d "Disabling file: $preset_setting_name"
           disable_file "$target_file"
@@ -787,8 +780,10 @@ api_set_preset_state() {
         source_file=$(jq -r '.source // empty' <<< "$current_preset_object")
         target_file=$(jq -r '.destination // empty' <<< "$current_preset_object")
         if [[ ! "$state" == "$preset_disabled_state" ]]; then
-          log d "Installing files for preset $preset_setting_name"
-          install_preset_files "$source_file" "$target_file"
+          if echo "$current_preset_object" | jq -e --arg state "$state" '.enabled_states | contains([$state])' > /dev/null; then # If the desired state should process this action
+            log d "Installing files for preset $preset_setting_name"
+            install_preset_files "$source_file" "$target_file"
+          fi
         else
           log d "Removing files for preset $preset_setting_name"
           remove_preset_files "$source_file" "$target_file"
@@ -800,13 +795,13 @@ api_set_preset_state() {
       ;;
 
     esac
-  done < <(jq -r --arg component "$component" \
+  done < <(jq -c --arg component "$component" \
                 --arg core "$child_component" \
                 --arg preset "$preset" \
                 'if $core != "" then
-                  .[$component].preset_actions[$core][$preset] | keys[]
+                  .[$component].preset_actions[$core][$preset].[]
                 else
-                  .[$component].preset_actions[$preset] | keys[]
+                  .[$component].preset_actions[$preset].[]
                 end
                 ' "$rd_components/$component/component_manifest.json")
 
