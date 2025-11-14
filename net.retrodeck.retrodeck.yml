@@ -1,18 +1,25 @@
-app-id: net.retrodeck.retrodeck
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#           ______     _            ______ _____ _____  _   __
+#           | ___ \   | |           |  _  \  ___/  __ \| | / /
+#           | |_/ /___| |_ _ __ ___ | | | | |__ | /  \/| |/ /
+#           |    // _ \ __| '__/ _ \| | | |  __|| |    |    \
+#           | |\ \  __/ |_| | | (_) | |/ /| |___| \__/\| |\  \
+#           \_| \_\___|\__|_|  \___/|___/ \____/ \____/\_| \_/
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: '6.10'
 sdk: org.kde.Sdk
-
-# Base image needed for Steam ROM Manager (Electron‑based)
-base: org.electronjs.Electron2.BaseApp
-base-version: '25.08'
-
 command: retrodeck
 
-# ------------------------------------------------------------------
-# Extensions – additional runtime components 
-# ------------------------------------------------------------------
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#                             Extensions
+#                     Additional runtime components
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 add-extensions:
   # Full FFmpeg libraries 
   org.freedesktop.Platform.ffmpeg-full:
@@ -29,6 +36,11 @@ add-extensions:
     version: '25.08'
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/mangohud"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#                             finish-args
+#                         Runtime permissions
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 finish-args:
   # DBus: screen‑saver inhibition
@@ -127,15 +139,28 @@ cleanup:
   - '*.a'
   - '*.la'
 
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+#                              Modules
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 modules:
 
-  # This module is used to define the RetroDECK version
-  # If the version is set as cooker it will automatically generate the version tag based on the date
-  # else it will just put what is written, "v" is not needed
-  # The version number is hardcoded in /app/retrodeck/version
+  # -------------------------------------------------------------------------
+  # RetroDECK version module
   #
-  # UPDATE STEPS FOR MAIN:
-  # [ ] Update the net.retrodeck.retrodeck.metainfo.xml with the version number, date and notes
+  # • If `version` is set to “cooker”, the build will automatically generate a
+  #   version tag based on the current date.
+  # • Otherwise the exact string placed in the `version` file will be used.
+  #   Do **not** prepend a leading “v”.
+  # • The version number is stored in `/app/retrodeck/version`.
+  #
+  # UPDATE STEPS FOR MAIN REPOSITORY
+  #   ☐ Update `net.retrodeck.retrodeck.metainfo.xml` with the new version,
+  #      release date, and changelog notes.
+  # -------------------------------------------------------------------------
 
   - name: initialization
     buildsystem: simple
@@ -163,9 +188,7 @@ modules:
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
-#                               START:
-#
-#                     RetroDECK: Internal Tools
+#                     RetroDECK: Generic Modules
 #
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -309,9 +332,7 @@ modules:
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
-#                               START:
-#
-#                     RetroDECK: Specific Tools
+#                     RetroDECK: Internal Modules
 #
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
