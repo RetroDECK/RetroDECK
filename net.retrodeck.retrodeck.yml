@@ -30,13 +30,13 @@ add-extensions:
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
 
-  # MangoHUD Vulkan layer (on‑screen overlay)
-  org.freedesktop.Platform.VulkanLayer.MangoHud:
-    directory: mangohud
-    add-ld-path: .
-    version: '25.08'
-    cleanup-commands:
-      - mkdir -p "${FLATPAK_DEST}/mangohud"
+ # MangoHUD Vulkan layer (on‑screen overlay) - Enable when we do overlays experiments.
+ # org.freedesktop.Platform.VulkanLayer.MangoHud:
+ #   directory: mangohud
+ #   add-ld-path: .
+ #   version: '25.08'
+ #   cleanup-commands:
+ #     - mkdir -p "${FLATPAK_DEST}/mangohud"
 
  # Gamescope
   org.freedesktop.Platform.VulkanLayer.gamescope:
