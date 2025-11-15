@@ -38,6 +38,14 @@ add-extensions:
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/mangohud"
 
+ # Gamescope
+  org.freedesktop.Platform.VulkanLayer.gamescope:
+    directory: gamescope
+    add-ld-path: .
+    version: '25.08'
+    cleanup-commands:
+      - mkdir -p "${FLATPAK_DEST}/gamescope"
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                             finish-args
@@ -97,6 +105,7 @@ finish-args:
   # Gamescope integration
   - --filesystem=xdg-run/gamescope-0:ro
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
+  - --env=PATH=/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
 
   # Filesystem: General 
   - --filesystem=home
