@@ -39,12 +39,12 @@ add-extensions:
  #     - mkdir -p "${FLATPAK_DEST}/mangohud"
 
  # Gamescope
-  org.freedesktop.Platform.VulkanLayer.gamescope:
-    directory: gamescope
-    add-ld-path: .
-    version: '25.08'
-    cleanup-commands:
-      - mkdir -p "${FLATPAK_DEST}/gamescope"
+ # org.freedesktop.Platform.VulkanLayer.gamescope:
+ #   directory: gamescope
+ #   add-ld-path: .
+ #   version: '25.08'
+ #   cleanup-commands:
+ #     - mkdir -p "${FLATPAK_DEST}/gamescope"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
