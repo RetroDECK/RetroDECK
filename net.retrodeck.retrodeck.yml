@@ -105,7 +105,7 @@ finish-args:
   # Gamescope integration
   - --filesystem=xdg-run/gamescope-0:ro
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
-  - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
+#  - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin - Future testing
 
   # Filesystem: General 
   - --filesystem=home
