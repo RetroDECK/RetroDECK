@@ -89,10 +89,7 @@ finish-args:
   # Gamescope integration
   - --filesystem=xdg-run/gamescope-0:ro
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
-
-  # Set up PATH to include various runtime and helper binaries
-  - --env=PATH=/app/bin:/app/retrodeck/components:/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
-
+  
   # Filesystem: General 
   - --filesystem=home
 
