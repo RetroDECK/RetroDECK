@@ -28,7 +28,7 @@ Instead of having several different emulators, game engines, other systems and f
 
 ## What is RetroDECK?
 
-RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) with the goal to provide everything you need for retro gaming right out of the box. With the `RetroDECK Framework`, `RetroDECK RetroENGINE` and `RetroDECK Configurator` it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.
+RetroDECK is a powerful all-in-one retro gaming platform designed for handheld gaming PCs like the Steam Deck, full Linux desktops, Linux HTPC setups, and Linux-based PC consoles such as the Steam Machine. Delivered as a self-contained Flatpak app, it gives you everything you need for retro gaming right out of the box, no manual setup required. By integrating a wide range of components such as emulators, game engines, ports, and built-in tools, RetroDECK brings all your favorite games together in one streamlined, easy-to-use package.
 
 ### How do I start using RetroDECK?
 
