@@ -38,60 +38,26 @@ add-extensions:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 finish-args:
-  # DBus: screen‑saver inhibition
+  # D-Bus: Prevent screen saver from activating
   - --talk-name=org.freedesktop.ScreenSaver
 
-  # DBus: Power‑management inhibition
+  # D-Bus: Prevent power management (sleep, suspend) actions
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
 
-  # DBus: Session control (systemd‑logind)
+  # D-Bus: Manage user session (systemd-logind)
   - --talk-name=org.freedesktop.login1.Manager
 
-  # DBus: Generic communication
+  # D-Bus: Enables generic inter-process communication
   - --talk-name=org.freedesktop.DBus
 
-  # Dbus: (and more): IPC namespace 
+  # D-Bus: Share IPC namespace for inter-process communication
   - --share=ipc
-
-  # Wayland: Display server 
-  - --socket=wayland
-
-  # Wayland: SDL window‑class
-  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
-
-  #  Wayland/EGL/XCB: Qt platform selection
-  - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
-
-  # X11: Display server
-  - --socket=x11
-
-  # X11: SDL window‑class
-  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
-
-  # Sound: PulseAudio
-  - --socket=pulseaudio
-
-  # Sound: PipeWire socket
-  - --filesystem=xdg-run/pipewire-0
-
-  # Network 
-  - --share=network
 
   # Devices: All device access (e.g., /dev/*, used for various inputs)
   - --device=all
 
   # Devices: Bluetooth access (used for various inputs)
   - --allow=bluetooth
-
-  # Multi‑arch support (32‑bit libs on 64‑bit)
-  - --allow=multiarch
-
-  # Gamescope integration
-  - --filesystem=xdg-run/gamescope-0:ro
-  - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
-  
-  # Filesystem: General 
-  - --filesystem=home
 
   # Filesystem: External Drives
   - --filesystem=/run/media
@@ -104,8 +70,8 @@ finish-args:
   # Filesystem: GTK‑3 configuration (read‑only)
   - --filesystem=xdg-config/gtk-3.0:ro
 
-  # Filesystem: Udev information (read‑only, for inputs)
-  - --filesystem=/run/udev:ro
+  # Filesystem: Home 
+  - --filesystem=home
 
   # Filesystem: Steam ROM Manager – Flatpak‑installed Steam data
   - --filesystem=xdg-data/Steam:rw
@@ -115,6 +81,43 @@ finish-args:
 
   # Filesystem: Steam ROM Manager – Flatpak Steam data
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
+
+  # Filesystem: Udev information (read‑only, for inputs)
+  - --filesystem=/run/udev:ro
+
+  # GStreamer integration
+  - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
+
+  # Gamescope integration
+  - --filesystem=xdg-run/gamescope-0:ro
+  - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
+  
+  # Multi‑arch support (32‑bit libs on 64‑bit)
+  - --allow=multiarch
+
+  # Network 
+  - --share=network
+
+  # Sound: PulseAudio
+  - --socket=pulseaudio
+
+  # Sound: PipeWire socket
+  - --filesystem=xdg-run/pipewire-0
+
+  # Wayland: Display server 
+  - --socket=wayland
+
+  # Wayland: SDL window‑class
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
+
+  # Wayland/EGL/XCB: Qt platform selection
+  - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
+
+  # X11: Display server
+  - --socket=x11
+
+  # X11: SDL window‑class
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
 
   # Xemu: openSUSE QEMU_AUDIO_DRV fix
   - --unset-env=QEMU_AUDIO_DRV
