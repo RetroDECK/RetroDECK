@@ -810,7 +810,6 @@ finit() {
   (
   prepare_component "reset" "all"
   update_component_presets
-  build_retrodeck_current_presets
   deploy_helper_files
 
   # Optional actions based on user choices
@@ -913,8 +912,12 @@ deploy_helper_files() {
     dest=$(echo "$current_json_object" | jq -r '.location')
     if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
-      log d "Copying helper file $file to $current_dest"
-      cp -f "$helper_files_path/$file" "$current_dest/$file"
+      if [[ -d "$dest" ]]; then
+        log d "Copying helper file $file to $current_dest"
+        cp -f "$helper_files_path/$file" "$current_dest/$file"
+      else
+        log d "Helper file location $dest does not exist, component may not be installed. Skipping..."
+      fi
     fi
   done <<< "$helper_files"
 }
