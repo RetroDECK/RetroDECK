@@ -732,12 +732,48 @@ prepare_component() {
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
     return 1
-  else
-    # Update presets for all components after any reset or move
-    if [[ ! "$component" =~ ^(retrodeck|es-de) ]]; then
-      build_retrodeck_current_presets
+  elif [[ "$action" == "reset" ]]; then # If one or more components has been reset, also reset their presets in retrodeck.json
+      while IFS= read -r preset; do # Iterate all presets listed in retrodeck.json
+        while IFS= read -r preset_compatible_component; do # Iterate all system names in this preset
+          if [[ "$component" == "all" || "$preset_compatible_component" =~ "$component" ]]; then # If this is a component we have reset
+            local parent_component="$(jq -r --arg preset "$preset" --arg component "$preset_compatible_component" '
+                                                                                                .presets[$preset]
+                                                                                                | paths(scalars)
+                                                                                                | select(.[-1] == $component)
+                                                                                                | if length > 1 then .[-2] else $preset end
+                                                                                                ' "$rd_conf")"
+            if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
+              parent_component="${parent_component%.cores}"
+              local child_component="$preset_compatible_component"
+              local preset_compatible_component="$parent_component"
+            fi
+
+            local preset_disabled_state=$(jq -r --arg component "$preset_compatible_component" --arg core "$child_component" --arg preset "$preset" '
+                                      if $core != "" then
+                                        .[$component].compatible_presets[$core][$preset].[0] // empty
+                                      else
+                                        .[$component].compatible_presets[$preset].[0] // empty
+                                      end
+                                    ' "$rd_components/$preset_compatible_component/component_manifest.json")
+
+            local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset") # Read the variables value from active retrodeck.json
+
+            if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then # If the preset is not already disabled
+              if [[ -n "$child_component" ]]; then
+                log d "Disabling preset $preset for component $preset_compatible_component core $child_component"
+                set_setting_value "$rd_conf" "$child_component" "$preset_disabled_state" "retrodeck" "$preset"
+              else
+                log d "Disabling preset $preset for component $preset_compatible_component"
+                set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
+              fi
+            fi
+          fi
+        done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
+      done < <(jq -r '.presets | keys[]' "$rd_conf")
     fi
   fi
 
-  conf_write
+  if [[ "$component" =~ ^(all|framework) ]]; then # If core paths or options were reset or moved
+    conf_write
+  fi
 }
