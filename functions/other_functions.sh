@@ -299,8 +299,12 @@ dir_prep() {
   # moving everything from the old folder to the new one, delete the old one
   if [ -d "$symlink.old" ];
   then
-    log d "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink.old"/{.[!.],}* "$real"
+    if [[ -n $(ls -A1 "$symlink.old") ]]; then # If the old folder is not empty
+      log d "Moving the data from $symlink.old to $real" #DEBUG
+      mv -f "$symlink.old"/{.[!.],}* "$real"
+    else
+      log d "$symlink.old is empty, no need to move files."
+    fi
     log d "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
