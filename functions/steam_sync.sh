@@ -113,9 +113,9 @@ steam_sync() {
 steam_sync_add() {
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
     (
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm add >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
     --title="Syncing with Steam" \
@@ -123,18 +123,18 @@ steam_sync_add() {
     --text="<span foreground='$purple'><b>\t\t\t\tAdding new favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm add >> "$srm_log" 2>&1
   fi
 }
 
 steam_sync_remove() {
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
     (
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager remove >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm remove >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
     --title="Syncing with Steam" \
@@ -142,8 +142,8 @@ steam_sync_remove() {
     --text="<span foreground='$purple'><b>\t\t\t\tRemoving unfavorited games from Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager remove >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm remove >> "$srm_log" 2>&1
   fi
 }
