@@ -696,81 +696,60 @@ prepare_component() {
 
   # If component is "all", iterate over all components in $rd_components
   if [[ "$component" == "all" ]]; then
-    for comp_dir in "$rd_components"/*; do
-      comp=$(basename "$comp_dir")
-      found_this_component="false"
-      while IFS= read -r prepare_component_file; do
-        if [[ "$(basename "$(dirname "$prepare_component_file")")" == "$comp" ]]; then
-          log d "Found component file $prepare_component_file for component $comp"
-          source "$prepare_component_file"
-          found_this_component="true"
-          component_found="true"
-        fi
-      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
-      if [[ "$found_this_component" == "false" ]]; then
-        log w "Component $comp not found"
-      fi
-    done
+    while IFS= read -r prepare_component_file; do
+      log d "Found component file $prepare_component_file"
+      source "$prepare_component_file"
+    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
   else
-    # Read install components component_prepare.sh files for specified components
-    for comp in $component; do
-      found_this_component="false"
-      while IFS= read -r prepare_component_file; do
-        if [[ "$(basename "$(dirname "$prepare_component_file")")" == "$comp" ]]; then
-          log d "Found component file $prepare_component_file for component $comp"
-          source "$prepare_component_file"
-          found_this_component="true"
-          component_found="true"
-        fi
-      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
-      if [[ "$found_this_component" == "false" ]]; then
-        log w "Component $comp not found"
-      fi
-    done
+    if [[ -f "$rd_components/$component/component_prepare.sh" ]]; then
+      log d "Found component file $rd_components/$component/component_prepare.sh for component $component"
+      source "$rd_components/$component/component_prepare.sh"
+    else
+      log e "No component_prepare.sh file found for component $component"
+      return 1
+    fi
   fi
 
-  if [[ $component_found == "false" ]]; then
-    log e "Supplied component $component not found, not resetting"
-    return 1
-  elif [[ "$action" == "reset" ]]; then # If one or more components has been reset, also reset their presets in retrodeck.json
-      while IFS= read -r preset; do # Iterate all presets listed in retrodeck.json
-        while IFS= read -r preset_compatible_component; do # Iterate all system names in this preset
-          if [[ "$component" == "all" || "$preset_compatible_component" =~ "$component" ]]; then # If this is a component we have reset
-            local parent_component="$(jq -r --arg preset "$preset" --arg component "$preset_compatible_component" '
-                                                                                                .presets[$preset]
-                                                                                                | paths(scalars)
-                                                                                                | select(.[-1] == $component)
-                                                                                                | if length > 1 then .[-2] else $preset end
-                                                                                                ' "$rd_conf")"
-            if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
-              parent_component="${parent_component%.cores}"
-              local child_component="$preset_compatible_component"
-              local preset_compatible_component="$parent_component"
-            fi
+  if [[ "$action" == "reset" ]]; then
+    while IFS= read -r preset # Iterate all presets listed in retrodeck.cfg
+    do
+      while IFS= read -r preset_compatible_component # Iterate all system names in this preset
+      do
+        if [[ "$component" == "all" || "$preset_compatible_component" =~ "$component" ]]; then
+          local parent_component="$(jq -r --arg preset "$preset" --arg component "$preset_compatible_component" '
+                                                                                              .presets[$preset]
+                                                                                              | paths(scalars)
+                                                                                              | select(.[-1] == $component)
+                                                                                              | if length > 1 then .[-2] else $preset end
+                                                                                              ' "$rd_conf")"
+          if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
+            parent_component="${parent_component%.cores}"
+            local child_component="$preset_compatible_component"
+            local preset_compatible_component="$parent_component"
+          fi
 
-            local preset_disabled_state=$(jq -r --arg component "$preset_compatible_component" --arg core "$child_component" --arg preset "$preset" '
-                                      if $core != "" then
-                                        .[$component].compatible_presets[$core][$preset].[0] // empty
-                                      else
-                                        .[$component].compatible_presets[$preset].[0] // empty
-                                      end
-                                    ' "$rd_components/$preset_compatible_component/component_manifest.json")
+          local preset_disabled_state=$(jq -r --arg component "$preset_compatible_component" --arg core "$child_component" --arg preset "$preset" '
+                                    if $core != "" then
+                                      .[$component].compatible_presets[$core][$preset].[0] // empty
+                                    else
+                                      .[$component].compatible_presets[$preset].[0] // empty
+                                    end
+                                  ' "$rd_components/$preset_compatible_component/component_manifest.json")
 
-            local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset") # Read the variables value from active retrodeck.json
+          local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset") # Read the variables value from active retrodeck.cfg
 
-            if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then # If the preset is not already disabled
-              if [[ -n "$child_component" ]]; then
-                log d "Disabling preset $preset for component $preset_compatible_component core $child_component"
-                set_setting_value "$rd_conf" "$child_component" "$preset_disabled_state" "retrodeck" "$preset"
-              else
-                log d "Disabling preset $preset for component $preset_compatible_component"
-                set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
-              fi
+          if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
+            if [[ -n "$child_component" ]]; then
+              log d "Disabling preset $preset for component $preset_compatible_component core $child_component"
+              set_setting_value "$rd_conf" "$child_component" "$preset_disabled_state" "retrodeck" "$preset"
+            else
+              log d "Disabling preset $preset for component $preset_compatible_component"
+              set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
             fi
           fi
-        done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
-      done < <(jq -r '.presets | keys[]' "$rd_conf")
-    fi
+        fi
+      done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
+    done < <(jq -r '.presets | keys[]' "$rd_conf")
   fi
 
   if [[ "$component" =~ ^(all|framework) ]]; then # If core paths or options were reset or moved
