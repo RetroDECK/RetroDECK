@@ -277,18 +277,18 @@ api_get_bios_file_status() {
   local bios_files="$(mktemp)"
   echo '[]' > "$bios_files"
 
-  while read -r entry; do
+  while read -r bios_obj; do
     while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
     # Extract the key (element name) and the fields
-    bios_file=$(jq -r '.key // "Unknown"' <<< "$entry")
-    bios_md5=$(jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
-    bios_systems=$(jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
-    bios_desc=$(jq -r '.value.description // "No description provided"' <<< "$entry")
-    required=$(jq -r '.value.required // "No"' <<< "$entry")
-    bios_paths=$(jq -r '.value.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$entry")
+    bios_file=$(jq -r '.filename // "Unknown"' <<< "$bios_obj")
+    bios_md5=$(jq -r '.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
+    bios_systems=$(jq -r '.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
+    bios_desc=$(jq -r '.description // "No description provided"' <<< "$bios_obj")
+    bios_required=$(jq -r '.required // "No"' <<< "$bios_obj")
+    bios_paths=$(jq -r '.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$bios_obj")
 
     log d "Checking entry $bios_entry"
 
@@ -323,18 +323,18 @@ api_get_bios_file_status() {
       log d "Expected MD5: $bios_md5"
     fi
 
-    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $required $bios_md5\" to the bios_checked_list"
+    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_required $bios_md5\" to the bios_checked_list"
 
     local json_obj=$(jq -n --arg file "$bios_file" --arg systems "$bios_systems" --arg found "$bios_file_found" --arg md5_matched "$bios_md5_matched" \
-                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg required "$required" --arg md5 "$bios_md5" \
-                          '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, known_md5_hashes: $md5 }')
+                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg required "$bios_required" --arg md5 "$bios_md5" \
+                          '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, required, $required, known_md5_hashes: $md5 }')
     (
     flock -x 200
     jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$bios_files" > "$bios_files.tmp" && mv "$bios_files.tmp" "$bios_files"
     ) 200>"$rd_file_lock"
   ) &
   wait # wait for background tasks to finish
-  done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
+  done < <(jq -c '.bios.[]' "$bios_checklist")
 
   # Sort the final list numerically, then alphabetically by system name
   local final_json=$(cat "$bios_files" | jq 'sort_by([
