@@ -323,10 +323,10 @@ api_get_bios_file_status() {
       log d "Expected MD5: $bios_md5"
     fi
 
-    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
+    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $required $bios_md5\" to the bios_checked_list"
 
     local json_obj=$(jq -n --arg file "$bios_file" --arg systems "$bios_systems" --arg found "$bios_file_found" --arg md5_matched "$bios_md5_matched" \
-                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg md5 "$bios_md5" \
+                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg required "$required" --arg md5 "$bios_md5" \
                           '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, known_md5_hashes: $md5 }')
     (
     flock -x 200
