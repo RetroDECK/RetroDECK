@@ -265,9 +265,7 @@ configurator_reset_dialog() {
   # If the user selects components, it calls `prepare_component` with the selected components.
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the welcome screen.
 
-  parse_json_to_array components "api_get_component" "all"
-  keep_parts_of_array "1 2 3" components components_filtered "6"
-  add_value_to_array components_filtered components_list FALSE "3"
+  build_zenity_reset_component_menu_array reset_component_list
 
   choice=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Reset Components" --cancel-label="Cancel" \
@@ -277,10 +275,10 @@ configurator_reset_dialog() {
   --separator="^" \
   --text="Which components do you want to reset?" \
   --column "Reset" \
-  --column "Emulator" \
+  --column "Component" \
   --column "Name" \
   --column "Description" \
-  "${components_list[@]}")
+  "${reset_component_list[@]}")
 
   log d "User selected: $choice"
 

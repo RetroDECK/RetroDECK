@@ -263,11 +263,25 @@ build_zenity_open_component_menu_array() {
   local -a temp_bash_array=()
 
   while read -r obj; do # Iterate through all returned menu objects
-    log d "DEBUG: $obj"
     local name=$(jq -r '.component_friendly_name' <<< "$obj")
     local desc=$(jq -r '.description' <<< "$obj")
     local command=$(jq -r '.path' <<< "$obj")
     temp_bash_array+=("$name" "$desc" "$command")
+  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null)')
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
+
+build_zenity_reset_component_menu_array() {
+  local dest_array="$1"
+  local -a temp_bash_array=()
+
+  while read -r obj; do # Iterate through all returned menu objects
+    local checkbox_state="FALSE"
+    local name=$(jq -r '.component_name' <<< "$obj")
+    local friendly_name=$(jq -r '.component_friendly_name' <<< "$obj")
+    local desc=$(jq -r '.description' <<< "$obj")
+    temp_bash_array+=("$checkbox_state" "$name" "$friendly_name" "$desc")
   done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null)')
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
