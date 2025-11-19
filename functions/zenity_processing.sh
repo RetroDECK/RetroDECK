@@ -24,7 +24,6 @@ parse_json_to_array() {
   local -a temp_bash_array=()
 
   while IFS= read -r json_value; do
-    log d "json_value: $json_value"
     temp_bash_array+=( "$json_value" )
   done < <("$@" | jq -r '.[]
                           | if type=="array" then .[] else . end
@@ -255,6 +254,21 @@ build_zenity_preset_value_menu_array() {
                                   .[$component].compatible_presets[$preset].[] // empty
                                 end
                                 ' "$rd_components/$base_component/component_manifest.json")
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
+
+build_zenity_open_component_menu_array() {
+  local dest_array="$1"
+  local -a temp_bash_array=()
+
+  while read -r obj; do # Iterate through all returned menu objects
+    log d "DEBUG: $obj"
+    local name=$(jq -r '.component_friendly_name' <<< "$obj")
+    local desc=$(jq -r '.description' <<< "$obj")
+    local command=$(jq -r '.path' <<< "$obj")
+    temp_bash_array+=("$name" "$desc" "$command")
+  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null)')
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
