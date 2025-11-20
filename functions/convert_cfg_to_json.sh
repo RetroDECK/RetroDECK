@@ -1,55 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
-declare -A PATH_KEY_MAP=(
-  ["rdhome"]="rd_home_path"
-  ["roms_folder"]="roms_path"
-  ["saves_folder"]="saves_path"
-  ["states_folder"]="states_path"
-  ["shaders_folder"]="shaders_path"
-  ["bios_folder"]="bios_path"
-  ["backups_folder"]="backups_path"
-  ["media_folder"]="downloaded_media_path"
-  ["themes_folder"]="themes_path"
-  ["logs_folder"]="logs_path"
-  ["screenshots_folder"]="screenshots_path"
-  ["mods_folder"]="mods_path"
-  ["texture_packs_folder"]="texture_packs_path"
-  ["borders_folder"]="borders_path"
-  ["cheats_folder"]="cheats_path"
-  ["sdcard"]="sdcard"
-)
-
-declare -A OPTIONS_KEY_MAP=(
-  ["logging_level"]="rd_logging_level"
-)
-
-declare -A PRESET_NESTING_MAP=(
-  ["borders.gb"]="retroarch_cores.gb"
-  ["borders.gba"]="retroarch_cores.gba"
-  ["borders.gbc"]="retroarch_cores.gnc"
-  ["borders.genesis"]="retroarch_cores.genesis"
-  ["borders.gg"]="retroarch_cores.gg"
-  ["borders.n64"]="retroarch_cores.n64"
-  ["borders.psx_ra"]="retroarch_cores.pcsx_ra"
-  ["borders.snes"]="retroarch_cores.snes"
-
-  # Widescreen transformations
-  ["widescreen.genesis"]="retroarch_cores.genesis"
-  ["widescreen.n64"]="retroarch_cores.n64"
-  ["widescreen.psx_ra"]="retroarch_cores.pcsx_ra"
-  ["widescreen.snes"]="retroarch_cores.snes"
-
-  # Rewind transformations
-  ["rewind.gb"]="retroarch_cores.gb"
-  ["rewind.gba"]="retroarch_cores.gba"
-  ["rewind.gbc"]="retroarch_cores.gbc"
-  ["rewind.genesis"]="retroarch_cores.genesis"
-  ["rewind.gg"]="retroarch_cores.gg"
-  ["rewind.snes"]="retroarch_cores.snes"
-)
-
 transform_key() {
   local section="$1"
   local key="$2"
@@ -83,7 +33,81 @@ get_nesting_info() {
   fi
 }
 
+is_excluded() {
+  local section="$1"
+  local key="$2"
+  local lookup
+
+  if [[ -n "$section" ]]; then
+    lookup="${section}.${key}"
+  else
+    lookup="$key"
+  fi
+
+  for excluded in "${EXCLUDE_KEYS[@]}"; do
+    if [[ "$excluded" == "$lookup" ]]; then
+      return 0  # Is excluded
+    fi
+  done
+
+  return 1  # Is not excluded
+}
+
 convert_cfg_to_json() {
+  set -euo pipefail
+
+  declare -A PATH_KEY_MAP=(
+    ["rdhome"]="rd_home_path"
+    ["roms_folder"]="roms_path"
+    ["saves_folder"]="saves_path"
+    ["states_folder"]="states_path"
+    ["shaders_folder"]="shaders_path"
+    ["bios_folder"]="bios_path"
+    ["backups_folder"]="backups_path"
+    ["media_folder"]="downloaded_media_path"
+    ["themes_folder"]="themes_path"
+    ["logs_folder"]="logs_path"
+    ["screenshots_folder"]="screenshots_path"
+    ["mods_folder"]="mods_path"
+    ["texture_packs_folder"]="texture_packs_path"
+    ["borders_folder"]="borders_path"
+    ["cheats_folder"]="cheats_path"
+    ["sdcard"]="sdcard"
+  )
+
+  declare -A OPTIONS_KEY_MAP=(
+    ["logging_level"]="rd_logging_level"
+  )
+
+  declare -A PRESET_NESTING_MAP=(
+    ["borders.gb"]="retroarch_cores.gambatte_libretro"
+    ["borders.gba"]="retroarch_cores.mgba_libretro"
+    ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["borders.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["borders.psx_ra"]="retroarch_cores.swanstation_libretro"
+    ["borders.snes"]="retroarch_cores.snes9x-current_libretro"
+
+    ["widescreen.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["widescreen.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["widescreen.psx_ra"]="retroarch_cores.swanstation_libretro"
+    ["widescreen.snes"]="retroarch_cores.snes9x-current_libretro"
+
+    ["rewind.gb"]="retroarch_cores.gambatte_libretro"
+    ["rewind.gba"]="retroarch_cores.mgba_libretro"
+    ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["rewind.snes"]="retroarch_cores.snes9x-current_libretro"
+  )
+
+  declare -a EXCLUDE_KEYS=(
+    "rewind.gbc"
+    "rewind.gg"
+    "borders.gbc"
+    "borders.gg"
+    "abxy_button_swap.gbc"
+    "options.kiroi_ponzu"
+    "options.akai_ponzu"
+  )
+
   input_file="$1"
   output_file="${2:-}"
 
@@ -116,6 +140,10 @@ convert_cfg_to_json() {
       value=$(echo "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
       transformed_key=$(transform_key "$current_section" "$key")
+
+      if is_excluded "$current_section" "$key"; then
+        continue
+      fi
 
       if [[ ! -n "$current_section" ]]; then
         json_output=$(echo "$json_output" | jq --arg key "$transformed_key" --arg val "$value" \
