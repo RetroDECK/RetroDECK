@@ -223,7 +223,7 @@ api_get_current_preset_state() {
                                                               ' "$rd_conf")
           if [[ ! "$preset_name" == "$base_component" ]]; then # If component is a core
             log d "Component $component is a core of $base_component"
-            base_component="${base_component%.cores}"
+            base_component="${base_component%_cores}"
           else
             base_component="$component"
           fi
@@ -543,7 +543,7 @@ api_set_preset_state() {
     | if length > 1 then .[-2] else $preset end
     ' "$rd_conf")"
     if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
-      parent_component="${parent_component%.cores}"
+      parent_component="${parent_component%_cores}"
       child_component="$component"
       component="$parent_component"
     fi
@@ -582,7 +582,7 @@ api_set_preset_state() {
               if jq -e --arg component "$component" \
               --arg core "$child_component" \
               --arg preset "$preset_key_value" '
-              (if $core != "" then $component + ".cores" else $component end) as $component_ext
+              (if $core != "" then $component + "_cores" else $component end) as $component_ext
               |
               if $core != "" then
                 .presets[$preset][$component_ext] | has($core)
@@ -614,7 +614,7 @@ api_set_preset_state() {
               if jq -e --arg component "$component" \
               --arg core "$child_component" \
               --arg preset "$preset_key" '
-              (if $core != "" then $component + ".cores" else $component end) as $component_ext
+              (if $core != "" then $component + "_cores" else $component end) as $component_ext
               |
               if $core != "" then
                 .presets[$preset][$component_ext] | has($core)

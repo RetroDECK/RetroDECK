@@ -235,7 +235,7 @@ build_retrodeck_current_presets() {
                                                                                           | if length > 1 then .[-2] else $preset end
                                                                                           ' "$rd_conf")"
       if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
-        parent_component="${parent_component%.cores}"
+        parent_component="${parent_component%_cores}"
         child_component="$component"
         component="$parent_component"
       fi

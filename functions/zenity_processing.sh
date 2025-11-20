@@ -226,7 +226,7 @@ build_zenity_preset_value_menu_array() {
 
   if [[ ! "$preset_name" == "$base_component" ]]; then # If component is a core
     log d "Component $component is a core of $base_component"
-    base_component="${base_component%.cores}"
+    base_component="${base_component%_cores}"
   else
     base_component="$component"
   fi

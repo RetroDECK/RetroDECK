@@ -840,7 +840,10 @@ finit() {
     --title "RetroDECK Finishing Initialization" \
     --text="RetroDECK is finishing the initial setup process, please wait.\n\n"
 
-  add_retrodeck_to_steam
+  get_steam_user
+  if [[ -n "$steam_id" ]]; then
+    add_retrodeck_to_steam
+  fi
   create_lock
 
   # Inform the user where to put the ROMs and BIOS files
@@ -1632,19 +1635,19 @@ update_component_presets() {
             tmpfile=$(mktemp)
             jq --arg preset "$preset_name" '.presets += { ($preset): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
           fi
-          if ! jq -e --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If there is no wrapper for the parent component for this core
+          if ! jq -e --arg component "${component_name}_cores" --arg preset "$preset_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If there is no wrapper for the parent component for this core
             log d "Wrapper for parent component \"$component_name\" in \"$preset_name\" not found, creating it."
             tmpfile=$(mktemp)
-            jq --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] += { ($component): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+            jq --arg component "${component_name}_cores" --arg preset "$preset_name" '.presets[$preset] += { ($component): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
           fi
-          if jq -e --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" '.presets[$preset][$component] | has($nest)' "$rd_conf" > /dev/null; then
+          if jq -e --arg preset "$preset_name" --arg component "${component_name}_cores" --arg nest "$nested_object" '.presets[$preset][$component] | has($nest)' "$rd_conf" > /dev/null; then
             log d "The preset \"$preset_name\" already contains the component \"$component_name\" core \"$nested_object\". Skipping."
           else
             # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
             default_preset_value=$(jq -r --arg name "$component_name" --arg nest "$nested_object" --arg preset "$preset_name" '.[$name].compatible_presets[$nest][$preset][0]' "$manifest_file")
             log d "Adding component \"$component_name\" core \"$nested_object\" with default value '$default_preset_value' to preset \"$preset_name\"."
             tmpfile=$(mktemp)
-            jq --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" --arg value "$default_preset_value" \
+            jq --arg preset "$preset_name" --arg component "${component_name}_cores" --arg nest "$nested_object" --arg value "$default_preset_value" \
               '.presets[$preset][$component] += { ($nest): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
           fi
         done < <(jq -r --arg component "$component_name" --arg nest "$nested_object" '

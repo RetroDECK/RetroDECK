@@ -723,7 +723,7 @@ prepare_component() {
                                                                                               | if length > 1 then .[-2] else $preset end
                                                                                               ' "$rd_conf")"
           if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
-            parent_component="${parent_component%.cores}"
+            parent_component="${parent_component%_cores}"
             local child_component="$preset_compatible_component"
             local preset_compatible_component="$parent_component"
           fi
