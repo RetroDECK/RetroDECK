@@ -80,35 +80,35 @@ convert_cfg_to_json() {
   )
 
   declare -A PRESET_NESTING_MAP=(
-    ["borders.gb"]="retroarch_cores.gambatte_libretro"
+    ["borders.gb"]="retroarch_cores.gambatte_libretro_GB"
+    ["borders.gb"]="retroarch_cores.gambatte_libretro_GBC"
     ["borders.gba"]="retroarch_cores.mgba_libretro"
-    ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
+    ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro_GG"
     ["borders.n64"]="retroarch_cores.mupen64plus_next_libretro"
     ["borders.psx_ra"]="retroarch_cores.swanstation_libretro"
     ["borders.snes"]="retroarch_cores.snes9x-current_libretro"
 
-    ["widescreen.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["widescreen.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
     ["widescreen.n64"]="retroarch_cores.mupen64plus_next_libretro"
     ["widescreen.psx_ra"]="retroarch_cores.swanstation_libretro"
     ["widescreen.snes"]="retroarch_cores.snes9x-current_libretro"
 
-    ["rewind.gb"]="retroarch_cores.gambatte_libretro"
+    ["rewind.gb"]="retroarch_cores.gambatte_libretro_GB"
+    ["rewind.gbc"]="retroarch_cores.gambatte_libretro_GBC"
     ["rewind.gba"]="retroarch_cores.mgba_libretro"
-    ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
+    ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
+    ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro_GG"
     ["rewind.snes"]="retroarch_cores.snes9x-current_libretro"
 
-    ["abxy_button_swap.gb"]="retroarch_cores.gambatte_libretro"
+    ["abxy_button_swap.gb"]="retroarch_cores.gambatte_libretro_GB"
+    ["abxy_button_swap.gbc"]="retroarch_cores.gambatte_libretro_GBC"
     ["abxy_button_swap.gba"]="retroarch_cores.mgba_libretro"
     ["abxy_button_swap.n64"]="retroarch_cores.mupen64plus_next_libretro"
     ["abxy_button_swap.snes"]="retroarch_cores.snes9x-current_libretro"
   )
 
   declare -a EXCLUDE_KEYS=(
-    "rewind.gbc"
-    "rewind.gg"
-    "borders.gbc"
-    "borders.gg"
-    "abxy_button_swap.gbc"
     "abxy_button_swap.citra"
     "options.kiroi_ponzu"
     "options.akai_ponzu"
