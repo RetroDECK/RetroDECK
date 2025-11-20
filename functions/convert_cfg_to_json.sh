@@ -25,30 +25,29 @@ declare -A OPTIONS_KEY_MAP=(
   ["logging_level"]="rd_logging_level"
 )
 
-# Preset nesting rules: "section.key" -> "parent1.parent2.final_key"
-# Format: "section_name.original_key=nested.path.to.key"
-# Use empty value for no transformation
 declare -A PRESET_NESTING_MAP=(
-  ["borders.gb"]="retroarch.cores.gambatte_libretro"
-  ["borders.gba"]="retroarch.cores.mgba_libretro"
-  ["borders.gbc"]="retroarch.cores.gambatte_libretro"
-  ["borders.genesis"]="retroarch.cores.genesis_plus_gx_libretro"
-  ["borders.gg"]="retroarch.cores.genesis_plus_gx_libretro"
-  ["borders.n64"]="retroarch.cores.mupen64plus_next_libretro"
-  ["borders.psx_ra"]="retroarch.cores.pcsx_rearmed_libretro"
-  ["borders.snes"]="retroarch.cores.snes9x-current_libretro"
+  ["borders.gb"]="retroarch_cores.gb"
+  ["borders.gba"]="retroarch_cores.gba"
+  ["borders.gbc"]="retroarch_cores.gnc"
+  ["borders.genesis"]="retroarch_cores.genesis"
+  ["borders.gg"]="retroarch_cores.gg"
+  ["borders.n64"]="retroarch_cores.n64"
+  ["borders.psx_ra"]="retroarch_cores.pcsx_ra"
+  ["borders.snes"]="retroarch_cores.snes"
 
-  ["widescreen.genesis"]="retroarch.cores.genesis_plus_gx_libretro"
-  ["widescreen.n64"]="retroarch.cores.mupen64plus_next_libretro"
-  ["widescreen.psx_ra"]="retroarch.cores.pcsx_rearmed_libretro"
-  ["widescreen.snes"]="retroarch.cores.snes9x-current_libretro"
+  # Widescreen transformations
+  ["widescreen.genesis"]="retroarch_cores.genesis"
+  ["widescreen.n64"]="retroarch_cores.n64"
+  ["widescreen.psx_ra"]="retroarch_cores.pcsx_ra"
+  ["widescreen.snes"]="retroarch_cores.snes"
 
-  ["rewind.gb"]="retroarch.cores.gambatte_libretro"
-  ["rewind.gba"]="retroarch.cores.mgba_libretro"
-  ["rewind.gbc"]="retroarch.cores.gambatte_libretro"
-  ["rewind.genesis"]="retroarch.cores.genesis_plus_gx_libretro"
-  ["rewind.gg"]="retroarch.cores.genesis_plus_gx_libretro"
-  ["rewind.snes"]="retroarch.cores.snes9x-current_libretro"
+  # Rewind transformations
+  ["rewind.gb"]="retroarch_cores.gb"
+  ["rewind.gba"]="retroarch_cores.gba"
+  ["rewind.gbc"]="retroarch_cores.gbc"
+  ["rewind.genesis"]="retroarch_cores.genesis"
+  ["rewind.gg"]="retroarch_cores.gg"
+  ["rewind.snes"]="retroarch_cores.snes"
 )
 
 transform_key() {
@@ -72,7 +71,7 @@ transform_key() {
   echo "$transformed"
 }
 
-get_nesting_path() {
+get_nesting_info() {
   local section="$1"
   local key="$2"
   local lookup="${section}.${key}"
@@ -85,12 +84,6 @@ get_nesting_path() {
 }
 
 convert_cfg_to_json() {
-  if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <input.ini> [output.json]"
-    echo "If output.json is not specified, outputs to stdout"
-    exit 1
-  fi
-
   input_file="$1"
   output_file="${2:-}"
 
@@ -99,16 +92,16 @@ convert_cfg_to_json() {
     exit 1
   fi
 
-  json_output='{}'
+  json_output='{"version":"","paths":{},"options":{},"presets":{}}'
 
   current_section=""
 
   while IFS= read -r line || [[ -n "$line" ]]; do
     line=$(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//') # Trim whitespace
 
-    [[ -z "$line" ]] && continue
-    [[ "$line" =~ ^# ]] && continue
-    [[ "$line" =~ ^\; ]] && continue
+    if [[ -z "$line" || "$line" =~ ^[#\;] ]]; then # Skip empty lines and comments
+      continue
+    fi
 
     if [[ "$line" =~ ^\[([^]]+)\]$ ]]; then
       current_section="${BASH_REMATCH[1]}"
@@ -124,28 +117,29 @@ convert_cfg_to_json() {
 
       transformed_key=$(transform_key "$current_section" "$key")
 
-      if [[ "$current_section" == "paths" ]]; then
+      if [[ ! -n "$current_section" ]]; then
+        json_output=$(echo "$json_output" | jq --arg key "$transformed_key" --arg val "$value" \
+            '.[$key] = $val')
+      elif [[ "$current_section" == "paths" ]]; then
         json_output=$(echo "$json_output" | jq --arg key "$transformed_key" --arg val "$value" \
             '.paths[$key] = $val')
       elif [[ "$current_section" == "options" ]]; then
         json_output=$(echo "$json_output" | jq --arg key "$transformed_key" --arg val "$value" \
             '.options[$key] = $val')
       else # This is a preset section
-        nesting_path=$(get_nesting_path "$current_section" "$key")
+        nesting_info=$(get_nesting_info "$current_section" "$key")
 
-        if [[ "$nesting_path" == *"."* ]]; then
-          IFS='.' read -ra PATH_PARTS <<< "$nesting_path"
-          jq_path=".presets[\"$current_section\"]"
+        if [[ "$nesting_info" =~ ^([^.]+)\.(.+)$ ]]; then
+          parent="${BASH_REMATCH[1]}"
+          final_key="${BASH_REMATCH[2]}"
 
-          for part in "${PATH_PARTS[@]}"; do
-            jq_path="${jq_path}[\"${part}\"]"
-          done
-
-          json_output=$(echo "$json_output" | jq --arg v "$value" "${jq_path} = \$v")
+          json_output=$(echo "$json_output" | jq --arg section "$current_section" \
+              --arg parent "$parent" --arg key "$final_key" --arg val "$value" \
+              '.presets[$section][$parent][$key] = $val')
         else
           json_output=$(echo "$json_output" | jq --arg section "$current_section" \
-              --arg k "$nesting_path" --arg v "$value" \
-              '.presets[$section][$k] = $v')
+              --arg key "$nesting_info" --arg val "$value" \
+              '.presets[$section][$key] = $val')
         fi
       fi
     fi
@@ -162,4 +156,4 @@ convert_cfg_to_json() {
 input_file="$1"
 shift
 
-convert_cfg_to_json "$1" "$@"
+convert_cfg_to_json "$input_file" "$@"
