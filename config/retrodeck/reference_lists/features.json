@@ -384,6 +384,10 @@
     "savestate_on_exit": {
       "name": "Savestate on Exit",
       "desc": "Enable / Disable: Savestate on Exit in supported systems."
-    }    
+    },
+    "savestate_auto_load": {
+      "name": "Savestate Auto Load",
+      "desc": "Enable / Disable: Savestate Auto Load in supported systems."
+    } 
   }
 }
