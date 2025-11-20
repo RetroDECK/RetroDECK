@@ -96,6 +96,11 @@ convert_cfg_to_json() {
     ["rewind.gba"]="retroarch_cores.mgba_libretro"
     ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro"
     ["rewind.snes"]="retroarch_cores.snes9x-current_libretro"
+
+    ["abxy_button_swap.gb"]="retroarch_cores.gambatte_libretro"
+    ["abxy_button_swap.gba"]="retroarch_cores.mgba_libretro"
+    ["abxy_button_swap.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["abxy_button_swap.snes"]="retroarch_cores.snes9x-current_libretro"
   )
 
   declare -a EXCLUDE_KEYS=(
@@ -104,8 +109,10 @@ convert_cfg_to_json() {
     "borders.gbc"
     "borders.gg"
     "abxy_button_swap.gbc"
+    "abxy_button_swap.citra"
     "options.kiroi_ponzu"
     "options.akai_ponzu"
+    "ask_to_exit.citra"
   )
 
   input_file="$1"
