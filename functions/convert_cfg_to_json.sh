@@ -187,8 +187,3 @@ convert_cfg_to_json() {
     echo "$json_output" | jq '.'
   fi
 }
-
-input_file="$1"
-shift
-
-convert_cfg_to_json "$input_file" "$@"
