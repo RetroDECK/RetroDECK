@@ -111,6 +111,22 @@ set_setting_value() {
       fi
     ;;
 
+    "ryubing")
+      if [[ -z "$current_section_name" ]]; then
+        jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $setting ] =
+                                                                                            ( if ($newval == "true")  then true
+                                                                                              elif ($newval == "false") then false
+                                                                                              else $newval
+                                                                                              end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      else
+        jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $section ][ $setting ] =
+                                                                                                                                  ( if ($newval == "true")  then true
+                                                                                                                                    elif ($newval == "false") then false
+                                                                                                                                    else $newval
+                                                                                                                                    end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      fi
+    ;;
+
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
     ;;
@@ -223,6 +239,14 @@ get_setting_value() {
       echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
     elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
       echo $(xml sel -t -v "/mameconfig/system[@name='$current_section_name']//*[@type='$current_setting_name']//*" -v "text()" -n "$1")
+    fi
+  ;;
+
+  "ryubing")
+    if [[ -z "$current_section_name" ]]; then
+      jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
+    else
+      jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
     fi
   ;;
 
