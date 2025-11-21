@@ -198,6 +198,20 @@ api_get_component() {
   echo "$final_json"
 }
 
+api_get_all_preset_names() {
+  # This function will gather the names of all compatible presets for all installed components
+  # USAGE: api_get_all_preset_names
+
+  local preset_names='[]'
+
+  while read -r preset_name; do
+    local json_obj=$(jq -n --arg preset "$preset_name" '{ preset_name: $preset }')
+    preset_names=$(jq -n --argjson existing_obj "$preset_names" --argjson new_obj "$json_obj" '$existing_obj + [$new_obj]')
+  done < <(jq -r '.presets | keys[]' "$rd_conf")
+  
+  echo "$preset_names" | jq '. | sort_by(.preset_name)'
+}
+
 api_get_current_preset_state() {
   # This function will gather the state (enabled/disabled/other) of all the systems in a given preset. An "all" argument can also be given which will check all presets for all components.
   # Optionally, a specific component can be added, which will make the function return the state of all presets for that one component
