@@ -176,7 +176,7 @@ build_zenity_preset_menu_array() {
     local system_name=$(jq -r '.system_name // empty' <<< "$obj")
     local friendly_name=$(jq -r '.system_friendly_name // empty' <<< "$obj")
     local desc=$(jq -r '.description // empty' <<< "$obj")
-    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name // empty' <<< "$obj")
+    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name | if type=="array" then join(", ") else . end // empty' <<< "$obj")
     local status=$(jq -r '.status // empty' <<< "$obj")
     local parent_component=$(jq -r '.parent_component // empty' <<< "$obj")
 
