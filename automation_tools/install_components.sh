@@ -67,6 +67,31 @@ for archive in "${archives[@]}"; do
       echo "Component $component_path does not contain any shared-libs, no merge needed."
     fi
 
+    if [[ -d "$component_path/shared-data" ]]; then # If component includes a shared-data folder
+      echo "$component_path/shared-data folder found, merging with core shared-data"
+
+      if [[ ! -d "${FLATPAK_DEST}/retrodeck/components/shared-data" ]]; then
+        mkdir -p "${FLATPAK_DEST}/retrodeck/components/shared-data"
+      fi
+
+      while read -r source_file; do
+        relative_filepath="${source_file##$component_path/shared-data/}"
+        if [[ ! -e "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath" ]]; then
+            echo "$relative_filepath not found in core shared-data, copying..."
+            if [[ ! -d "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath")" ]]; then
+              mkdir -p "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath")"
+            fi
+            cp -a "$source_file" "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath"
+        else
+            echo "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath already exists in core shared-data, skipping..."
+        fi
+      done < <(find "$component_path/shared-data" -not -type d)
+
+      rm -rf "$component_path/shared-data" # Cleanup leftover shared-data folder in component folder
+    else
+      echo "Component $component_path does not contain any shared-data, no merge needed."
+    fi
+
     # If running in CI/CD, delete the components folder to reclaim space
     # This solves an issue where the  runner runs out of space and some components are not installed
 
