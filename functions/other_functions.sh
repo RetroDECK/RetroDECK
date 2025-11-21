@@ -301,7 +301,9 @@ dir_prep() {
   then
     if [[ -n $(ls -A1 "$symlink.old") ]]; then # If the old folder is not empty
       log d "Moving the data from $symlink.old to $real" #DEBUG
-      mv -f "$symlink.old"/{.[!.],}* "$real"
+      shopt -s dotglob
+      mv -f "${symlink}.old"/* "$real"
+      shopt -u dotglob
     else
       log d "$symlink.old is empty, no need to move files."
     fi
