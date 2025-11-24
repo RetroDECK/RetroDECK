@@ -119,7 +119,7 @@ convert_cfg_to_json() {
   output_file="${2:-}"
 
   if [[ ! -f "$input_file" ]]; then
-    echo "Error: Input file '$input_file' not found"
+    log e "Error: Input file '$input_file' not found"
     exit 1
   fi
 
@@ -182,7 +182,7 @@ convert_cfg_to_json() {
 
   if [[ -n "$output_file" ]]; then
     echo "$json_output" | jq '.' > "$output_file"
-    echo "Conversion complete: $output_file"
+    log i "Conversion complete: $output_file"
   else
     echo "$json_output" | jq '.'
   fi
