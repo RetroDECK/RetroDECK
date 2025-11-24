@@ -80,6 +80,11 @@ post_update() {
 
   # Start of post_update actions
 
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+    log d "Version is older than 0.5.0b, executing save migration"
+    save_migration
+  fi
+
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
   (
     source "/app/retrodeck/components/framework/component_update.sh"
