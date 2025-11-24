@@ -82,29 +82,9 @@ post_update() {
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
   (
-
-  # TODO: add the post-update for 0.10.0b here if needed
-
-  # The following commands are run every time.
-
-  if [[ -d "$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    log i "Refreshing installed textures for Dolphin..."
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures/" && log i "Done"
-  fi
-  if [[ -d "$XDG_DATA_HOME/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    log i "Refreshing installed textures for Dolphin..."
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$XDG_DATA_HOME/primehack/Load/DynamicInputTextures/" && log i "Done"
-  fi
-
-  if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
-    install_retrodeck_controller_profile
-  fi
-
-  retroarch_updater
-  update_splashscreens
-  deploy_helper_files
-  update_component_presets
-  build_retrodeck_current_presets
+    while read -r component_update_file; do
+      source "$component_update_file"
+    done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh")
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
