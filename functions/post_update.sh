@@ -82,9 +82,12 @@ post_update() {
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
   (
+    source "/app/retrodeck/components/framework/component_update.sh"
+    
     while read -r component_update_file; do
       source "$component_update_file"
-    done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh")
+    done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh" -not -path "/app/retrodeck/components/framework/*"
+)
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
