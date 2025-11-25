@@ -256,8 +256,8 @@ jobs:
             echo "" >> $RELEASE_BODY_FILE
           fi
 
-          echo "Cooker channel is provided for the community to test fixes and explore new functionality." >> $RELEASE_BODY_FILE
-          echo "Please DO NOT open issues or ask support on this build." >> $RELEASE_BODY_FILE
+          echo "**Cooker Builds** are only for testers that have read: [How-to: Start Testing](https://retrodeck.readthedocs.io/en/latest/wiki_development/testing/retrodeck-testing/)" >> $RELEASE_BODY_FILE
+          echo "Do not report issues on Github from Cooker builds. Cooker Builds are nightly releases that contains new and **unstable features**. They should not be for regular use, these builds **will** destabilize your RetroDeck experience or worse. The RetroDECK Team is **not responsible** for your data-loss. " >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
           # Append changelog from metainfo
