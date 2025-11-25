@@ -85,14 +85,32 @@ post_update() {
     save_migration
   fi
 
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.10.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.10.0b
+    log d "Version is older than 0.10.0b, defining legacy paths for proper post_update processing."
+    rdhome="$rd_home_path"
+    roms_folder="$roms_path"
+    saves_folder="$saves_path"
+    states_folder="$states_path"
+    shaders_folder="$shaders_path"
+    bios_folder="$bios_path"
+    backups_folder="$backups_path"
+    media_folder="$downloaded_media_path"
+    themes_folder="$themes_path"
+    logs_folder="$logs_path"
+    screenshots_folder="$screenshots_path"
+    mods_folder="$mods_path"
+    texture_packs_folder="$texture_packs_path"
+    borders_folder="$borders_path"
+    cheats_folder="$cheats_path"
+  fi
+
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
   (
     source "/app/retrodeck/components/framework/component_update.sh"
     
     while read -r component_update_file; do
       source "$component_update_file"
-    done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh" -not -path "/app/retrodeck/components/framework/*"
-)
+    done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh" -not -path "/app/retrodeck/components/framework/*")
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
