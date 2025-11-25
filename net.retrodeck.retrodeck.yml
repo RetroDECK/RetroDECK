@@ -95,25 +95,17 @@ finish-args:
   # Network 
   - --share=network
 
-  # Sound: PulseAudio
+  # Sound: PulseAudio, PipeWire
   - --socket=pulseaudio
-
-  # Sound: PipeWire socket
   - --filesystem=xdg-run/pipewire-0
 
-  # Wayland: Display server 
+  # Wayland: Display server access, SDL window‑class, Qt platform selection
   - --socket=wayland
-
-  # Wayland: SDL window‑class
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
-
-  # Wayland/EGL/XCB: Qt platform selection
   - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
 
-  # X11: Display server
+  # X11: Display server access, SDL window‑class
   - --socket=x11
-
-  # X11: SDL window‑class
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
 
   # Xemu: openSUSE QEMU_AUDIO_DRV fix
