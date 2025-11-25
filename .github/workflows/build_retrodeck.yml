@@ -257,7 +257,7 @@ jobs:
           fi
 
           echo "**Cooker Builds** are for testers only – see [How‑to: Start Testing](https://retrodeck.readthedocs.io/en/latest/wiki_development/testing/retrodeck-testing/)." >> $RELEASE_BODY_FILE
-          echo "Do not file GitHub issues for Cooker builds. These nightly releases contain **unstable features** and may destabilize or corrupt your RetroDeck setup. The RetroDECK team is **not liable** for any data loss." >> $RELEASE_BODY_FILE
+          echo "Do not file GitHub issues for Cooker builds. These nightly releases contain **unstable features** and may destabilize or corrupt your RetroDECK setup. The RetroDECK team is **not liable** for any data loss." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
           # Append changelog from metainfo
