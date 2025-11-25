@@ -88,7 +88,10 @@ fi
 # To handle crossover to new config file style
 if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" && ! -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.json" ]]; then
   log i "Old-style RetroDECK config file found, setting to load for conversion"
-  convert_cfg_to_json "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.json"
+  if convert_cfg_to_json "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.json"; then
+    log i "Conversion successful, backing up legacy file to $XDG_CONFIG_HOME/retrodeck/retrodeck.bak"
+    mv "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"
+  fi
 fi
 
 # If there is no config file I initalize the file with the the default values

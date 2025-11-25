@@ -120,7 +120,7 @@ convert_cfg_to_json() {
 
   if [[ ! -f "$input_file" ]]; then
     log e "Error: Input file '$input_file' not found"
-    exit 1
+    return 1
   fi
 
   json_output='{"version":"","paths":{},"options":{},"presets":{}}'
