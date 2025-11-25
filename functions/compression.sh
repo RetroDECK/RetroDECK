@@ -3,15 +3,18 @@
 compress_game() {
   # Function for compressing one or more files to .chd format
   # USAGE: compress_game $format $full_path_to_input_file $cleanup_choice $system(optional)
+  local format="$1"
   local file="$2"
+  local post_compression_cleanup="$3"
+  local system="$4"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
   local filename_extension="${filename_no_path##*.}"
   local source_file=$(dirname "$(realpath "$file")")"/""$(basename "$file")"
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
-  if [[ "$1" == "chd" ]]; then
-    case "$4" in # Check platform-specific compression options
+  if [[ "$format" == "chd" ]]; then
+    case "$system" in # Check platform-specific compression options
     "psp" )
       log d "Compressing PSP game $source_file into $dest_file"
       /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
@@ -27,14 +30,14 @@ compress_game() {
       /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
     ;;
     esac
-  elif [[ "$1" == "zip" ]]; then
+  elif [[ "$format" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
-  elif [[ "$1" == "rvz" ]]; then
+  elif [[ "$format" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
   fi
 
-  if [[ "$3" == "true" ]]; then # Remove file(s) if requested
-    if [[ -f "${file%.*}.$1" ]]; then
+  if [[ "$post_compression_cleanup" == "true" ]]; then # Remove file(s) if requested
+    if [[ -f "${file%.*}.$format" ]]; then
       log i "Performing post-compression file cleanup"
       if [[ "$file" == *".cue" ]]; then
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -51,7 +54,7 @@ compress_game() {
         rm -f "$(realpath "$file")"
       fi
     else
-      log i "Compressed file ${file%.*}.$1 not found, skipping original file deletion"
+      log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
     fi
   fi
 }
@@ -60,7 +63,7 @@ find_compatible_compression_format() {
   # This function will determine what compression format, if any, the file and system are compatible with
   # USAGE: find_compatible_compression_format "$file"
   local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-  local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+  local system=$(echo "$1" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
 
   # Extract the relevant lists from the JSON file
   local chd_systems=$(jq -r '.compression_targets.chd[]' "$features")
@@ -163,17 +166,17 @@ find_compatible_games() {
   log d "compression_targets: $compression_targets"
 
   while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
     log d "Checking system: $system"
-    if [[ -d "$roms_folder/$system" ]]; then
+    if [[ -d "$roms_path/$system" ]]; then
       local compression_candidates
-      compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
-          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
             sleep 0.1
           done
           (
@@ -192,7 +195,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^chd" >> "$output_file"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "zip")
@@ -201,7 +204,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^zip" >> "$output_file"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "rvz")
@@ -210,7 +213,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^rvz" >> "$output_file"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "all")
@@ -219,7 +222,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^${compatible_compression_format}" >> "$output_file"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$rd_file_lock"
               fi
               ;;
           esac
@@ -247,7 +250,7 @@ cli_compress_single_game() {
     read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
     if [[ ! -z "$file" ]]; then
       if [[ -f "$file" ]]; then
-        local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+        local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
         local compatible_compression_format=$(find_compatible_compression_format "$file")
         if [[ ! $compatible_compression_format == "none" ]]; then
           log i "$(basename "$file") can be compressed to $compatible_compression_format"
@@ -299,16 +302,16 @@ cli_compress_all_games() {
 
     while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
     do
-      while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
       done
       (
-      local compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      local compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt")
       if [[ ! -z "$compression_candidates" ]]; then
         log i "Checking files for $system"
         while IFS= read -r file
         do
-          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
             sleep 0.1
           done
           (

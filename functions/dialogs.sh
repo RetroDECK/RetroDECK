@@ -7,7 +7,7 @@ blue="#6fbfff"
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
-
+  log i "Debug dialog for: $1" # showing the command in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Debug Dialog" \
@@ -17,6 +17,7 @@ debug_dialog() {
 configurator_process_complete_dialog() {
   # This dialog shows when a process is complete.
   # USAGE: configurator_process_complete_dialog "process text"
+  log i "Process complete dialog for: $1" # showing the process in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
@@ -32,7 +33,7 @@ configurator_process_complete_dialog() {
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
   # USAGE: configurator_generic_dialog "title text" "info text"
-  log i "Showing a configurator_generic_dialog"
+  log i "$2" # showing the message in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "$1" \
@@ -43,6 +44,7 @@ configurator_generic_question_dialog() {
   # This dialog provides a generic dialog for getting a response from a user.
   # USAGE: $(configurator_generic_question_dialog "title text" "action text")
   # This function will return a "true" if the user clicks "Yes", and "false" if they click "No".
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -57,6 +59,7 @@ configurator_destination_choice_dialog() {
   # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
   # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -73,6 +76,7 @@ configurator_reset_confirmation_dialog() {
   # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
   # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
   # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
+  log i "$2"
   choice=$(rd_zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
@@ -86,10 +90,11 @@ configurator_reset_confirmation_dialog() {
 configurator_move_folder_dialog() {
   # This dialog will take a folder variable name from retrodeck.cfg and move it to a new location. The variable will be updated in retrodeck.cfg as well as any emulator configs where it occurs.
   # USAGE: configurator_move_folder_dialog "folder_variable_name"
+  log i "Showing a configurator_move_folder_dialog for $1"
   local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
   local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")/" # The path of that folder variable
   local source_root="$(echo "$dir_to_move" | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
-  if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
+  if [[ ! "$rd_dir_name" == "rd_home_path" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
     local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
   else # Otherwise just set the retrodeck root folder
     local rd_dir_path="$(basename "$dir_to_move")"
@@ -110,7 +115,7 @@ configurator_move_folder_dialog() {
       fi
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
-        if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
+        if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rd_home_path") ]] || [[ "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
           configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder is already at that location, please pick a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
@@ -120,8 +125,8 @@ configurator_move_folder_dialog() {
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
               declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
-              if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
-                prepare_component "postmove" "retrodeck"
+              if [[ "$rd_dir_name" == "rd_home_path" ]]; then # If the whole retrodeck folder was moved...
+                prepare_component "postmove" "framework"
               fi
               prepare_component "postmove" "all" # Update all the appropriate emulator path settings
               conf_write # Write the settings to retrodeck.cfg
@@ -157,6 +162,90 @@ configurator_move_folder_dialog() {
     conf_write
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename "$dir_to_move") folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
+  fi
+}
+
+configurator_change_preset_dialog() {
+  # This function will build a list of all systems compatible with a given preset,
+  # show their current enable/disabled state and allow the user to change one or more.
+  # USAGE: configurator_change_preset_dialog "$preset"
+
+  local preset="$1"
+  pretty_preset_name=${preset//_/ }  # Preset name prettification
+  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
+
+  build_zenity_preset_menu_array "current_preset_settings" "$preset"
+
+  choice=$(rd_zenity \
+    --list --width=1200 --height=720 \
+    --hide-column=5 --print-column=5 \
+    --text="Enable $pretty_preset_name:" \
+    --column "Status" \
+    --column "Emulator" \
+    --column "Emulated System" \
+    --column "Emulator Description" \
+    --column "internal_system_name" \
+    "${current_preset_settings[@]}")
+
+  local rc=$?
+
+  log d "User made a choice: $choice with return code: $rc"
+
+  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+    configurator_change_preset_value_dialog "$preset" "$choice"
+  else
+    log i "No preset choices made"
+    configurator_global_presets_and_settings_dialog
+  fi
+}
+
+configurator_change_preset_value_dialog() {
+  local preset="$1"
+  local component="$2"
+
+  build_zenity_preset_value_menu_array current_preset_values "$preset" "$component"
+
+  choice=$(rd_zenity \
+    --list --width=1200 --height=720 \
+    --radiolist \
+    --hide-column=3 --print-column=3 \
+    --text="Enable $pretty_preset_name:" \
+    --column "Current State" \
+    --column "Option" \
+    --column "preset_state" \
+    "${current_preset_values[@]}")
+
+  local rc=$?
+
+  log d "User made a choice: $choice with return code: $rc"
+
+  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+    local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
+    if [[ ! "$choice" == "$preset_current_value" ]]; then
+      if [[ "$preset" =~ (cheevos|cheevos_hardcore) ]]; then
+        if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
+          log d "Cheevos not currently logged in, prompting user..."
+          if cheevos_login_info=$(get_cheevos_token_dialog); then
+            cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
+            cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
+            cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
+          else
+            configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+            configurator_change_preset_dialog "$preset"
+            return 1
+          fi
+        fi
+      fi
+      if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
+        configurator_change_preset_dialog "$preset"
+      else
+        configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+        configurator_change_preset_dialog "$preset"
+      fi
+    fi
+  else
+    log i "No preset choices made"
+    configurator_change_preset_dialog "$preset"
   fi
 }
 
@@ -198,17 +287,17 @@ get_cheevos_token_dialog() {
   # USAGE: get_cheevos_token_dialog
 
   local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
-  --text="Add your RetroAchievements: Username & Password." \
+  --text="Username and password." \
   --separator="^" \
   --add-entry="Username" \
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
-  if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
-    log d "Cheevos: RetroAchievements Login Succeeded"
+  if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
+    log d "Cheevos login succeeded"
     echo "$cheevos_info"
   else # login failed
-    log d "Cheevos: RetroAchievements Login Failed"
+    log d "Cheevos login failed"
     return 1
   fi
 }
@@ -260,5 +349,25 @@ low_space_warning() {
       fi
     fi
     log i "Selected: \"OK\""
+  fi
+}
+
+configurator_power_user_warning_dialog() {
+  if [[ $power_user_warning == "true" ]]; then
+    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Power User Warning" \
+    --text="Making manual changes to a components, systems or emulators configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+  fi
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    configurator_open_component_dialog
+  else # If any button other than "Yes" was clicked
+    if [[ $choice == "No" ]]; then
+      configurator_welcome_dialog
+    elif [[ $choice == "Never show this again" ]]; then
+      set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
+      configurator_open_component_dialog
+    fi
   fi
 }

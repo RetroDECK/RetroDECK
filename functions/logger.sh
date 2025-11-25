@@ -2,7 +2,7 @@
 # It logs messages to both the terminal and a specified logfile, supporting multiple log levels.
 # The log function takes three parameters: log level, log message, and optionally the logfile. If no logfile is specified, it writes to retrodeck/logs/retrodeck.log.
 # 
-# Supported logging levels (controlled by the variable 'logging_level'):
+# Supported logging levels (controlled by the variable 'rd_logging_level'):
 # - none: No logs are produced.
 # - info: Logs informational messages (i) and errors (e).
 # - warn: Logs warnings (w), informational messages (i), and errors (e).
@@ -37,14 +37,14 @@ log() {
   export logprefix_info="[INFO]"
   export logprefix_default="[LOG]"
 
-  # Exit immediately if logging_level is "none"
-  if [[ $logging_level == "none" ]]; then
+  # Exit immediately if rd_logging_level is "none"
+  if [[ $rd_logging_level == "none" ]]; then
     return
   fi
 
   local level="$1"          # Current message level
   local message="$2"        # Message to log
-  local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local logfile="${3:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
   local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"   # Timestamp
   local colorize_terminal=true
 
@@ -59,7 +59,7 @@ log() {
 
   # Internal function to check if the message should be logged
   should_log() {
-    case "$logging_level" in
+    case "$rd_logging_level" in
       debug) return 0 ;;  # Log everything
       info) [[ "$level" == "i" || "$level" == "e" ]] && return 0 ;;
       warn) [[ "$level" != "d" ]] && return 0 ;;
@@ -102,7 +102,7 @@ log() {
     log_message="$timestamp $prefix [$caller] $message"
 
     # If silent mode is not active, print the message to the terminal
-    if [[ "$LOG_SILENT" != "true" ]]; then
+    if [[ "${LOG_SILENT:-false}" != "true" ]]; then
       echo -e "$colored_message" >&2
     fi
 
@@ -127,7 +127,7 @@ log() {
 # the original log file is cleared for continued logging.
 
 rotate_logs() {
-  local logfile="${1:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local logfile="${1:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
   local max_logs=3  # Maximum number of rotated logs to keep
 
   # Rotate existing logs

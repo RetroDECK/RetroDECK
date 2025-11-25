@@ -112,7 +112,7 @@ run_game() {
                           }
                           if (found && $0 ~ /<\/game>/) exit
                       }
-                      ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+                      ' "$rd_home_path/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
 
         if [[ -n "$altemulator" ]]; then
 
@@ -130,7 +130,7 @@ run_game() {
                                        exit
                                        }
                                    }
-                                   ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+                                   ' "$rd_home_path/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
             log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
             emulator=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
 

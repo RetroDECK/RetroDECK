@@ -1,179 +1,106 @@
 #!/bin/bash
 
-# Be aware that this script deletes the source directory after copying the files. It is intended to be used only by the flatpak builder.
+# LibMan 2.0
+# This script:
+# 1. Ensures standard versioned symlinks (like libX.so.MAJOR.MINOR and libX.so.MAJOR) exist for fully versioned libraries.
+# 2. Deduplicates library files in the Flatpak build environment by replacing duplicates with symlinks.
+# Priority: /lib > /app/retrodeck/components/shared-libs > other components.
 
+set -euo pipefail
 
-# List of user-defined libraries to exclude
-excluded_libraries=()
+echo "=== Creating standard versioned symlinks ==="
 
-# General libraries
-excluded_libraries=("libselinux.so.1" "libwayland-egl.so.1" "libwayland-cursor.so.0" "libxkbcommon.so.0")
-# Qt libraries
-excluded_libraries+=("libQt6Multimedia.so.6" "libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
-# SDL libraries
-excluded_libraries+=("libSDL2_net-2.0.so.0.200.0" "libSDL2_mixer-2.0.so.0.600.3" "libSDL2-2.0.so.0" "libSDL2_mixer-2.0.so.0" "libSDL2_image-2.0.so.0" "libSDL2-2.0.so.0.2800.5" "libSDL2_ttf-2.0.so.0" "libSDL2_net-2.0.so.0" "libSDL2_image-2.0.so.0.600.3" "libSDL2_ttf-2.0.so.0.2200.0")
-# FFMPEG libraries
-excluded_libraries+=("libavcodec.so" "libavformat.so" "libavutil.so" "libavfilter.so" "libavdevice" "libswresample.so" "libswscale.so")
-
-# Add libraries from /lib/x86_64-linux-gnu/ to the excluded list
-for lib in /lib/x86_64-linux-gnu/*.so*; do
-    excluded_libraries+=("$(basename "$lib")")
-done
-
-# Add libraries from /lib to the excluded list
-for lib in /lib/*.so*; do
-    excluded_libraries+=("$(basename "$lib")")
-done
-
-# Add libraries from /lib64 to the excluded list
-for lib in /lib64/*.so*; do
-    excluded_libraries+=("$(basename "$lib")")
-done
-
-# Define target directory
-target_dir="${FLATPAK_DEST}/lib"
-
-# Define debug directory
-debug_dir="${target_dir}/debug"
-
-echo "Worry not, LibMan is here!"
-
-# Set default destination if FLATPAK_DEST is not set
-if [ -z "$FLATPAK_DEST" ]; then
-    export FLATPAK_DEST="/app"
-fi
-
-# Check if source directory is provided
-if [ -z "$1" ]; then
-    echo "Usage: $0 <source_directory>"
-    exit 0
-fi
-
-# Ensure the target directory exists
-if ! mkdir -p "$target_dir"; then
-    echo "Error: Failed to create target directory $target_dir"
-    exit 0
-fi
-
-# Ensure the debug directory exists
-if ! mkdir -p "$debug_dir"; then
-    echo "Error: Failed to create debug directory $debug_dir"
-    exit 0
-fi
-
-# Function to check if a file is in the excluded libraries list
-is_excluded() {
-    local file="$1"
-    for excluded in "${excluded_libraries[@]}"; do
-        if [[ "$file" == $excluded ]]; then # NOTE excluded is not quoted to allow for wildcard matching
-            return 0
+# Create standard symlinks for fully versioned .so files (e.g., libQt6Core.so.6.8.3 -> libQt6Core.so.6 and libQt6Core.so.6.8)
+find "${FLATPAK_DEST}" -type f -name '*.so.*.*' | while read -r fullver_file; do
+    dir=$(dirname "$fullver_file")
+    base=$(basename "$fullver_file")
+    
+    # Handle .MAJOR.MINOR.PATCH
+    if [[ $base =~ ^(lib.+\.so)\.([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+        base_name="${BASH_REMATCH[1]}"
+        major="${BASH_REMATCH[2]}"
+        minor="${BASH_REMATCH[3]}"
+        patch="${BASH_REMATCH[4]}"
+        
+        # Create .MAJOR.MINOR symlink
+        minor_symlink="${dir}/${base_name}.${major}.${minor}"
+        if [[ ! -e "$minor_symlink" ]]; then
+            echo "Creating symlink: $minor_symlink -> $base"
+            ln -s "$base" "$minor_symlink"
         fi
-    done
-    return 1
-}
+        
+        # Create .MAJOR symlink
+        major_symlink="${dir}/${base_name}.${major}"
+        if [[ ! -e "$major_symlink" ]]; then
+            echo "Creating symlink: $major_symlink -> $base"
+            ln -s "$base" "$major_symlink"
+        fi
 
-# Find and copy files
-copied_files=()
-failed_files=()
+    # Handle .MAJOR.MINOR (like libicuuc.so.73.2)
+    elif [[ $base =~ ^(lib.+\.so)\.([0-9]+)\.([0-9]+)$ ]]; then
+        base_name="${BASH_REMATCH[1]}"
+        major="${BASH_REMATCH[2]}"
+        minor="${BASH_REMATCH[3]}"
 
-# First, copy all regular files
-for file in $(find "$1" -type f -name "*.so*" ! -type l); do
-    # Check if the file is in the debug folder
-    if [[ "$file" == *"/debug/"* ]]; then
-        dest_file="$debug_dir/$(basename "$file")"
-    else
-        dest_file="$target_dir/$(basename "$file")"
-    fi
-
-    # Skip if the file is in the list of excluded libraries
-    if is_excluded "$(basename "$file")"; then
-        reason="library is in the exclusion list"
-        echo "Skipped $file as it is $reason"
-        failed_files+=("$file, $reason")
-        continue
-    fi
-    
-    # Skip if the destination file already exists
-    if [ -e "$dest_file" ]; then
-        echo "Skipped $file as $dest_file already exists"
-        continue
-    fi
-
-    # Attempt to copy the file
-    if install -D "$file" "$dest_file" 2>error_log; then
-        echo "Copied $file to $dest_file"
-        copied_files+=("$file")
-    else
-        error_message=$(<error_log)
-        echo "Warning: Failed to copy $file. Skipping. Error: $error_message"
-        failed_files+=("$file, $error_message")
+        # Create .MAJOR symlink
+        major_symlink="${dir}/${base_name}.${major}"
+        if [[ ! -e "$major_symlink" ]]; then
+            echo "Creating symlink: $major_symlink -> $base"
+            ln -s "$base" "$major_symlink"
+        fi
     fi
 done
 
-# Then, copy all symlinks
-for file in $(find "$1" -type l -name "*.so*"); do
-    # Check if the file is in the debug folder
-    if [[ "$file" == *"/debug/"* ]]; then
-        dest_file="$debug_dir/$(basename "$file")"
-    else
-        dest_file="$target_dir/$(basename "$file")"
-    fi
+echo "=== Starting deduplication ==="
 
-    # Get the target of the symlink
-    symlink_target=$(readlink "$file")
-    # Define the destination for the symlink target
-    if [[ "$symlink_target" == *"/debug/"* ]]; then
-        dest_symlink_target="$debug_dir/$(basename "$symlink_target")"
-    else
-        dest_symlink_target="$target_dir/$(basename "$symlink_target")"
-    fi
-    
-    # Copy the symlink target if it doesn't already exist
-    if [ ! -e "$dest_symlink_target" ]; then
-        if install -D "$symlink_target" "$dest_symlink_target" 2>error_log; then
-            echo "Copied symlink target $symlink_target to $dest_symlink_target"
-            copied_files+=("$symlink_target")
+# Collect all relevant library files with null-delimited safety
+mapfile -d '' all_files < <(
+    find "${FLATPAK_DEST}/lib" -type f -name '*.so*' -print0 2>/dev/null
+    find "${FLATPAK_DEST}/retrodeck/components/shared-libs" -type f -name '*.so*' -print0 2>/dev/null
+    find "${FLATPAK_DEST}/retrodeck/components" -type f -name '*.so*' -not -path "${FLATPAK_DEST}/retrodeck/components/shared-libs/*" -print0 2>/dev/null
+)
+
+# Group library files by basename
+declare -A files_by_name
+
+for file in "${all_files[@]}"; do
+    filename=$(basename "$file")
+    files_by_name["$filename"]+="$file"$'\n'
+done
+
+# Create hash map to track strongest (priority) file per content hash
+declare -A file_hash_map
+
+# Compare only same-named files
+for filename in "${!files_by_name[@]}"; do
+    # Read file list line by line
+    IFS=$'\n' read -d '' -r -a same_named_files < <(printf '%s\0' "${files_by_name[$filename]}")
+
+    for file in "${same_named_files[@]}"; do
+        [ -f "$file" ] || continue
+
+        # Compute hash
+        hash=$(sha256sum "$file" | awk '{print $1}')
+
+        if [[ ! -v file_hash_map[$hash] ]]; then
+            file_hash_map[$hash]="$file"
         else
-            error_message=$(<error_log)
-            echo "Warning: Failed to copy symlink target $symlink_target. Skipping. Error: $error_message"
-            failed_files+=("$symlink_target, $error_message")
-            continue
+            strongest="${file_hash_map[$hash]}"
+            if [[ "$file" != "$strongest" ]] && cmp -s "$file" "$strongest"; then
+                echo "Deduping: $file is a duplicate of $strongest"
+                rm -f "$file"
+                ln -s "$(realpath --relative-to="$(dirname "$file")" "$strongest")" "$file"
+            fi
         fi
-    fi
-
-    # Create the symlink in the target directory
-    if ln -s "$dest_symlink_target" "$dest_file" 2>error_log; then
-        echo "Created symlink $dest_file -> $dest_symlink_target"
-        copied_files+=("$file")
-    else
-        error_message=$(<error_log)
-        echo "Warning: Failed to create symlink $dest_file. Skipping. Error: $error_message"
-        failed_files+=("$file, $error_message")
-    fi
+    done
 done
 
-# Output the lists of copied and failed files
-if [ ${#copied_files[@]} -ne 0 ]; then
-    echo "Imported libraries:"
-    for file in "${copied_files[@]}"; do
-        echo "$file"
-    done
+# One-off fix: ensure libopenh264.so.7 symlink exists if libopenh264.so.2.5.1 is present
+openh264_target="${FLATPAK_DEST}/lib/libopenh264.so.2.5.1"
+openh264_symlink="${FLATPAK_DEST}/lib/libopenh264.so.7"
+if [ -f "$openh264_target" ] && [ ! -e "$openh264_symlink" ]; then
+    echo "Creating symlink: libopenh264.so.7 -> libopenh264.so.2.5.1 (one-off fix)"
+    ln -s "libopenh264.so.2.5.1" "$openh264_symlink"
 fi
 
-# Output failed files only if the list is not empty
-if [ ${#failed_files[@]} -ne 0 ]; then
-    echo "Failed library files:"
-    for file in "${failed_files[@]}"; do
-        echo "$file"
-    done
-fi
-
-# Remove excluded libraries from the target directory
-for excluded in "${excluded_libraries[@]}"; do
-    if [ -e "$target_dir/$excluded" ]; then
-        rm -f "$target_dir/$excluded"
-        echo "Deleted excluded library $target_dir/$excluded"
-    fi
-done
-
-echo "LibMan is flying away"
+echo "=== Done! ==="

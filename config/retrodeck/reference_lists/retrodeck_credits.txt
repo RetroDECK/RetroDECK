@@ -1,80 +1,53 @@
-The Team
+=====================================================================
+                        ★ RETRODECK TEAM ★
+=====================================================================
 
-Those that make RetroDECK happen
+▶ XARGONWAN
+   • Founder – RetroDECK & Co‑founder of AmberELEC
+   • Primary Backend Architect (Framework, RetroENGINE, Configurator)
 
----
+▶ LAZORNE
+   • Community Manager & Outreach Lead
+   • Testing Coordinator
+   • Wiki Author & Maintainer
+   • Component‑Configuration Specialist
+   • Steam Input & Miscellaneous Input Integrations
 
-XargonWan
+▶ JIANNAZZONE
+   • Web Development & Site Maintenance
+   • Godot Programming & UI/UX Design
+   • Community Outreach & Engagement
+   • Art & Asset Creation
 
-RetroDECK project founder and also one of the founding members of AmberELEC.
+▶ ICENINE451
+   • Lead Technical Architect
+   • Creator of RetroDECK Configurator & Framework
+   • Backend Development & API Design
 
----
+▶ WALLK
+   • Godot Development Specialist
 
-Lazorne
-
-Does community management/outreach, testing, documentation, emulator configurations, maestro and more.
-
----
-
-jiannazzone
-
-Does Web Development, Godot, Community management/outreach, testing, documentation and more.
-
----
-
-IceNine451
-
-Focus on scripting and creator of the RetroDECK Configurator the RetroDECK Framework and various cool things.
-
----
-
-WallK
-
-Does Godot, backend development and various cool things.
-
----
----
----
+▶ LAHRS
+   • Arcade Veteran & Retro Knowledge Authority
+   • Component Configurations
+   • Community Management & Support
+   • Feature Requests & Issue Handling
+   • Testing, Art & Assets, Wiki Documentation
 
 
-RetroDECK Alumni
+=====================================================================
+                         ★ SPECIAL THANKS ★
+=====================================================================
 
-RetroDECK Alumni are former members of the RetroDECK Team that have moved on to other pastures. They deserve their own special credit for the efforts done to make RetroDECK possible.
+We are deeply grateful to everyone who powers RetroDECK:
 
----
+  • Donors – Keep our build servers humming and supply vital feedback.
+  • Upstream Projects – The emulators, front‑ends, engines, other components and libraries we rely on.
+  • Contributors – Those who donate time, code, expertise, love and financial support.
+  • Community Helpers – Users offering support, guidance, and a welcoming spirit.
+  • Testers & Bug Reporters – Helping us squash issues and improve stability.
+  • Artists & Asset Creators – Enriching the ecosystem with graphics, sounds, and more.
 
-dottormac
+Your collective effort makes RetroDECK possible. Thank you!
 
-Did bleeding edge cooker testing and provided valuable feedback.
-
----
-
-Lx32
-
-Did the work of getting SRM and Steam Sync into RetroDECK.
-
----
-
-MonkeyX
-
-Did several Godot Configurator things and backend improvements.
-
----
----
----
-
-We want give special thanks to:
-
-- Our Patreon and donors that keeps the build servers running and provide feedback.
-
-- All related emulation, front end and software projects that we are dependent on.
-
-- All people that have put both time and money into emulation projects.
-
-- All the users who help others with support, guidance and good spirit.
-
-- All the users who help with testing and reporting issues.
-
-- All the community creators who creates various art and assets for the community.
-
-You are all the ones that makes this project possible.
+=====================================================================

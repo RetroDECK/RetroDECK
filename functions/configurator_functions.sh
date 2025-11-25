@@ -2,7 +2,7 @@
 
 
 find_empty_rom_folders() {
-  # This function will build an array of all the system subfolders in $roms_folder which are either empty or contain only systeminfo.txt for easy removal
+  # This function will build an array of all the system subfolders in $roms_path which are either empty or contain only systeminfo.txt for easy removal
 
   if [[ -f "$godot_empty_roms_folders" ]]; then
     rm -f "$godot_empty_roms_folders" # Godot data transfer temp files
@@ -15,9 +15,9 @@ find_empty_rom_folders() {
   # Extract helper file names using jq and populate the all_helper_files array
   all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
 
-  for system in $(find "$roms_folder" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+  for system in $(find "$roms_path" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
   do
-    local dir="$roms_folder/$system"
+    local dir="$roms_path/$system"
     local files=$(ls -A1 "$dir")
     local count=$(ls -A "$dir" | wc -l)
 
@@ -51,13 +51,13 @@ find_empty_rom_folders() {
 }
 
 configurator_check_multifile_game_structure() {
-  local folder_games=($(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
+  local folder_games=($(find "$roms_path" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
   if [[ ${#folder_games[@]} -gt 1 ]]; then
-    echo "$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$logs_folder"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    echo "$(find "$roms_path" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$logs_path"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Verify Multi-file Structure" \
-    --text="The following games have an incorrect folder structure:\n\n$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can cause games to fail to launch or save files to be in the wrong location.\n\nPlease check the RetroDECK Wiki for more details.\n\nYou can find this list of games under <span foreground='purple'>/retrodeck/logs</span>."
+    --text="The following games have an incorrect folder structure:\n\n$(find "$roms_path" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can cause games to fail to launch or save files to be in the wrong location.\n\nPlease check the RetroDECK Wiki for more details.\n\nYou can find this list of games under <span foreground='purple'>/retrodeck/logs</span>."
   else
     configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi

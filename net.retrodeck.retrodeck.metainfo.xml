@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2022 Xargon <xargonwan@gmail.com> and the RetroDECK Team-->
+<!-- Copyright 2025 RetroDECK Team-->
 <component type="desktop-application">
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
@@ -36,36 +36,36 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or full Linux Desktop. It is a self-contained flatpak application with the goal to provide everything you need for retro gaming right out of the box. With the RetroDECK Framework, RetroENGINE and Configurator it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.</p>
-      <p>Why RetroDECK?</p>
-      <ul>
-         <li>All-in-One Convenience: Catalog, customize, and play your retro games collection from one unified app with the ES-DE Frontend.</li>
-         <li>Easy Installation and Updates: As a flatpak RetroDECK is contained and easy to install, update, and remove (if you choose) ensuring a hassle-free experience.</li>
-         <li>Not a custom Firmware nor OS Replacement: RetroDECK's goal is to build-in the benefits of custom firmware and emulation OSes without modifying your entire system.</li>
-      </ul>
-      <p>What’s Inside?</p>
-      <ul>
-          <li>Emulators: Packed with emulators like RetroArch, MAME, PCSX2, and more — play almost any retro game you can think of.</li>
-          <li>Engines: Support for game engines like Solarus, GZDoom (with RetroDECK's .doom format support), and others.</li>
-          <li>ES-DE Frontend: A polished, user-friendly interface for browsing and launching your retro collection.</li>
-          <li>PortMaster: Built-in PortMaster support with easy game Linux ports management.</li>
-          <li>RetroDECK Configurator: A multi-tool interface to tweak and tailor settings to enhance your gaming experience without going into each systems settings.</li>
-          <li>RetroDECK ES-DE Theme: A built-in theme for ES-DE with added features like PortMaster support. You can still switch to any theme you want.</li>
-          <li>RetroDECK Framework: A flexible and powerful environment for seamless emulation and retro gaming.</li>
-          <li>RetroDECK RetroENGINE: Offers a versatile gaming setup with headless engine mode, perfect for advanced users or developers.</li>
-          <li>Steam Input Support: RetroDECK features advanced input layouts via Steam Input for many controller types. The feature radial menus and hotkeys for multiple systems.</li>
-          <li>Steam Sync: Easily add your games as non-Steam titles using the built-in Steam ROM Manager sync. Just mark your favorites in ES-DE and turn on the feature.</li>
-      </ul>
+     <p>RetroDECK is a powerful all-in-one retro gaming platform designed for handheld gaming PCs like the Steam Deck, full Linux desktops, Linux HTPC setups, and Linux-based PC consoles such as the Steam Machine. Delivered as a self-contained Flatpak app, it gives you everything you need for retro gaming right out of the box, no manual setup required. By integrating a wide range of components such as emulators, game engines, ports, and built-in tools, RetroDECK brings all your favorite games together in one streamlined, easy-to-use package.</p>
+  <p><b>Why RetroDECK?</b></p>
+  <ul>
+    <li><b>All-in-One Convenience:</b> Browse, customize, and play your entire backup collection from a unified interface powered by the ES-DE frontend.</li>
+    <li><b>Simple Installation and Updates:</b> RetroDECK is easy to install, update, and remove, ensuring a hassle-free experience.</li>
+    <li><b>No Custom Firmware Needed:</b> RetroDECK provides many benefits of emulation-focused OSes or custom firmware without altering your underlying system.</li>
+  </ul>
+  <p><b>What’s Inside?</b></p>
+  <ul>
+    <li><b>Emulators:</b> Includes RetroArch, MAME, PCSX2, and many others — supporting a wide range of classic systems.</li>
+    <li><b>Game Engines:</b> Features engine support such as Solarus, OpenBOR and GZDoom (including RetroDECK’s custom <code>.doom</code> format).</li>
+    <li><b>ES-DE Frontend:</b> A modern, user-friendly interface for browsing and launching your games.</li>
+    <li><b>PortMaster Integration:</b> Easily manage and play community-supported Linux game ports.</li>
+    <li><b>RetroDECK Configurator:</b> A powerful multi-tool interface for adjusting emulator and system settings without digging into each emulator individually.</li>
+    <li><b>RetroDECK ES-DE Theme:</b> A polished, built-in theme with extra features such as PortMaster integration (with the freedom to switch to any other theme).</li>
+    <li><b>RetroDECK Framework:</b> A flexible environment that ties together emulators, engines, and tools for a seamless user experience.</li>
+    <li><b>RetroDECK RetroENGINE:</b> Offers advanced capabilities including a headless engine mode for power users and developers.</li>
+    <li><b>Steam Input Support:</b> Includes advanced controller layouts with radial menus and system-specific hotkeys when you add RetroDECK to Steam.</li>
+    <li><b>Steam Sync:</b> Automatically add games to Steam using the built-in Steam ROM Manager sync. Mark favorites in ES-DE and sync them with a single toggle.</li>
+  </ul>
       <p>The RetroDECK Community:</p>
       <ul>
-         <li>RetroDECK Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
-         <li>RetroDECK Wiki: https://retrodeck.readthedocs.io/</li>
-         <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
-         <li>Discord: https://discord.gg/WDc5C9YWMx</li>
-         <li>Lemmy: https://lemmy.zip/c/retrodeck</li>
-         <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
-         <li>Reddit: https://www.reddit.com/r/retrodeck</li>
-         <li>Revolt: https://rvlt.gg/StVaEc0w</li>
+         <li><b>RetroDECK Blog:</b> https://retrodeck.readthedocs.io/en/latest/blog/</li>
+         <li><b>RetroDECK Wiki</b>: https://retrodeck.readthedocs.io/</li>
+         <li><b>Bluesky:</b> https://bsky.app/profile/retrodeck.net</li>
+         <li><b>Discord:</b> https://discord.gg/WDc5C9YWMx</li>
+         <li><b>Lemmy:</b> https://lemmy.zip/c/retrodeck</li>
+         <li><b>Matrix:</b> https://matrix.to/#/#retrodeck:matrix.org</li>
+         <li><b>Reddit:</b> https://www.reddit.com/r/retrodeck</li>
+         <li><b>Stoat:</b> https://rvlt.gg/StVaEc0w</li>
       </ul>
    </description>
    <branding>
@@ -78,9 +78,24 @@
        <release version="0.10.0b" date="2025-12-12">
            <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.10.0b</url>
            <description>
-               <p>Fixes:</p>
+               <p>Changes:</p>
+                  <ul>
+                      <li>RetroDECK’s core has been fully re-engineered with a modular infrastructure. While this is mostly behind-the-scenes, it makes RetroDECK more robust, maintainable, and much easier for contributors to extend and improve.</li>
+                  </ul>
+               <p>Additions and Updates:</p>
                <ul>
-                   <li>WIP: Some WIP HERE</li>
+                   <li>New system: Sega Mark III runnable via RetroArch cores.</li>
+                   <li>New system: TI99 via MAME (Standalone)</li>
+                   <li>New libretro core: NooDS</li>
+                   <li>Added/expanded extensions on several systems:</li>
+               </ul>
+               <ul>
+                   <li>`n64` now includes `.AppImage`, `.desktop`, `.sh`</li>
+                   <li>`pcengine` / `tg16` / `supergrafx` now accept `.rom .ROM` for PCE/SGX related systems</li>
+                   <li>`daphne` and `laserdisc` extensions now include `.mmi`</li>
+                   <li>`mame` extension list added `lindbergh`</li>
+                   <li>`tic80` now also accepts `.png`</li>
+                   <li>`n3ds` extension list expanded (desktop/sh/AppImage-like entries)</li>
                </ul>
            </description>
        </release>

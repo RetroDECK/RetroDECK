@@ -1,128 +1,36 @@
 #!/bin/bash
 
-change_preset_dialog() {
-  # This function will build a list of all systems compatible with a given preset,
-  # show their current enable/disabled state and allow the user to change one or more.
-  # USAGE: change_preset_dialog "$preset"
-
-  preset="$1"
-  pretty_preset_name=${preset//_/ }  # Preset name prettification
-  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
-  current_preset_settings=()
-  local section_results
-  section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
-  all_emulators_in_preset=""
-
-  log d "Starting change_preset_dialog for preset: $preset"
-
-  while IFS= read -r config_line; do
-      system_name=$(get_setting_name "$config_line" "retrodeck")
-      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      if [[ -n $all_emulators_in_preset ]]; then
-        all_emulators_in_preset+=","
-      fi
-      all_emulators_in_preset+="$system_name" # Build a list of all emulators in case user selects "Enable All"
-      # Append three values: the current enabled state, a pretty name, and the internal system name.
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty "$system_name")" "$system_name")
-  done < <(printf '%s\n' "$section_results")
-
-  log d "Current preset settings built for preset: $preset"
-
-  # Show the checklist with extra buttons for "Enable All" and "Disable All"
-  choice=$(rd_zenity \
-    --list --width=1200 --height=720 \
-    --checklist \
-    --separator="," \
-    --hide-column=3 --print-column=3 \
-    --text="Enable $pretty_preset_name:" \
-    --column "Enabled" \
-    --column "Emulator" \
-    --column "internal_system_name" \
-    "${current_preset_settings[@]}" \
-    --extra-button "Enable All" \
-    --extra-button "Disable All")
-
-  local rc=$?
-
-  log d "User made a choice: $choice with return code: $rc"
-
-  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
-    choice_made="true"
-  fi
-
-  # Handle extra button responses.
-  if [ "$choice" == "Enable All" ]; then
-      log d "Enable All selected"
-      # Assign the comma-separated list of all preset system names as the choice
-      choice="$all_emulators_in_preset"
-  elif [ "$choice" == "Disable All" ]; then
-      log d "Disable All selected"
-      # Assign empty string as choice, as all systems will be disabled
-      choice=""
-  fi
-
-  # Call make_preset_changes if the user made a selection,
-  # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
-   if [[ "$choice_made" == "true" ]]; then
-    log d "Calling make_preset_changes with choice: $choice"
-    (
-      make_preset_changes "$preset" "$choice"
-    ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-         --title "RetroDECK Configurator Utility - Presets Configuration" \
-         --text="Setting up your presets, please wait..."
-   else
-     log i "No preset choices made"
-   fi
-}
-
 build_preset_list_options() {
   # FUNCTION: build_preset_list_options
   # DESCRIPTION: This function builds a list of all the systems available for a given preset.
-  #              It generates the list into a Godot temp file and updates the variable $current_preset_settings.
-  #              The function also builds several arrays (all_systems, changed_systems, etc.) that are used in the make_preset_changes() function.
+  #              The function also builds several arrays (all_systems, current_enabled_systems, etc.) that are used in the make_preset_changes() function.
   #              This function needs to be called in the same memory space as make_preset_changes() at least once.
   # USAGE: build_preset_list_options "$preset"
   # INPUT:
   #   - $1: The name of the preset.
   # OUTPUT:
-  #   - $godot_current_preset_settings: A Godot temp file containing the system values, pretty system names, and system names.
-  #   - $current_preset_settings: An array containing the system values, pretty system names, and system names.
   #   - $current_enabled_systems: An array containing the names of systems that are enabled in the preset.
   #   - $current_disabled_systems: An array containing the names of systems that are disabled in the preset.
-  #   - $changed_systems: An array that will be used to track systems that have changed.
-  #   - $changed_presets: An array that will be used to track presets that have changed.
   #   - $all_systems: An array containing the names of all systems in the preset.
 
-  if [[ -f "$godot_current_preset_settings" ]]; then
-    rm -f "$godot_current_preset_settings" # Godot data transfer temp files
-  fi
-  touch "$godot_current_preset_settings"
-
   preset="$1"
-  pretty_preset_name=${preset//_/ } # Preset name prettification
-  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-  current_preset_settings=()
   current_enabled_systems=()
   current_disabled_systems=()
-  changed_systems=()
-  changed_presets=()
   all_systems=()
-  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
 
-  while IFS= read -r config_line
-    do
-      system_name=$(get_setting_name "$config_line" "retrodeck")
-      all_systems=("${all_systems[@]}" "$system_name")
-      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      if [[ "$system_value" == "true" ]]; then
-        current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
-      elif [[ "$system_value" == "false" ]]; then
-        current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
-      fi
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty "$system_name")" "$system_name")
-      echo "$system_value"^"$(make_name_pretty "$system_name")"^"$system_name" >> "$godot_current_preset_settings"
-  done < <(printf '%s\n' "$section_results")
+  while IFS= read -r system_name
+  do
+    all_systems=("${all_systems[@]}" "$system_name")
+    system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+    if jq -e --arg system_name "$system_name" --arg system_value "$system_value" --arg preset "$preset" \
+        '.[$system_name].compatible_presets[$preset][0] == $system_value' "$rd_components/$system_name/component_manifest.json" > /dev/null; then # The setting is set to the disabled value for this preset
+      log d "$system_name is currently disabled for preset $preset"
+      current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
+    else # The setting is set to some enabled value
+      log d "$system_name is currently enabled for preset $preset"
+      current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
+    fi
+  done < <(jq -r --arg preset "$1" '.presets[$preset] | keys[]' "$rd_conf")
 }
 
 make_preset_changes() {
@@ -141,10 +49,12 @@ make_preset_changes() {
 
   preset="$1"
   choice="$2"
+  changed_systems=()
+  changed_presets=()
 
   build_preset_list_options "$preset"
 
-  IFS="," read -ra choices <<< "$choice"
+  IFS="," read -ra choices <<< "$choice" # Convert CSV list into Bash array
     for emulator in "${all_systems[@]}"; do
       if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
         changed_systems=("${changed_systems[@]}" "$emulator")
@@ -186,143 +96,173 @@ build_preset_config() {
   shift
   local presets_being_changed="$*"
   log d "Applying presets: $presets_being_changed for system: $system_being_changed"
+
+  read_config_format=$(jq -r --arg component "$system_being_changed" '.[$component].preset_actions.config_file_format' "$rd_components/$system_being_changed/component_manifest.json")
+  if [[ "$read_config_format" == "retroarch-all" ]]; then
+    local retroarch_all="true"
+    local read_config_format="retroarch"
+  fi
+  log d "Config file format: $read_config_format"
+
   for current_preset in $presets_being_changed
   do
-    local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
-    while IFS= read -r system_line
-    do
-      local read_system_name=$(get_setting_name "$system_line")
-      if [[ "$read_system_name" == "$system_being_changed" ]]; then
-        local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
-        log d "Processing system: $read_system_name with preset: $current_preset, enabled: $read_system_enabled"
-        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]];
-        do
-          if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
-            case "$action" in
+    if jq -e --arg system_being_changed "$system_being_changed" --arg preset "$current_preset" '.presets[$preset] | has($system_being_changed)' "$rd_conf" > /dev/null; then
+      local read_system_enabled=$(get_setting_value "$rd_conf" "$system_being_changed" "retrodeck" "$current_preset")
+      log d "Processing system: $system_being_changed with preset: $current_preset, enabled: $read_system_enabled"
+      while IFS= read -r read_setting_name
+      do
+        current_preset_object=$(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" --arg preset_name "$read_setting_name" \
+                                  '.[$system].preset_actions[$preset][$preset_name]' "$rd_components/$system_being_changed/component_manifest.json")
+        action=$(echo "$current_preset_object" | jq -r '.action')
 
-            "config_file_format" )
-              if [[ "$read_preset" == "retroarch-all" ]]; then
-                local retroarch_all="true"
-                local read_config_format="retroarch"
-              else
-                local read_config_format="$read_preset"
-              fi
-              log d "Config file format: $read_config_format"
-            ;;
+        case "$action" in
 
-            "change" )
-              if [[ "$read_preset" == "$current_preset" ]]; then
-                if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
-                  eval target_file=$target_file
-                fi
-                local read_target_file="$target_file"
-                if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
-                  eval defaults_file=$defaults_file
-                fi
-                local read_defaults_file="$defaults_file"
+        "change" )
+          log d "Changing config file for preset: $read_setting_name"
+          new_setting_value=$(echo "$current_preset_object" | jq -r '.new_setting_value')
+          section=$(echo "$current_preset_object" | jq -r '.section')
+          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          defaults_file=$(echo "$current_preset_object" | jq -r '.defaults_file')
 
-                if [[ "$read_system_enabled" == "true" ]]; then
-                  if [[ "$new_setting_value" = \$* ]]; then
-                    eval new_setting_value=$new_setting_value
-                  fi
-                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
-                    if [[ ! -f "$read_target_file" ]]; then
-                      log d "RetroArch per-system override file $read_target_file not found, creating and adding setting"
-                      create_dir "$(realpath "$(dirname "$read_target_file")")"
-                      echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
-                    else
-                      if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
-                        log d "RetroArch per-system override file $read_target_file does not contain setting $read_setting_name, adding and assigning value $new_setting_value"
-                        add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                      else
-                        log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
-                        set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                      fi
-                    fi
-                  elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
-                    log d "Creating PPSSPP cheevos token file $ppssppcheevosconf"
-                    echo "$new_setting_value" > "$read_target_file"
-                  else
-                    log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
-                    set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                  fi
-                else
-                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
-                    if [[ -f "$read_target_file" ]]; then
-                      log d "Removing setting $read_setting_name from RetroArch per-system override file $read_target_file"
-                      delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
-                      if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
-                        log d "RetroArch per-system override file is empty, removing"
-                        rm -f "$read_target_file"
-                      fi
-                      if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
-                        log d "RetroArch per-system override folder is empty, removing"
-                        rmdir "$(realpath "$(dirname "$read_target_file")")"
-                      fi
-                    fi
-                  elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
-                    log d "Removing PPSSPP cheevos token file $ppssppcheevosconf"
-                    rm "$read_target_file"
-                  else
-                    local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
-                    log d "Changing setting: $read_setting_name to $default_setting_value in $read_target_file"
-                    set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
-                  fi
-                fi
-              fi
-            ;;
-
-            "enable" )
-              if [[ "$read_preset" == "$current_preset" ]]; then
-                log d "Enabling file: $read_setting_name"
-                if [[ "$read_system_enabled" == "true" ]]; then
-                  enable_file "$read_setting_name"
-                else
-                  disable_file "$read_setting_name"
-                fi
-              fi
-            ;;
-
-            * )
-              log d "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
-            ;;
-
-            esac
+          if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+            eval target_file=$target_file
+            log d "Target file is a variable name. Actual target $target_file"
           fi
-        done < <(cat "$presets_dir/$read_system_name"_presets.cfg)
-      fi
-    done < <(printf '%s\n' "$preset_section")
+          local read_target_file="$target_file"
+          if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+            eval defaults_file=$defaults_file
+            log d "Defaults file is a variable name. Actual defaults file $defaults_file"
+          fi
+          local read_defaults_file="$defaults_file"
+
+          if [[ "$read_system_enabled" == "true" ]]; then
+            if [[ "$new_setting_value" = \$* ]]; then
+              eval new_setting_value=$new_setting_value
+              log d "New setting value is a variable. Actual setting value is $new_setting_value"
+            fi
+            if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
+              if [[ ! -f "$read_target_file" ]]; then
+                log d "RetroArch per-system override file $read_target_file not found, creating and adding setting"
+                create_dir "$(realpath "$(dirname "$read_target_file")")"
+                echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
+              else
+                if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
+                  log d "RetroArch per-system override file $read_target_file does not contain setting $read_setting_name, adding and assigning value $new_setting_value"
+                  add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                else
+                  log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
+                  set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                fi
+              fi
+            elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+              log d "Creating PPSSPP cheevos token file $ppssppcheevosconf"
+              echo "$new_setting_value" > "$read_target_file"
+            else
+              log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
+              set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+            fi
+          else
+            if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
+              if [[ -f "$read_target_file" ]]; then
+                log d "Removing setting $read_setting_name from RetroArch per-system override file $read_target_file"
+                delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
+                if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
+                  log d "RetroArch per-system override file is empty, removing"
+                  rm -f "$read_target_file"
+                fi
+                if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
+                  log d "RetroArch per-system override folder is empty, removing"
+                  rmdir "$(realpath "$(dirname "$read_target_file")")"
+                fi
+              fi
+            elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+              log d "Removing PPSSPP cheevos token file $ppssppcheevosconf"
+              rm "$read_target_file"
+            else
+              local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
+              log d "Changing setting: $read_setting_name to $default_setting_value in $read_target_file"
+              set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
+            fi
+          fi
+        ;;
+
+        "enable" )
+          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          if [[ ! "$read_system_enabled" == "false" ]]; then
+            log d "Enabling file: $read_setting_name"
+            enable_file "$read_setting_name"
+          else
+            log d "Disabling file: $read_setting_name"
+            disable_file "$read_setting_name"
+          fi
+        ;;
+
+        "install" )
+          source_file=$(echo "$current_preset_object" | jq -r '.source')
+          target_file=$(echo "$current_preset_object" | jq -r '.destination')
+          if [[ ! "$read_system_enabled" == "false" ]]; then
+            log d "Installing files for preset $read_setting_name"
+            install_preset_files "$source_file" "$target_file"
+          else
+            log d "Removing files for preset $read_setting_name"
+            remove_preset_files "$source_file" "$target_file"
+          fi
+        ;;
+
+        * )
+          log d "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
+        ;;
+
+        esac
+      done < <(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" '.[$system].preset_actions[$preset] | keys[]' "$rd_components/$system_being_changed/component_manifest.json")
+    fi
   done
 }
 
 build_retrodeck_current_presets() {
-  # This function will read the presets sections of the retrodeck.cfg file and build the default state
+  # This function will read the presets sections of the retrodeck.cfg file and build the default state if it is anything other than disabled
   # This can also be used to build the "current" state post-update after adding new systems
   # USAGE: build_retrodeck_current_presets
 
-  while IFS= read -r current_setting_line || [[ -n "$current_setting_line" ]]; # Read the existing retrodeck.cfg
+  while IFS= read -r preset # Iterate all presets listed in retrodeck.cfg
   do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-      else
-        if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
-          local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local system_enabled=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$current_section") # Read the variables value from active retrodeck.cfg
-          if [[ "$system_enabled" == "true" ]]; then
-            build_preset_config "$system_name" "$current_section"
-          fi
-        fi
+    while IFS= read -r component # Iterate all system names in this preset
+    do
+      local parent_component="$(jq -r --arg preset "$preset" --arg component "$component" '
+                                                                                          .presets[$preset]
+                                                                                          | paths(scalars)
+                                                                                          | select(.[-1] == $component)
+                                                                                          | if length > 1 then .[-2] else $preset end
+                                                                                          ' "$rd_conf")"
+      if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
+        parent_component="${parent_component%_cores}"
+        child_component="$component"
+        component="$parent_component"
       fi
-    fi
-  done < "$rd_conf"
+
+      local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+                                if $core != "" then
+                                  .[$component].compatible_presets[$core][$preset].[0] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[0] // empty
+                                end
+                              ' "$rd_components/$component/component_manifest.json")
+      
+      local preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset") # Read the variables value from active retrodeck.cfg
+      
+      if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
+        api_set_preset_state "$component" "$preset" "$preset_current_state"
+      fi
+    done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
+  done < <(jq -r '.presets | keys[]' "$rd_conf")
 }
 
 fetch_all_presets() {
+  # TODO: Remove, likely not needed anymore
   # This function fetches all possible presets from the presets directory
   # USAGE: fetch_all_presets [--pretty] [system_name]
 
-  local presets_dir="$config/retrodeck/presets"
+  local rd_config_presets_path="$rd_core_files/presets"
   local presets=()
   local pretty_presets=()
   local pretty_output=false
@@ -336,7 +276,7 @@ fetch_all_presets() {
   fi
 
   if [[ -n "$system_name" ]]; then
-    preset_file="$presets_dir/${system_name}_presets.cfg"
+    preset_file="$rd_config_presets_path/${system_name}_presets.cfg"
     if [[ -f "$preset_file" ]]; then
       while IFS= read -r line; do
         if [[ $line =~ ^(change|enable)\^([a-zA-Z0-9_]+)\^ ]]; then
@@ -353,7 +293,7 @@ fetch_all_presets() {
       done < "$preset_file"
     fi
   else
-    for preset_file in "$presets_dir"/*_presets.cfg; do
+    for preset_file in "$rd_config_presets_path"/*_presets.cfg; do
       while IFS= read -r line; do
         if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
           preset="${BASH_REMATCH[1]}"
@@ -377,7 +317,8 @@ fetch_all_presets() {
   fi
 }
 
-change_presets_cli () {
+change_presets_cli() {
+  # TODO: Rebuild for API use
   # This function will allow a user to change presets either individually or all for a preset class from the CLI.
   # USAGE: change_presets_cli "$preset" "$system/all" "$on/off"
 

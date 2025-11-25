@@ -27,7 +27,7 @@ steam_sync() {
   launch_command="run net.retrodeck.retrodeck"
   startIn=""
 
-  for system_path in "$rdhome/ES-DE/gamelists/"*/; do
+  for system_path in "$rd_home_path/ES-DE/gamelists/"*/; do
     # Skip the CLEANUP folder
     if [[ "$system_path" == *"/CLEANUP/"* ]]; then
       continue
@@ -50,7 +50,7 @@ steam_sync() {
       log d "$system_favorites"
       while read -r game_path; do
         local game="${game_path#./}" # Remove leading ./
-        if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
+        if [[ -f "$roms_path/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
           # Construct launch options with the rom path in quotes, to handle spaces
           local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
                                                               /<path>/ {
@@ -59,12 +59,12 @@ steam_sync() {
                                                                   print name[1]
                                                                 }
                                                               }' "$gamelist")
-          local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+          local launchOptions="$launch_command -s $system \"$roms_path/$system/$game\""
           log d "Adding entry $launchOptions to favorites manifest."
           jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
           '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
           && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
-        elif [[ -d "$roms_folder/$system/$game" && -f "$roms_folder/$system/$game/$game" ]]; then # If the favorite is an .m3u multi-disc parent folder, validate the actual .m3u file also exists
+        elif [[ -d "$roms_path/$system/$game" && -f "$roms_path/$system/$game/$game" ]]; then # If the favorite is an .m3u multi-disc parent folder, validate the actual .m3u file also exists
           # Construct launch options with the rom path in quotes, to handle spaces
           local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
                                                               /<path>/ {
@@ -73,13 +73,13 @@ steam_sync() {
                                                                   print name[1]
                                                                 }
                                                               }' "$gamelist")
-          local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game/$game\""
+          local launchOptions="$launch_command -s $system \"$roms_path/$system/$game/$game\""
           log d "Adding entry $launchOptions to favorites manifest."
           jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
           '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
           && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
         else
-          log d "Game file $roms_folder/$system/$game not found, skipping..."
+          log d "Game file $roms_path/$system/$game not found, skipping..."
         fi
       done <<< "$system_favorites"
     fi
@@ -113,9 +113,9 @@ steam_sync() {
 steam_sync_add() {
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
     (
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm add >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
     --title="Syncing with Steam" \
@@ -123,18 +123,18 @@ steam_sync_add() {
     --text="<span foreground='$purple'><b>\t\t\t\tAdding new favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm add >> "$srm_log" 2>&1
   fi
 }
 
 steam_sync_remove() {
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
     (
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager remove >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm remove >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
     --title="Syncing with Steam" \
@@ -142,8 +142,8 @@ steam_sync_remove() {
     --text="<span foreground='$purple'><b>\t\t\t\tRemoving unfavorited games from Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
-    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-    steam-rom-manager remove >> "$srm_log" 2>&1
+    rd_srm disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    rd_srm remove >> "$srm_log" 2>&1
   fi
 }
