@@ -340,7 +340,7 @@ backup_retrodeck_userdata() {
   #        backup_retrodeck_userdata core
   #        backup_retrodeck_userdata custom saves_path states_path /some/other/path
 
-  create_dir "$backups_folder"
+  create_dir "$backups_path"
 
   backup_date=$(date +"%0m%0d_%H%M")
   backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
@@ -357,7 +357,7 @@ backup_retrodeck_userdata() {
     return 1
   fi
 
-  zip_file="$backups_folder/retrodeck_${backup_date}_${backup_type}.zip"
+  zip_file="$backups_path/retrodeck_${backup_date}_${backup_type}.zip"
 
   # Initialize paths arrays
   paths_to_backup=()
@@ -365,7 +365,7 @@ backup_retrodeck_userdata() {
 
   # Build array of folder names and real paths from retrodeck.cfg
   while read -r path_name; do
-    if [[ ! $path_name =~ (rd_home_path|sdcard|backups_folder) ]]; then # Ignore these locations
+    if [[ ! $path_name =~ (rd_home_path|sdcard|backups_path) ]]; then # Ignore these locations
       local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
       log d "Path $path_value added to potential backup list"
       config_paths["$path_name"]="$path_value"
@@ -551,7 +551,7 @@ backup_retrodeck_userdata() {
   fi
 
   # Get available space at destination
-  available_space=$(df -B1 "$backups_folder" | awk 'NR==2 {print $4}')
+  available_space=$(df -B1 "$backups_path" | awk 'NR==2 {print $4}')
 
   # Log sizes for reference
   log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B "$total_size")"
@@ -573,7 +573,7 @@ backup_retrodeck_userdata() {
       # Create zip with selected paths
       if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
         # Rotate backups for the specific type
-        cd "$backups_folder" || return 1
+        cd "$backups_path" || return 1
         ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
 
         final_size=$(du -h "$zip_file" | cut -f1)
@@ -597,7 +597,7 @@ backup_retrodeck_userdata() {
   else
     if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
       # Rotate backups for the specific type
-      cd "$backups_folder" || return 1
+      cd "$backups_path" || return 1
       ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
 
       final_size=$(du -h "$zip_file" | cut -f1)
