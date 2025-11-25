@@ -70,16 +70,13 @@ finish-args:
   # Filesystem: GTK‑3 configuration (read‑only)
   - --filesystem=xdg-config/gtk-3.0:ro
 
-  # Filesystem: Home 
+  # Filesystem: Home (/home folder access)
   - --filesystem=home
 
-  # Filesystem: Steam ROM Manager – Flatpak‑installed Steam data
+  # Filesystem: Steam ROM Manager / Steam Integration
+  - --filesystem=~/.steam/steam:rw
   - --filesystem=xdg-data/Steam:rw
-
-  # Filesystem: Steam ROM Manager – Non‑Flatpak Steam data
   - --filesystem=~/.steam:rw
-
-  # Filesystem: Steam ROM Manager – Flatpak Steam data
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
   # Filesystem: Udev information (read‑only, for inputs)
