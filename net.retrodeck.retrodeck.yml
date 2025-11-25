@@ -64,7 +64,7 @@ finish-args:
   - --filesystem=/mnt
   - --filesystem=/media
 
-  # Filesystem: Discord
+  # Filesystem: Discord (For the components that has an option for Discord Rich Presence)
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
 
   # Filesystem: GTK‑3 configuration (read‑only)
