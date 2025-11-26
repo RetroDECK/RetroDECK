@@ -19,17 +19,84 @@ set +o allexport # Back to normal, otherwise every assigned variable will get ex
 rotate_logs
 
 # OS detection
-system_display_width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
-system_display_height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
-if [[ $system_display_width -ne 1280 ]] || [[ $system_display_height -ne 800 ]]; then
-  sd_native_resolution=false
-else
-  sd_native_resolution=true
+# Detect if we're running inside a Flatpak sandbox. When inside Flatpak we
+# should avoid using `flatpak-spawn` or calling host-only tools such as
+# `xrandr`.
+# We always run inside the Flatpak runtime for the app; avoid calling
+# any host-only tools (flatpak-spawn, xrandr, lspci). Use sysfs, drm and
+# /proc where possible.
+system_gpu_info=""
+for drmdev in /sys/class/drm/*; do
+  # device subdir might not exist for some entries
+  devdir="$drmdev/device"
+  if [[ -d "$devdir" ]]; then
+    vendor_id=""
+    device_id=""
+    driver=""
+    if [[ -r "$devdir/vendor" ]]; then
+      vendor_id=$(cat "$devdir/vendor" 2>/dev/null || true)
+    fi
+    if [[ -r "$devdir/device" ]]; then
+      device_id=$(cat "$devdir/device" 2>/dev/null || true)
+    fi
+    if [[ -r "$devdir/uevent" ]]; then
+      driver=$(grep -i '^DRIVER=' "$devdir/uevent" 2>/dev/null | cut -d'=' -f2 || true)
+    fi
+    if [[ -n "$driver" ]]; then
+      system_gpu_info="$driver"
+      [[ -n "$vendor_id" || -n "$device_id" ]] && system_gpu_info+=" (${vendor_id:-unknown}:${device_id:-unknown})"
+      break
+    fi
+  fi
+done
+if [[ -z "$system_gpu_info" ]]; then
+  # final fallback: try to derive a name from modalias or reject with unknown
+  for drmdev in /sys/class/drm/*/device/modalias; do
+    if [[ -r "$drmdev" ]]; then
+      modalias=$(cat "$drmdev" 2>/dev/null || true)
+      if [[ -n "$modalias" ]]; then
+        system_gpu_info="$modalias"
+        break
+      fi
+    fi
+  done
 fi
-system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
-system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
-system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
-system_cpu_info=$(flatpak-spawn --host lscpu | grep 'Model name' | cut -d':' -f2 | xargs) # Get CPU model name
+if [[ -z "$system_gpu_info" ]]; then
+  system_gpu_info="unknown"
+fi
+
+# Resolution: try a few sane fallbacks that work inside the sandbox. First
+# check the framebuffer modes (common on SteamDeck), then drm connectors, and
+# finally leave empty if nothing is available.
+system_display_width=""
+system_display_height=""
+
+# Try to read DRM modes (first matching connector with modes)
+drm_modes=$(grep -h --binary-files=without-match -oE '[0-9]+x[0-9]+' /sys/class/drm/*/modes 2>/dev/null || true)
+if [[ -n "$drm_modes" ]]; then
+  # take the first match
+  mode=$(echo "$drm_modes" | head -n1)
+  system_display_width=$(echo "$mode" | cut -dx -f1)
+  system_display_height=$(echo "$mode" | cut -dx -f2)
+fi
+
+# Check for Steam Deck native resolution
+if [[ -n "$system_display_width" && -n "$system_display_height" && "$system_display_width" -eq 1280 && "$system_display_height" -eq 800 ]]; then
+  sd_native_resolution=true
+else
+  sd_native_resolution=false
+fi
+# Read OS information directly from /etc/os-release (no flatpak-spawn). This
+# gives the runtime/guest info when inside the sandbox but avoids host-only
+# commands which aren't allowed here.
+system_distro_name=$(grep '^ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' || true)
+system_distro_version=$(grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' || true)
+
+# GPU info is already detected above using sysfs/DRM and stored in
+# $system_gpu_info.
+
+# CPU: use /proc/cpuinfo as a robust sandbox-friendly source
+system_cpu_info=$(grep -m1 'model name' /proc/cpuinfo | cut -d':' -f2 | xargs || true) # Get CPU model name
 system_cpu_cores=$(nproc)
 system_cpu_max_threads=$(echo $(($(nproc) / 2)))
 
