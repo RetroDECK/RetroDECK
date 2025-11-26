@@ -50,6 +50,7 @@ steam_sync() {
       log d "$system_favorites"
       while read -r game_path; do
         local game="${game_path#./}" # Remove leading ./
+        game=$(decode_filename "$game")
         if [[ -f "$roms_path/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
           # Construct launch options with the rom path in quotes, to handle spaces
           local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
@@ -146,4 +147,13 @@ steam_sync_remove() {
     rd_srm enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
     rd_srm remove >> "$srm_log" 2>&1
   fi
+}
+
+decode_filename() {
+  echo "$1" | sed \
+      -e 's/&amp;/\&/g' \
+      -e 's/&lt;/</g' \
+      -e 's/&gt;/>/g' \
+      -e 's/&quot;/"/g' \
+      -e 's/&#39;/'"'"'/g'
 }
