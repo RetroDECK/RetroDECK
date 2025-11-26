@@ -697,6 +697,7 @@ finit() {
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
+  
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
   else
@@ -711,7 +712,7 @@ finit() {
     quit_retrodeck
   ;;
 
-  "Internal Storage" ) # Internal
+  "Internal Storage" | "Home Directory" ) # Internal
     log i "Internal selected"
     rd_home_path="$HOME/retrodeck"
     if [[ -L "$rd_home_path" ]]; then #Remove old symlink from existing install, if it exists

@@ -56,13 +56,19 @@ configurator_generic_question_dialog() {
 }
 
 configurator_destination_choice_dialog() {
-  # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
+  # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom Location" locations if on Steam Deck, "Home Directory" and "Custom Location" otherwise.
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
-  # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
+  # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
-  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="$2")
+  if [[ $(check_is_steam_deck) == "true" ]]; then
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="$2")
+  else
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="$2")
+  fi
 
   local rc=$?
   if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then
