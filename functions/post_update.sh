@@ -113,6 +113,28 @@ post_update() {
     prepare_component "reset" "ryubing"
     prepare_component "reset" "xroar"
     prepare_component "reset" "portmaster"
+
+    log i "Checking for Ryujinx and Yuzu saves to move into Ryubing folder."
+    switch_saves_moved=false
+
+    for old_saves_folder in "$saves_path/switch/ryujinx/nand/system/save" \
+                            "$XDG_HOME_CONFIG/Ryujinx/bis/system/save" \
+                            "$saves_path/switch/yuzu/nand/system/save" \
+                            "$XDG_HOME_CONFIG/Yuzu/bis/system/save" ; do
+
+      if [[ -d "$old_saves_folder" ]]; then
+        log i "Found Switch saves in $old_saves_folder to move."
+        rsync -a --ignore-existing --mkpath "$old_saves_folder/" "$saves_path/switch/ryubing/"
+        switch_saves_moved=true
+      fi
+
+    done
+
+    if [[ $switch_saves_moved == true ]]; then
+      log i "Ryujinx and Yuzu saves have been moved into Ryubing folder."
+      configurator_generic_dialog "RetroDECK - Post Update" "<span foreground='$purple'><b>Ryujinx</b></span> and <span foreground='$purple'><b>Yuzu</b></span> saves have been moved into the <span foreground='$purple'><b>Ryubing</b></span> folder.\nThe old Ryujinx save location can now be safely manually deleted to free up space.\n\n<span foreground='$purple'><b>RetroDECK will not delete any save files automatically.</b></span>"
+    fi
+
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
