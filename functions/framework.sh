@@ -16,7 +16,7 @@ set_setting_value() {
 
   case $4 in
 
-    "retrodeck")
+    "retrodeck" )
       if [[ -z "$current_section_name" ]]; then
         if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
           jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
@@ -50,7 +50,7 @@ set_setting_value() {
       fi
     ;;
 
-    "melonds" | "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom"  )
+    "melonds" | "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -111,7 +111,7 @@ set_setting_value() {
       fi
     ;;
 
-    "ryubing")
+    "ryubing" )
       if [[ -z "$current_section_name" ]]; then
         jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $setting ] =
                                                                                             ( if ($newval == "true")  then true
@@ -174,7 +174,7 @@ get_setting_value() {
 
   case $3 in
 
-    "retrodeck")
+    "retrodeck" )
     if [[ -z "$current_section_name" ]]; then
       if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
         jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
@@ -199,6 +199,23 @@ get_setting_value() {
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else
       sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
+    fi
+  ;;
+
+  "azahar" ) # For files with this syntax - setting_name=setting_value but also maybe backslashes in the setting name
+    escaped_setting_name=$(printf '%s\n' "$current_setting_name" | sed 's/[[\.*^$/]/\\&/g')
+
+    if [[ -n "$current_section_name" ]]; then
+        awk -F'=' -v section="[$current_section_name]" -v key="$escaped_setting_name" '
+            $0 == section { in_section=1; next }
+            /^\[/ { in_section=0 }
+            in_section && $1 == key { print $2; exit }
+        ' "$1"
+    else
+        awk -F'=' -v key="$escaped_setting_name" '
+            /^\[/ { exit }
+            $1 == key { print $2; exit }
+        ' "$1"
     fi
   ;;
 
@@ -242,7 +259,7 @@ get_setting_value() {
     fi
   ;;
 
-  "ryubing")
+  "ryubing" )
     if [[ -z "$current_section_name" ]]; then
       jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
     else
