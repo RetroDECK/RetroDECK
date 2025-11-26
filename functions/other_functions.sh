@@ -1053,7 +1053,7 @@ install_release() {
 
     # Proceed with Flatpak update
     flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck
-    flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$flatpak_file"
+    flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$flatpak_name"
 
     # Cleanup
     rm -rf "$rd_home_path/RetroDECK_Updates"
