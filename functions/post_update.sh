@@ -109,6 +109,10 @@ post_update() {
       set_setting_value "$es_de_config" "Theme" "RetroDECK-theme-main"
     fi
 
+    prepare_component "reset" "azahar"
+    prepare_component "reset" "ryubing"
+    prepare_component "reset" "xroar"
+    prepare_component "reset" "portmaster"
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
