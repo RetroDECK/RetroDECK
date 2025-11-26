@@ -86,6 +86,7 @@ post_update() {
   fi
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.10.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.10.0b
+
     log d "Version is older than 0.10.0b, defining legacy paths for proper post_update processing."
     rdhome="$rd_home_path"
     roms_folder="$roms_path"
@@ -102,6 +103,12 @@ post_update() {
     texture_packs_folder="$texture_packs_path"
     borders_folder="$borders_path"
     cheats_folder="$cheats_path"
+
+    prepare_component reset azahar
+    prepare_component reset ryubing
+    prepare_component reset xroar
+    prepare_component reset portmaster
+
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
