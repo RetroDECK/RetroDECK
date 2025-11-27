@@ -23907,6 +23907,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+--- MB Microvision ---
+
+MB Microvision 
+
+Thanks to:
+
+"It all is open source - do what you wish with it, please keep attributions however."
+2014, Paul Robson https://mbmicrovision.blogspot.com/
+
+More work done by:
+
+"If anyone out there wants to build a Mac version or keep working on the emulator, here is a ZIP of the source code and Code::Blocks project that I put together. I make no guarantees that it’s pretty, but I did try to comment where I added things. It may take some work to even get the project set up; the project file was missing from Paul’s original upload and I had to reconstruct it, paths to things like SDL are sure to need changed, and in zipping it up I actually rearranged the directories a bit so it probably doesn’t open out of the box."
+
+2017 Raph Koster https://www.raphkoster.com/
+
 
 --- Mini Banner ---
 
@@ -23930,3 +23945,4 @@ The Steam Deck logo and Steam Deck device is a registered trademark of Valve Cor
 --- Other Trademarks in Documentation and Wiki ---
 
 All trademarks, logos, controller images and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
+
