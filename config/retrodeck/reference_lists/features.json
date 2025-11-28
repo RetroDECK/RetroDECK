@@ -46,7 +46,7 @@
   "finit_default_options": {
     "rd_controller_profile": {
       "name": "Steam Input: RetroDECKs Controller Templates",
-      "description": "Install RetroDECKs Steam Input Templates into Steam. This step is highly recommended for optimal controller support.",
+      "description": "Install RetroDECKs Steam Input Templates into Steam. Highly recommended for optimal controller support.",
       "enabled": true
     },
     "rpcs3_firmware": {
