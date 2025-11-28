@@ -51,7 +51,7 @@
     },
     "rpcs3_firmware": {
       "name": "RPCS3 Firmware",
-      "description": "Download & Install the required firmware for RPCS3 - the PlayStation 3 emulator.",
+      "description": "Download & Install the required firmware for RPCS3 - the PlayStation 3 Emulator.",
       "enabled": false
     },
     "vita3k_firmware": {
