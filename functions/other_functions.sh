@@ -853,7 +853,7 @@ finit() {
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Setup Complete" \
-    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory: <span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in: <span foreground='$purple'><b>$rd_home_path/bios\n\n</b></span>.n\n\ Refer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> for more information and instructions about how-to use RetroDECK.\n\nWe hope you have a pleasant time using RetroDECK... ❤️ RetroDECK Team."
+    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nRefer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> \nFor more information and instructions about how-to use RetroDECK.\n\nWe hope you have a pleasant time using RetroDECK...\n\n❤️ RetroDECK Team."
 }
 
 install_retrodeck_starterpack() {
