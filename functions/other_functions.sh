@@ -696,7 +696,7 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\nRead each prompt carefully during installation so everything is configured correctly.\n\nWhere should RetroDECK store its data?\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\nThis folder will hold all of your important files: <span foreground='$purple'><b>ROMs, BIOS, save games, scraped data and more</b></span>." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>ROMs (Games) \nBIOS and Firmware \nGame Saves \nScraped Data \nEtc...</b></span>." )
   
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
