@@ -841,7 +841,7 @@ finit() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Finishing Initialization" \
-    --text="RetroDECK is completing its initial setup. n/n/<span foreground='$purple'><b>Please wait while the process finishes..</b></span>.\n\n"
+    --text="RetroDECK is completing its initial setup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛\n\n"
 
   get_steam_user
   if [[ -n "$steam_id" ]]; then
