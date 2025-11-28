@@ -197,7 +197,7 @@ configurator_change_preset_dialog() {
 
   log d "User made a choice: $choice with return code: $rc"
 
-  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+  if [[ "$rc" == 0 && -n "$choice" ]]; then # If the user didn't hit Cancel
     configurator_change_preset_value_dialog "$preset" "$choice"
   else
     log i "No preset choices made"
@@ -225,7 +225,7 @@ configurator_change_preset_value_dialog() {
 
   log d "User made a choice: $choice with return code: $rc"
 
-  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+  if [[ "$rc" == 0 && -n "$choice" ]]; then # If the user didn't hit Cancel
     local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
     if [[ ! "$choice" == "$preset_current_value" ]]; then
       if [[ "$preset" =~ (cheevos|cheevos_hardcore) ]]; then
