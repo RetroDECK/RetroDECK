@@ -696,7 +696,7 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\nRead each prompt carefully during installation so everything is configured correctly.\n\nWhere should RetroDECK store its data?\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\nThis folder will hold all of your important files: <span foreground='$purple'><b>ROMs, BIOS, save games, scraped data and more</b></span>." )
   
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
@@ -731,7 +731,7 @@ finit() {
     done < <(df --output=size,target -h | grep "/run/media/" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
-      configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected, please choose which one you would like to install RetroDECK on."
+      configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
@@ -752,7 +752,7 @@ finit() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="No external storage devices could be found.\nPlease choose the location of your SD card manually.\n\nNOTE: A \"retrodeck\" folder will be created starting from the location that you select."
+      --text="No external drives were detected.\nPlease manually select the location of your SD card."
       sdcard="$(finit_browse)" # Calling the browse function
       if [[ -z "$sdcard" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
@@ -767,7 +767,7 @@ finit() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
-        --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
+        --text="SD card detected, but it can not be written to.\nThis often occurs when the card was formatted on a PC.\n\nWhat to do:\n\nSwitch the Steam Deck to <span foreground='$purple'><b>Game Mode</b></span>.\n\nSettings > System > Format SD Card\n\nRun RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         log i "Now quitting"
         quit_retrodeck
@@ -782,7 +782,7 @@ finit() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
+      --text="Choose a location for RetroDECKs data folder."
       sdcard="$(finit_browse)" # Calling the browse function
       rd_home_path="$sdcard/retrodeck"
       if [[ -z "$rd_home_path" ]]; then # If user hit the cancel button
@@ -803,16 +803,16 @@ finit() {
   local finit_options_choices=$(finit_user_options_dialog)
 
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
+    configurator_generic_dialog "RPCS3 Firmware Install" "You have opted to install the <span foreground='$purple'><b>RPCS3</b></span> firmware.\n\nThe installation will take a few minutes and needs an internet connection.\n\nWhen the RetroDECK setup finishes, <span foreground='$purple'><b>RPCS3</b></span> will start automatically.\n\nAfter the firmware is installed: <span foreground='$purple'><b>close the emulator window</b></span> to complete the process."
   fi
 
   if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "Vita3K Firmware Install" "You have chosen to install the Vita3K firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nVita3K will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
+    configurator_generic_dialog "Vita3K Firmware Install" "You have opted to install the <span foreground='$purple'><b>Vita3K</b></span> firmware.\n\nThe installation will take a few minutes and needs an internet connection.\n\nWhen the RetroDECK setup finishes, <span foreground='$purple'><b>Vita3K</b></span> will start automatically.\n\nAfter the firmware is installed: <span foreground='$purple'><b>close the emulator window</b></span> to complete the process."
   fi
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-  --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
+  --text="RetroDECK is now installing the required files.\nThis may take up to a minute.\nWhen the installation finishes, RetroDECK will launch automatically.\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
   prepare_component "reset" "all"
