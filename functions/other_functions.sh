@@ -782,7 +782,7 @@ finit() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="Choose a location for RetroDECKs data folder."
+      --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
       sdcard="$(finit_browse)" # Calling the browse function
       rd_home_path="$sdcard/retrodeck"
       if [[ -z "$rd_home_path" ]]; then # If user hit the cancel button
