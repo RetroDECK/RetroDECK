@@ -50,7 +50,7 @@ find_empty_rom_folders() {
   done
 }
 
-configurator_check_multifile_game_structure() {
+configurator_check_multifile_game_structure_dialog() {
   local folder_games=($(find "$roms_path" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
   if [[ ${#folder_games[@]} -gt 1 ]]; then
     echo "$(find "$roms_path" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$logs_path"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
