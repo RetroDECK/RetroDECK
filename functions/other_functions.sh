@@ -799,7 +799,7 @@ finit() {
 
   conf_write # Write the new values to retrodeck.cfg
 
-  configurator_generic_dialog "RetroDECK Initial Setup" "The next dialog will be a list of optional actions to take during the initial setup.\n\nIf you choose to not do any of these now, they can be done later through the Configurator."
+  configurator_generic_dialog "RetroDECK Initial Setup" "The next dialog will be a list of <span foreground='$purple'><b>optional actions</b></span> to take during the initial setup.\n\nIf you choose to not do any of these now, they can be done later through the Configurator."
   local finit_options_choices=$(finit_user_options_dialog)
 
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
@@ -812,7 +812,7 @@ finit() {
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-  --text="RetroDECK is now installing the required files.\nThis may take up to a minute.\nWhen the installation finishes, RetroDECK will launch automatically.\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
+  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⌛<span foreground='$purple'><b>This may take up to a minute or two</b></span>⌛\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
   prepare_component "reset" "all"
@@ -853,7 +853,7 @@ finit() {
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Setup Complete" \
-    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rd_home_path/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
+    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory: <span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in: <span foreground='$purple'><b>$rd_home_path/bios\n\n</b></span>.n\n\ Refer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> for more information and instructions about how-to use RetroDECK.\n\nWe hope you have a pleasant time using RetroDECK... ❤️ RetroDECK Team."
 }
 
 install_retrodeck_starterpack() {
