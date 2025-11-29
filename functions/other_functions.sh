@@ -12,7 +12,7 @@ directory_browse() {
     if [ ! -z "$target" ] #yes
     then
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-      --text="Directory $target chosen, is this correct?"
+      --text="Directory <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
         path_selected=true
@@ -42,7 +42,7 @@ file_browse() {
     if [ ! -z "$target" ] #yes
     then
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-      --text="File $target chosen, is this correct?"
+      --text="File <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
         file_selected=true
@@ -92,13 +92,13 @@ move() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Move in Progress" \
-  --text="Moving directory $(basename "$1") to new location of $2,\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Move Directories" \
-    --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
+    --text="Some files could not be moved because they already exist in the destination.\n\nAll other files are now in the new location; you will need to handle the remaining conflicts manually."
   fi
 }
 
@@ -140,7 +140,7 @@ download_file() {
   ) |
   rd_zenity --progress \
     --title="Downloading File" \
-    --text="Downloading $3..." \
+    --text="Downloading <span foreground='$purple'><b>$3</b></span>..." \
     --pulsate \
     --auto-close
 }
@@ -642,7 +642,7 @@ finit_browse() {
         rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
         --ok-label "Yes" \
-        --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
+        --text="Your RetroDECK data folder will be:\n\n<span foreground='$purple'><b>$target/retrodeck</b></span>\n\nIs this correct?"
         if [ $? == 0 ] #yes
         then
           path_selected=true
@@ -696,7 +696,7 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>🕹️ ROMs / Games \n⚙️ BIOS and Firmware \n💾 Game Saves \n🖼️ Art Data \n🧺 Etc...</b></span>." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>🕹️ ROMs / Games \n⚙️ BIOS & Firmware \n💾 Game Saves \n🖼️ Art Data \n🧺 Etc...</b></span>." )
   
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
@@ -853,7 +853,7 @@ finit() {
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Setup Complete" \
-    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nRefer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> \nFor more information and instructions about how-to use RetroDECK.\n\nWe hope you have a pleasant time using RetroDECK...\n\n❤️ RetroDECK Team."
+    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nRefer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> \nFor more information and instructions about how-to use RetroDECK.\n\nWe hope you have a good time using RetroDECK...\n\n❤️ RetroDECK Team."
 }
 
 install_retrodeck_starterpack() {
@@ -976,7 +976,7 @@ install_release() {
   rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Updater" \
-    --text="$1 will now be installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
+    --text="<span foreground='$purple'><b>$1</b></span> will now be installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
 
   rc=$?
   if [[ $rc == "1" ]]; then
@@ -1375,7 +1375,7 @@ add_retrodeck_to_steam(){
     log i "Checking if user wants to add RetroDECK to Steam"
 
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-  --text="Do you want to add RetroDECK to Steam?"
+  --text="Do you want to add RetroDECK the Steam?\n\n(Recommended for optimal controller support via Steam Input.)"
     if [ $? == 0 ]; then
       (
         log i "RetroDECK has been added to Steam"
@@ -1386,7 +1386,7 @@ add_retrodeck_to_steam(){
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "Adding RetroDECK to Steam" \
         --text="RetroDECK is being added to Steam.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
-      rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease close and reopen Steam to see the changes."
+      rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease restart Steam to see the changes."
     fi
 }
 
@@ -1459,19 +1459,19 @@ check_if_updated() {
         set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
         set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="☢️ Delete Everything & Fresh Install ☢️" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Cooker Upgrade" \
-        --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
+        --text="You are upgrading a cooker build of RetroDECK.\n\n Press the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything & Fresh Install</b></span> ☢️ button deletes all data (including ROMs, BIOS, Saves and everything else stored in /retrodeck). Do not press it unless you know what you are doing!")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
             log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
             set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-          elif [[ "$choice" == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          elif [[ "$choice" == "☢️ Delete Everything & Fresh Install ☢️" ]]; then # Remove all RetroDECK data and start a fresh install
             if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
               if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
-                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
+                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY deleted.\n\nStill sure you want to proceed?") == "true" ]]; then
                   configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
                   if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
                     log w "Removing RetroDECK data and starting fresh"
