@@ -10,7 +10,7 @@ debug_dialog() {
   log i "Debug dialog for: $1" # showing the command in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Debug Dialog" \
+  --title "RetroDECK Configurator - Debug Dialog" \
   --text="$1"
 }
 
@@ -20,7 +20,7 @@ configurator_process_complete_dialog() {
   log i "Process complete dialog for: $1" # showing the process in the logs
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Process Complete" \
+  --title "RetroDECK Configurator - Process Complete" \
   --text="The process of $1 is now complete.\n\nYou may need to restart RetroDECK for the changes to take effect.\n\nClick OK to return to the Main Menu or Quit to exit RetroDECK."
 
   if [ ! $? == 0 ]; then # OK button clicked
@@ -61,11 +61,11 @@ configurator_destination_choice_dialog() {
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
   if [[ $(check_is_steam_deck) == "true" ]]; then
-    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   else
-    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   fi
@@ -83,7 +83,7 @@ configurator_reset_confirmation_dialog() {
   # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
   # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
   log i "$2"
-  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
+  choice=$(rd_zenity --title "RetroDECK Configurator - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
   if [[ $? == "0" ]]; then
@@ -146,7 +146,7 @@ configurator_move_folder_dialog() {
           else # If there isn't enough space in the picked destination
             rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Move Directories" \
+            --title "RetroDECK Configurator - Move Directories" \
             --text="The destination you selected does not have enough free space for the files you are trying to move.\n\nPlease choose a new destination or free up some space."
           fi
         fi

@@ -205,7 +205,7 @@ configurator_open_component_dialog() {
   build_zenity_open_component_menu_array open_component_list
 
   component=$(rd_zenity --list \
-  --title "RetroDECK Configurator Utility - Open Component" --cancel-label="Back" \
+  --title "RetroDECK Configurator - Open Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which component do you want to launch?" \
   --hide-header --hide-column=3 --print-column=3\
@@ -268,7 +268,7 @@ configurator_reset_dialog() {
   build_zenity_reset_component_menu_array reset_component_list
 
   choice=$(rd_zenity --list \
-  --title "RetroDECK Configurator Utility - Reset Components" --cancel-label="Cancel" \
+  --title "RetroDECK Configurator - Reset Components" --cancel-label="Cancel" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --checklist --ok-label="Reset Selected" --extra-button="Reset All" --extra-button="Factory Reset" \
   --print-column=2 --hide-column=2 \
@@ -304,8 +304,8 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Utility - Reset in Progress" \
-      --text="Resetting all components, please wait...\n\n"
+      --title "RetroDECK Configurator - Reset in Progress" \
+      --text="Resetting all components\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
       configurator_process_complete_dialog "resetting all components"
     else # User clicked "Cancel"
       configurator_welcome_dialog
@@ -329,8 +329,8 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Utility - Reset in Progress" \
-      --text="Resetting selected components, please wait...\n\n"
+      --title "RetroDECK Configurator - Reset in Progress" \
+      --text="Resetting selected components.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
     else # User clicked "Cancel"
       configurator_reset_dialog
     fi

@@ -91,13 +91,13 @@ move() {
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Move in Progress" \
+  --title "RetroDECK Configurator - Move in Progress" \
   --text="Moving directory $(basename "$1") to new location of $2,\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Move Directories" \
+    --title "RetroDECK Configurator - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
   fi
 }
@@ -535,7 +535,7 @@ backup_retrodeck_userdata() {
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --title "RetroDECK Configurator - Userdata Backup" \
             --text="Verifying there is enough free space for the backup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
     total_size=$(cat "$total_size_file")
     rm "$total_size_file" # Clean up temp file
@@ -592,7 +592,7 @@ backup_retrodeck_userdata() {
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --title "RetroDECK Configurator - Userdata Backup" \
             --text="Compressing files into backup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
   else
     if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then

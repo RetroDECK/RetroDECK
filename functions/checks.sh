@@ -62,7 +62,7 @@ check_for_version_update() {
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
-        --text="A new version of RetroDECK is available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from your app store, such as KDE Discover or Gnome Software.\n\nTo ignore this notification, click the \"Ignore this version\" button.")
+        --text="RetroDECK version 🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕 is now available.\nUpdate via your app store (e.g., KDE Discover / GNOME Software / Bazaar ).\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.")
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
           log i "Selected: \"OK\""
@@ -73,7 +73,7 @@ check_for_version_update() {
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK - New Cooker Version Available" \
-          --text="A new version of RetroDECK cooker is available.\nYou are currently running version: <span foreground='$blue'><b>$hard_version</b></span>. The latest version is: <span foreground='$blue'><b>$online_version</b></span>.\n\nWould you like to update now?\nTo ignore this notification, click the \"Ignore this version\" button.\n\nTo disable these notifications entirely, turn off Online Update Checks in the Configurator")
+          --text="RetroDECK Cooker version:\n\n🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕\nis now available.\n\nYou are on version:\n\n🔴 <span foreground='$blue'><b>$hard_version</b></span> 🔴.\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.\n\n<b>Would you like to update now?</b>")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then
