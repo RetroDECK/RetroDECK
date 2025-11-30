@@ -696,7 +696,7 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to RetroDECKs first-time setup!\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>🕹️ ROMs and Games \n⚙️ BIOS and Firmware \n💾 Game Saves \n🖼️ Art Data \n🧺 Etc...</b></span>." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "<b>Welcome to RetroDECKs first-time setup!</b>\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>🕹️ ROMs and Games \n⚙️ BIOS and Firmware \n💾 Game Saves \n🖼️ Art Data \n🧺 Etc...</b></span>." )
   
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
@@ -853,7 +853,7 @@ finit() {
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Setup Complete" \
-    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nRefer to the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span> \nFor more information and instructions about how-to use RetroDECK.\n\nWe hope you have a good time using RetroDECK...\n\n❤️ RetroDECK Team."
+    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nCheck out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nFor detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
 }
 
 install_retrodeck_starterpack() {
