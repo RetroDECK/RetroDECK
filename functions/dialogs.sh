@@ -185,6 +185,7 @@ configurator_change_preset_dialog() {
   choice=$(rd_zenity \
     --list --width=1200 --height=720 \
     --hide-column=5 --print-column=5 \
+    --ok-label="Select" --extra-button="Disable All" --extra-button="Enable All" \
     --text="Enable $pretty_preset_name:" \
     --column "Status" \
     --column "Emulator" \
@@ -197,8 +198,101 @@ configurator_change_preset_dialog() {
 
   log d "User made a choice: $choice with return code: $rc"
 
-  if [[ "$rc" == 0 && -n "$choice" ]]; then # If the user didn't hit Cancel
-    configurator_change_preset_value_dialog "$preset" "$choice"
+  if [[ -n "$choice" ]]; then # If the user didn't hit Cancel
+    if [[ "$choice" == "Enable All" ]]; then
+      log d "User selected \"Enable All\""
+      (
+      while read -r component_obj; do
+        local component="$(jq -r '.system_name' <<< $component_obj)"
+        local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
+        local child_component=""
+        local current_status="$(jq -r '.status' <<< $component_obj)"
+
+        if [[ -n "$parent_name" ]]; then
+          child_component="$component"
+          component="$parent_name"
+        fi
+
+        local preset_enabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+                                if $core != "" then
+                                  .[$component].compatible_presets[$core][$preset].[1] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[1] // empty
+                                end
+                              ' "$rd_components/$component/component_manifest.json")
+
+        if [[ ! "$current_status" == "$preset_enabled_state" ]]; then
+          if [[ -n "$child_component" ]]; then
+            log d "Enabling preset $preset for component $child_component"
+            api_set_preset_state "$child_component" "$preset" "$preset_enabled_state"
+          else
+            log d "Enabling preset $preset for component $component"
+            api_set_preset_state "$component" "$preset" "$preset_enabled_state"
+          fi
+        else
+          if [[ -n "$child_component" ]]; then
+            log d "Component $child_component is already enabled for preset $preset"
+          else
+            log d "Component $component is already enabled for preset $preset"
+          fi
+        fi
+      done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK - Enabling Preset $preset" \
+      --width=400 --height=200 \
+      --text="RetroDECK is enabling the preset $preset for all compatible systems, please wait...."
+      configurator_change_preset_dialog "$preset"
+    elif [[ "$choice" == "Disable All" ]]; then
+      log d "User selected \"Disable All\""
+      (
+      while read -r component_obj; do
+        local component="$(jq -r '.system_name' <<< $component_obj)"
+        local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
+        local child_component=""
+        local current_status="$(jq -r '.status' <<< $component_obj)"
+
+        if [[ -n "$parent_name" ]]; then
+          child_component="$component"
+          component="$parent_name"
+        fi
+
+        local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+                                if $core != "" then
+                                  .[$component].compatible_presets[$core][$preset].[0] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[0] // empty
+                                end
+                              ' "$rd_components/$component/component_manifest.json")
+
+        if [[ ! "$current_status" == "$preset_disabled_state" ]]; then
+          if [[ -n "$child_component" ]]; then
+            log d "Disabling preset $preset for component $child_component"
+            api_set_preset_state "$child_component" "$preset" "$preset_disabled_state"
+          else
+            log d "Disabling preset $preset for component $component"
+            api_set_preset_state "$component" "$preset" "$preset_disabled_state"
+          fi
+        else
+          if [[ -n "$child_component" ]]; then
+            log d "Component $child_component is already disabled for preset $preset"
+          else
+            log d "Component $component is already disabled for preset $preset"
+          fi
+        fi
+      done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK - Disabling Preset $preset" \
+      --width=400 --height=200 \
+      --text="RetroDECK is disabling the preset $preset for all compatible systems, please wait...."
+      configurator_change_preset_dialog "$preset"
+    else
+      log d "User selected \"$choice\""
+      configurator_change_preset_value_dialog "$preset" "$choice"
+    fi
   else
     log i "No preset choices made"
     configurator_global_presets_and_settings_dialog
