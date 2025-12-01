@@ -1339,24 +1339,17 @@ open_component(){
   fi
 }
 
-add_retrodeck_to_steam(){
-
-    log i "Checking if user wants to add RetroDECK to Steam"
-
-    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-  --text="Do you want to add RetroDECK the Steam?\n\n(Recommended for optimal controller support via Steam Input.)"
-    if [ $? == 0 ]; then
-      (
-        log i "RetroDECK has been added to Steam"
-        rd_srm enable --names "RetroDECK Launcher"
-        rd_srm add
-      ) |
-      rd_zenity --progress --no-cancel --pulsate --auto-close \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "Adding RetroDECK to Steam" \
-        --text="RetroDECK is being added to Steam.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
-      rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease restart Steam to see the changes."
-    fi
+add_retrodeck_to_steam() {
+  (
+    log i "RetroDECK has been added to Steam"
+    rd_srm enable --names "RetroDECK Launcher"
+    rd_srm add
+  ) |
+  rd_zenity --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "Adding RetroDECK to Steam" \
+    --text="RetroDECK is being added to Steam.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+  rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease restart Steam to see the changes."
 }
 
 repair_paths() {
