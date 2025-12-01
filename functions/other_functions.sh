@@ -667,29 +667,6 @@ finit_browse() {
   done
 }
 
-finit_user_options_dialog() {
-  finit_available_options=()
-  finit_extracted_options=$(jq -r '.finit_default_options | to_entries[] | "\(.value.enabled)^\(.value.name)^\(.value.description)^\(.key)"' "$features")
-
-  # Read finit_default_options from features.json using jq
-  while IFS="^" read -r enabled option_name option_desc option_tag; do
-    finit_available_options+=("$enabled" "$option_name" "$option_desc" "$option_tag")
-  done <<< "$finit_extracted_options"
-
-  local choices=$(rd_zenity \
-  --list --width=1200 --height=720 \
-  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
-  --separator=" " --print-column=4 \
-  --text="Choose which options to enable:" \
-  --column "Enabled?" \
-  --column "Option" \
-  --column "Description" \
-  --column "option_flag" \
-  "${finit_available_options[@]}")
-
-  echo "${choices[*]}"
-}
-
 finit() {
   # Force/First init, depending on the situation
 
@@ -707,9 +684,9 @@ finit() {
   case "$finit_dest_choice" in
 
   "Quit" | "Back" | "" ) # Back, Quit or X button quits
-    rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
+    rm -f "$rd_conf" # Cleanup unfinished retrodeck.json if first install is interrupted
     log i "Now quitting"
-    quit_retrodeck
+    exit 2
   ;;
 
   "Internal Storage" | "Home Directory" ) # Internal
@@ -795,46 +772,42 @@ finit() {
 
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
-  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  local finit_choices=()
 
-  conf_write # Write the new values to retrodeck.cfg
+  while read -r manifest_file; do
+    if jq -e '.. | objects | select(has("finit_options")) | any' "$manifest_file" > /dev/null; then
+      while read -r finit_array_obj; do
+        local option_dialog=$(jq -r '.dialog' <<< "$finit_array_obj")
+        local option_action=$(jq -r '.action' <<< "$finit_array_obj")
 
-  configurator_generic_dialog "RetroDECK Initial Setup" "The next dialog will be a list of <span foreground='$purple'><b>optional actions</b></span> to take during the initial setup.\n\nIf you choose to not do any of these now, they can be done later through the Configurator."
-  local finit_options_choices=$(finit_user_options_dialog)
-
-  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "RPCS3 Firmware Install" "You have opted to install the <span foreground='$purple'><b>RPCS3</b></span> firmware.\n\nThe installation will take a few minutes and needs an internet connection.\n\nWhen the RetroDECK setup finishes, <span foreground='$purple'><b>RPCS3</b></span> will start automatically.\n\nAfter the firmware is installed: <span foreground='$purple'><b>close the emulator window</b></span> to complete the process."
-  fi
-
-  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "Vita3K Firmware Install" "You have opted to install the <span foreground='$purple'><b>Vita3K</b></span> firmware.\n\nThe installation will take a few minutes and needs an internet connection.\n\nWhen the RetroDECK setup finishes, <span foreground='$purple'><b>Vita3K</b></span> will start automatically.\n\nAfter the firmware is installed: <span foreground='$purple'><b>close the emulator window</b></span> to complete the process."
-  fi
+        if launch_command "$option_dialog"; then
+          finit_choices+=("$option_action")
+        fi
+      done < <(jq -c '.[].finit_options.[]' "$manifest_file")
+    else
+      continue
+    fi
+  done < <({
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json" | grep "^$rd_components/framework/component_manifest.json" || true
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json" | grep -v "^$rd_components/framework/component_manifest.json" | sort
+           })
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⌛<span foreground='$purple'><b>This may take up to a minute or two</b></span>⌛\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
+  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  conf_write # Write the new values to retrodeck.cfg
   prepare_component "reset" "all"
   update_component_presets
   deploy_helper_files
 
-  # Optional actions based on user choices
-  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      update_rpcs3_firmware
-    fi
-  fi
-  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      update_vita3k_firmware
-    fi
-  fi
-  if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
-    install_retrodeck_controller_profile
-  fi
-  if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then
-    install_retrodeck_starterpack
+  if [[ -n "${finit_choices:-}" ]]; then # Process optional finit choices
+    for choice in "${finit_choices[@]}"; do
+      log d "Processing finit user choice $choice"
+      launch_command "$choice"
+    done
   fi
 
   ) |
@@ -843,10 +816,6 @@ finit() {
     --title "RetroDECK Finishing Initialization" \
     --text="RetroDECK is completing its initial setup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
 
-  get_steam_user
-  if [[ -n "$steam_id" ]]; then
-    add_retrodeck_to_steam
-  fi
   create_lock
 
   # Inform the user where to put the ROMs and BIOS files
