@@ -1837,3 +1837,8 @@ install_retrodeck_controller_profile_and_add_to_steam() {
   install_retrodeck_controller_profile
   add_retrodeck_to_steam
 }
+
+finit_default_yes() {
+  log i "Defaulting setting "$@" enabled."
+  return 0
+}
