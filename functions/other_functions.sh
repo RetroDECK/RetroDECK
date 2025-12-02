@@ -1253,7 +1253,10 @@ open_component(){
     echo "$(api_get_component "all" | jq -r '.[] | select(.component_name != "retrodeck") | .component_name')"
   else
     if [[ -f "$rd_components/$command/component_launcher.sh" ]]; then
-      /bin/bash "$rd_components/$command/component_launcher.sh"
+      # Pass any additional arguments given to open_component on to the
+      # component's launcher script so callers can forward flags/parameters.
+      log d "Launching component '$command' with args: $@"
+      /bin/bash "$rd_components/$command/component_launcher.sh" "$@"
     else
       log e "No launcher could be found for the component: $command"
     fi
