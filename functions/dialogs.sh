@@ -1228,11 +1228,11 @@ configurator_iconset_toggle_dialog() {
 }
 
 finit_install_controller_profile_dialog() {
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install" --cancel-label="No" --ok-label "Yes" \
-      --text="Put RetroDECK controller profile install question text here."
-}
-
-finit_add_rd_to_steam_dialog() {
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install" --cancel-label="No" --ok-label "Yes" \
-  --text="Do you want to add RetroDECK the Steam?\n\n(Recommended for optimal controller support via Steam Input.)"
+  get_steam_user
+  if [[ -n "$steam_id" ]]; then
+    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
+    --text="Would you like to install the RetroDECK Steam Controller Profiles and add RetroDECK to Steam?"
+  else
+    return 1
+  fi
 }

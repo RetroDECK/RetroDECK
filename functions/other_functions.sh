@@ -1832,3 +1832,8 @@ handle_folder_iconsets() {
     set_setting_value "$rd_conf" "folder_iconset" "false" retrodeck "options"
   fi
 }
+
+install_retrodeck_controller_profile_and_add_to_steam() {
+  install_retrodeck_controller_profile
+  add_retrodeck_to_steam
+}
