@@ -110,8 +110,8 @@ configurator_move_folder_dialog() {
     choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename "$dir_to_move") folder.")
     case $choice in
 
-    "Internal Storage" | "SD Card" | "Custom Location" ) # If the user picks a location
-      if [[ "$choice" == "Internal Storage" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
+    "Internal Storage" | "Home Directory" | "SD Card" | "Custom Location" ) # If the user picks a location
+      if [[ "$choice" == "Internal Storage" || "$choice" == "Home Directory" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
         local dest_root="$HOME"
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
@@ -126,7 +126,7 @@ configurator_move_folder_dialog() {
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $choice"
+            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $dest_root/retrodeck/$(basename "$dir_to_move")"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -139,7 +139,7 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "moving the RetroDECK data directory to internal storage"
+              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $dest_root/retrodeck/$(basename "$dir_to_move") was successful."
             else
               configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
@@ -169,6 +169,8 @@ configurator_move_folder_dialog() {
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename "$dir_to_move") folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
+
+  configurator_data_management_dialog
 }
 
 configurator_change_preset_dialog() {
