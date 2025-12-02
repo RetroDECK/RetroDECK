@@ -37,13 +37,14 @@ https://retrodeck.net
 "
 }
 
+source /app/libexec/global.sh
+
 # Check if is an infromational message
 # If so, set LOG_SILENT to true, source the global.sh script,
 # show the needed information and quit
 case "$1" in
   -h|--help)
     LOG_SILENT=true
-    source /app/libexec/global.sh
     if [[ "$version" =~ ^[0-9] ]]; then
       echo "RetroDECK v$version"
     else
@@ -54,7 +55,6 @@ case "$1" in
     ;;
   -v|--version)
     LOG_SILENT=true
-    source /app/libexec/global.sh
     if [[ "$version" =~ ^[0-9] ]]; then
       echo "RetroDECK v$version"
     else
@@ -64,7 +64,6 @@ case "$1" in
     ;;
   --get-help)
     LOG_SILENT=true
-    source /app/libexec/global.sh
     echo -e "\nUsed to check the state of all systems for a given preset.\n\nAvailable presets are:"
     fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
     echo -e "\nUsage: --get <preset> [system/all]"
@@ -79,7 +78,6 @@ case "$1" in
     ;;
   --set-help)
     LOG_SILENT=true
-    source /app/libexec/global.sh
     echo -e "\nUsed to toggle or set a preset.\n\nAvailable presets are:"
     fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
     echo -e "\nUsage: --set <preset> <system/all> <value>"
@@ -92,8 +90,6 @@ case "$1" in
     exit 0
     ;;
 esac
-
-source /app/libexec/global.sh
 
 # Process command-line arguments
 while [[ $# -gt 0 ]]; do
