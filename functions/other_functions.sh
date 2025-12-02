@@ -11,7 +11,7 @@ directory_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="Directory <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -20,7 +20,7 @@ directory_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="No directory selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -41,7 +41,7 @@ file_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1")"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="File <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -50,7 +50,7 @@ file_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -649,7 +649,7 @@ finit_browse() {
           echo "$target"
           break
         else
-          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" --text="Do you want to quit?"
           if [ $? == 0 ] # yes, quit
           then
             quit_retrodeck
@@ -709,7 +709,7 @@ finit() {
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
       configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -793,7 +793,7 @@ finit() {
            })
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
   --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⌛<span foreground='$purple'><b>This may take up to a minute or two</b></span>⌛\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
