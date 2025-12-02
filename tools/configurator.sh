@@ -64,8 +64,6 @@ source /app/libexec/global.sh
 #       - M3U Multi-File Validator
 #       - Repair RetroDECK paths
 #       - Change Logging Level
-#       - Ponzu: Remove Yuzu
-#       - Ponzu: Remove Citra
 #     - Steam Tools
 #       - Add RetroDECK to Steam
 #       - Automatic Steam Sync
@@ -194,7 +192,6 @@ configurator_open_component_dialog() {
   # This function displays a dialog to the user for selecting an emulator to open.
   # It first constructs a list of available emulators and their descriptions by reading
   # from the output of `open_component --list` and `open_component --getdesc`.
-  # If certain settings (kiroi_ponzu or akai_ponzu) are enabled, it adds Yuzu and Citra
   # to the list of emulators.
   # The function then uses `rd_zenity` to display a graphical list dialog with the
   # available emulators and their descriptions.

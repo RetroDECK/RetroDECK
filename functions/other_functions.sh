@@ -1037,85 +1037,7 @@ install_release() {
   quit_retrodeck
 }
 
-ponzu() {
-  # This function is used to extract some specific appimages
-  # Check if any of the specified files exist
-  # If RetroDECK is reset Ponzu must re-cooked
-
-  log d "Checking for Ponzu"
-
-  local tmp_folder="/tmp/extracted"
-  local ponzu_files=("$rd_home_path"/ponzu/Citra*.AppImage "$rd_home_path"/ponzu/citra*.AppImage "$rd_home_path"/ponzu/Yuzu*.AppImage "$rd_home_path"/ponzu/yuzu*.AppImage) 
-  local data_dir
-  local appimage
-  local executable
-
-  # if the binaries are found, ponzu should be set as true into the retrodeck config
-  if [ -f "$XDG_DATA_HOME/ponzu/Citra/bin/citra-qt" ]; then
-    log d "Citra binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
-  fi
-  if [ -f "$XDG_DATA_HOME/ponzu/Yuzu/bin/yuzu" ]; then
-    log d "Yuzu binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
-  fi
-
-  # Loop through all ponzu files
-  for ponzu_file in "${ponzu_files[@]}"; do
-    # Check if the current ponzu file exists
-    if [ -f "$ponzu_file" ]; then
-      if [[ "$ponzu_file" == *itra* ]]; then
-        log i "Found akai ponzu! Elaborating it"
-        data_dir="$XDG_DATA_HOME/ponzu/Citra"
-        local message="Akai ponzu is served, enjoy"
-      elif [[ "$ponzu_file" == *uzu* ]]; then
-        log i "Found kiroi ponzu! Elaborating it"
-        data_dir="$XDG_DATA_HOME/ponzu/Yuzu"
-        local message="Kiroi ponzu is served, enjoy"
-      else
-        log e "AppImage not recognized, not a ponzu ingredient!"
-        exit 1
-      fi
-      appimage="$ponzu_file"
-      chmod +x "$ponzu_file"
-      create_dir "$data_dir"
-      log d "Moving AppImage in \"$data_dir\""
-      mv "$appimage" "$data_dir"
-      cd "$data_dir"
-      local filename=$(basename "$ponzu_file")
-      log d "Setting appimage=$data_dir/$filename"
-      appimage="$data_dir/$filename"
-      log d "Extracting AppImage"
-      "$appimage" --appimage-extract
-      create_dir "$tmp_folder"
-      log d "Cleaning up"
-      cp -r squashfs-root/* "$tmp_folder"
-      rm -rf *
-      if [[ "$ponzu_file" == *itra* ]]; then
-        mv "$tmp_folder/usr/"** .
-        executable="$data_dir/bin/citra"
-        log d "Making $executable and $executable-qt executable"
-        chmod +x "$executable"
-        chmod +x "$executable-qt"
-        prepare_component "reset" "citra"
-        set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
-      elif [[ "$ponzu_file" == *uzu* ]]; then
-        mv "$tmp_folder/usr/"** .
-        executable="$data_dir/bin/yuzu"
-        log d "Making $executable executable"
-        chmod +x "$executable"
-        prepare_component "reset" "yuzu"
-        set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
-      fi
-      
-      cd -
-      log i "$message"
-      rm -rf "$tmp_folder"
-    fi
-  done
-  rm -rf "$rd_home_path/ponzu"
-}
-
+# Don't remove this function as itś used in post update of 0.10.b to remove ponzu itself
 ponzu_remove() {
 
   # Call me with yuzu or citra and I will remove them
@@ -1291,7 +1213,6 @@ quit_retrodeck() {
 start_retrodeck() {
   get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
-  ponzu
 
   log d "Checking if PortMaster should be shown"
   if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "false" ]]; then
