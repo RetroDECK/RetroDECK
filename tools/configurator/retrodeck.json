@@ -38,14 +38,12 @@
 		"ppsspp": false
 	},
 	"options": {
-		"akai_ponzu": false,
 		"ask_default_user": true,
 		"branch": "",
 		"cloud_saves": false,
 		"default_user": "",
 		"desktop_mode_warning": true,
 		"developer_options": false,
-		"kiroi_ponzu": false,
 		"low_space_warning": true,
 		"multi_user_mode": false,
 		"power_user_warning": true,

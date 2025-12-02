@@ -110,8 +110,6 @@ convert_cfg_to_json() {
 
   declare -a EXCLUDE_KEYS=(
     "abxy_button_swap.citra"
-    "options.kiroi_ponzu"
-    "options.akai_ponzu"
     "ask_to_exit.citra"
   )
 
