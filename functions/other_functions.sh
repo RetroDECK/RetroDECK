@@ -1836,6 +1836,13 @@ handle_folder_iconsets() {
 install_retrodeck_controller_profile_and_add_to_steam() {
   install_retrodeck_controller_profile
   add_retrodeck_to_steam
+  
+  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Enable Steam Sync 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
+    --text="Would you like to enable automatic Steam Sync of your Favorites in ES-DE?"
+
+  if [[ $? == 0 ]]
+    configurator_enable_steam_sync
+  fi
 }
 
 finit_default_yes() {
