@@ -1345,7 +1345,7 @@ check_if_updated() {
         set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
         set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="☢️ Delete Everything & Fresh Install ☢️" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade 🟢" --extra-button="Don't Upgrade 🟥" --extra-button="Delete Everything & Fresh Install ☢️" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Cooker Upgrade" \
         --text="You are upgrading a cooker build of RetroDECK.\n\n Press the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything & Fresh Install</b></span> ☢️ button deletes all data (including ROMs, BIOS, Saves and everything else stored in /retrodeck). Do not press it unless you know what you are doing!")
@@ -1354,7 +1354,7 @@ check_if_updated() {
           if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
             log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
             set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-          elif [[ "$choice" == "☢️ Delete Everything & Fresh Install ☢️" ]]; then # Remove all RetroDECK data and start a fresh install
+          elif [[ "$choice" == "Delete Everything & Fresh Install ☢️" ]]; then # Remove all RetroDECK data and start a fresh install
             if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This will delete ALL RetroDECK data: BIOS files, borders, media, gamelists, mods, ROMs, saves, states, screenshots, texture packs, themes and more. Are you sure you want to continue? Remember what happened last time!") == "true" ]]; then
               if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
                 if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY deleted. Like what happend to Rowan Skye, because he can not read.\n\nAre you still sure you want to proceed?!") == "true" ]]; then

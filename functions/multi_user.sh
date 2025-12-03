@@ -25,7 +25,7 @@ done < <(ls -1 "$multi_user_data_folder")
 
 chosen_user=$(rd_zenity \
   --list --width=1200 --height=720 \
-  --ok-label="Select User" \
+  --ok-label="Select User 🔻" \
   --text="Choose the current user:" \
   --column "Steam Username" --print-column=1 \
   "${full_userlist[@]}")

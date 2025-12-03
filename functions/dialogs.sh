@@ -18,7 +18,7 @@ configurator_process_complete_dialog() {
   # This dialog shows when a process is complete.
   # USAGE: configurator_process_complete_dialog "process text"
   log i "Process complete dialog for: $1" # showing the process in the logs
-  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit🚪" --extra-button="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Process Complete" \
   --text="The process of $1 is now complete.\n\nYou may need to restart RetroDECK for the changes to take effect.\n\nClick OK to return to the Main Menu or Quit to exit RetroDECK."
@@ -61,11 +61,11 @@ configurator_destination_choice_dialog() {
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
   if [[ $(check_is_steam_deck) == "true" ]]; then
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit🚪" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   else
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit🚪" --extra-button="Home Directory" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   fi
@@ -187,7 +187,7 @@ configurator_change_preset_dialog() {
   choice=$(rd_zenity \
     --list --width=1200 --height=720 \
     --hide-column=5 --print-column=5 \
-    --ok-label="Select" --extra-button="Disable All" --extra-button="Enable All" \
+    --ok-label="Select 🟡" --extra-button="Disable All 🟥" --extra-button="Enable All 🟢" \
     --text="Enable $pretty_preset_name:" \
     --column "Status" \
     --column "Emulator" \
@@ -413,7 +413,7 @@ desktop_mode_warning() {
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
     local message='You appear to be running RetroDECK in the SteamOS <span foreground='$purple'>Desktop Mode</span>\n\nSome functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'>Desktop Mode</span>.\n\nRetroDECK is best enjoyed in <span foreground='$purple'>Game mode</span> on SteamOS.\n\nDo you still want to proceed?'
     log i "Showing message:\n$message"
-    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Desktop Mode Warning" \
     --text="$message")
@@ -422,7 +422,7 @@ desktop_mode_warning() {
       if [[ $choice == "No" ]]; then
         log i "Selected: \"No\""
         exit 1
-      elif [[ $choice == "Never show this again" ]]; then
+      elif [[ $choice == "Never show again 🛑" ]]; then
         log i "Selected: \"Never show this again\""
         set_setting_value "$rd_conf" "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
@@ -441,11 +441,11 @@ low_space_warning() {
     if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
       local message='Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.'
       log i "Showing message:\n$message"
-      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Never show again 🛑" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Low Space Warning" \
       --text="$message")
-      if [[ $choice == "Never show this again" ]]; then
+      if [[ $choice == "Never show again 🛑" ]]; then
         log i "Selected: \"Never show this again\""
         set_setting_value "$rd_conf" "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
@@ -456,7 +456,7 @@ low_space_warning() {
 
 configurator_power_user_warning_dialog() {
   if [[ $power_user_warning == "true" ]]; then
-    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Power User Warning" \
     --text="Making manual changes to a components, systems or emulators configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
@@ -467,7 +467,7 @@ configurator_power_user_warning_dialog() {
   else # If any button other than "Yes" was clicked
     if [[ $choice == "No" ]]; then
       configurator_welcome_dialog
-    elif [[ $choice == "Never show this again" ]]; then
+    elif [[ $choice == "Never show again 🛑" ]]; then
       set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
       configurator_open_component_dialog
     fi
@@ -709,7 +709,7 @@ configurator_compress_multiple_games_dialog() {
 
     local choice=$(rd_zenity \
       --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
-      --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+      --checklist --hide-column=3 --ok-label="Compress Selected 🟡" --extra-button="Compress All 🟢" \
       --separator="^" --print-column=2,3 \
       --text="Choose which games to compress:" \
       --column "Compress?" \
@@ -786,7 +786,7 @@ configurator_compression_cleanup_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No 🟥" --ok-label="Yes 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-  --text="Do you want to remove old files after they are compressed?\n\nClicking \"No\" will leave all files behind which will need to be cleaned up manually and may result in game duplicates showing in the RetroDECK library.\n\nPlease make sure you have a backup of your ROMs before using automatic cleanup."
+  --text="Would you like to delete the original files after they are compressed?\n\n\If you select <span foreground='$purple'><b>No</b></span>, the original files will remain.You will need to remove them manually, and this may cause <span foreground='$purple'><b>duplicate games</b></span> to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a <span foreground='$purple'><b>backup of your Files</b></span>."
   local rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
     echo "true"
@@ -878,7 +878,7 @@ configurator_change_rd_logging_level_dialog() {
 configurator_retrodeck_backup_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>\n\n"
 
-  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
+  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="Cancel 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup  🟡" --extra-button="Complete Backup 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
 
   case $choice in
@@ -932,7 +932,7 @@ configurator_clean_empty_systems_dialog() {
 
   choice=$(rd_zenity \
       --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty System Folders" \
-      --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
+      --checklist --hide-column=3 --ok-label="Remove Selected 🟡" --extra-button="Remove All 🟢" \
       --separator="^" --print-column=2 \
       --text="Choose which empty ROM folders to remove:" \
       --column "Remove?" \
