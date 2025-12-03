@@ -1189,7 +1189,7 @@ configurator_iconset_toggle_dialog() {
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
     --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
-
+    
     if [ $? == 0 ] # User clicked "Yes"
     then
       (
