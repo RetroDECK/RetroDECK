@@ -283,7 +283,7 @@ configurator_reset_dialog() {
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
-      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
+      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground="$purple"><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       prepare_component "factory-reset"
       configurator_process_complete_dialog "performing a factory reset"
@@ -294,7 +294,7 @@ configurator_reset_dialog() {
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
-      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
+      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground="$purple"><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
         prepare_component "reset" "all"
@@ -302,7 +302,7 @@ configurator_reset_dialog() {
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting all components\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+      --text="Resetting all components\n\n⏳<span foreground="$purple"><b>Please wait while the process finishes...</b></span>⏳"
       configurator_process_complete_dialog "resetting all components"
     else # User clicked "Cancel"
       configurator_welcome_dialog
@@ -327,7 +327,7 @@ configurator_reset_dialog() {
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting selected components.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+      --text="Resetting selected components.\n\n⏳<span foreground="$purple"><b>Please wait while the process finishes...</b></span>⏳"
     else # User clicked "Cancel"
       configurator_reset_dialog
     fi
