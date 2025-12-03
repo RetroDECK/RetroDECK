@@ -116,17 +116,17 @@ configurator_move_folder_dialog() {
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
       else
-        configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder you would like to store the $(basename "$dir_to_move") folder in."
+        configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Select the parent folder where you would like to store the $(basename "$dir_to_move") folder."
         local dest_root=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
       fi
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
         if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rd_home_path") ]] || [[ "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
-          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder is already at that location, please pick a new one."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder is already at that location. Please select a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $dest_root/retrodeck/$(basename "$dir_to_move")"
+            configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Moving <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder to <span foreground="$purple"><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span>)"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -139,9 +139,9 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $dest_root/retrodeck/$(basename "$dir_to_move") was successful."
+              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>Moving $(basename "$dir_to_move")</b></span> folder to <span foreground="$purple"><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span> was successful."
             else
-              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
+              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>The moving process was not completed.</b></span> Please try again."
             fi
           else # If there isn't enough space in the picked destination
             rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -152,21 +152,21 @@ configurator_move_folder_dialog() {
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
         if [[ ! -z "$dest_root" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No destination was chosen, so no files have been moved."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>No destination was chosen</b></span>, so no files have been moved."
         else
-          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen if RetroDECK does not have permission to write to the selected location.\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>The chosen destination is not writable.</b></span>\nNo files have been moved.\n\nThis can happen if RetroDECK does not have permission to write to the selected location.\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
         fi
       fi
     ;;
 
     esac
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
-    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location")
     declare -g "$rd_dir_name=$dir_to_move"
     prepare_component "postmove" "all"
     conf_write
-    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename "$dir_to_move") folder now configured at\n$dir_to_move."
+    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "RetroDECK <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground="$purple"><b>$dir_to_move</b></span>."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 
@@ -501,7 +501,7 @@ configurator_portmaster_toggle_dialog() {
       portmaster_show "true"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
       --text="PortMaster is now <span foreground='$purple'><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
     fi
   fi
