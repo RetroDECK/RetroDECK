@@ -415,7 +415,7 @@ desktop_mode_warning() {
     log i "Showing message:\n$message"
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK - 🛑 Warning 🛑 - Desktop Mode" \
+    --title "RetroDECK - 🛑 Warning: Desktop Mode 🛑" \
     --text="$message")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
@@ -443,7 +443,7 @@ low_space_warning() {
       log i "Showing message:\n$message"
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Never show again 🛑" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK - 🛑 Warning 🛑 - Low Space" \
+      --title "RetroDECK - 🛑 Warning: Low Space 🛑" \
       --text="$message")
       if [[ $choice == "Never show again 🛑" ]]; then
         log i "Selected: \"Never show this again\""
@@ -458,7 +458,7 @@ configurator_power_user_warning_dialog() {
   if [[ $power_user_warning == "true" ]]; then
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK - 🛑 Warning 🛑 - Power User" \
+    --title "RetroDECK - 🛑 Warning: Power User 🛑" \
     --text="Making manual changes to a components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\n\The RetroDECK team do encourage tinkering. But if anything goes wrong, you need to use the built-in reset tools inside the RetroDECK Configurator.\n\n\<span foreground='$purple'><b>Please continue only if you know what you're doing.</b></span>\n\n\Component types:\n\<span foreground='$purple'><b>• Clients</b></span>\n\<span foreground='$purple'><b>• Emulators</b></span>\n\<span foreground='$purple'><b>• Engines</b></span>\n\<span foreground='$purple'><b>• Ports</b></span>\n\<span foreground='$purple'><b>• Systems</b></span>\n\n\\n\n\Do you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
