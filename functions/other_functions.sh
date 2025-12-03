@@ -1840,7 +1840,7 @@ install_retrodeck_controller_profile_and_add_to_steam() {
   rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Steam Syncronization 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
     --text="Enable Steam synchronization?\n\nThis will scan your games for any 🌟 <span foreground=\"$purple\"><b>Favorited</b></span> 🌟 games in ES-DE and add them to your Steam library as individual entries.\n\nYou will need to restart Steam for the changes to take effect."
 
-  if [[ $? == 0 ]]
+  if [[ $? == 0 ]]; then
     configurator_enable_steam_sync
   fi
 }
