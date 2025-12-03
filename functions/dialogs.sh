@@ -61,11 +61,11 @@ configurator_destination_choice_dialog() {
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
   if [[ $(check_is_steam_deck) == "true" ]]; then
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Internal Storage 🏠" --extra-button="SD Card 💾" --extra-button="Custom Location 🟡" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   else
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Home Directory" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Home Directory 🏠" --extra-button="Custom Location 🟡" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   fi
@@ -110,10 +110,10 @@ configurator_move_folder_dialog() {
     choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename "$dir_to_move") folder.")
     case $choice in
 
-    "Internal Storage" | "Home Directory" | "SD Card" | "Custom Location" ) # If the user picks a location
-      if [[ "$choice" == "Internal Storage" || "$choice" == "Home Directory" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
+    "Internal Storage 🏠" | "Home Directory 🏠" | "SD Card 💾" | "Custom Location 🟡" ) # If the user picks a location
+      if [[ "$choice" == "Internal Storage 🏠" || "$choice" == "Home Directory 🏠" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
         local dest_root="$HOME"
-      elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
+      elif [[ "$choice" == "SD Card 💾" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
       else
         configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Select the parent folder where you would like to store the $(basename "$dir_to_move") folder."
@@ -1231,7 +1231,7 @@ finit_install_controller_profile_dialog() {
   get_steam_user
   if [[ -n "$steam_id" ]]; then
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Add to Steam 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
-    --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\<span foreground='$purple'><b>Needed for optimal controller support via Steam Input.</b></span>"
+    --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\Needed for <span foreground='$purple'><b>optimal controller support</b></span>via Steam Input."
   else
     return 1
   fi

@@ -689,7 +689,7 @@ finit() {
     exit 2
   ;;
 
-  "Internal Storage" | "Home Directory" ) # Internal
+  "Internal Storage 🏠" | "Home Directory 🏠" ) # Internal
     log i "Internal selected"
     rd_home_path="$HOME/retrodeck"
     if [[ -L "$rd_home_path" ]]; then #Remove old symlink from existing install, if it exists
@@ -697,7 +697,7 @@ finit() {
     fi
   ;;
 
-  "SD Card" )
+  "SD Card 💾" )
     log i "SD Card selected"
     external_devices=()
 
@@ -821,8 +821,9 @@ finit() {
   # Inform the user where to put the ROMs and BIOS files
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Initial Setup - Complete" \
-    --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nCheck out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nFor detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
+    --ok-label="Start RetroDECK 🎮" \
+    --title "RetroDECK Initial Setup - Complete ✅" \
+    --text="RetroDECK initial setup is complete! ✅\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nCheck out the <span foreground='$purple'><b>RetroDECK Wiki and Website:</b></span>\n\nFor detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
 }
 
 install_retrodeck_starterpack() {
