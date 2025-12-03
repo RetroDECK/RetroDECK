@@ -61,11 +61,11 @@ configurator_destination_choice_dialog() {
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
   if [[ $(check_is_steam_deck) == "true" ]]; then
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit🚪" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   else
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 folder" --info --no-wrap --ok-label="Quit🚪" --extra-button="Home Directory" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit🚪" --extra-button="Home Directory" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   fi
@@ -411,11 +411,11 @@ desktop_mode_warning() {
   # USAGE: desktop_mode_warning
 
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
-    local message='You appear to be running RetroDECK in the SteamOS <span foreground='$purple'>Desktop Mode</span>\n\nSome functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'>Desktop Mode</span>.\n\nRetroDECK is best enjoyed in <span foreground='$purple'>Game mode</span> on SteamOS.\n\nDo you still want to proceed?'
+    local message='You appear to be running RetroDECK in the SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\Some functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\RetroDECK is best enjoyed in <span foreground='$purple'><b>Game Mode</b></span> on SteamOS.\n\n\Do you still want to proceed?'
     log i "Showing message:\n$message"
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Desktop Mode Warning" \
+    --title "RetroDECK - 🛑 Warning 🛑 Desktop Mode " \
     --text="$message")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
@@ -443,7 +443,7 @@ low_space_warning() {
       log i "Showing message:\n$message"
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Never show again 🛑" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Low Space Warning" \
+      --title "RetroDECK - 🛑 Warning 🛑 Low Space" \
       --text="$message")
       if [[ $choice == "Never show again 🛑" ]]; then
         log i "Selected: \"Never show this again\""
@@ -458,8 +458,8 @@ configurator_power_user_warning_dialog() {
   if [[ $power_user_warning == "true" ]]; then
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Power User Warning" \
-    --text="Making manual changes to a components, systems or emulators configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+    --title "RetroDECK - 🛑 Warning 🛑 Power User" \
+    --text="Making manual changes to a components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\n\The RetroDECK team encourages tinkering. If anything goes wrong, you can use the built-in reset tools inside the RetroDECK Configurator.\n\n\<span foreground='$purple'><b>Please continue only if you know what you're doing.</b></span>\n\n\Component types:\n\<span foreground='$purple'><b>• Clients</b></span>\n\<span foreground='$purple'><b>• Emulators</b></span>\n\<span foreground='$purple'><b>• Engines</b></span>\n\<span foreground='$purple'><b>• Ports</b></span>\n\<span foreground='$purple'><b>• Systems</b></span>\n\n\\n\n\Do you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
@@ -479,7 +479,7 @@ configurator_portmaster_toggle_dialog() {
   if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --title "RetroDECK Configurator - PortMaster Visibility 🛶" \
     --text="PortMaster is currently <span foreground='$purple'><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground='$purple'><b>Note: The installed games will still be visible.</b></span>"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -487,13 +487,13 @@ configurator_portmaster_toggle_dialog() {
       portmaster_show "false"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --title "RetroDECK Configurator - PortMaster Visibility 🛶" \
       --text="PortMaster is now <span foreground='$purple'><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --title "RetroDECK Configurator - PortMaster Visibility 🛶" \
     --text="PortMaster is currently <span foreground='$purple'><b>Hidden</b></span> in ES-DE. Do you want to show it?"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -570,7 +570,7 @@ configurator_bios_checker_dialog() {
 
     log d "Finished checking BIOS files"
 
-    rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker" \
+    rd_zenity --list --title="RetroDECK Configurator - BIOS Checker" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --column "BIOS File Name" \
       --column "Systems" \
@@ -585,8 +585,8 @@ configurator_bios_checker_dialog() {
   ) |
   rd_zenity --progress --auto-close --no-cancel \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - BIOS Checker - Scanning" \
-    --text="The BIOS Checker is scanning for BIOS & Firmware files that RetroDECK recognizes as supported by each system.\n\nPlease note that not all BIOS & Firmware files are necessary for games to work.\n\nBIOS files not recognized by this tool may still function correctly.\n\nSome emulators have additional built-in methods to verify the functionality of BIOS & Firmware files.\n\n<span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span>\n\n" \
+    --title "RetroDECK Configurator - BIOS Checker: 🔎 Scanning 🔎" \
+    --text="The BIOS Checker is scanning for <span foreground='$purple'><b>BIOS and Firmware</b></span> files that RetroDECK recognizes as supported by each system.\n\n\Please note that not all BIOS & Firmware files are necessary for games to work.\n\n\BIOS files not recognized by this tool may still function correctly.\n\n\Some components have additional built-in methods to verify the functionality of BIOS and Firmware files.\n\n\⏳ <span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span> ⏳" \
     --width=400 --height=100
 
   configurator_tools_dialog
@@ -595,7 +595,7 @@ configurator_bios_checker_dialog() {
 configurator_compression_tool_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Compression Tool" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🗜️ Compression Tool 🗜️" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Compress Single Game" "Compress a single game into a compatible format." \
@@ -665,12 +665,12 @@ configurator_compress_single_game_dialog() {
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --width="800" \
-      --title "RetroDECK Configurator Utility - Compression in Progress"
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The compression process is complete."
+      --title "RetroDECK Configurator - ⏳ Compression in Progress ⏳"
+      configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete."
       configurator_compression_tool_dialog
 
     else
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The selected file does not have any compatible compression formats."
+      configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The selected file does not have any compatible compression formats."
       configurator_compression_tool_dialog
     fi
   else
@@ -688,7 +688,7 @@ configurator_compress_multiple_games_dialog() {
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compressible games, please wait..."
+  --title "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" --text "RetroDECK is searching for compressible games, please wait..."
 
   if [[ -n "$(cat "$compressible_games_list_file")" ]]; then
     log d "Found the following games to compress: ${all_compressible_games[*]}"
@@ -708,7 +708,7 @@ configurator_compress_multiple_games_dialog() {
     done < <(cat "$compressible_games_list_file")
 
     local choice=$(rd_zenity \
-      --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
+      --list --width=1200 --height=720 --title "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" \
       --checklist --hide-column=3 --ok-label="Compress Selected 🟡" --extra-button="Compress All 🟢" \
       --separator="^" --print-column=2,3 \
       --text="Choose which games to compress:" \
@@ -777,7 +777,7 @@ configurator_compress_multiple_games_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator Utility - Compression in Progress"
+    --title "RetroDECK Configurator - ⏳ Compression in Progress ⏳"
 
   configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
 }
@@ -785,8 +785,8 @@ configurator_compress_multiple_games_dialog() {
 configurator_compression_cleanup_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No 🟥" --ok-label="Yes 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-  --text="Would you like to delete the original files after they are compressed?\n\n\If you select <span foreground='$purple'><b>No</b></span>, the original files will remain.You will need to remove them manually, and this may cause <span foreground='$purple'><b>duplicate games</b></span> to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a <span foreground='$purple'><b>backup of your Files</b></span>."
+  --title "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" \
+  --text="Would you like to delete the original files after they are compressed?\n\n\If you select <span foreground='$purple'><b>No</b></span>, the original files will remain. You will need to remove them manually, and this may cause <span foreground='$purple'><b>duplicate games</b></span> to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a <span foreground='$purple'><b>backup of your files</b></span>."
   local rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
     echo "true"
@@ -829,7 +829,7 @@ configurator_repair_paths_dialog() {
 }
 
 configurator_change_rd_logging_level_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Change Logging Level" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Level 1: Informational" "The default setting, logs only basic important information." \
@@ -931,7 +931,7 @@ configurator_clean_empty_systems_dialog() {
   find_empty_rom_folders
 
   choice=$(rd_zenity \
-      --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty System Folders" \
+      --list --width=1200 --height=720 --title "RetroDECK Configurator - Clean Empty System Folders" \
       --checklist --hide-column=3 --ok-label="Remove Selected 🟡" --extra-button="Remove All 🟢" \
       --separator="^" --print-column=2 \
       --text="Choose which empty ROM folders to remove:" \
@@ -972,7 +972,7 @@ configurator_version_history_dialog() {
     all_versions_list=("${all_versions_list[@]}" "RetroDECK $rd_version Changelog" "View the changes specific to version $rd_version")
   done
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK Version History" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - RetroDECK Version History" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Full RetroDECK Changelog" "View the list of all changes that have ever been made to RetroDECK" \
@@ -1139,7 +1139,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back 🔙" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -1156,7 +1156,7 @@ configurator_usb_import_dialog() {
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - USB Import In Progress"
+            --title "RetroDECK Configurator - USB Import In Progress"
             configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
           fi
         else
