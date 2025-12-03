@@ -72,8 +72,8 @@ run_game() {
     if [[ -z "$game" || ! -e "$game" ]]; then
         rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK - File not found" \
-            --text="ERROR! File: <span foreground='$purple'><b>\"$game\"</b></span> not found.\n\nMake sure RetroDECKs Flatpak has permission to access the specified path.\n\nf needed, add the path in Flatseal or terminal and try again."
+            --title "RetroDECK - 🛑 Warning! 🛑 File not found" \
+            --text="🛑 Warning! 🛑 File: <span foreground='$purple'><b>\"$game\"</b></span> not found.\n\nMake sure RetroDECKs Flatpak has permission to access the specified path.\n\nf needed, add the path in Flatseal or terminal and try again."
         log e "File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
         exit 1
     fi
@@ -198,7 +198,7 @@ find_system_commands() {
     else
         # Show the list with Zenity and return the **command** (second column) selected
         selected_command=$(rd_zenity --list \
-            --title="Select an emulator for $system_name" \
+            --title="Select an component for $system_name" \
             --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
             --width=800 --height=400 --print-column=2 --hide-column=2)
     fi

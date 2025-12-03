@@ -265,7 +265,7 @@ configurator_reset_dialog() {
   build_zenity_reset_component_menu_array reset_component_list
 
   choice=$(rd_zenity --list \
-  --title "RetroDECK Configurator - Reset Components" --cancel-label="Cancel 🟥" \
+  --title "RetroDECK Configurator - ↩️ Reset Components ↩️" --cancel-label="Cancel 🟥" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --checklist --ok-label="Reset Selected 🟡" --extra-button="Reset All 🟩" --extra-button="Factory Reset ☢️" \
   --print-column=2 --hide-column=2 \
@@ -301,7 +301,7 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Reset in Progress" \
+      --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
       --text="Resetting all components\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
       configurator_process_complete_dialog "resetting all components"
     else # User clicked "Cancel"
@@ -316,7 +316,7 @@ configurator_reset_dialog() {
     done
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Reset Components" \
+      --title "RetroDECK Configurator - ↩️ Reset Components ↩️" \
       --text="You selected the following components to be reset:\n\n$(printf '%s\n' ${pretty_choices[@]})\n\nDo you want to continue?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
@@ -326,7 +326,7 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Reset in Progress" \
+      --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
       --text="Resetting selected components.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
     else # User clicked "Cancel"
       configurator_reset_dialog
@@ -342,7 +342,7 @@ configurator_reset_dialog() {
 configurator_about_retrodeck_dialog() {
   build_zenity_menu_array choices about_retrodeck # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - About RetroDECK" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧾 About RetroDECK 🧾" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -361,7 +361,7 @@ configurator_about_retrodeck_dialog() {
 configurator_steam_tools_dialog() {
   build_zenity_menu_array choices steam_tools # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Steam Tools" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🚂 Steam Tools 🚂" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -380,7 +380,7 @@ configurator_steam_tools_dialog() {
 configurator_developer_dialog() {
   build_zenity_menu_array choices developer_options # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Developer Options" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")

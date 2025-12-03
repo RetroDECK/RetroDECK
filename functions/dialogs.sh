@@ -799,8 +799,8 @@ configurator_update_notify_dialog() {
   if [[ $(get_setting_value "$rd_conf" "update_check" retrodeck "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+    --title "RetroDECK Configurator - Online Update Check ✅" \
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Disabled</b></span>.\n\nDo you want to disable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -811,8 +811,8 @@ configurator_update_notify_dialog() {
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+    --title "RetroDECK Configurator - Online Update Check ✅" \
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Enabled</b></span>.\n\nDo you want to disable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -829,7 +829,7 @@ configurator_repair_paths_dialog() {
 }
 
 configurator_change_rd_logging_level_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Change Logging Level" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Change Logging Level 📒" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Level 1: Informational" "The default setting, logs only basic important information." \
@@ -878,7 +878,7 @@ configurator_change_rd_logging_level_dialog() {
 configurator_retrodeck_backup_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>"
 
-  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup 🟡" --extra-button="Complete Backup 🟢" \
+  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata 🗄️" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup 🟡" --extra-button="Complete Backup 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n\")
 
   case $choice in
@@ -931,7 +931,7 @@ configurator_clean_empty_systems_dialog() {
   find_empty_rom_folders
 
   choice=$(rd_zenity \
-      --list --width=1200 --height=720 --title "RetroDECK Configurator - Clean Empty System Folders" \
+      --list --width=1200 --height=720 --title "RetroDECK Configurator - Clean Empty System Folders 📁" \
       --checklist --hide-column=3 --ok-label="Remove Selected 🟡" --extra-button="Remove All 🟢" \
       --separator="^" --print-column=2 \
       --text="Choose which empty ROM folders to remove:" \
@@ -972,7 +972,7 @@ configurator_version_history_dialog() {
     all_versions_list=("${all_versions_list[@]}" "RetroDECK $rd_version Changelog" "View the changes specific to version $rd_version")
   done
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - RetroDECK Version History" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Version History 📖" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Full RetroDECK Changelog" "View the list of all changes that have ever been made to RetroDECK" \
@@ -999,7 +999,7 @@ configurator_version_history_dialog() {
 configurator_retrodeck_credits_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Credits" \
+  --title "RetroDECK Configurator - 🏆 RetroDECK Team Credits 🏆" \
   --filename="$rd_core_files/reference_lists/retrodeck_credits.txt"
   configurator_about_retrodeck_dialog
 }
@@ -1048,8 +1048,8 @@ configurator_online_update_channel_dialog() {
   if [[ $(get_setting_value "$rd_conf" "update_repo" retrodeck "options") == "RetroDECK" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
-    --text="You are currently on the stable branch of RetroDECK updates. Would you like to switch to the cooker branch?\n\nAfter installing a cooker build, you may need to remove the \"stable\" branch install of RetroDECK to avoid overlap."
+    --title "RetroDECK Configurator - Change Update Branch" \
+    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> 🍲 branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1063,7 +1063,7 @@ configurator_online_update_channel_dialog() {
 }
 
 configurator_usb_import_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Developer Options 🧑‍💻" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Prepare USB device" "Create ROM and BIOS folders on a selected USB device" \
@@ -1083,7 +1083,7 @@ configurator_usb_import_dialog() {
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
       configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may show up in this list but may not be suitable for USB import.\n\nPlease select your desired drive carefully."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back 🔙" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -1139,7 +1139,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back 🔙" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -1166,7 +1166,7 @@ configurator_usb_import_dialog() {
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Utility - USB Import In Progress"
+          --title "RetroDECK Configurator - ⏳ USB Import In Progress ⏳"
           configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
         fi
       fi
@@ -1187,7 +1187,7 @@ configurator_iconset_toggle_dialog() {
   if [[ ! $(get_setting_value "$rd_conf" "folder_iconset" "retrodeck" "options") == "false" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
+    --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets 🎨" \
     --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
     
     if [ $? == 0 ] # User clicked "Yes"
@@ -1200,13 +1200,13 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator Utility - Toggle RetroDECK Folder Iconsets In Progress"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
+      --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets 🎨" \
       --text="RetroDECK folder icons are now <span foreground='$purple'><b>Disabled</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
+    --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets 🎨" \
     --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -1219,7 +1219,7 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator Utility - Toggle RetroDECK Folder Iconsets In Progress"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
+      --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets 🎨" \
       --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
     fi
   fi
@@ -1230,7 +1230,7 @@ configurator_iconset_toggle_dialog() {
 finit_install_controller_profile_dialog() {
   get_steam_user
   if [[ -n "$steam_id" ]]; then
-    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
+    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Add to Steam 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
     --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\<span foreground='$purple'><b>Needed for optimal controller support via Steam Input.</b></span>"
   else
     return 1
