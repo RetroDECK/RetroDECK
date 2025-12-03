@@ -113,23 +113,16 @@ if [[ $sd_native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
 
+set -o allexport # Export all the variables found during sourcing, for use elsewhere
+source /app/libexec/all_vars.sh
+set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+
 for file in /app/libexec/*.sh; do
-  if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" ]]; then
+  if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" && ! "$file" == "/app/libexec/all_vars.sh" ]]; then
     log d "Sourcing $file"
     source "$file"
   fi
 done
-
-# Base dir for all installed RetroDECK components
-export rd_components="/app/retrodeck/components"
-export rd_shared_libs="/app/retrodeck/components/shared-libs"
-export rd_shared_libs_kde_path="/app/retrodeck/components/shared-libs/org.kde.Platform"
-export rd_shared_libs_gnome_path="/app/retrodeck/components/shared-libs/org.gnome.Platform"
-export rd_shared_libs_freedesktop_path="/app/retrodeck/components/shared-libs/org.freedesktop.Platform" 
-export runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/retrodeck"
-export DEFAULT_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-
-source_component_functions "framework" # Source this first as future functions will need to know these paths
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_xdg_config_logs_path" ]; then
@@ -210,6 +203,7 @@ else # If the config file is existing i just read the variables
     set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
     set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
   fi
 
   conf_read

@@ -11,7 +11,7 @@ directory_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="Directory <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -20,7 +20,7 @@ directory_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="No directory selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -41,7 +41,7 @@ file_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1")"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="File <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -50,7 +50,7 @@ file_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
       --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -649,7 +649,7 @@ finit_browse() {
           echo "$target"
           break
         else
-          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" --text="Do you want to quit?"
           if [ $? == 0 ] # yes, quit
           then
             quit_retrodeck
@@ -709,7 +709,7 @@ finit() {
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
       configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -793,7 +793,7 @@ finit() {
            })
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
   --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⌛<span foreground='$purple'><b>This may take up to a minute or two</b></span>⌛\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
@@ -1411,13 +1411,6 @@ source_component_functions() {
   if [[ -n "$choice" ]]; then
     case "$choice" in
 
-    "framework" )
-      set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      log d "Sourcing $rd_components/framework/component_functions.sh"
-      source "$rd_components/framework/component_functions.sh"
-      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-    ;;
-
     "internal" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
       source "$rd_components/es-de/component_functions.sh"
@@ -1779,4 +1772,73 @@ launch_command() {
 
   # Call the function with any remaining arguments
   "$function_name" "$@"
+}
+
+portmaster_show(){
+  log d "Setting PortMaster visibility in ES-DE"
+  if [ "$1" = "true" ]; then
+    log d "\"$roms_path/portmaster/PortMaster.sh\" is not found, installing it"
+    install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+    set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
+  elif [ "$1" = "false" ]; then
+    rm -rf "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
+    set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
+  else
+    log e "\"$1\" is not a valid choice, quitting"
+  fi
+}
+
+handle_folder_iconsets() {
+  local iconset="$1"
+
+  if [[ ! "$iconset" == "false" ]]; then
+    if [[ -d "$folder_iconsets_dir/$iconset" ]]; then
+      while read -r icon; do
+        local icon_relative_path="${icon#$folder_iconsets_dir/$iconset/}"
+        local icon_relative_path="${icon_relative_path%.ico}"
+        local icon_relative_root="${icon_relative_path%%/*}"
+        local path_var_name="${icon_relative_root}_path"
+        local path_name=""
+
+        if [[ -v "$path_var_name" ]]; then
+          path_name="${!path_var_name}"
+          if [[ ! "$icon_relative_path" == "$icon_relative_root" ]]; then
+            path_name="$path_name/${icon_relative_path#$icon_relative_root/}"
+          fi
+          if [[ ! -d "$path_name" ]]; then
+            log w "Path for icon $icon could not be found, skipping..."
+            continue
+          fi
+        elif [[ -d "$rd_home_path/$icon_relative_path" ]]; then
+          path_name="$rd_home_path/$icon_relative_path"
+        else
+          log w "Path for icon $icon could not be found, skipping..."
+          continue
+        fi
+
+        log d "Creating file $path_name/.directory"
+        echo '[Desktop Entry]' > "$path_name/.directory"
+        echo "Icon=$folder_iconsets_dir/$iconset/$icon_relative_path.ico" >> "$path_name/.directory"
+      done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
+      set_setting_value "$rd_conf" "folder_iconset" "$iconset" retrodeck "options"
+    else
+      configurator_generic_dialog "RetroDeck Configurator - Toggle RetroDECK Folder Icons" "The chosen iconset could not be found in the RetroDECK assets."
+      return 1
+    fi
+  else
+    while read -r path; do
+      find -L "$path" -maxdepth 2 -type f -iname '.directory' -exec rm {} \;
+    done < <(jq -r 'del(.paths.downloaded_media_path, .paths.themes_path, .paths.sdcard) | .paths[]' "$rd_conf")
+    set_setting_value "$rd_conf" "folder_iconset" "false" retrodeck "options"
+  fi
+}
+
+install_retrodeck_controller_profile_and_add_to_steam() {
+  install_retrodeck_controller_profile
+  add_retrodeck_to_steam
+}
+
+finit_default_yes() {
+  log i "Defaulting setting "$@" enabled."
+  return 0
 }
