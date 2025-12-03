@@ -636,13 +636,13 @@ finit_browse() {
   path_selected=false
   while [ $path_selected == false ]
   do
-    local target="$(rd_zenity --file-selection --title="RetroDECK - Main data directory location" --directory)"
+    local target="$(rd_zenity --file-selection --title="RetroDECK - 📂 retrodeck 📂 location" --directory)"
     if [[ ! -z "$target" ]]; then
       if [[ -w "$target" ]]; then
         rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
         --ok-label "Yes" \
-        --text="Your RetroDECK data folder will be:\n\n<span foreground='$purple'><b>$target/retrodeck</b></span>\n\nIs this correct?"
+        --text="Your RetroDECK main data folder location will be:\n\n<span foreground='$purple'><b>$target/retrodeck</b></span>\n\nIs this correct?"
         if [ $? == 0 ] #yes
         then
           path_selected=true
@@ -1151,7 +1151,7 @@ release_selector() {
     rd_zenity --list \
       --icon-name=net.retrodeck.retrodeck \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Cooker Releases: Select Release" \
+      --title "RetroDECK Configurator - 🍲 RetroDECK Cooker: Select Release 🍲" \
       --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
       --separator="|" --print-column='ALL' "${release_array[@]}"
   )
@@ -1271,7 +1271,7 @@ add_retrodeck_to_steam() {
   ) |
   rd_zenity --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Adding RetroDECK to Steam 🚂" \
+    --title "RetroDECK Configurator - ⏳ Adding RetroDECK to Steam ⏳" \
     --text="RetroDECK is being added to Steam.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
   rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\n\<span foreground='$purple'><b>Please restart Steam to see the changes.</b></span>"
 }
@@ -1347,7 +1347,7 @@ check_if_updated() {
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade 🟢" --extra-button="Don't Upgrade 🟥" --extra-button="Delete Everything & Fresh Install ☢️" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK - Cooker Upgrade" \
+        --title "RetroDECK - 🍲 RetroDECK Cooker: Upgrade 🍲" \
         --text="You are upgrading a cooker build of RetroDECK.\n\n Press the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything & Fresh Install</b></span> ☢️ button deletes all data (including ROMs, BIOS, Saves and everything else stored in /retrodeck). Do not press it unless you know what you are doing!")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked

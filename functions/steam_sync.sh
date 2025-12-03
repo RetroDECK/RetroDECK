@@ -119,7 +119,7 @@ steam_sync_add() {
     rd_srm add >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
-    --title="RetroDECK Configurator - Syncronizing with Steam" \
+    --title="RetroDECK Configurator - ⏳ Syncronizing with Steam ⏳" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="<span foreground='$purple'><b>Adding new favorited games to Steam</b></span>\n\n\<b>NOTE:</b> This may take a while depending on your library size.\n\Feel free to leave it running in the background and use another app." \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
@@ -138,7 +138,7 @@ steam_sync_remove() {
     rd_srm remove >> "$srm_log" 2>&1
     ) |
     rd_zenity --progress \
-    --title="RetroDECK Configurator - Syncronizing with Steam" \
+    --title="RetroDECK Configurator - ⏳ Syncronizing with Steam ⏳" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="<span foreground='$purple'><b>Removing unfavorited games from Steam</b></span>\n\n\<b>NOTE:</b> This may take a while depending on your library size.\n\Feel free to leave it running in the background and use another app." \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
