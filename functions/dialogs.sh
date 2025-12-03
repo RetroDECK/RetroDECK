@@ -1219,7 +1219,7 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator Utility - Toggle Folder Iconsets ⏳ In Progress ⏳"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets 🎨" \
+      --title "RetroDECK Configurator - 🎨 Toggle Folder Iconsets 🎨" \
       --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
     fi
   fi
