@@ -151,7 +151,7 @@ configurator_welcome_dialog() {
 
   "Developer Options" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" "<span foreground="$purple"><b>These features and options are potentially VERY DANGEROUS for your RetroDECK install!</b></span>\n\nThey represent the bleeding edge of upcoming RetroDECK functionality and should never be used while you have important saves, states, ROMs or other content that is not backed up\n\n<b>Affected data may include (but is not limited to):</b>\n<span foreground="$purple"><b>• BIOS files</b></span>\n<span foreground="$purple"><b>• Borders</b></span>\n<span foreground="$purple"><b>• Media</b></span>\n<span foreground="$purple"><b>• Gamelists</b></span>\n<span foreground="$purple"><b>• Mods</b></span>\n<span foreground="$purple"><b>• ROMs</b></span>\n<span foreground="$purple"><b>• Saves</b></span>\n<span foreground="$purple"><b>• States</b></span>\n<span foreground="$purple"><b>• Screenshots</b></span>\n<span foreground="$purple"><b>• Texture packs</b></span>\n<span foreground="$purple"><b>• Themes</b></span>\n<span foreground="$purple"><b>• And more</b></span>\n\n<span foreground="$purple"><b>ALL of this data could be lost or corrupted if you proceed.</b></span>\n\n<span foreground="$purple"><b>YOU HAVE BEEN WARNED!</b></span>"
+    configurator_generic_dialog "RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" "<span foreground='$purple'><b>These features and options are potentially VERY DANGEROUS for your RetroDECK install!</b></span>\n\nThey represent the bleeding edge of upcoming RetroDECK functionality and should never be used while you have important saves, states, ROMs or other content that is not backed up\n\n<b>Affected data may include (but is not limited to):</b>\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n<span foreground='$purple'><b>• And more</b></span>\n\n<span foreground='$purple'><b>ALL of this data could be lost or corrupted if you proceed.</b></span>\n\n<span foreground='$purple'><b>YOU HAVE BEEN WARNED!</b></span>"
     configurator_developer_dialog
   ;;
 
@@ -283,7 +283,7 @@ configurator_reset_dialog() {
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
-      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground="$purple"><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
+      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       prepare_component "factory-reset"
       configurator_process_complete_dialog "performing a factory reset"
@@ -294,7 +294,7 @@ configurator_reset_dialog() {
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
-      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground="$purple"><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
+      --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
         prepare_component "reset" "all"
@@ -302,7 +302,7 @@ configurator_reset_dialog() {
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting all components\n\n⏳<span foreground="$purple"><b>Please wait while the process finishes...</b></span>⏳"
+      --text="Resetting all components\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
       configurator_process_complete_dialog "resetting all components"
     else # User clicked "Cancel"
       configurator_welcome_dialog
@@ -327,7 +327,7 @@ configurator_reset_dialog() {
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting selected components.\n\n⏳<span foreground="$purple"><b>Please wait while the process finishes...</b></span>⏳"
+      --text="Resetting selected components.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
     else # User clicked "Cancel"
       configurator_reset_dialog
     fi

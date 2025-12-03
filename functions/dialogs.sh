@@ -21,7 +21,7 @@ configurator_process_complete_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit🚪" --extra-button="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Process Complete" \
-  --text="The process of <span foreground="$purple"><b>$1</b></span> is now complete.\n\nYou may need to <span foreground="$purple"><b>restart RetroDECK</b></span> for the changes to take effect.\n\nClick OK to return to the main menu or Quit to exit RetroDECK."
+  --text="The process of <span foreground='$purple'><b>$1</b></span> is now complete.\n\nYou may need to <span foreground='$purple'><b>restart RetroDECK</b></span> for the changes to take effect.\n\nClick OK to return to the main menu or Quit to exit RetroDECK."
 
   if [ ! $? == 0 ]; then # OK button clicked
       configurator_welcome_dialog
@@ -122,11 +122,11 @@ configurator_move_folder_dialog() {
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
         if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rd_home_path") ]] || [[ "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
-          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder is already at that location. Please select a new one."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder is already at that location. Please select a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Moving <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder to <span foreground="$purple"><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span>)"
+            configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Moving <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span>)"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -139,34 +139,34 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>Moving $(basename "$dir_to_move")</b></span> folder to <span foreground="$purple"><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span> was successful."
+              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>Moving $(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span> was successful."
             else
-              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>The moving process was not completed.</b></span> Please try again."
+              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>The moving process was not completed.</b></span> Please try again."
             fi
           else # If there isn't enough space in the picked destination
             rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - Move Directories" \
-            --text="The destination you selected does not have enough free space for the files you are trying to move\n\n\<span foreground="$purple"><b>Please choose a new destination or free up some space.</b></span>."
+            --text="The destination you selected does not have enough free space for the files you are trying to move\n\n\<span foreground='$purple'><b>Please choose a new destination or free up some space.</b></span>."
           fi
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
         if [[ ! -z "$dest_root" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>No destination was chosen</b></span>, so no files have been moved."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>No destination was chosen</b></span>, so no files have been moved."
         else
-          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground="$purple"><b>The chosen destination is not writable.</b></span>\nNo files have been moved.\n\nThis can happen if RetroDECK does not have permission to write to the selected location.\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
+          configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>The chosen destination is not writable.</b></span>\nNo files have been moved.\n\nThis can happen if RetroDECK does not have permission to write to the selected location.\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
         fi
       fi
     ;;
 
     esac
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
-    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location")
     declare -g "$rd_dir_name=$dir_to_move"
     prepare_component "postmove" "all"
     conf_write
-    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "RetroDECK <span foreground="$purple"><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground="$purple"><b>$dir_to_move</b></span>."
+    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 
@@ -244,7 +244,7 @@ configurator_change_preset_dialog() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Enabling Preset $preset" \
       --width=400 --height=200 \
-      --text="RetroDECK is <span foreground="$purple"><b>Enabling</b></span> the preset <span foreground="$purple"><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
+      --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
       configurator_change_preset_dialog "$preset"
     elif [[ "$choice" == "Disable All" ]]; then
       log d "User selected \"Disable All\""
@@ -289,7 +289,7 @@ configurator_change_preset_dialog() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Disabling Preset $preset" \
       --width=400 --height=200 \
-      --text="RetroDECK is <span foreground="$purple"><b>Disabling</b></span> the preset <span foreground="$purple"><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
+      --text="RetroDECK is <span foreground='$purple'><b>Disabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
       configurator_change_preset_dialog "$preset"
     else
       log d "User selected \"$choice\""
@@ -332,7 +332,7 @@ configurator_change_preset_value_dialog() {
             cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
             cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
-            configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground="$purple"><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
+            configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
             return 1
           fi
@@ -341,7 +341,7 @@ configurator_change_preset_value_dialog() {
       if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
         configurator_change_preset_dialog "$preset"
       else
-        configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground="$purple"><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
+        configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
         configurator_change_preset_dialog "$preset"
       fi
     fi
@@ -411,7 +411,7 @@ desktop_mode_warning() {
   # USAGE: desktop_mode_warning
 
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
-    local message='You appear to be running RetroDECK in the SteamOS <span foreground="$purple"><b>Desktop Mode</b></span>.\n\n\Some functions of RetroDECK may not work properly in SteamOS <span foreground="$purple"><b>Desktop Mode</b></span>.\n\n\RetroDECK is best enjoyed in <span foreground="$purple"><b>Game Mode</b></span> on SteamOS.\n\n\Do you still want to proceed?'
+    local message='You appear to be running RetroDECK in the SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\Some functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\RetroDECK is best enjoyed in <span foreground='$purple'><b>Game Mode</b></span> on SteamOS.\n\n\Do you still want to proceed?'
     log i "Showing message:\n$message"
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -439,7 +439,7 @@ low_space_warning() {
   if [[ $low_space_warning == "true" ]]; then
     local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
     if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      local message='Your main drive is over <span foreground="$purple">90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.'
+      local message='Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.'
       log i "Showing message:\n$message"
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Never show again 🛑" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -459,7 +459,7 @@ configurator_power_user_warning_dialog() {
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Never show again 🛑" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK - 🛑 Warning: Power User 🛑" \
-    --text="Making manual changes to a components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\n\The RetroDECK team do encourage tinkering. But if anything goes wrong, you need to use the built-in reset tools inside the RetroDECK Configurator.\n\n\<span foreground="$purple"><b>Please continue only if you know what you're doing.</b></span>\n\n\Component types:\n\<span foreground="$purple"><b>• Clients</b></span>\n\<span foreground="$purple"><b>• Emulators</b></span>\n\<span foreground="$purple"><b>• Engines</b></span>\n\<span foreground="$purple"><b>• Ports</b></span>\n\<span foreground="$purple"><b>• Systems</b></span>\n\n\\n\n\Do you want to continue?")
+    --text="Making manual changes to a components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\n\The RetroDECK team do encourage tinkering. But if anything goes wrong, you need to use the built-in reset tools inside the RetroDECK Configurator.\n\n\<span foreground='$purple'><b>Please continue only if you know what you're doing.</b></span>\n\n\Component types:\n\<span foreground='$purple'><b>• Clients</b></span>\n\<span foreground='$purple'><b>• Emulators</b></span>\n\<span foreground='$purple'><b>• Engines</b></span>\n\<span foreground='$purple'><b>• Ports</b></span>\n\<span foreground='$purple'><b>• Systems</b></span>\n\n\\n\n\Do you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
@@ -480,7 +480,7 @@ configurator_portmaster_toggle_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
-    --text="PortMaster is currently <span foreground="$purple"><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground="$purple"><b>Note: The installed games will still be visible.</b></span>"
+    --text="PortMaster is currently <span foreground='$purple'><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground='$purple'><b>Note: The installed games will still be visible.</b></span>"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -488,13 +488,13 @@ configurator_portmaster_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
-      --text="PortMaster is now <span foreground="$purple"><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground="$purple"><b>Configurator -> Open Component -> PortMaster</b></span>."
+      --text="PortMaster is now <span foreground='$purple'><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
-    --text="PortMaster is currently <span foreground="$purple"><b>Hidden</b></span> in ES-DE. Do you want to show it?"
+    --text="PortMaster is currently <span foreground='$purple'><b>Hidden</b></span> in ES-DE. Do you want to show it?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -502,7 +502,7 @@ configurator_portmaster_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
-      --text="PortMaster is now <span foreground="$purple"><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
+      --text="PortMaster is now <span foreground='$purple'><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
     fi
   fi
 }
@@ -586,7 +586,7 @@ configurator_bios_checker_dialog() {
   rd_zenity --progress --auto-close --no-cancel \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - BIOS Checker: 🔎 Scanning 🔎" \
-    --text="The BIOS Checker is scanning for <span foreground="$purple"><b>BIOS and Firmware</b></span> files that RetroDECK recognizes as supported by each system.\n\n\Please note that not all BIOS & Firmware files are necessary for games to work.\n\n\BIOS files not recognized by this tool may still function correctly.\n\n\Some components have additional built-in methods to verify the functionality of BIOS and Firmware files.\n\n\⏳ <span foreground="$purple"><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span> ⏳" \
+    --text="The BIOS Checker is scanning for <span foreground='$purple'><b>BIOS and Firmware</b></span> files that RetroDECK recognizes as supported by each system.\n\n\Please note that not all BIOS & Firmware files are necessary for games to work.\n\n\BIOS files not recognized by this tool may still function correctly.\n\n\Some components have additional built-in methods to verify the functionality of BIOS and Firmware files.\n\n\⏳ <span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span> ⏳" \
     --width=400 --height=100
 
   configurator_tools_dialog
@@ -786,7 +786,7 @@ configurator_compression_cleanup_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No 🟥" --ok-label="Yes 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" \
-  --text="Would you like to delete the original files after they are compressed?\n\n\If you select <span foreground="$purple"><b>No</b></span>, the original files will remain. You will need to remove them manually, and this may cause <span foreground="$purple"><b>duplicate games</b></span> to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a <span foreground="$purple"><b>backup of your files</b></span>."
+  --text="Would you like to delete the original files after they are compressed?\n\n\If you select <span foreground='$purple'><b>No</b></span>, the original files will remain. You will need to remove them manually, and this may cause <span foreground='$purple'><b>duplicate games</b></span> to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a <span foreground='$purple'><b>backup of your files</b></span>."
   local rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
     echo "true"
@@ -800,7 +800,7 @@ configurator_update_notify_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - ✅ Online Update Check ✅" \
-    --text="Online update checks for RetroDECK are currently <span foreground="$purple"><b>Disabled</b></span>.\n\nDo you want to disable them?"
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Disabled</b></span>.\n\nDo you want to disable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -812,7 +812,7 @@ configurator_update_notify_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - ✅ Online Update Check ✅" \
-    --text="Online update checks for RetroDECK are currently <span foreground="$purple"><b>Enabled</b></span>.\n\nDo you want to disable them?"
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Enabled</b></span>.\n\nDo you want to disable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -843,28 +843,28 @@ configurator_change_rd_logging_level_dialog() {
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "info" "retrodeck" "options"
     declare -g "$rd_logging_level=info"
-    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b>Level 1: Informational</b></span>."
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground='$purple'><b>Level 1: Informational</b></span>."
   ;;
 
   "Level 2: Warnings" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "warn" "retrodeck" "options"
     declare -g "$rd_logging_level=warn"
-    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b>Level 2: Warnings</b></span>."
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground='$purple'><b>Level 2: Warnings</b></span>."
   ;;
 
   "Level 3: Errors" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "error" "retrodeck" "options"
     declare -g "$rd_logging_level=error"
-    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b> Level 3: Errors</b></span>."
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground='$purple'><b> Level 3: Errors</b></span>."
   ;;
 
   "Level 4: Debug" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "debug" "retrodeck" "options"
     declare -g "$rd_logging_level=debug"
-    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b> Level 4: Debug</b></span>."
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground='$purple'><b> Level 4: Debug</b></span>."
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -876,7 +876,7 @@ configurator_change_rd_logging_level_dialog() {
 }
 
 configurator_retrodeck_backup_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground="$purple"><b>The resulting zip file will be located in $backups_path.</b></span>"
+  configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>"
 
   choice=$(rd_zenity --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup 🟡" --extra-button="Complete Backup 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n")
@@ -926,7 +926,7 @@ configurator_retrodeck_backup_dialog() {
 }
 
 configurator_clean_empty_systems_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Before removing any identified empty system folders,\n<span foreground="$purple"><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
+  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Before removing any identified empty system folders,\n<span foreground='$purple'><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
   configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Searching for empty system folders.\n\n⏳ Please wait... ⏳"
   find_empty_rom_folders
 
@@ -960,7 +960,7 @@ configurator_clean_empty_systems_dialog() {
 
 configurator_rebuild_esde_systems() {
   es-de --create-system-dirs
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground="$purple"><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground="$purple"><b>$roms_path</b></span>."
+  configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
 
@@ -1049,7 +1049,7 @@ configurator_online_update_channel_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Change Update Branch" \
-    --text="You are currently on the <span foreground="$purple"><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground="$purple"><b>Cooker</b></span> 🍲 branch?\n\n\After installing a cooker build, you may need to remove the <span foreground="$purple"><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
+    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> 🍲 branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1082,7 +1082,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "If you have an SD card installed that is not currently configured in RetroDECK, it may appear in this list but may not be suitable for USB import.\n\n<span foreground="$purple"><b>Please select your desired drive carefully.</b></span>"
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "If you have an SD card installed that is not currently configured in RetroDECK, it may appear in this list but may not be suitable for USB import.\n\n<span foreground='$purple'><b>Please select your desired drive carefully.</b></span>"
       choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
@@ -1122,7 +1122,7 @@ configurator_usb_import_dialog() {
         create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground="$purple"><b>No USB devices were found.</b></span>"
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground='$purple'><b>No USB devices were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;
@@ -1171,7 +1171,7 @@ configurator_usb_import_dialog() {
         fi
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground="$purple"><b>No USB devices with an importable folder were found.</b></span>"
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground='$purple'><b>No USB devices with an importable folder were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;
@@ -1188,7 +1188,7 @@ configurator_iconset_toggle_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
-    --text="RetroDECK folder icons are currently <span foreground="$purple"><b>Enabled</b></span>. Do you want to remove them?"
+    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
     
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1201,13 +1201,13 @@ configurator_iconset_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
-      --text="RetroDECK folder icons are now <span foreground="$purple"><b>Disabled</b></span>."
+      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Disabled</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
-    --text="RetroDECK folder icons are currently <span foreground="$purple"><b>Disabled</b></span>. Do you want to enable them?"
+    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1220,7 +1220,7 @@ configurator_iconset_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - 🎨 Toggle Folder Iconsets 🎨" \
-      --text="RetroDECK folder icons are now <span foreground="$purple"><b>Enabled</b></span>."
+      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
     fi
   fi
 
@@ -1231,7 +1231,7 @@ finit_install_controller_profile_dialog() {
   get_steam_user
   if [[ -n "$steam_id" ]]; then
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Add to Steam 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
-    --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\<span foreground="$purple"><b>Needed for optimal controller support via Steam Input.</b></span>"
+    --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\<span foreground='$purple'><b>Needed for optimal controller support via Steam Input.</b></span>"
   else
     return 1
   fi
