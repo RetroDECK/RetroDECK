@@ -332,7 +332,7 @@ configurator_change_preset_value_dialog() {
             cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
             cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
-            configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+            configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground="$purple"><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
             return 1
           fi
@@ -341,7 +341,7 @@ configurator_change_preset_value_dialog() {
       if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
         configurator_change_preset_dialog "$preset"
       else
-        configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+        configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground="$purple"><b>"$result"</b></span>\n\nCheck the RetroDECK logs for more details."
         configurator_change_preset_dialog "$preset"
       fi
     fi
@@ -593,7 +593,7 @@ configurator_bios_checker_dialog() {
 }
 
 configurator_compression_tool_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
+  configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator - 🗜️ Compression Tool 🗜️" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -666,11 +666,11 @@ configurator_compress_single_game_dialog() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --width="800" \
       --title "RetroDECK Configurator - ⏳ Compression in Progress ⏳"
-      configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete."
+      configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "The compression process is complete."
       configurator_compression_tool_dialog
 
     else
-      configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The selected file does not have any compatible compression formats."
+      configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "The selected file does not contain any compatible compression formats."
       configurator_compression_tool_dialog
     fi
   else
@@ -693,7 +693,7 @@ configurator_compress_multiple_games_dialog() {
   if [[ -n "$(cat "$compressible_games_list_file")" ]]; then
     log d "Found the following games to compress: ${all_compressible_games[*]}"
   else
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressible files were found."
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "No compressible files were found."
     rm "$compressible_games_list_file"
     return 1
   fi
@@ -779,7 +779,7 @@ configurator_compress_multiple_games_dialog() {
     --width="800" \
     --title "RetroDECK Configurator - ⏳ Compression in Progress ⏳"
 
-  configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
+  configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "The compression process is complete!"
 }
 
 configurator_compression_cleanup_dialog() {
@@ -843,28 +843,28 @@ configurator_change_rd_logging_level_dialog() {
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "info" "retrodeck" "options"
     declare -g "$rd_logging_level=info"
-    configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 1: Informational"
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b>Level 1: Informational</b></span>."
   ;;
 
   "Level 2: Warnings" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "warn" "retrodeck" "options"
     declare -g "$rd_logging_level=warn"
-    configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 2: Warnings"
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b>Level 2: Warnings</b></span>."
   ;;
 
   "Level 3: Errors" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "error" "retrodeck" "options"
     declare -g "$rd_logging_level=error"
-    configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 3: Errors"
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b> Level 3: Errors</b></span>."
   ;;
 
   "Level 4: Debug" )
     log i "Configurator: Changing logging level to \"$choice\""
     set_setting_value "$rd_conf" "rd_logging_level" "debug" "retrodeck" "options"
     declare -g "$rd_logging_level=debug"
-    configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 4: Debug"
+    configurator_generic_dialog "RetroDECK Configurator - 📒 Change Logging Level 📒" "The logging level has been changed to <span foreground="$purple"><b> Level 4: Debug</b></span>."
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -876,7 +876,7 @@ configurator_change_rd_logging_level_dialog() {
 }
 
 configurator_retrodeck_backup_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>"
+  configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>"
 
   choice=$(rd_zenity --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup 🟡" --extra-button="Complete Backup 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n\")
@@ -926,8 +926,8 @@ configurator_retrodeck_backup_dialog() {
 }
 
 configurator_clean_empty_systems_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Before removing any identified empty system folders,\nplease ensure your game collection is backed up, just in case!"
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Searching for empty system folders, please be patient..."
+  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Before removing any identified empty system folders,\n<span foreground="$purple"><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
+  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Searching for empty system folders.\n\n⏳ Please wait... ⏳"
   find_empty_rom_folders
 
   choice=$(rd_zenity \
@@ -960,7 +960,7 @@ configurator_clean_empty_systems_dialog() {
 
 configurator_rebuild_esde_systems() {
   es-de --create-system-dirs
-  configurator_generic_dialog "RetroDECK Configurator - Rebuild System Folders" "The rebuilding process is complete.\n\nAll missing default system folders will now exist in $roms_path"
+  configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground="$purple"><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground="$purple"><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
 
@@ -1082,7 +1082,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may show up in this list but may not be suitable for USB import.\n\nPlease select your desired drive carefully."
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "If you have an SD card installed that is not currently configured in RetroDECK, it may appear in this list but may not be suitable for USB import.\n\n<span foreground="$purple"><b>Please select your desired drive carefully.</b></span>"
       choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back 🔙" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
@@ -1122,7 +1122,7 @@ configurator_usb_import_dialog() {
         create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground="$purple"><b>No USB devices were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;
@@ -1171,7 +1171,7 @@ configurator_usb_import_dialog() {
         fi
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found with an importable folder."
+      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground="$purple"><b>No USB devices with an importable folder were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;

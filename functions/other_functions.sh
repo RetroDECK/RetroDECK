@@ -351,7 +351,7 @@ backup_retrodeck_userdata() {
     shift # Remove the first argument
   else
     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-      configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup option chosen. Valid options are <standard> and <custom>."
+      configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "No valid backup option chosen. Valid options are <standard> and <custom>."
     fi
     log e "No valid backup option chosen. Valid options are <complete>, <core> and <custom>."
     return 1
@@ -381,7 +381,7 @@ backup_retrodeck_userdata() {
         log i "Adding to backup: $folder_name = $path_value"
       else
         if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+          configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "The <span foreground="$purple"><b>$folder_name</b></span> was not found at its expected location: <span foreground="$purple"><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
         fi
         log i "Warning: Path does not exist: $folder_name = $path_value"
       fi
@@ -392,7 +392,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rd_home_path/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "The ES-DE collections folder was not found at its expected location: <span foreground="$purple"><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
     fi
@@ -401,7 +401,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/gamelists")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rd_home_path/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "The ES-DE gamelists folder was not found at its expected location: <span foreground="$purple"><b>$rd_home_path/ES-DE/gamelists</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
     fi
@@ -410,7 +410,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/custom_systems")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rd_home_path/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "The ES-DE custom_systems folder was not found at its expected location: <span foreground="$purple"><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
     fi
@@ -418,7 +418,7 @@ backup_retrodeck_userdata() {
     # Check if we found any valid paths
     if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid userdata folders were found.\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "<span foreground="$purple"><b>No valid userdata folders were found.</b></span>\nSomething may be wrong with your RetroDECK installation."
       fi
       log e "Error: No valid paths found in config file"
       return 1
@@ -433,7 +433,7 @@ backup_retrodeck_userdata() {
           log i "Adding to backup: $folder_name = $path_value"
         else
           if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-            configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+            configurator_generic_dialog "RetroDECK 🗄️ Backup Userdata 🗄️" "The <span foreground="$purple"><b>$folder_name</b></span> was not found at its expected location: <span foreground="$purple"><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
           fi
           log i "Warning: Path does not exist: $folder_name = $path_value"
         fi
