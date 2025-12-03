@@ -92,7 +92,7 @@ move() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Move in Progress" \
-  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -536,7 +536,7 @@ backup_retrodeck_userdata() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - Userdata Backup" \
-            --text="Verifying there is enough free space for the backup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+            --text="Verifying there is enough free space for the backup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
     total_size=$(cat "$total_size_file")
     rm "$total_size_file" # Clean up temp file
   else # If running in CLI
@@ -593,7 +593,7 @@ backup_retrodeck_userdata() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - Userdata Backup" \
-            --text="Compressing files into backup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+            --text="Compressing files into backup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
   else
     if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
       # Rotate backups for the specific type
@@ -794,7 +794,7 @@ finit() {
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
-  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⌛<span foreground='$purple'><b>This may take up to a minute or two</b></span>⌛\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
+  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⏳<span foreground='$purple'><b>This may take up to a minute or two</b></span>⏳\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
   prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
@@ -814,7 +814,7 @@ finit() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Finishing Initialization" \
-    --text="RetroDECK is completing its initial setup.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+    --text="RetroDECK is completing its initial setup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
 
   create_lock
 
@@ -1031,7 +1031,7 @@ install_release() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Updater" \
-    --text="RetroDECK is updating to the selected version.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+    --text="RetroDECK is updating to the selected version.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
 
   configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nRetroDECK will now quit."
   quit_retrodeck
@@ -1272,7 +1272,7 @@ add_retrodeck_to_steam() {
   rd_zenity --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "Adding RetroDECK to Steam" \
-    --text="RetroDECK is being added to Steam.\n\n⌛<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⌛"
+    --text="RetroDECK is being added to Steam.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
   rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease restart Steam to see the changes."
 }
 

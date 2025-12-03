@@ -147,7 +147,7 @@ configurator_move_folder_dialog() {
             rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - Move Directories" \
-            --text="The destination you selected does not have enough free space for the files you are trying to move.\n\nPlease choose a new destination or free up some space."
+            --text="The destination you selected does not have enough free space for the files you are trying to move\n\n\<span foreground='$purple'><b>Please choose a new destination or free up some space.</b></span>."
           fi
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
@@ -244,7 +244,7 @@ configurator_change_preset_dialog() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Enabling Preset $preset" \
       --width=400 --height=200 \
-      --text="RetroDECK is enabling the preset $preset for all compatible systems, please wait...."
+      --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
       configurator_change_preset_dialog "$preset"
     elif [[ "$choice" == "Disable All" ]]; then
       log d "User selected \"Disable All\""
@@ -289,7 +289,7 @@ configurator_change_preset_dialog() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Disabling Preset $preset" \
       --width=400 --height=200 \
-      --text="RetroDECK is disabling the preset $preset for all compatible systems, please wait...."
+      --text="RetroDECK is <span foreground='$purple'><b>Disabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
       configurator_change_preset_dialog "$preset"
     else
       log d "User selected \"$choice\""
@@ -480,7 +480,7 @@ configurator_portmaster_toggle_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - PortMaster Visibility" \
-    --text="PortMaster is currently <span foreground='$purple'><b>visible</b></span> in ES-DE. Do you want to hide it?\n\nPlease note that the installed games will still be visible."
+    --text="PortMaster is currently <span foreground='$purple'><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground='$purple'><b>Note: The installed games will still be visible.</b></span>"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -488,13 +488,13 @@ configurator_portmaster_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - PortMaster Visibility" \
-      --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
+      --text="PortMaster is now <span foreground='$purple'><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - PortMaster Visibility" \
-    --text="PortMaster is currently <span foreground='$purple'><b>hidden</b></span> in ES-DE. Do you want to show it?"
+    --text="PortMaster is currently <span foreground='$purple'><b>Hidden</b></span> in ES-DE. Do you want to show it?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -502,7 +502,7 @@ configurator_portmaster_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - PortMaster Visibility" \
-      --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
+      --text="PortMaster is now <span foreground='$purple'><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
     fi
   fi
 }
@@ -878,8 +878,8 @@ configurator_change_rd_logging_level_dialog() {
 configurator_retrodeck_backup_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>\n\n"
 
-  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="Cancel 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup  🟡" --extra-button="Complete Backup 🟢" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
+  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup  🟡" --extra-button="Complete Backup 🟢" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n\")
 
   case $choice in
     "Core Backup" )
