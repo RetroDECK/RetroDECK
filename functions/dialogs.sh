@@ -876,18 +876,18 @@ configurator_change_rd_logging_level_dialog() {
 }
 
 configurator_retrodeck_backup_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>\n\n"
+  configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\n\Please note that this process may take several minutes.\n\n\<span foreground='$purple'><b>The resulting zip file will be located in $backups_path.</b></span>"
 
-  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup  🟡" --extra-button="Complete Backup 🟢" \
+  choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="No Backup 🟥" --extra-button="Core Backup 🟠" --extra-button="Custom Backup 🟡" --extra-button="Complete Backup 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n\")
 
   case $choice in
-    "Core Backup" )
+    "Core Backup 🟠" )
       log i "User chose to backup core userdata prior to update."
       export CONFIGURATOR_GUI="zenity"
       backup_retrodeck_userdata "core"
     ;;
-    "Custom Backup" )
+    "Custom Backup 🟡" )
       log i "User chose to backup custom userdata prior to update."
       while read -r config_line; do
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
@@ -915,7 +915,7 @@ configurator_retrodeck_backup_dialog() {
       export CONFIGURATOR_GUI="zenity"
       backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
     ;;
-    "Complete Backup" )
+    "Complete Backup 🟢" )
       log i "User chose to backup all userdata prior to update."
       export CONFIGURATOR_GUI="zenity"
       backup_retrodeck_userdata "complete"
@@ -1188,7 +1188,7 @@ configurator_iconset_toggle_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
-    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>enabled</b></span>. Do you want to remove them?"
+    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1201,13 +1201,13 @@ configurator_iconset_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
-      --text="RetroDECK folder icons are now <span foreground='$purple'><b>disabled</b></span>."
+      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Disabled</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
-    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>disabled</b></span>. Do you want to enable them?"
+    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1220,7 +1220,7 @@ configurator_iconset_toggle_dialog() {
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Toggle RetroDECK Folder Iconsets" \
-      --text="RetroDECK folder icons are now <span foreground='$purple'><b>enabled</b></span>."
+      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
     fi
   fi
 
@@ -1231,7 +1231,7 @@ finit_install_controller_profile_dialog() {
   get_steam_user
   if [[ -n "$steam_id" ]]; then
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
-    --text="Would you like to install the RetroDECK Steam Controller Profiles and add RetroDECK to Steam?\n\n(Needed for optimal controller support via Steam Input.)"
+    --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\<span foreground='$purple'><b>Needed for optimal controller support via Steam Input.</b></span>"
   else
     return 1
   fi

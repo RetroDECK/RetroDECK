@@ -12,7 +12,7 @@ directory_browse() {
     if [ ! -z "$target" ] #yes
     then
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
-      --text="Directory <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
+      --text="Directory <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
       if [ $? == 0 ]
       then
         path_selected=true
@@ -21,7 +21,7 @@ directory_browse() {
       fi
     else
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
-      --text="No directory selected. Do you want to exit the selection process?"
+      --text="No directory selected.\n\n<span foreground='$purple'><b>Do you want to exit the selection process?</b></span>"
       if [ $? == 0 ]
       then
         break
@@ -42,7 +42,7 @@ file_browse() {
     if [ ! -z "$target" ] #yes
     then
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
-      --text="File <span foreground='$purple'><b>$target</b></span> chosen.\nIs this correct?"
+      --text="File <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
       if [ $? == 0 ]
       then
         file_selected=true
@@ -98,7 +98,7 @@ move() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Move Directories" \
-    --text="Some files could not be moved because they already exist in the destination.\n\nAll other files are now in the new location; you will need to handle the remaining conflicts manually."
+    --text="Some files could not be moved because they already exist in the destination.\n\n\<span foreground='$purple'><b>All other files have been moved to the new location. You will need to handle the remaining conflicts manually.</b></span>"
   fi
 }
 
@@ -744,7 +744,7 @@ finit() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
-        --text="SD card detected, but it can not be written to.\nThis often occurs when the card was formatted on a PC.\n\nWhat to do:\n\nSwitch the Steam Deck to <span foreground='$purple'><b>Game Mode</b></span>.\n\nSettings > System > Format SD Card\n\nRun RetroDECK again."
+        --text="SD card detected, but it cannot be written to.\n\This often occurs when the card was formatted on a PC.\n\n\What to do:\n\n\Switch the Steam Deck to <span foreground='$purple'><b>Game Mode</b></span>.\n\Settings > System > Format SD Card\n\n\Run RetroDECK again.."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         log i "Now quitting"
         quit_retrodeck
@@ -821,7 +821,7 @@ finit() {
   # Inform the user where to put the ROMs and BIOS files
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Setup Complete" \
+    --title "RetroDECK Initial Setup - Complete" \
     --text="RetroDECK initial setup is complete!\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nCheck out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nFor detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
 }
 
@@ -1174,7 +1174,7 @@ release_selector() {
   rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
-    --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
+    --text="Are you sure you want to install the following release?\n\n\<span foreground='$purple'><b>$selected_branch: \"$selected_tag\"</b></span>\n\Published on <span foreground='$purple'><b>$selected_date</b></span>?"
 
   if [[ $? -eq 0 ]]; then
     log d "User confirmed installation of release $selected_tag"
@@ -1273,7 +1273,7 @@ add_retrodeck_to_steam() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "Adding RetroDECK to Steam" \
     --text="RetroDECK is being added to Steam.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
-  rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease restart Steam to see the changes."
+  rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\n\<span foreground='$purple'><b>Please restart Steam to see the changes.</b></span>"
 }
 
 repair_paths() {

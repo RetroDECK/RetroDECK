@@ -267,7 +267,7 @@ configurator_reset_dialog() {
   choice=$(rd_zenity --list \
   --title "RetroDECK Configurator - Reset Components" --cancel-label="Cancel 🟥" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --checklist --ok-label="Reset Selected 🟡" --extra-button="Reset All" --extra-button="Factory Reset" \
+  --checklist --ok-label="Reset Selected 🟡" --extra-button="Reset All 🟩" --extra-button="Factory Reset ☢️" \
   --print-column=2 --hide-column=2 \
   --separator="^" \
   --text="Which components do you want to reset?" \
@@ -279,10 +279,10 @@ configurator_reset_dialog() {
 
   log d "User selected: $choice"
 
-  if [[ "$choice" == "Factory Reset" ]]; then
+  if [[ "$choice" == "Factory Reset ☢️" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Factory Reset" \
+      --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
       --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       prepare_component "factory-reset"
@@ -293,7 +293,7 @@ configurator_reset_dialog() {
   elif [[ "$choice" == "Reset All" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Factory Reset" \
+      --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
       --text="This will reset all RetroDECK settings to their defaults and restart the first-time setup!\n\n<span foreground='$purple'><b>Your personal data: games, saves, scraped art content, etc... will not be affected. </b></span>\n\nAre you sure you want to proceed?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
