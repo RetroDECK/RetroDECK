@@ -1360,7 +1360,7 @@ check_if_updated() {
                 if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything & Fresh Install ☢️: Reset 🍲" "<span foreground="$purple"><b>But are you super DUPER sure?</b></span>\n\nWe REALLY want to make sure you understand what is about to happen.\n\nThe following folders and <b>ALL of their contents</b> will be <span foreground="$purple"><b>PERMANENTLY deleted like what happened to Rowan Skye!</b></span>:\n<span foreground="$purple"><b>• ~/retrodeck</b></span>\n<span foreground="$purple"><b>• ~/.var/app/net.retrodeck.retrodeck</b></span>\n\n<span foreground="$purple"><b>This is irreversible — proceed at your own risk!</b></span>") == "true" ]]; then
                   configurator_generic_dialog "RetroDECK Cooker: ☢️ Delete Everything & Fresh Install ☢️" "<span foreground="$purple"><b>Ok, if you're that sure, here we go!</b></span>"
                   if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything & Fresh Install ☢️" "<span foreground="$purple"><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground="$purple"><b>No backsies...OK?!</b></span>") == "true" ]]; then
-                    log w "Removing RetroDECK data and starting fresh"
+                    log w "☢️ Deleting all RetroDECK Data & Fresh Install"
                     rm -rf /var
                     rm -rf "$HOME/retrodeck"
                     rm -rf "$rd_home_path"
