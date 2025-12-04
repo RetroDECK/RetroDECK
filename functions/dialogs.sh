@@ -1228,7 +1228,7 @@ configurator_iconset_toggle_dialog() {
 }
 
 finit_install_controller_profile_dialog() {
-  get_steam_user
+  get_steam_user "finit"
   if [[ -n "$steam_id" ]]; then
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Add to Steam 🚂" --cancel-label="No 🟥 " --ok-label "Yes 🟢" \
     --text="Would you like to install the RetroDECK Steam Controller Templates and add RetroDECK to Steam?\n\n\Needed for <span foreground='$purple'><b>optimal controller support</b></span>via Steam Input."
