@@ -983,7 +983,7 @@ configurator_clean_empty_systems_dialog() {
 }
 
 configurator_rebuild_esde_systems() {
-  es-de --create-system-dirs
+  start_esde --create-system-dirs
   configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
