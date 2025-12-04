@@ -394,35 +394,6 @@ enable_file() {
   mv "$(realpath "$1".disabled)" "$(realpath "$(echo "$1" | sed -e 's/\.disabled//')")"
 }
 
-install_preset_files() {
-  # This function will copy a file or complete directory from a given source to a target location.
-  # rsync is used for all file copying operations, for speed and to update files in place if needed.
-  # USAGE: install_preset_files "$source" "$target"
-  local source="$1"
-  local target="$2"
-
-  # If source or target are a directory, ensure there is a trailing slash for proper rsync functionality. Files do not need this
-  if [[ -d "$source" ]]; then
-  source="${source%/}/"
-  fi
-  if [[ -d "$target" ]]; then
-  target="${target%/}/"
-  fi
-
-  rsync -rlD --mkpath "$source" "$target"
-  log d "Preset files installed at: $target"
-}
-
-remove_preset_files() {
-  # This function will remove a single target file or directory
-  # The purpose is to remove files related to a preset which need to be present to be active and removed to be disabled, as there is no associated setting value that can be changed.
-  # USAGE: remove_preset_files "$target"
-  local target="$1"
-
-  rm -rf "$target"
-  log d "Preset files deleted: $target"
-}
-
 generate_single_patch() {
   # generate_single_patch $original_file $modified_file $patch_file $system
 
