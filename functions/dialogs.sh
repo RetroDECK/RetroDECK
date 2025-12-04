@@ -881,20 +881,46 @@ configurator_retrodeck_backup_dialog() {
 
   case $choice in
     "Core Backup 🟠" )
-      log i "User chose to backup core userdata prior to update."
+      log i "User chose to backup core userdata."
       export CONFIGURATOR_GUI="zenity"
       backup_retrodeck_userdata "core"
     ;;
     "Custom Backup 🟡" )
-      log i "User chose to backup custom userdata prior to update."
-      while read -r config_line; do
-        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-        if [[ ! $current_setting_name =~ (rd_home_path|sdcard|rd_home_backups_path) ]]; then # Ignore these locations
-        log d "Adding $current_setting_name to compressible paths."
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+      log i "User chose to backup custom userdata."
+      while read -r config_path; do
+        local path_var=$(echo "$config_path" | jq -r '.key')
+        local path_value=$(echo "$config_path" | jq -r '.value')
+        log d "Adding $path_value to compressible paths."
+        compressible_paths+=( "false" "$path_var" "$path_value")
+      done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "sdcard")' "$rd_conf")
+
+      # Add static paths not defined in retrodeck.cfg
+      if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
+        compressible_paths+=( "false" "ES-DE collections" "$rd_home_path/ES-DE/collections")
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation."
         fi
-      done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+        log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
+      fi
+
+      if [[ -e "$rd_home_path/ES-DE/gamelists" ]]; then
+        compressible_paths+=( "false" "ES-DE gamelists" "$rd_home_path/ES-DE/gamelists")
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE gamelists folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/gamelists</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        fi
+        log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
+      fi
+
+      if [[ -e "$rd_home_path/ES-DE/custom_systems" ]]; then
+        compressible_paths+=( "false" "ES-DE custom_systems" "$rd_home_path/ES-DE/custom_systems")
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        fi
+        log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
+      fi
 
       choice=$(rd_zenity \
       --list --width=1200 --height=720 \
@@ -914,7 +940,7 @@ configurator_retrodeck_backup_dialog() {
       backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
     ;;
     "Complete Backup 🟢" )
-      log i "User chose to backup all userdata prior to update."
+      log i "User chose to backup all userdata."
       export CONFIGURATOR_GUI="zenity"
       backup_retrodeck_userdata "complete"
     ;;
