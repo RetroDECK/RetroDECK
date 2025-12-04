@@ -267,7 +267,7 @@ build_zenity_open_component_menu_array() {
     local desc=$(jq -r '.description' <<< "$obj")
     local command=$(jq -r '.path' <<< "$obj")
     temp_bash_array+=("$name" "$desc" "$command")
-  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null)')
+  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null and .component_name != "retrodeck")')
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
@@ -282,7 +282,7 @@ build_zenity_reset_component_menu_array() {
     local friendly_name=$(jq -r '.component_friendly_name' <<< "$obj")
     local desc=$(jq -r '.description' <<< "$obj")
     temp_bash_array+=("$checkbox_state" "$name" "$friendly_name" "$desc")
-  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null)')
+  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null and .component_name != "retrodeck")')
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
