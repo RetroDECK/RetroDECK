@@ -345,6 +345,7 @@ configurator_change_preset_value_dialog() {
         configurator_change_preset_dialog "$preset"
       fi
     fi
+    configurator_change_preset_dialog "$preset"
   else
     log i "No preset choices made"
     configurator_change_preset_dialog "$preset"
