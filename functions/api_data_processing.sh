@@ -793,6 +793,7 @@ api_set_preset_state() {
       "install" )
         source_file=$(jq -r '.source // empty' <<< "$current_preset_object")
         target_file=$(jq -r '.destination // empty' <<< "$current_preset_object")
+        cleanup_type=$(jq -r '.cleanup_type // empty' <<< "$current_preset_object")
         if [[ ! "$state" == "$preset_disabled_state" ]]; then
           if echo "$current_preset_object" | jq -e --arg state "$state" '.enabled_states | contains([$state])' > /dev/null; then # If the desired state should process this action
             log d "Installing files for preset $preset_setting_name"
@@ -800,7 +801,7 @@ api_set_preset_state() {
           fi
         else
           log d "Removing files for preset $preset_setting_name"
-          remove_preset_files "$source_file" "$target_file"
+          remove_preset_files "$source_file" "$target_file" "$cleanup_type"
         fi
       ;;
 
