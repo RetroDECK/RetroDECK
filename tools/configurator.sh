@@ -110,10 +110,10 @@ configurator_welcome_dialog() {
   )
 
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options+=("Developer Options" "Welcome to the DANGER ZONE")
+    welcome_menu_options+=("Developer Options 🧑‍💻" "Welcome to the 💥 DANGER ZONE 💥")
   fi
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator" --cancel-label="Quit 🚪" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator" --cancel-label="Quit 🚪" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "${welcome_menu_options[@]}")
@@ -172,7 +172,7 @@ configurator_welcome_dialog() {
 configurator_global_presets_and_settings_dialog() {
   build_zenity_menu_array choices settings # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Global: Presets and Settings" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Global: Presets and Settings" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -202,7 +202,7 @@ configurator_open_component_dialog() {
   build_zenity_open_component_menu_array open_component_list
 
   component=$(rd_zenity --list \
-  --title "RetroDECK Configurator - Open Component" --cancel-label="Back 🔙" \
+  --title "RetroDECK Configurator - Open Component" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which component do you want to launch?" \
   --hide-header --hide-column=3 --print-column=3\
@@ -219,7 +219,7 @@ configurator_open_component_dialog() {
 configurator_tools_dialog() {
   build_zenity_menu_array choices tools # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Tools" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Tools" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -237,7 +237,7 @@ configurator_tools_dialog() {
 configurator_data_management_dialog() {
   build_zenity_menu_array choices data_management # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Data Management" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Data Management" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -265,7 +265,7 @@ configurator_reset_dialog() {
   build_zenity_reset_component_menu_array reset_component_list
 
   choice=$(rd_zenity --list \
-  --title "RetroDECK Configurator - ↩️ Reset Components ↩️" --cancel-label="Cancel 🟥" \
+  --title "RetroDECK Configurator - ↩️ Reset Components ↩️" --cancel-label="Cancel 🟥"  \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --checklist --ok-label="Reset Selected 🟡" --extra-button="Reset All 🟩" --extra-button="Factory Reset ☢️" \
   --print-column=2 --hide-column=2 \
@@ -342,7 +342,7 @@ configurator_reset_dialog() {
 configurator_about_retrodeck_dialog() {
   build_zenity_menu_array choices about_retrodeck # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧾 About RetroDECK 🧾" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧾 About RetroDECK 🧾" --cancel-label="Back 🔙" --ok-label="OK 🟢"\
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -361,7 +361,7 @@ configurator_about_retrodeck_dialog() {
 configurator_steam_tools_dialog() {
   build_zenity_menu_array choices steam_tools # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🚂 Steam Tools 🚂" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🚂 Steam Tools 🚂" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -380,7 +380,7 @@ configurator_steam_tools_dialog() {
 configurator_developer_dialog() {
   build_zenity_menu_array choices developer_options # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" --cancel-label="Back 🔙" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" --cancel-label="Back 🔙" --ok-label="OK 🟢" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
