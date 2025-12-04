@@ -844,7 +844,7 @@ api_do_cheevos_login() {
   # This function will attempt to authenticate with the RA API with the supplied credentials and will return a JSON object if successful
   # USAGE api_do_cheevos_login $username $password
 
-  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
+  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$ra_cheevos_api_url")
   local cheevos_success=$(jq -r '.Success' <<< "$cheevos_api_response")
   if [[ "$cheevos_success" == "true" ]]; then
     log d "cheevos login succeeded"
