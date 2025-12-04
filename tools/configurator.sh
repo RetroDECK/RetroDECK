@@ -105,7 +105,7 @@ configurator_welcome_dialog() {
     "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
     "Tools 🧰" "Run various tools: <span foreground='$purple'><b>BIOS Checker</b></span>, <span foreground='$purple'><b>File Compressor</b></span>, Install optional features and more."
     "Steam Tools 🚂" "Synchronize ES-DE 🌟 <span foreground='$purple'><b>Favorites</b></span> 🌟 or add a RetroDECK launcher to Steam."
-    "Data Management 📁" Move, clean empty or rebuild RetroDECK directories."
+    "Data Management 📁" "Move, clean empty or rebuild RetroDECK directories."
     "About RetroDECK 📖" "View patch notes, credits, and other project information."
   )
 
