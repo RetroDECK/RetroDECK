@@ -101,7 +101,7 @@ configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
     "Settings ⚙️" "Adjust core RetroDECK: <span foreground='$purple'><b>Presets</b></span>, <span foreground='$purple'><b>Visuals</b></span>, <span foreground='$purple'><b>Tweaks</b></span> and <span foreground='$purple'><b>Logins</b></span>."
-    "Open Component 🔧" "Manually launch and configure individual components. 🛑 Advanced Users Only 🛑"
+    "Open Component 🔧" "Manually launch and configure individual components. 🛑  <span foreground='$purple'><b>Advanced Users Only</b></span> 🛑"
     "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
     "Tools 🧰" "Run various tools: <span foreground='$purple'><b>BIOS Checker</b></span>, <span foreground='$purple'><b>File Compressor</b></span>, Install optional features and more."
     "Steam Tools 🚂" "Synchronize ES-DE 🌟 <span foreground='$purple'><b>Favorites</b></span> 🌟 or add a RetroDECK launcher to Steam."
