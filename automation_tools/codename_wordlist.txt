@@ -1,5 +1,7 @@
+arcaneasada
 abduction
 aboleth
+adamone
 advance
 aesthetic
 alien
@@ -130,6 +132,7 @@ cultist
 curaga
 curara
 cure
+danblu
 daihyousha
 daikon
 daisy
@@ -152,7 +155,7 @@ dinosaur
 disc
 doctor
 dos
-dot
+dottormac
 dragon
 drake
 dream
@@ -208,6 +211,7 @@ friendship
 futaba
 future
 gainax
+gardiner
 gakusei
 galleon
 game
@@ -240,7 +244,6 @@ greenonion
 grimlock
 gronsakssoppa
 guldhamnare
-gun
 gundam
 guotie
 gurren
@@ -267,6 +270,7 @@ hotpot
 house
 hunter
 hydra
+icenine
 igor
 ikki
 imp
@@ -344,13 +348,16 @@ kunoichi
 kuwagata
 kvarg
 kyoto
+lahrs
 lagan
 lamia
 landlubber
 langfil
 lax
 laxpudding
+lazorne
 level
+leonse
 libman
 lich
 lingondricka
@@ -370,6 +377,7 @@ luigi
 lum
 lussekatt
 lutfisk
+lx32
 machine
 macintosh
 mage
@@ -414,10 +422,11 @@ midvinter
 mindflayer
 mini
 minotaur
+mrmoon
 mochi
 mode
 monk
-monkey
+monkeyx
 monster
 mooncake
 moroboshi
@@ -439,6 +448,7 @@ neon
 night
 ninja
 nisse
+noahsdhq
 noclip
 noodle
 norrsken
@@ -561,10 +571,12 @@ rocky
 rokusho
 roll
 room
+rowanskye
 round
 ruby
 rupie
 ryoga
+ryubasteon
 ryuji
 saffransbrod
 saffransbullar
@@ -717,6 +729,7 @@ temple
 tendo
 terminator
 tetris
+thalintroll
 thundaga
 thundara
 thunder
@@ -740,6 +753,7 @@ trollkin
 tuna
 tunnbrod
 turnip
+tophatcat
 tux
 tv
 txt
@@ -765,6 +779,7 @@ vintertid
 vittra
 vortbrod
 vrock
+wallk
 wario
 warlord
 warrior
@@ -778,13 +793,14 @@ wight
 wildcard
 will-o-wisp
 wizard
-woman
 won
 wonder
 wonton
 wraith
 wrap
 xiaolongbao
+xargon
+xargonsaigf
 xorn
 yaki
 yam
@@ -797,4 +813,5 @@ yu
 yukiko
 zelda
 zero
+zurdi
 zombie
