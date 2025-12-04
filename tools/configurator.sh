@@ -100,13 +100,13 @@ source /app/libexec/global.sh
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
-    "Settings" "Customize your RetroDECK experience with various presets and tweaks."
-    "Open Component" "Manually launch and configure settings for each component, system or emulator (for advanced users)."
-    "Reset Components" "Reset a specific component, system, emulator or all of RetroDECK."
-    "Tools" "Various tools for verifying files and BIOS, and installing optional features."
-    "Steam Tools" "Setup synchronization of all ES-DE favorited games with Steam, or add a RetroDECK shortcut to Steam."
-    "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
-    "About RetroDECK" "View additional information, including patch notes and credits."
+    "Settings ⚙️" "Adjust core RetroDECK presets, tweaks, visuals, and logins."
+    "Open Component 🔧" "Manually launch and configure individual components. 🛑 Advanced Users Only 🛑"
+    "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
+    "Tools 🧰" "Run various tools: BIOS checker, File Compressor, install optional features and more."
+    "Steam Tools 🚂" "Sync ES-DE favorites with Steam or add a RetroDECK launcher."
+    "Data Management 📁" Move, clean empty or rebuild RetroDECK directories."
+    "About RetroDECK 📖" "View patch notes, credits, and other project information."
   )
 
   if [[ $developer_options == "true" ]]; then
@@ -120,42 +120,42 @@ configurator_welcome_dialog() {
 
   case $choice in
 
-  "Settings" )
+  "Settings ⚙️" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Open Component" )
+  "Open Component 🔧" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
 
-  "Reset Components" )
+  "Reset Components 🔄" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_reset_dialog
   ;;
 
-  "Tools" )
+  "Tools 🧰" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_tools_dialog
   ;;
 
-  "About RetroDECK" )
+  "About RetroDECK 📖" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_about_retrodeck_dialog
   ;;
 
-  "Steam Tools" )
+  "Steam Tools 🚂" )
     configurator_steam_tools_dialog
   ;;
 
-  "Developer Options" )
+  "Developer Options 🧑‍💻" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" "<span foreground='$purple'><b>These features and options are potentially VERY DANGEROUS for your RetroDECK install!</b></span>\n\nThey represent the bleeding edge of upcoming RetroDECK functionality and should never be used while you have important saves, states, ROMs or other content that is not backed up\n\n<b>Affected data may include (but is not limited to):</b>\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n<span foreground='$purple'><b>• And more</b></span>\n\n<span foreground='$purple'><b>ALL of this data could be lost or corrupted if you proceed.</b></span>\n\n<span foreground='$purple'><b>YOU HAVE BEEN WARNED!</b></span>"
     configurator_developer_dialog
   ;;
 
-  "Data Management" )
+  "Data Management 📁" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_data_management_dialog
   ;;
