@@ -800,27 +800,24 @@ configurator_update_notify_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - ✅ Online Update Check ✅" \
-    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Disabled</b></span>.\n\nDo you want to disable them?"
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Enabled</b></span>.\n\nDo you want to disable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
       set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_tools_dialog
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - ✅ Online Update Check ✅" \
-    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Enabled</b></span>.\n\nDo you want to disable them?"
+    --text="Online update checks for RetroDECK are currently <span foreground='$purple'><b>Disabled</b></span>.\n\nDo you want to enable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
       set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_tools_dialog
     fi
   fi
+  configurator_tools_dialog
 }
 
 configurator_repair_paths_dialog() {
