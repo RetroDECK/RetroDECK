@@ -103,7 +103,7 @@ configurator_welcome_dialog() {
     "Settings ⚙️" "Adjust core RetroDECK presets, tweaks, visuals, and logins."
     "Open Component 🔧" "Manually launch and configure individual components. 🛑 Advanced Users Only 🛑"
     "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
-    "Tools 🧰" "Run various tools: BIOS checker, File Compressor, install optional features and more."
+    "Tools 🧰" "Run various tools: BIOS Checker, File Compressor, install optional features and more."
     "Steam Tools 🚂" "Sync ES-DE favorites with Steam or add a RetroDECK launcher."
     "Data Management 📁" Move, clean empty or rebuild RetroDECK directories."
     "About RetroDECK 📖" "View patch notes, credits, and other project information."
