@@ -43,23 +43,6 @@
       "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
     }
   },
-  "finit_default_options": {
-    "rd_controller_profile": {
-      "name": "Steam Input: RetroDECKs Controller Templates",
-      "description": "Install RetroDECKs Steam Input Templates into Steam. Highly recommended for optimal controller support.",
-      "enabled": true
-    },
-    "rpcs3_firmware": {
-      "name": "RPCS3 Firmware",
-      "description": "Download & Install the required firmware for RPCS3 - the PlayStation 3 Emulator.",
-      "enabled": false
-    },
-    "vita3k_firmware": {
-      "name": "Vita3K Firmware",
-      "description": "Download & Install the required firmware for Vita3K - the PSVita Emulator",
-      "enabled": false
-    }
-  },
   "splash_screens": {
     "new_year": {
       "start_date": "1231",
