@@ -342,9 +342,6 @@ backup_retrodeck_userdata() {
 
   create_dir "$backups_path"
 
-  backup_date=$(date +"%0m%0d_%H%M")
-  backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
-
   # Check if first argument is the type
   if [[ "$1" == "complete" || "$1" == "core" || "$1" == "custom" ]]; then
     backup_type="$1"
@@ -357,20 +354,21 @@ backup_retrodeck_userdata() {
     return 1
   fi
 
-  zip_file="$backups_path/retrodeck_${backup_date}_${backup_type}.zip"
+  backup_date=$(date +"%0m%0d_%H%M")
+  backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
+  backup_file="$backups_path/retrodeck_${backup_date}_${backup_type}.tar.gz"
 
   # Initialize paths arrays
   paths_to_backup=()
   declare -A config_paths # Requires an associative (dictionary) array to work
 
-  # Build array of folder names and real paths from retrodeck.cfg
-  while read -r path_name; do
-    if [[ ! $path_name =~ (rd_home_path|sdcard|backups_path) ]]; then # Ignore these locations
-      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
-      log d "Path $path_value added to potential backup list"
-      config_paths["$path_name"]="$path_value"
-    fi
-  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
+  # Build array of folder names and real paths from retrodeck.json
+  while read -r config_path; do
+    local path_var=$(echo "$config_path" | jq -r '.key')
+    local path_value=$(echo "$config_path" | jq -r '.value')
+    log d "Adding $path_value to compressible paths."
+    config_paths["$path_var"]="$path_value"
+  done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "sdcard")' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -570,18 +568,18 @@ backup_retrodeck_userdata() {
 
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
     (
-      # Create zip with selected paths
-      if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+      # Create backup with selected paths
+      if tar -czhf "$backup_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
         # Rotate backups for the specific type
         cd "$backups_path" || return 1
-        ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+        ls -t *_${backup_type}.tar.gz | tail -n +4 | xargs -r rm
 
-        final_size=$(du -h "$zip_file" | cut -f1)
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The backup to <span foreground='$purple'><b>$zip_file</b></span> was successful, final size is <span foreground='$purple'><b>$final_size</b></span>.\n\nThe backups have been rotated, keeping the last 3 of the <span foreground='$purple'><b>$backup_type</b></span> backup type."
-        log i "Backup completed successfully: $zip_file (Size: $final_size)"
+        final_size=$(du -h "$backup_file" | cut -f1)
+        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The backup to <span foreground='$purple'><b>$backup_file</b></span> was successful, final size is <span foreground='$purple'><b>$final_size</b></span>.\n\nThe backups have been rotated, keeping the last 3 of the <span foreground='$purple'><b>$backup_type</b></span> backup type."
+        log i "Backup completed successfully: $backup_file (Size: $final_size)"
         log i "Older backups rotated, keeping latest 3 of type $backup_type"
 
-        if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+        if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning tar threw no errors
           rm -f "$backup_log_file"
         fi
       else
@@ -595,16 +593,16 @@ backup_retrodeck_userdata() {
             --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️ 🗄️" \
             --text="Compressing files into backup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
   else
-    if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+    if tar -czhf "$backup_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
       # Rotate backups for the specific type
       cd "$backups_path" || return 1
-      ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+      ls -t *_${backup_type}.tar.gz | tail -n +4 | xargs -r rm
 
-      final_size=$(du -h "$zip_file" | cut -f1)
-      log i "Backup completed successfully: $zip_file (Size: $final_size)"
+      final_size=$(du -h "$backup_file" | cut -f1)
+      log i "Backup completed successfully: $backup_file (Size: $final_size)"
       log i "Older backups rotated, keeping latest 3 of type $backup_type"
 
-      if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+      if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning tar threw no errors
         rm -f "$backup_log_file"
       fi
     else
