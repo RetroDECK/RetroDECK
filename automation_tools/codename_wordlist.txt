@@ -786,6 +786,7 @@ warrior
 warlock
 waterchestnut
 wave
+weestuarty
 weapon
 werewolf
 who
