@@ -44,7 +44,7 @@ api_get_compressible_games() {
     (
     if [[ -d "$roms_path/$system" ]]; then
       local compression_candidates
-      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt")
+      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt" -not -iname ".directory")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
           while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
