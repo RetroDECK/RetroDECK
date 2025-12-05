@@ -995,6 +995,10 @@ configurator_clean_empty_systems_dialog() {
 
 configurator_rebuild_esde_systems() {
   start_esde --create-system-dirs
+  local current_iconset=$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")
+  if [[ ! "$current_iconset" == "false" ]]; then
+    handle_folder_iconsets "$current_iconset"
+  fi
   configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
@@ -1219,7 +1223,7 @@ configurator_usb_import_dialog() {
 }
 
 configurator_iconset_toggle_dialog() {
-  if [[ ! $(get_setting_value "$rd_conf" "folder_iconset" "retrodeck" "options") == "false" ]]; then
+  if [[ ! $(get_setting_value "$rd_conf" "iconset" "retrodeck" "options") == "false" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
