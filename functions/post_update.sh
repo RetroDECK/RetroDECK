@@ -118,7 +118,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
-  --text="RetroDECK is completing the upgrade.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳.\n\n<span foreground='$purple' size='larger'><b>Notice: If it seems stuck:</b></span>\n\nSome background windows (emulator, engines, upgrade prompts or system pop-ups) may need your input.\n Close them to continue."
+  --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n⏳ <span foreground='$purple'><b>Please wait while the setup process completes...</b></span> ⏳"
 
   conf_read
   version="$hard_version"

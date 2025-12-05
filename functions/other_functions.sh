@@ -812,7 +812,7 @@ finit() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK: Installing 📀" \
-    --text="RetroDECK is completing its initial setup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+    --text="RetroDECK is completing its initial setup. Please check for any background windows or pop-ups that may require your attention.\n\n⏳ <span foreground='$purple'><b>Please wait while the setup process completes...</b></span> ⏳"
 
   create_lock
 
