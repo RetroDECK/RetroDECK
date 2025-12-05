@@ -1703,7 +1703,7 @@ handle_folder_iconsets() {
         echo '[Desktop Entry]' > "$path_name/.directory"
         echo "Icon=$folder_iconsets_dir/$iconset/$icon_relative_path.ico" >> "$path_name/.directory"
       done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
-      set_setting_value "$rd_conf" "folder_iconset" "$iconset" retrodeck "options"
+      set_setting_value "$rd_conf" "iconset" "$iconset" retrodeck "options"
     else
       configurator_generic_dialog "RetroDeck Configurator - 🎨 Toggle Folder Iconsets 🎨" "The chosen <span foreground='$purple'><b>iconset</b></span> could not be found in the RetroDECK assets."
       return 1
@@ -1712,7 +1712,7 @@ handle_folder_iconsets() {
     while read -r path; do
       find -L "$path" -maxdepth 2 -type f -iname '.directory' -exec rm {} \;
     done < <(jq -r 'del(.paths.downloaded_media_path, .paths.themes_path, .paths.sdcard) | .paths[]' "$rd_conf")
-    set_setting_value "$rd_conf" "folder_iconset" "false" retrodeck "options"
+    set_setting_value "$rd_conf" "iconset" "false" retrodeck "options"
   fi
 }
 
