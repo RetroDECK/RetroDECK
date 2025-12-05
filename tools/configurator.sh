@@ -199,6 +199,7 @@ configurator_open_component_dialog() {
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the
   # welcome screen.
 
+  (
   build_zenity_open_component_menu_array open_component_list
 
   component=$(rd_zenity --list \
@@ -214,6 +215,11 @@ configurator_open_component_dialog() {
   else
     configurator_welcome_dialog
   fi
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - ⏳ Gathering Component Information ⏳" \
+      --text="Gathering RetroDECK component information.\n\n⏳Please wait...⏳"
 }
 
 configurator_tools_dialog() {
@@ -262,8 +268,9 @@ configurator_reset_dialog() {
   # If the user selects components, it calls `prepare_component` with the selected components.
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the welcome screen.
 
+  (
   build_zenity_reset_component_menu_array reset_component_list
-
+  
   choice=$(rd_zenity --list \
   --title "RetroDECK Configurator - ↩️ Reset Components ↩️" --cancel-label="Cancel 🟥"  \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -335,7 +342,11 @@ configurator_reset_dialog() {
     log d "User selected \"Cancel\""
     configurator_welcome_dialog
   fi
-
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - ⏳ Gathering Component Information ⏳" \
+      --text="Gathering RetroDECK component information.\n\n⏳Please wait...⏳"
 }
 
 configurator_about_retrodeck_dialog() {
