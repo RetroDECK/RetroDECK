@@ -325,52 +325,52 @@
   ],
   "presets": {
     "borders": {
-      "name": "Borders",
-      "desc": "Enable / Disable: Borders in supported systems"
+      "name": "Borders 🖼️",
+      "desc": "Enable or disable: Borders in supported components."
     },
     "widescreen": {
-      "name": "Widescreen",
-      "desc": "Enable / Disable: Widescreen in supported systems"
+      "name": "Widescreen 🖥️",
+      "desc": "Enable or disable: Widescreen mode in supported components."
     },
     "ask_to_exit": {
-      "name": "Ask-To-Exit",
-      "desc": "Enable / Disable: Popups that asks - Are sure you want to Quit? in supported systems"
+      "name": "Ask-To-Exit ❓",
+      "desc": "Enable or disable: Show a confirmation pop-up when exiting a game (for certain components)."
     },
     "quick_resume": {
-      "name": "Quick Resume",
-      "desc": "Enable / Disable: Save state auto-save/load in supported systems"
+      "name": "Quick Resume ⚡",
+      "desc": "Enable or disable: Automatic save/load of game states in supported components."
     },
     "rewind": {
-      "name": "Rewind",
-      "desc": "Enable / Disable: the rewind function in supported systems"
+      "name": "Rewind ⏪",
+      "desc": "Enable or disable: Rewind functionality in supported components."
     },
     "abxy_button_swap": {
-      "name": "Swap A/B and X/Y Buttons",
-      "desc": "Enable / Disable: Swapped A/B and X/Y button layout in supported systems"
+      "name": "Swap A/B and X/Y Buttons 🔀",
+      "desc": "Enable or disable: Swapped A/B and X/Y button layout in supported components."
     },
     "cheevos": {
-      "name": "RetroAchievements",
-      "desc": "Log in or out of RetroAchievements in supported systems"
+      "name": "RetroAchievements 🏆",
+      "desc": "Logging in/out of RetroAchievements in supported components."
     },
     "cheevos_hardcore": {
-      "name": "RetroAchievements: Hardcore Mode",
-      "desc": "Enable / Disable: RetroAchievements Hardcore / Challange Mode (no cheats, rewind, save states, etc.) in supported systems"
+      "name": "RetroAchievements: Hardcore Mode 💀",
+      "desc": "Enable or disable: Hardcore mode for RetroAchievements (no cheats, rewind, or save states) in supported components."
     },
     "universal_dyn_input": {
-      "name": "Universal Dynamic Input Textures",
-      "desc": "Enable / Disable: Universal Dynamic Input Textures in supported systems"
+      "name": "Universal Dynamic Input Textures 🎮",
+      "desc": "Enable or disable: Universal Dynamic Input Textures in supported components."
     },
     "discord_rich_presence": {
-      "name": "Discord Rich Presence",
-      "desc": "Enable / Disable: Discord Rich Presence in supported systems"
+      "name": "Discord Rich Presence 💬",
+      "desc": "Enable or disable: Discord Rich Presence in supported components."
     },
     "savestate_on_exit": {
-      "name": "Savestate on Exit",
-      "desc": "Enable / Disable: Savestate on Exit in supported systems."
+      "name": "Savestate on Exit 💾",
+      "desc": "Enable or disable: Automatic save on exit in supported components."
     },
     "savestate_auto_load": {
-      "name": "Savestate Auto Load",
-      "desc": "Enable / Disable: Savestate Auto Load in supported systems."
+      "name": "Savestate Auto Load ⏱️",
+      "desc": "Enable or disable: Automatic load of the last saved state in supported components."
     } 
   }
 }
