@@ -203,7 +203,7 @@ configurator_change_preset_dialog() {
   log d "User made a choice: $choice with return code: $rc"
 
   if [[ -n "$choice" ]]; then # If the user didn't hit Cancel
-    if [[ "$choice" == "Enable All" ]]; then
+    if [[ "$choice" =~ "Enable All" ]]; then
       log d "User selected \"Enable All\""
       (
       while read -r component_obj; do
@@ -248,7 +248,7 @@ configurator_change_preset_dialog() {
       --width=400 --height=200 \
       --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\n⏳ Please wait... ⏳"
       configurator_change_preset_dialog "$preset"
-    elif [[ "$choice" == "Disable All" ]]; then
+    elif [[ "$choice" =~ "Disable All" ]]; then
       log d "User selected \"Disable All\""
       (
       while read -r component_obj; do
