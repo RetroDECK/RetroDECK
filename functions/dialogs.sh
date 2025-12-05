@@ -565,6 +565,7 @@ configurator_bios_checker_dialog() {
 
     current_bios=$((current_bios + 1))
     echo "$((current_bios * 100 / total_bios))"
+    echo "#Checking ${current_bios} of ${total_bios} BIOS files: ${bios_file}"
 
     done < <(jq -c '.bios | map(.system |= (if type=="array" then join(", ") else . end // "Unknown")) | sort_by(.system) | .[]' "$bios_checklist")
 
@@ -586,7 +587,6 @@ configurator_bios_checker_dialog() {
   rd_zenity --progress --auto-close --no-cancel \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - BIOS Checker: 🔎 Scanning 🔎" \
-    --text="The BIOS Checker is scanning for <span foreground='$purple'><b>BIOS and Firmware</b></span> files that RetroDECK recognizes as supported by each system.\n\n\Please note that not all BIOS & Firmware files are necessary for games to work.\n\n\BIOS files not recognized by this tool may still function correctly.\n\n\Some components have additional built-in methods to verify the functionality of BIOS and Firmware files.\n\n\⏳ <span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span> ⏳" \
     --width=400 --height=100
 
   configurator_tools_dialog
