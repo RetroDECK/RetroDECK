@@ -420,10 +420,10 @@ desktop_mode_warning() {
     --text="You appear to be running RetroDECK in the SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\Some functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'><b>Desktop Mode</b></span>.\n\n\RetroDECK is best enjoyed in <span foreground='$purple'><b>Game Mode</b></span> on SteamOS.\n\n\Do you still want to proceed?")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-      if [[ $choice == "No" ]]; then
+      if [[ $choice =~ "No" ]]; then
         log i "Selected: \"No\""
         exit 1
-      elif [[ $choice == "Never show again 🛑" ]]; then
+      elif [[ $choice =~ "Never show again" ]]; then
         log i "Selected: \"Never show this again\""
         set_setting_value "$rd_conf" "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
@@ -444,7 +444,7 @@ low_space_warning() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - 🛑 Warning: Low Space 🛑" \
       --text="Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.")
-      if [[ $choice == "Never show again 🛑" ]]; then
+      if [[ $choice =~ "Never show again" ]]; then
         log i "Selected: \"Never show this again\""
         set_setting_value "$rd_conf" "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
@@ -464,9 +464,9 @@ configurator_power_user_warning_dialog() {
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
     configurator_open_component_dialog
   else # If any button other than "Yes" was clicked
-    if [[ $choice == "No" ]]; then
+    if [[ $choice =~ "No" ]]; then
       configurator_welcome_dialog
-    elif [[ $choice == "Never show again 🛑" ]]; then
+    elif [[ $choice =~ "Never show again" ]]; then
       set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
       configurator_open_component_dialog
     fi
@@ -725,7 +725,7 @@ configurator_compress_multiple_games_dialog() {
       for ((i=0; i<${#temp_array[@]}; i+=2)); do
         games_to_compress+=("${temp_array[i]}^${temp_array[i+1]}")
       done
-    elif [[ "$choice" == "Compress All" ]]; then
+    elif [[ "$choice" =~ "Compress All" ]]; then
       while read -r obj; do # Iterate through all returned menu objects
         local game=$(jq -r '.game' <<< "$obj")
         local format=$(jq -r '.format' <<< "$obj")

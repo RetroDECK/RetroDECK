@@ -279,7 +279,7 @@ configurator_reset_dialog() {
 
   log d "User selected: $choice"
 
-  if [[ "$choice" == "Factory Reset ☢️" ]]; then
+  if [[ "$choice" =~ "Factory Reset" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
@@ -290,7 +290,7 @@ configurator_reset_dialog() {
     else # User clicked "Cancel"
       configurator_welcome_dialog
     fi
-  elif [[ "$choice" == "Reset All" ]]; then
+  elif [[ "$choice" =~ "Reset All" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
@@ -311,7 +311,6 @@ configurator_reset_dialog() {
     pretty_choices=()
     IFS='^' read -ra choices <<< "$choice"
     for current_choice in "${choices[@]}"; do
-      log d "current_choice: $current_choice"
       pretty_choices+=("$(jq -r --arg component "$current_choice" '.[$component].name' "$rd_components/$current_choice/component_manifest.json")")
     done
     rd_zenity --question \

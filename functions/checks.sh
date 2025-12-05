@@ -59,13 +59,13 @@ check_for_version_update() {
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
       if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< "$version") -le $(sed -e 's/[\.a-z]//g' <<< "$online_version") ]]; then
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Ignore this version" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Ignore Version 🛑" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - 🆕 New Update Available 🆕" \
         --text="RetroDECK version 🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕 is now available.\nUpdate via your app store (e.g., KDE Discover / GNOME Software / Bazaar ).\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.")
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
-          log i "Selected: \"OK\""
+          log i "\"Ignore this version\" selected, updating \"$rd_conf\""
           set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
@@ -76,7 +76,7 @@ check_for_version_update() {
           --text="RetroDECK Cooker version:\n\n🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕\nis now available.\n\nYou are on version:\n\n🔴 <span foreground='$blue'><b>$hard_version</b></span> 🔴.\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.\n\n<b>Would you like to update now?</b>")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-          if [[ $choice == "Ignore this version" ]]; then
+          if [[ $choice =~ "Ignore Version" ]]; then
             log i "\"Ignore this version\" selected, updating \"$rd_conf\""
             set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
           fi
