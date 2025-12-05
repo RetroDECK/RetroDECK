@@ -100,13 +100,13 @@ source /app/libexec/global.sh
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
-    "Settings ⚙️" "Adjust core RetroDECK: Presets, Visuals, Tweaks and Logins."
+    "About RetroDECK 📖" "View patch notes, credits, and other project information."
+    "Data Management 📁" "Move, clean empty or rebuild RetroDECK directories."
     "Open Component 🔧" "Manually launch and configure individual components. 🛑  Advanced Users Only 🛑"
     "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
+    "Settings ⚙️" "Adjust core RetroDECK: Presets, Visuals, Tweaks and Logins."
+    "Steam Tools 🚂" "Synchronize ES-DE 🌟 Favorites 🌟 or add RetroDECK to Steam."
     "Tools 🧰" "Run various tools: BIOS Checker, File Compressor, Install optional features and more."
-    "Steam Tools 🚂" "Synchronize ES-DE 🌟 Favorites 🌟 or add a RetroDECK launcher to Steam."
-    "Data Management 📁" "Move, clean empty or rebuild RetroDECK directories."
-    "About RetroDECK 📖" "View patch notes, credits, and other project information."
   )
 
   if [[ $developer_options == "true" ]]; then
