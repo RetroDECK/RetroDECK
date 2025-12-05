@@ -141,7 +141,7 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>Moving $(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/retrodeck/$rd_dir_path</b></span> was successful."
+              configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>Moving $(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/$rd_dir_path</b></span> was successful."
             else
               configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "<span foreground='$purple'><b>The moving process was not completed.</b></span> Please try again."
             fi
