@@ -336,10 +336,6 @@
       "name": "Discord Rich Presence 💬",
       "desc": "Enable or disable: Discord Rich Presence in supported components."
     },
-    "abxy_button_swap": {
-      "name": "Swap A/B and X/Y Buttons 🔀",
-      "desc": "Enable or disable: Swapped A/B and X/Y button layout in supported components."
-    },
     "cheevos": {
       "name": "RetroAchievements 🏆",
       "desc": "Logging in/out of RetroAchievements in supported components."
@@ -363,6 +359,10 @@
     "savestate_on_exit": {
       "name": "Savestate on Exit 💾",
       "desc": "Enable or disable: Automatic save on exit in supported components."
+    },
+    "abxy_button_swap": {
+      "name": "Swap A/B and X/Y Buttons 🔀",
+      "desc": "Enable or disable: Swapped A/B and X/Y button layout in supported components."
     },
     "universal_dyn_input": {
       "name": "Universal Dynamic Input Textures 🎮",
