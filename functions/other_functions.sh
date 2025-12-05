@@ -817,11 +817,16 @@ finit() {
   create_lock
 
   # Inform the user where to put the ROMs and BIOS files
-  rd_zenity --info --no-wrap \
+  rd_zenity --question --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --ok-label="Start RetroDECK 🎮" \
+    --cancel-label="Quit RetroDECK ⚙️" --ok-label="Start RetroDECK 🎮" \
     --title "RetroDECK Initial Setup - Complete ✅" \
     --text="RetroDECK initial setup is complete! ✅\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nCheck out the <span foreground='$purple'><b>RetroDECK Wiki and Website:</b></span>\n\nFor detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
+
+  local rc=$?
+  if [[ $rc == "1" ]]; then
+    quit_retrodeck
+  fi
 }
 
 install_retrodeck_starterpack() {
