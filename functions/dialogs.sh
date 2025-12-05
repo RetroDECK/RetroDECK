@@ -593,8 +593,6 @@ configurator_bios_checker_dialog() {
 }
 
 configurator_compression_tool_dialog() {
-  configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
-
   choice=$(rd_zenity --list --title="RetroDECK Configurator - 🗜️ Compression Tool 🗜️" --cancel-label="Back 🔙" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
@@ -614,30 +612,35 @@ configurator_compression_tool_dialog() {
 
   "Compress Multiple Games: CHD" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
     configurator_compress_multiple_games_dialog "chd"
     configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: ZIP" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
     configurator_compress_multiple_games_dialog "zip"
     configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: RVZ" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
     configurator_compress_multiple_games_dialog "rvz"
     configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: All Formats" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
     configurator_compress_multiple_games_dialog "all"
     configurator_compression_tool_dialog
   ;;
 
   "Compress All Games" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - 🗜️ Compression Tool 🗜️" "Depending on your library size and compression settings, this process may take some time."
     configurator_compress_multiple_games_dialog "everything"
     configurator_compression_tool_dialog
   ;;
