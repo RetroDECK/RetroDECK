@@ -127,7 +127,9 @@ configurator_move_folder_dialog() {
         else
           if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
             configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "Moving <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/retrodeck/$(basename "$dir_to_move")</b></span>)"
-            unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
+            if [[ -L "$dest_root/$rd_dir_path" ]]; then
+              unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
+            fi
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
               declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
