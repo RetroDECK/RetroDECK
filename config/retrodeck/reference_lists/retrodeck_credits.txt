@@ -1,5 +1,5 @@
 =====================================================================
-                        ★ RETRODECK TEAM ★
+                        🏆 RETRODECK TEAM 🏆
 =====================================================================
 
 ▶ XARGONWAN
@@ -34,9 +34,12 @@
    • Feature Requests & Issue Handling
    • Testing, Art & Assets, Wiki Documentation
 
+=====================================================================
+
+
 
 =====================================================================
-                         ★ SPECIAL THANKS ★
+                         🌟 SPECIAL THANKS 🌟
 =====================================================================
 
 We are deeply grateful to everyone who powers RetroDECK:
@@ -49,5 +52,46 @@ We are deeply grateful to everyone who powers RetroDECK:
   • Artists & Asset Creators – Enriching the ecosystem with graphics, sounds, and more.
 
 Your collective effort makes RetroDECK possible. Thank you!
+
+=====================================================================
+
+
+
+=====================================================================
+                        🎓 RETRODECK ALUMNI 🎓
+=====================================================================
+
+RetroDECK Alumni are former members of the RetroDECK Team that have moved on to other pastures.
+
+▶ Lx32
+   • Did the work that got in the end SRM into RetroDECK.
+
+▶ dottormac
+   • Did tons of bug hunting and testing in the early days.
+
+▶ MonkeyX
+   • Did Godot and other improvements.
+
+=====================================================================
+
+
+
+=====================================================================
+                  🏝️ RETRODECK PAST HELPERS 🏝️
+=====================================================================
+
+People that have helped the project in the past and are worthy of recognition.
+
+▶ Niroku / Atari
+   • Helped with community management during in the early days of RetroDECK.
+
+▶ RavenKilit
+   • Helped with development and testing in the early days.
+
+▶ Gabeboii
+   • Helped with web development in the early days.
+
+▶ Draco
+   • Helped with Server Administration in the early days. 
 
 =====================================================================

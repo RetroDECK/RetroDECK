@@ -1,6 +1,5 @@
 abduction
 aboleth
-adamone
 advance
 aesthetic
 agate
@@ -293,6 +292,7 @@ jackrabbit
 jade
 jaguar
 jazz
+jiannazzone
 jill
 johnny
 joker
