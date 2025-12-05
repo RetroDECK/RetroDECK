@@ -1689,6 +1689,10 @@ handle_folder_iconsets() {
         local path_var_name="${icon_relative_root}_path"
         local path_name=""
 
+        if [[ "$icon_relative_path" =~ (sync) ]]; then # If the icon is for a hidden folder, add the leading dot temporarily for searching
+          icon_relative_path=".${icon_relative_path}"
+        fi
+
         if [[ -v "$path_var_name" ]]; then
           path_name="${!path_var_name}"
           if [[ ! "$icon_relative_path" == "$icon_relative_root" ]]; then
@@ -1700,6 +1704,7 @@ handle_folder_iconsets() {
           fi
         elif [[ -d "$rd_home_path/$icon_relative_path" ]]; then
           path_name="$rd_home_path/$icon_relative_path"
+          icon_relative_path="${icon_relative_path#.}" # Remove leading dot from actual icon name reference
         else
           log w "Path for icon $icon could not be found, skipping..."
           continue
