@@ -716,18 +716,18 @@ api_set_preset_state() {
         defaults_file=$(jq -r '.defaults_file // empty' <<< "$current_preset_object")
 
         if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
-          eval target_file=$target_file
+          target_file=$(echo "$target_file" | envsubst)
           log d "Target file is a variable name. Actual target $target_file"
         fi
         if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
-          eval defaults_file=$defaults_file
+            defaults_file=$(echo "$defaults_file" | envsubst)
           log d "Defaults file is a variable name. Actual defaults file $defaults_file"
         fi
 
         if [[ ! "$state" == "$preset_disabled_state" ]]; then # Preset is being enabled
           if echo "$current_preset_object" | jq -e --arg state "$state" '.enabled_states | contains([$state])' > /dev/null; then # If the desired state should process this action
             if [[ "$new_setting_value" = \$* ]]; then
-              eval new_setting_value=$new_setting_value
+              new_setting_value=$(echo "$new_setting_value" | envsubst)
               log d "New setting value is a variable. Actual setting value is $new_setting_value"
             fi
             if [[ "$config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
@@ -744,8 +744,8 @@ api_set_preset_state() {
                   set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
                 fi
               fi
-            elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
-              log d "Creating cheevos token file $ppssppcheevosconf"
+            elif [[ ! -f "$target_file" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+              log d "Target file $target_file does not exist, creating..."
               echo "$new_setting_value" > "$target_file"
             else
               log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
@@ -766,8 +766,8 @@ api_set_preset_state() {
                 rmdir "$(realpath "$(dirname "$target_file")")"
               fi
             fi
-          elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
-            log d "Removing PPSSPP cheevos token file $ppssppcheevosconf"
+          elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppsspp_retroachievements_dat" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+            log d "Removing PPSSPP cheevos token file ppsspp_retroachievements_dat"
             rm "$target_file"
           else
             local default_setting_value=$(get_setting_value "$defaults_file" "$preset_setting_name" "$config_format" "$section")
