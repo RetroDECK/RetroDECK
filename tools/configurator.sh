@@ -102,7 +102,7 @@ configurator_welcome_dialog() {
   welcome_menu_options=(
     "About RetroDECK 📖" "View patch notes, credits, and other project information."
     "Data Management 📁" "Move, clean empty or rebuild RetroDECK directories."
-    "Open Component 🔧" "Manually launch and configure individual components. 🛑  Advanced Users Only 🛑"
+    "Open Component 🔧" "Manually launch and configure individual components 🛑 Advanced Users Only 🛑." 
     "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
     "Settings ⚙️" "Adjust core RetroDECK: Presets, Visuals, Tweaks and Logins."
     "Steam Tools 🚂" "Synchronize ES-DE 🌟 Favorites 🌟 or add RetroDECK to Steam."
