@@ -952,33 +952,43 @@ configurator_retrodeck_backup_dialog() {
 
 configurator_clean_empty_systems_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Before removing any identified empty system folders,\n<span foreground='$purple'><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "Searching for empty system folders.\n\n⏳ Please wait... ⏳"
-  find_empty_rom_folders
 
-  choice=$(rd_zenity \
-      --list --width=1200 --height=720 --title "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" \
-      --checklist --hide-column=3 --ok-label="Remove Selected 🟡" --extra-button="Remove All 🟢" \
-      --separator="^" --print-column=2 \
-      --text="Choose which empty ROM folders to remove:" \
-      --column "Remove?" \
-      --column "System" \
-      "${empty_rom_folders_list[@]}")
+  (
+  build_zenity_find_empty_rom_folders_menu_array empty_rom_folders_list
 
-  local rc=$?
-  if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
-    IFS="^" read -ra folders_to_remove <<< "$choice"
-    for folder in "${folders_to_remove[@]}"; do
-      log i "Removing empty folder $folder"
-      rm -rf "$folder"
-    done
-    configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "The removal process is complete."
-  elif [[ ! -z $choice ]]; then # User clicked "Remove All"
-    for folder in "${all_empty_folders[@]}"; do
-      log i "Removing empty folder $folder"
-      rm -rf "$folder"
-    done
-    configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "The removal process is complete."
+  if [[ -n ${empty_rom_folders_list[@]} ]]; then
+    choice=$(rd_zenity --list \
+    --width=1200 --height=720 --title "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" \
+    --checklist --ok-label="Remove Selected 🟡" --extra-button="Remove All 🟢" \
+    --separator="^" --hide-column=3 --print-column=3 \
+    --text="Choose which empty ROM folders to remove:" \
+    --column "Remove?" \
+    --column "System" \
+    --column "path" \
+    "${empty_rom_folders_list[@]}")
+
+    local rc=$?
+    if [[ $rc == "0" && -n "$choice" ]]; then # User clicked "Remove Selected" with at least one system selected
+      IFS="^" read -ra folders_to_remove <<< "$choice"
+      for folder in "${folders_to_remove[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -rf "$folder"
+      done
+      configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "The removal process is complete."
+    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
+      for folder in "${all_empty_folders[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -rf "$folder"
+      done
+      configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "The removal process is complete."
+    fi
+  else
+    configurator_generic_dialog "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" "No empty folders found for removal."
   fi
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close --pulsate \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - 📁 Clean Empty System Folders 📁" --text "Searching for empty system folders.\n\n⏳ Please wait... ⏳"
 
   configurator_data_management_dialog
 }

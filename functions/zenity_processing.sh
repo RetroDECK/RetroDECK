@@ -286,3 +286,19 @@ build_zenity_reset_component_menu_array() {
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
+
+build_zenity_find_empty_rom_folders_menu_array() {
+  local dest_array="$1"
+  local -a temp_bash_array=()
+
+  while read -r obj; do # Iterate through all returned menu objects
+    if [[ ! "$obj" == "no empty rom folders found" ]]; then
+      local checkbox_state="TRUE"
+      local system=$(jq -r '.system' <<< "$obj")
+      local path=$(jq -r '.path' <<< "$obj")
+      temp_bash_array+=("$checkbox_state" "$system" "$path")
+    fi
+  done < <(api_get_empty_rom_folders | jq -c '.[]')
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
