@@ -210,9 +210,9 @@ configurator_change_preset_dialog() {
         if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
           log d "Cheevos not currently logged in, prompting user..."
           if cheevos_login_info=$(get_cheevos_token_dialog); then
-            cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
-            cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
-            cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
+            export cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
+            export cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
+            export cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
             configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
@@ -346,9 +346,9 @@ configurator_change_preset_value_dialog() {
         if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
           log d "Cheevos not currently logged in, prompting user..."
           if cheevos_login_info=$(get_cheevos_token_dialog); then
-            cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
-            cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
-            cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
+            export cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
+            export cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
+            export cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
             configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
