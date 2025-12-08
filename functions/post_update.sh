@@ -113,6 +113,18 @@ post_update() {
     while read -r component_update_file; do
       source "$component_update_file"
     done < <(find "$rd_components" -mindepth 2 -maxdepth 2 -type f -iname "component_update.sh" -not -path "/app/retrodeck/components/framework/*")
+
+    #######################################
+    # These actions happen at every update
+    #######################################
+
+    if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
+      install_retrodeck_controller_profile
+    fi
+
+    update_splashscreens
+    deploy_helper_files
+    build_retrodeck_current_presets
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
