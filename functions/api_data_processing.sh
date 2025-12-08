@@ -644,9 +644,9 @@ api_set_preset_state() {
                       end
                     ' "$rd_components/$component/component_manifest.json")
                 if [[ -n "$child_component" ]]; then
-                  incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$child_component" "retrodeck" "$preset_key_value")
+                  incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$child_component" "retrodeck" "$preset_key")
                 else
-                  incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_key_value")
+                  incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_key")
                 fi
                 if [[ ! "$incompatible_preset_current_state" == "$incompatible_preset_disabled_state" ]]; then # If the incompatible preset is enabled
                   echo "incompatible preset $preset_key is currently enabled, cannot enable $preset"
