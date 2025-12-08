@@ -1716,7 +1716,7 @@ handle_folder_iconsets() {
       done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
       set_setting_value "$rd_conf" "iconset" "$iconset" retrodeck "options"
     else
-      configurator_generic_dialog "RetroDeck Configurator - 🎨 Toggle Folder Iconsets 🎨" "The chosen <span foreground='$purple'><b>iconset</b></span> could not be found in the RetroDECK assets."
+      configurator_generic_dialog "RetroDeck Configurator - 🎨 Toggle Folder Iconsets 🎨" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> could not be found in the RetroDECK assets."
       return 1
     fi
   else
