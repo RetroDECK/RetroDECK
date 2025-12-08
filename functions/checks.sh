@@ -59,7 +59,7 @@ check_for_version_update() {
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
       if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< "$version") -le $(sed -e 's/[\.a-z]//g' <<< "$online_version") ]]; then
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK 🟢"  --extra-button="Ignore Version 🛑" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  --extra-button="Ignore Version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - 🆕 New Update Available 🆕" \
         --text="RetroDECK version 🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕 is now available.\nUpdate via your app store (e.g., KDE Discover / GNOME Software / Bazaar ).\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.")
@@ -70,7 +70,7 @@ check_for_version_update() {
         fi
       elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes 🟢" --extra-button="No 🟥" --extra-button="Ignore Version 🛑" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore Version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK - 🆕🍲 New Cooker Version Available 🍲🆕" \
           --text="RetroDECK Cooker version:\n\n🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕\nis now available.\n\nYou are on version:\n\n🔴 <span foreground='$blue'><b>$hard_version</b></span> 🔴.\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.\n\n<b>Would you like to update now?</b>")

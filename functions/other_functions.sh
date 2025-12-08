@@ -11,7 +11,7 @@ directory_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="Directory <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -20,7 +20,7 @@ directory_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="No directory selected.\n\n<span foreground='$purple'><b>Do you want to exit the selection process?</b></span>"
       if [ $? == 0 ]
       then
@@ -41,7 +41,7 @@ file_browse() {
     local target="$(rd_zenity --file-selection --title="Choose $1")"
     if [ ! -z "$target" ] #yes
     then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="File <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
       if [ $? == 0 ]
       then
@@ -50,7 +50,7 @@ file_browse() {
         break
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -647,7 +647,7 @@ finit_browse() {
           echo "$target"
           break
         else
-          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No 🟥" --ok-label="Yes 🟢" --text="Do you want to quit?"
+          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" --text="Do you want to quit?"
           if [ $? == 0 ] # yes, quit
           then
             quit_retrodeck
@@ -687,7 +687,7 @@ finit() {
     exit 2
   ;;
 
-  "Internal Storage 🏠" | "Home Directory 🏠" ) # Internal
+  "Internal Storage" | "Home Directory" ) # Internal
     log i "Internal selected"
     rd_home_path="$HOME/retrodeck"
     if [[ -L "$rd_home_path" ]]; then #Remove old symlink from existing install, if it exists
@@ -707,7 +707,7 @@ finit() {
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
       configurator_generic_dialog "RetroDeck Installation - 💾 SD Card 💾" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back 🔙" \
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -819,8 +819,8 @@ finit() {
   # Inform the user where to put the ROMs and BIOS files
   rd_zenity --question --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --ok-label="Start RetroDECK 🎮" \
-    --cancel-label="Return to Desktop 🖥️" \
+    --ok-label="Start RetroDECK" \
+    --cancel-label="Return to Desktop" \
     --title "RetroDECK Initial Setup - Complete ✅" \
     --text="RetroDECK initial setup is Complete! ✅\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span> 🖥️.\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Your ⚙️ <span foreground='$purple'><b>BIOS and Firmware</b></span> files in:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
 
@@ -1350,7 +1350,7 @@ check_if_updated() {
         set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
         set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade 🟢" --extra-button="Don't Upgrade 🟥" --extra-button="Delete Everything & Fresh Install ☢️" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything & Fresh Install" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - 🍲 RetroDECK Cooker: Upgrade 🍲" \
         --text="You are upgrading a cooker build of RetroDECK.\n\n Press the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything & Fresh Install</b></span> ☢️ button deletes all data (including ROMs, BIOS, Saves and everything else stored in /retrodeck). Do not press it unless you know what you are doing!")
@@ -1731,7 +1731,7 @@ install_retrodeck_controller_profile_and_add_to_steam() {
   install_retrodeck_controller_profile
   add_retrodeck_to_steam
   
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Steam Syncronization 🚂" --cancel-label="No 🟥" --ok-label "Yes 🟢" \
+  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Steam Syncronization 🚂" --cancel-label="No" --ok-label "Yes" \
     --text="Enable Steam synchronization?\n\nThis will scan your games for any 🌟 <span foreground='$purple'><b>Favorited</b></span> 🌟 games in ES-DE and add them to your Steam library as individual entries.\n\nYou will need to restart Steam for the changes to take effect."
 
   if [[ $? == 0 ]]; then
