@@ -895,10 +895,10 @@ deploy_helper_files() {
     file=$(echo "$current_json_object" | jq -r '.filename')
     dest=$(echo "$current_json_object" | jq -r '.location')
     if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
-      eval current_dest="$dest"
+      dest=$(echo "$dest" | envsubst)
       if [[ -d "$dest" ]]; then
-        log d "Copying helper file $file to $current_dest"
-        cp -f "$helper_files_path/$file" "$current_dest/$file"
+        log d "Copying helper file $file to $dest"
+        cp -f "$helper_files_path/$file" "$dest/$file"
       else
         log d "Helper file location $dest does not exist, component may not be installed. Skipping..."
       fi
