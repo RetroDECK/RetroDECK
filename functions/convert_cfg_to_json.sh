@@ -81,10 +81,10 @@ convert_cfg_to_json() {
 
   declare -A PRESET_NESTING_MAP=(
     ["borders.gb"]="retroarch_cores.gambatte_libretro_GB"
-    ["borders.gb"]="retroarch_cores.gambatte_libretro_GBC"
+    ["borders.gbc"]="retroarch_cores.gambatte_libretro_GBC"
     ["borders.gba"]="retroarch_cores.mgba_libretro"
     ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
-    ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro_GG"
+    ["borders.gg"]="retroarch_cores.genesis_plus_gx_libretro_GG"
     ["borders.n64"]="retroarch_cores.mupen64plus_next_libretro"
     ["borders.psx_ra"]="retroarch_cores.swanstation_libretro"
     ["borders.snes"]="retroarch_cores.snes9x-current_libretro"
@@ -98,7 +98,7 @@ convert_cfg_to_json() {
     ["rewind.gbc"]="retroarch_cores.gambatte_libretro_GBC"
     ["rewind.gba"]="retroarch_cores.mgba_libretro"
     ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
-    ["rewind.genesis"]="retroarch_cores.genesis_plus_gx_libretro_GG"
+    ["rewind.gg"]="retroarch_cores.genesis_plus_gx_libretro_GG"
     ["rewind.snes"]="retroarch_cores.snes9x-current_libretro"
 
     ["abxy_button_swap.gb"]="retroarch_cores.gambatte_libretro_GB"
