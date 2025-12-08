@@ -228,12 +228,14 @@ build_retrodeck_current_presets() {
   do
     while IFS= read -r component # Iterate all system names in this preset
     do
+      local child_component=""
       local parent_component="$(jq -r --arg preset "$preset" --arg component "$component" '
                                                                                           .presets[$preset]
                                                                                           | paths(scalars)
                                                                                           | select(.[-1] == $component)
                                                                                           | if length > 1 then .[-2] else $preset end
                                                                                           ' "$rd_conf")"
+
       if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
         parent_component="${parent_component%_cores}"
         child_component="$component"
@@ -248,12 +250,21 @@ build_retrodeck_current_presets() {
                                 end
                               ' "$rd_components/$component/component_manifest.json")
       
-      local preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset") # Read the variables value from active retrodeck.cfg
+      if [[ -n "$child_component" ]]; then
+        component="$child_component"
+      fi
+
+      local preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
       
       if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
         api_set_preset_state "$component" "$preset" "$preset_current_state"
       fi
-    done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
+    done < <(jq -r --arg preset "$preset" '.presets[$preset] | to_entries[] |
+                                          if (.key | endswith("_cores")) then
+                                            .value | keys[]
+                                          else
+                                            .key
+                                          end' "$rd_conf")
   done < <(jq -r '.presets | keys[]' "$rd_conf")
 }
 

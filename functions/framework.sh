@@ -657,15 +657,17 @@ prepare_component() {
       while IFS= read -r preset_compatible_component # Iterate all system names in this preset
       do
         if [[ "$component" == "all" || "$preset_compatible_component" =~ "$component" ]]; then
+          local child_component=""
           local parent_component="$(jq -r --arg preset "$preset" --arg component "$preset_compatible_component" '
                                                                                               .presets[$preset]
                                                                                               | paths(scalars)
                                                                                               | select(.[-1] == $component)
                                                                                               | if length > 1 then .[-2] else $preset end
                                                                                               ' "$rd_conf")"
+          
           if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
             parent_component="${parent_component%_cores}"
-            local child_component="$preset_compatible_component"
+            child_component="$preset_compatible_component"
             local preset_compatible_component="$parent_component"
           fi
 
@@ -677,19 +679,23 @@ prepare_component() {
                                     end
                                   ' "$rd_components/$preset_compatible_component/component_manifest.json")
 
-          local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset") # Read the variables value from active retrodeck.cfg
+          if [[ -n "$child_component" ]]; then
+            preset_compatible_component="$child_component"
+          fi
+
+          local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset")
 
           if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
-            if [[ -n "$child_component" ]]; then
-              log d "Disabling preset $preset for component $preset_compatible_component core $child_component"
-              set_setting_value "$rd_conf" "$child_component" "$preset_disabled_state" "retrodeck" "$preset"
-            else
-              log d "Disabling preset $preset for component $preset_compatible_component"
-              set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
-            fi
+            log d "Disabling preset $preset for component $preset_compatible_component"
+            set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
           fi
         fi
-      done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
+      done < <(jq -r --arg preset "$preset" '.presets[$preset] | to_entries[] |
+                                          if (.key | endswith("_cores")) then 
+                                            .value | keys[]
+                                          else
+                                            .key
+                                          end' "$rd_conf")
     done < <(jq -r '.presets | keys[]' "$rd_conf")
   fi
 
