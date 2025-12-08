@@ -6,7 +6,7 @@ set_setting_value() {
 
   local setting_name_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${5:-}")
 
   log d "Setting $setting_name_to_change=$setting_value_to_change in $1"
   if [[ ! -f "$1" ]]; then
@@ -170,7 +170,7 @@ get_setting_value() {
 # USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
 
   local current_setting_name="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
@@ -279,7 +279,7 @@ add_setting_line() {
   # USAGE: add_setting_line $setting_file $setting_line $system $section (optional)
 
   local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
 
   case $3 in
 
@@ -304,7 +304,7 @@ add_setting() {
 
   local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local current_setting_value=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${5:-}")
 
   case $4 in
 
@@ -324,7 +324,7 @@ delete_setting() {
   # USAGE: delete_setting $setting_file $setting_name $system $section (optional)
 
   local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
 
   case $3 in
 
@@ -343,7 +343,7 @@ disable_setting() {
   # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
 
   local current_setting_line="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
@@ -363,7 +363,7 @@ enable_setting() {
   # USAGE: enable_setting $setting_file $setting_line $system $section (optional)
 
   local current_setting_line="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
@@ -626,7 +626,7 @@ prepare_component() {
 
   action="$1"
   component="$2"
-  call_source="$3"
+  call_source="${3:-}"
   component_found="false"
 
   if [[ -z "$component" ]]; then
