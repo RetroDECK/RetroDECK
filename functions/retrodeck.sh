@@ -42,7 +42,7 @@ source /app/libexec/global.sh
 # Check if is an infromational message
 # If so, set LOG_SILENT to true, source the global.sh script,
 # show the needed information and quit
-case "$1" in
+case "${1:-}" in
   -h|--help)
     LOG_SILENT=true
     if [[ "$version" =~ ^[0-9] ]]; then
