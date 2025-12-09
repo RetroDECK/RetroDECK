@@ -915,7 +915,7 @@ configurator_retrodeck_backup_dialog() {
   configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "This tool will compress one or more RetroDECK userdata folders into a single .tar file.\n\n\⏳ <span foreground='$purple'><b>Please note that this process may take several minutes.</b></span> ⏳\n\n\The resulting .tar file will be located in:\n<span foreground='$purple'><b>$backups_path.</b></span>"
 
   choice=$(rd_zenity --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n")
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Please choose a backup method for your RetroDECK userdata:\n\n\🧩 Core Backup:\nOnly essential files will be saved, including game saves, save states, and gamelists.\n\n\🎛️ Custom Backup:\nSelect specific folders to include in your backup. Ideal for tailored data preservation.\n\n\📦 Complete Backup:\nAll userdata will be backed up, including games and downloaded media.\n\n\<span foreground='purple'>⚠️ <b>WARNING:</b> A complete backup may require a very large amount of storage space. ⚠️</span>")
 
   case $choice in
     "Core Backup" )
