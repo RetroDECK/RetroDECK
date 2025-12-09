@@ -220,25 +220,25 @@ conf_write() {
       "$filter" \
       "$rd_conf" > "$tmp" \
       && mv "$tmp" "$rd_conf"
-    else
-      while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-      do
-        if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-          if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-            local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-          else
-            if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-              local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-              local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-              if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
-                set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
-              fi
+  else
+    while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+    do
+      if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+        if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+          local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
+        else
+          if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+            local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+            local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+            if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
+              set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
             fi
           fi
         fi
-      done < "$rd_conf"
-    fi
+      fi
+    done < "$rd_conf"
+  fi
   log d "retrodeck.cfg written"
 }
 
@@ -758,9 +758,10 @@ finit() {
       --title "RetroDECK" \
       --ok-label "Browse" \
       --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      sdcard="$(finit_browse)" # Calling the browse function
-      rd_home_path="$sdcard/retrodeck"
-      if [[ -z "$rd_home_path" ]]; then # If user hit the cancel button
+      rd_home_path="$(finit_browse)" # Calling the browse function
+      if [[ -n "$rd_home_path" ]]; then 
+        rd_home_path="$rd_home_path/retrodeck"
+      else # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
@@ -796,7 +797,6 @@ finit() {
 
   (
   prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
-  conf_write # Write the new values to retrodeck.cfg
   prepare_component "reset" "all"
   update_component_presets
   deploy_helper_files
@@ -868,7 +868,6 @@ create_lock() {
   version=$hard_version
   log i "Creating RetroDECK lock file in $rd_lockfile"
   touch "$rd_lockfile"
-  conf_write
 }
 
 update_splashscreens() {
