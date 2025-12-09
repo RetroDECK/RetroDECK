@@ -165,11 +165,15 @@ configurator_move_folder_dialog() {
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
     configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location")
-    declare -g "$rd_dir_name=$dir_to_move"
-    prepare_component "postmove" "all"
-    conf_write
-    configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
-    configurator_move_folder_dialog "$rd_dir_name"
+    if [[ -n "$dir_to_move" ]]; then
+      declare -g "$rd_dir_name=$dir_to_move"
+      prepare_component "postmove" "all"
+      conf_write
+      configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
+      configurator_move_folder_dialog "$rd_dir_name"
+    else
+      configurator_generic_dialog "RetroDECK Configurator - 📁 Move Folder 📁" "No location was selected, returning to the Data Management menu."
+    fi
   fi
 
   configurator_data_management_dialog
