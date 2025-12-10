@@ -30,6 +30,15 @@ add-extensions:
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
 
+# Gamescope for Steam Deck
+  org.freedesktop.Platform.VulkanLayer.gamescope:
+    directory: lib/gamescope     
+    add-ld-path: . 
+    version: '25.08'
+    cleanup-commands:
+      - mkdir -p "${FLATPAK_DEST}/lib/gamescope"
+      
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                             finish-args
