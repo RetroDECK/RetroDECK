@@ -388,7 +388,7 @@
       "md5": "6f69cc8b5ed761b03afd78000dfb0e19",
       "system": "msx",
       "description": "MSX FMPAC floppy controller BIOS",
-      "required": "required"
+      "required": "optional"
     },
     {
       "filename": "MSXDOS2.ROM",
@@ -402,14 +402,14 @@
       "md5": "403cdea1cbd2bb24fae506941f8f655e",
       "system": "msx",
       "description": "MSX Yamaha Painter ROM",
-      "required": "required"
+      "required": "optional"
     },
     {
       "filename": "KANJI.ROM",
       "md5": "febe8782b466d7c3b16de6d104826b34",
       "system": "msx",
       "description": "MSX Kanji font ROM",
-      "required": "required"
+      "required": "optional"
     },
     {
       "filename": "mcpx_1.0.bin",
@@ -691,21 +691,21 @@
       "filename": "gb_bios.bin",
       "md5": "32fbbd84168d3482956eb3c5051637f5",
       "system": "gb",
-      "description": "Game Boy BIOS (shows Nintendo logo at boot; optional)",
+      "description": "Game Boy BIOS (shows Nintendo logo at boot)",
       "required": "optional"
     },
     {
       "filename": "gbc_bios.bin",
       "md5": "dbfce9db9deaa2567f6a84fde55f9680",
       "system": "gbc",
-      "description": "Game Boy Color BIOS (shows Nintendo logo at boot; optional)",
+      "description": "Game Boy Color BIOS (shows Nintendo logo at boot)",
       "required": "optional"
     },
     {
       "filename": "gba_bios.bin",
       "md5": "a860e8c0b6d573d191e4ec7db1b1e4f6",
       "system": "gba",
-      "description": "Game Boy Advance BIOS (shows Nintendo logo at boot; optional)",
+      "description": "Game Boy Advance BIOS (shows Nintendo logo at boot)",
       "required": "optional"
     },
     {
@@ -739,14 +739,14 @@
       "filename": "biosdsi7.bin",
       "sha256": "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2",
       "system": "nds",
-      "description": "Nintendo DSi ARM7 BIOS - DSi",
+      "description": "Nintendo DSi ARM7 BIOS",
       "required": "required"
     },
     {
       "filename": "biosdsi9.bin",
       "sha256": "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce",
       "system": "nds",
-      "description": "Nintendo DSi ARM9 BIOS - DSi",
+      "description": "Nintendo DSi ARM9 BIOS",
       "required": "required"
     },
     {
@@ -760,7 +760,7 @@
       "filename": "dsifirmware.bin",
       "sha256": "11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99",
       "system": "nds",
-      "description": "Nintendo DSi firmware - DSi",
+      "description": "Nintendo DSi firmware",
       "required": "required"
     },
     {
@@ -847,7 +847,8 @@
       ],
       "system": "dreamcast",
       "description": "Naomi arcade BIOS archive",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "naomi2.zip",
@@ -867,7 +868,8 @@
         "arcade"
       ],
       "description": "Naomi boot BIOS (used by many arcade boards)",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "hod2bios.zip",
@@ -877,7 +879,8 @@
       ],
       "system": "dreamcast",
       "description": "House of the Dead 2 Naomi BIOS",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "f355dlx.zip",
@@ -887,7 +890,8 @@
       ],
       "system": "dreamcast",
       "description": "Ferrari F355 Challenge Deluxe Naomi BIOS",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "f355bios.zip",
@@ -900,7 +904,8 @@
         "arcade"
       ],
       "description": "Ferrari F355 Challenge Twin/Deluxe Naomi BIOS",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "airlbios.zip",
@@ -913,7 +918,8 @@
         "arcade"
       ],
       "description": "Airline Pilots Deluxe Naomi BIOS",
-      "paths": "$bios_path/dc"
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "awbios.zip",
@@ -926,31 +932,140 @@
         "arcade"
       ],
       "description": "Atomiswave Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "dc_boot.bin",
+      "md5": "e10c53c2f8b90bab96ead2d368858623",
+      "system": "dreamcast",
+      "description": "Dreamcast BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required"
+    },
+    {
+      "filename": "naomi.zip",
+      "md5": [
+        "0ea6d3650ce4a7608a589e5df21a1f2f",
+        "526eda1e2a7920c92c88178789d71d84"
+      ],
+      "system": "dreamcast",
+      "description": "Naomi arcade BIOS archive",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "naomi2.zip",
+      "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
+      "system": "dreamcast",
+      "description": "Second Naomi BIOS set",
       "paths": "$bios_path/dc"
+    },
+    {
+      "filename": "naomi_boot.bin",
+      "md5": [
+        "96cb91c4a0bedd86e5a6965cfe6c0148",
+        "3bffafac42a7767d8dcecf771f5552ba"
+      ],
+      "system": [
+        "dreamcast",
+        "arcade"
+      ],
+      "description": "Naomi boot BIOS (used by many arcade boards)",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "hod2bios.zip",
+      "md5": [
+        "629bb0552463ba116ccf23d9a468a9f0",
+        "f4011d3116500354edf7302a90402711"
+      ],
+      "system": "dreamcast",
+      "description": "House of the Dead 2 Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "f355dlx.zip",
+      "md5": [
+        "4b5bb177cbd760477598f85531dbe7fd",
+        "1028615bcac4c31634a3364ce5c04044"
+      ],
+      "system": "dreamcast",
+      "description": "Ferrari F355 Challenge Deluxe Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "f355bios.zip",
+      "md5": [
+        "547f3d12aed389058ca06148f1cca0ed",
+        "882f2c1cf8ec030955c48fe6aa6929ea"
+      ],
+      "system": [
+        "dreamcast",
+        "arcade"
+      ],
+      "description": "Ferrari F355 Challenge Twin/Deluxe Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "airlbios.zip",
+      "md5": [
+        "09ef4b8dea6cd8db2de1c13d510a6a87",
+        "7a11bfe0cc72886d032e386db68f890c"
+      ],
+      "system": [
+        "dreamcast",
+        "arcade"
+      ],
+      "description": "Airline Pilots Deluxe Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
+    },
+    {
+      "filename": "awbios.zip",
+      "md5": [
+        "b2f122e091da223beb824efafc3d6a36",
+        "85254fbe320ca82a768ec2c26bb08def"
+      ],
+      "system": [
+        "dreamcast",
+        "arcade"
+      ],
+      "description": "Atomiswave Naomi BIOS",
+      "paths": "$bios_path/dc",
+      "required": "required for arcade emulation"
     },
     {
       "filename": "bios.sms",
       "md5": "840481177270d5642a14ca71ee72844c",
       "system": "mastersystem",
-      "description": "Sega Master System BIOS"
+      "description": "Sega Master System BIOS",
+      "required": "required"
     },
     {
       "filename": "bios.gg",
       "md5": "672e104c3be3a238301aceffc3b23fd6",
       "system": "gamegear",
-      "description": "Sega Game Gear BIOS"
+      "description": "Sega Game Gear BIOS",
+      "required": "required"
     },
     {
       "filename": "BIOS.col",
       "md5": "2c66f5911e5b42b8ebe113403548eee7",
       "system": "colecovision",
-      "description": "ColecoVision BIOS"
+      "description": "ColecoVision BIOS",
+      "required": "required"
     },
     {
       "filename": "colecovision.rom",
       "md5": "2c66f5911e5b42b8ebe113403548eee7",
       "system": "colecovision",
-      "description": "ColecoVision ROM image (identical to BIOS.col)"
+      "description": "ColecoVision ROM image (identical to BIOS.col)",
+      "required": "required"
     },
     {
       "filename": "sega_101.bin",
@@ -959,7 +1074,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Saturn JP BIOS",
+      "description": "Saturn Japanese BIOS (sega_101)",
       "required": "at least one for this system"
     },
     {
@@ -969,7 +1084,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Saturn US/EU BIOS",
+      "description": "Saturn US/EU BIOS (mpr-17933)",
       "required": "required"
     },
     {
@@ -979,7 +1094,7 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "The King of Fighters 95 cartridge",
+      "description": "The King of Fighters 95 cartridge ROM",
       "required": "required for this title"
     },
     {
@@ -989,109 +1104,112 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Ultraman: Hikari no Kyojin Densetsu cartridge",
+      "description": "Ultraman: Hikari no Kyojin Densetsu cartridge ROM",
       "required": "required for this title"
     },
     {
       "filename": "iplrom.dat",
       "md5": "7fd4caabac1d9169e289f0f7bbf71d8e",
       "system": "x68000",
-      "description": "X68000 IPL ROM",
+      "description": "X68000 IPL ROM (main system boot ROM)",
       "required": "required"
     },
     {
       "filename": "cgrom.dat",
       "md5": "cb0a5cfcf7247a7eab74bb2716260269",
       "system": "x68000",
-      "description": "X68000 character generator ROM",
+      "description": "X68000 character generator ROM (font/graphics support)",
       "required": "required"
     },
     {
       "filename": "iplrom30.dat",
       "md5": "f373003710ab4322642f527f567e020a",
       "system": "x68000",
-      "description": "X68000 secondary IPL ROM"
+      "description": "X68000 secondary IPL ROM (for older 30-series models)",
+      "required": "optional"
     },
     {
       "filename": "iplromcdc_flash.bino.dat",
       "md5": "cc78d4f4900f622bd6de1aed7f52592f",
       "system": "x68000",
-      "description": "X68000 flash IPL ROM variant"
+      "description": "X68000 flash IPL ROM variant (for CDC and flash memory models)",
+      "required": "optional"
     },
     {
       "filename": "iplromxv.dat",
       "md5": "0617321daa182c3f3d6f41fd02fb3275",
       "system": "x68000",
-      "description": "X68000 XV series IPL ROM"
+      "description": "X68000 XV series IPL ROM (for XV-series machines)",
+      "required": "optional"
     },
     {
       "filename": "psxonpsp660.bin",
       "md5": "c53ca5908936d412331790f4426c6c33",
       "system": "psx",
-      "description": "PlayStation BIOS extracted from PSP",
+      "description": "PlayStation BIOS extracted from PSP (Japan/PSP compatibility)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph5500.bin",
       "md5": "8dd7d5296a650fac7319bce665a6a53c",
       "system": "psx",
-      "description": "PlayStation JP BIOS",
+      "description": "PlayStation BIOS - SCPH-5500 (Japan, original retail release)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph5501.bin",
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
-      "description": "PlayStation US BIOS",
+      "description": "PlayStation BIOS - SCPH-5501 (USA, original retail release)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph5502.bin",
       "md5": "32736f17079d0b2b7024407c39bd3050",
       "system": "psx",
-      "description": "PlayStation EU BIOS",
+      "description": "PlayStation BIOS - SCPH-5502 (Europe, original retail release)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph7001.bin",
       "md5": "1e68c231d0896b7eadcad1d7d8e76129",
       "system": "psx",
-      "description": "PlayStation BIOS (generic, required for at least one region)",
+      "description": "PlayStation BIOS - SCPH-7001 (Japan, later model, supports multiple region modes)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph7002.bin",
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PlayStation BIOS (alternate, required for at least one region)",
+      "description": "PlayStation BIOS - SCPH-7002 (USA, later model, required for at least one region)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph7003.bin",
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
-      "description": "PlayStation BIOS duplicate",
+      "description": "PlayStation BIOS - SCPH-7003 (Europe, later model, duplicate of SCPH-7002 USA)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph7502.bin",
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PlayStation BIOS (additional copy, required for at least one region)",
+      "description": "PlayStation BIOS - SCPH-7502 (Europe, updated model, compatible with newer games)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph9002(7502).bin",
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
-      "description": "PlayStation BIOS (variant, required for at least one region)",
+      "description": "PlayStation BIOS - SCPH-9002 (Europe, variant, based on SCPH-7502, needed for some emulators)",
       "required": "at least one for this system"
     },
     {
       "filename": "ps1_rom.bin",
       "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
       "system": "psx",
-      "description": "Generic PlayStation BIOS",
+      "description": "Generic PlayStation BIOS (universal copy for emulator compatibility, region-independent)",
       "required": "at least one for this system"
     },
     {
