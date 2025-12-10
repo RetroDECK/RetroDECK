@@ -1737,6 +1737,9 @@ install_retrodeck_controller_profile_and_add_to_steam() {
   if [[ $? == 0 ]]; then
     configurator_enable_steam_sync
   fi
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") =~ (flatpak) ]]; then # If Flatpak Steam, warn about permission
+    configurator_generic_dialog "RetroDeck Configurator - 🚂 Steam Syncronization 🚂" "It appears you are using the Flatpak version of Steam.\n\nAddition permissions are needed by Steam in order to launch RetroDECK.\n\nPlease see the wiki for more information."
+  fi
 }
 
 finit_default_yes() {
