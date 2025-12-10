@@ -4144,37 +4144,37 @@
     {
       "filename": "IPLROM.X1",
       "crc32": "eeeea1cd29c6e0e8b094790ae969bfa7",
-      "system": "sharpx1",
+      "system": "x1",
       "description": "Main IPL ROM for Sharp X1 series, required for system boot in emulators"
     },
     {
       "filename": "IPLROM.X1T",
       "crc32": "56c28adcf1f3a2f87cf3d57c378013f5",
-      "system": "sharpx1",
+      "system": "x1",
       "description": "Alternate IPL ROM for Sharp X1T model, used for system boot in emulators"
     },
     {
       "filename": "level2.rom",
       "md5": "ca74822ebc2803c6635a55116ecd9539",
-      "system": "trs80",
+      "system": "trs-80",
       "description": "Level 2 BASIC ROM for TRS-80 Model I, required for booting and running standard software"
     },
     {
       "filename": "level3.rom",
       "md5": "ecd0a5a83fca19ea860fe565fad4b061",
-      "system": "trs80",
+      "system": "trs-80",
       "description": "Level 3 BASIC ROM for TRS-80 Model III, required for booting and running Model III software"
     },
     {
       "filename": "level4.rom",
       "md5": "0e4c4b1638a23fd26796816cf2f83961",
-      "system": "trs80",
+      "system": "trs-80",
       "description": "Level 4 BASIC ROM for TRS-80 Model 4, required for booting and running Model 4 software"
     },
     {
       "filename": "level4p.rom",
       "md5": "9bc4cc42958a2a120670e5bc0bfc1d5e",
-      "system": "trs80",
+      "system": "trs-80",
       "description": "Level 4 BASIC ROM for TRS-80 Model 4P, required for booting and running Model 4P software"
     }
   ]
