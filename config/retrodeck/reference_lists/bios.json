@@ -1319,6 +1319,12 @@
       "description": "Fairchild Channel F BIOS - first revision"
     },
     {
+      "filename": "channelf.zip",
+      "md5": "2f2f8de3827ae1faf2495e497ca95232",
+      "system": "channelf",
+      "description": "Fairchild Channel F consolidated BIOS archive containing the required system ROMs for emulation."
+    },
+    {
       "filename": "sl31254.bin",
       "md5": "da98f4bb3242ab80d76629021bb27585",
       "system": "channelf",
@@ -2298,6 +2304,18 @@
       "md5": "22167938f142c222f40992839aa21a06",
       "system": "enterprise",
       "description": "Enterprise 64/128 - HUN BIOS variant"
+    },
+    {
+      "filename": "epdos16f.rom",
+      "md5": "6593dff00ab32a4b1fc084674ededf2b",
+      "system": "enterprise",
+      "description": "EP-DOS ROM for the Enterprise 128 providing an enhanced DOS-like command and file management system."
+    },
+    {
+      "filename": "exdos14isdos10uk.rom",
+      "md5": "f91c4a507cc6895bdd9c43df4f021df3",
+      "system": "enterprise",
+      "description": "IS-DOS ROM combining EXDOS 1.4 and IS-DOS 1.0 to provide CP/M-style functionality for the Enterprise 128."
     },
     {
       "filename": "brd.rom",
@@ -3328,6 +3346,12 @@
       "description": "Double‑sided RSDOS ROM - supports 2‑side floppy media"
     },
     {
+      "filename": "coco3p.rom",
+      "md5": "4ae57e5a8e7494e5485446fefedb580b",
+      "system": "coco",
+      "description": "Plus-style ROM providing the enhanced system firmware used by upgraded CoCo 3 configurations."
+    },
+    {
       "filename": "CCNPATCH.cas",
       "md5": "2c395ad58a842711931679b554483a90",
       "system": "coco",
@@ -3422,6 +3446,30 @@
       "md5": "f2f241bf094168cfb9e7805dc2856433",
       "system": "amiga",
       "description": "Combined CD32 Kickstart and Extended ROM v3.1 rev 40.060, used by some emulators as an all-in-one CD32 firmware."
+    },
+    {
+      "filename": "JiffyDOS_C64.bin",
+      "md5": "be09394f0576cf81fa8bacf634daf9a2",
+      "system": "c64",
+      "description": "JiffyDOS Kernal replacement for the Commodore 64 providing accelerated disk access and enhanced command features."
+    },
+    {
+      "filename": "JiffyDOS_1541-II.bin",
+      "md5": "1b1e985ea5325a1f46eb7fd9681707bf",
+      "system": "c64",
+      "description": "JiffyDOS firmware for the Commodore 1541-II disk drive enabling high-speed serial communication and improved disk routines."
+    },
+    {
+      "filename": "JiffyDOS_1571_repl310654.bin",
+      "md5": "41c6cc528e9515ffd0ed9b180f8467c0",
+      "system": "c64",
+      "description": "JiffyDOS enhanced BIOS for the Commodore 1571 drive featuring faster disk operations and advanced dual-sided support."
+    },
+    {
+      "filename": "JiffyDOS_1581.bin",
+      "md5": "20b6885c6dc2d42c38754a365b043d71",
+      "system": "c64",
+      "description": "JiffyDOS custom BIOS for the Commodore 1581 drive offering high-speed transfers and improved directory handling."
     }
   ]
 }
