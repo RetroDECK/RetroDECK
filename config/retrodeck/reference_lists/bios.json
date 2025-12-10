@@ -58,7 +58,7 @@
       "filename": "3do_arcade_saot.bin",
       "md5": "8970fc987ab89a7f64da9f8a8c4333ff",
       "system": "3do",
-      "description": "‘Shootout At Old Tucson’ arcade BIOS for 3DO"
+      "description": "Shootout At Old Tucson - Arcade BIOS for 3DO"
     },
     {
       "filename": "panafz1-kanji.bin",
@@ -71,14 +71,14 @@
       "filename": "panafz10ja-anvil-kanji.bin",
       "md5": "428577250f43edc902ea239c50d2240d",
       "system": "3do",
-      "description": "Kanji font ROM for Panasonic FZ‑10JA (Anvil) – needed for Japanese titles",
+      "description": "Kanji font ROM for Panasonic FZ‑10JA (Anvil) - needed for Japanese titles",
       "required": "Required for some Japanese games."
     },
     {
       "filename": "panafz1j-kanji.bin",
       "md5": "c23fb5d5e6bb1c240d02cf968972be37",
       "system": "3do",
-      "description": "Kanji font ROM for Panasonic FZ‑1J – required for Japanese games",
+      "description": "Kanji font ROM for Panasonic FZ‑1J - required for Japanese games",
       "required": "Required for some Japanese games."
     },
     {
@@ -420,17 +420,17 @@
     {
       "filename": "Complex.bin",
       "system": "xbox",
-      "description": "XEMU Complex BIOS – supplemental firmware for advanced features"
+      "description": "XEMU Complex BIOS - supplemental firmware for advanced features"
     },
     {
       "filename": "Complex_4627v1.03.bin",
       "system": "xbox",
-      "description": "XEMU Complex BIOS version 1.03 (revision 4627) – enhanced compatibility"
+      "description": "XEMU Complex BIOS version 1.03 (revision 4627) - enhanced compatibility"
     },
     {
       "filename": "Complex_4627.bin",
       "system": "xbox",
-      "description": "XEMU Complex BIOS revision 4627 – baseline complex firmware"
+      "description": "XEMU Complex BIOS revision 4627 - baseline complex firmware"
     },
     {
       "filename": "syscard3.pce",
@@ -513,37 +513,37 @@
       "filename": "2608_BD.WAV",
       "md5": "d94546e70f17fd899be8df3544ab6cbb",
       "system": "pc98",
-      "description": "YM2608 drum sample – Bass Drum"
+      "description": "YM2608 drum sample - Bass Drum"
     },
     {
       "filename": "2608_SD.WAV",
       "md5": "d71004351c8bbfdad53b18222c061d49",
       "system": "pc98",
-      "description": "YM2608 drum sample – Snare Drum"
+      "description": "YM2608 drum sample - Snare Drum"
     },
     {
       "filename": "2608_TOP.WAV",
       "md5": "593cff6597ab9380d822b8f824fd2c28",
       "system": "pc98",
-      "description": "YM2608 drum sample – Top Cymbal"
+      "description": "YM2608 drum sample - Top Cymbal"
     },
     {
       "filename": "2608_HH.WAV",
       "md5": "08c54a0c1f774a5538a848a6665a34b4",
       "system": "pc98",
-      "description": "YM2608 drum sample – Hi‑Hat"
+      "description": "YM2608 drum sample - Hi‑Hat"
     },
     {
       "filename": "2608_TOM.WAV",
       "md5": "96a4ead13f364734f79b0c58af2f0e1f",
       "system": "pc98",
-      "description": "YM2608 drum sample – Tom Tom"
+      "description": "YM2608 drum sample - Tom Tom"
     },
     {
       "filename": "2608_RIM.WAV",
       "md5": "465ea0768b27da404aec45dfc501404b",
       "system": "pc98",
-      "description": "YM2608 drum sample – Rim Shot"
+      "description": "YM2608 drum sample - Rim Shot"
     },
     {
       "filename": "n88.rom",
@@ -556,7 +556,7 @@
       "filename": "n88n.rom",
       "md5": "2ff07b8769367321128e03924af668a0",
       "system": "pc88",
-      "description": "PC‑8000 series BIOS (N‑BASIC mode) – required for those machines"
+      "description": "PC‑8000 series BIOS (N‑BASIC mode) - required for those machines"
     },
     {
       "filename": "n88knj1.rom",
@@ -1140,28 +1140,28 @@
       "filename": "256s-0.rom",
       "md5": "b9fda5b6a747ff037365b0e2d8c4379a",
       "system": "zxspectrum",
-      "description": "Scorpion 256 KB ROM – first bank",
+      "description": "Scorpion 256 KB ROM - first bank",
       "required": "required"
     },
     {
       "filename": "256s-1.rom",
       "md5": "643861ad34831b255bf2eb64e8b6ecb8",
       "system": "zxspectrum",
-      "description": "Scorpion 256 KB ROM – second bank",
+      "description": "Scorpion 256 KB ROM - second bank",
       "required": "required"
     },
     {
       "filename": "256s-2.rom",
       "md5": "d8ad507b1c915a9acfe0d73957082926",
       "system": "zxspectrum",
-      "description": "Scorpion 256 KB ROM – third bank",
+      "description": "Scorpion 256 KB ROM - third bank",
       "required": "required"
     },
     {
       "filename": "256s-3.rom",
       "md5": "ce0723f9bc02f4948c15d3b3230ae831",
       "system": "zxspectrum",
-      "description": "Scorpion 256 KB ROM – fourth bank",
+      "description": "Scorpion 256 KB ROM - fourth bank",
       "required": "required"
     },
     {
@@ -1198,19 +1198,19 @@
       "filename": "sl31253.bin",
       "md5": "ac9804d4c0e9d07e33472e3726ed15c3",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS – first revision"
+      "description": "Fairchild Channel F BIOS - first revision"
     },
     {
       "filename": "sl31254.bin",
       "md5": "da98f4bb3242ab80d76629021bb27585",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS – second revision"
+      "description": "Fairchild Channel F BIOS - second revision"
     },
     {
       "filename": "sl90025.bin",
       "md5": "95d339631d867c8f1d15a5f2ec26069d",
       "system": "channelf",
-      "description": "Fairchild Channel F BIOS – third revision"
+      "description": "Fairchild Channel F BIOS - third revision"
     },
     {
       "filename": "prboom.wad",
@@ -1222,21 +1222,21 @@
       "filename": "freej2me-lr.jar",
       "md5": "ccd92e7156ce2f0ce14c88ffb68a16eb",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS – lightweight runtime (low‑res) version",
+      "description": "FreeJ2ME BIOS - lightweight runtime (low‑res) version",
       "required": "required"
     },
     {
       "filename": "freej2me-sdl.jar",
       "md5": "4da74084fc1b1bd3d776ed8d3ee648de",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS – SDL‑based graphics backend",
+      "description": "FreeJ2ME BIOS - SDL‑based graphics backend",
       "required": "required"
     },
     {
       "filename": "freej2me.jar",
       "md5": "29a92d0867da2917275b7c6c805d256f",
       "system": "j2me",
-      "description": "FreeJ2ME BIOS – default full‑feature build",
+      "description": "FreeJ2ME BIOS - default full‑feature build",
       "required": "required"
     },
     {
@@ -1344,7 +1344,7 @@
       "filename": "pcfxbios.bin",
       "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
       "system": "pcfx",
-      "description": "Duplicate of pcfx.rom – primary PC‑FX BIOS",
+      "description": "Duplicate of pcfx.rom - primary PC‑FX BIOS",
       "required": "required"
     },
     {
@@ -1370,7 +1370,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube DVD BIOS (June 2001 release) – universal version"
+      "description": "GameCube DVD BIOS (June 2001 release) - universal version"
     },
     {
       "filename": "gc-dvd-20010831.bin",
@@ -1381,7 +1381,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube DVD BIOS (August 2001) – updated checksum"
+      "description": "GameCube DVD BIOS (August 2001) - updated checksum"
     },
     {
       "filename": "gc-dvd-20020402.bin",
@@ -1392,7 +1392,7 @@
         "$rd_home_saves_paths_paths_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube DVD BIOS (April 2002) – latest public release"
+      "description": "GameCube DVD BIOS (April 2002) - latest public release"
     },
     {
       "filename": "gc-dvd-20020823.bin",
@@ -1403,7 +1403,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube DVD BIOS (August 2002) – final revision"
+      "description": "GameCube DVD BIOS (August 2002) - final revision"
     },
     {
       "filename": "gc-ntsc-10.bin",
@@ -1413,7 +1413,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube NTSC (US/Japan) BIOS – version 10"
+      "description": "GameCube NTSC (US/Japan) BIOS - version 10"
     },
     {
       "filename": "gc-ntsc-11.bin",
@@ -1423,7 +1423,7 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube NTSC BIOS – version 11 (minor bug‑fix)"
+      "description": "GameCube NTSC BIOS - version 11 (minor bug‑fix)"
     },
     {
       "filename": "gc-ntsc-12.bin",
@@ -1433,28 +1433,28 @@
         "$rd_home_saves_path/gc/dolphin/US",
         "$rd_home_saves_path/gc/dolphin/JP"
       ],
-      "description": "GameCube NTSC BIOS – version 12 (latest NTSC build)"
+      "description": "GameCube NTSC BIOS - version 12 (latest NTSC build)"
     },
     {
       "filename": "gc-pal-10.bin",
       "md5": "0cdda509e2da83c85bfe423dd87346cc",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "GameCube PAL (EU) BIOS – version 10"
+      "description": "GameCube PAL (EU) BIOS - version 10"
     },
     {
       "filename": "gc-pal-11.bin",
       "md5": "339848a0b7c2124cf155276c1e79cbd0",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "GameCube PAL BIOS – version 11 (bug‑fix update)"
+      "description": "GameCube PAL BIOS - version 11 (bug‑fix update)"
     },
     {
       "filename": "gc-pal-12.bin",
       "md5": "db92574caab77a7ec99d4605fd6f2450",
       "system": "gc",
       "paths": "$rd_home_saves_path/gc/dolphin/EU",
-      "description": "GameCube PAL BIOS – version 12 (current EU release)"
+      "description": "GameCube PAL BIOS - version 12 (current EU release)"
     },
     {
       "filename": "64DD_IPL.bin",
@@ -1484,7 +1484,7 @@
         "snes",
         "satellaview"
       ],
-      "description": "Satellaview BS‑X BIOS – English language version"
+      "description": "Satellaview BS‑X BIOS - English language version"
     },
     {
       "filename": "BS-X (En) (DRM-Free).bin",
@@ -1493,7 +1493,7 @@
         "snes",
         "satellaview"
       ],
-      "description": "Satellaview BS‑X BIOS – English version without DRM"
+      "description": "Satellaview BS‑X BIOS - English version without DRM"
     },
     {
       "filename": "STBIOS.bin",
@@ -1511,7 +1511,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – first version"
+      "description": "Super Game Boy BIOS - first version"
     },
     {
       "filename": "SGB2.sfc",
@@ -1520,7 +1520,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – second version (updated checksum)"
+      "description": "Super Game Boy BIOS - second version (updated checksum)"
     },
     {
       "filename": "sgb1.boot.rom",
@@ -1529,7 +1529,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – boot ROM (identical to SGB1.sfc)"
+      "description": "Super Game Boy BIOS - boot ROM (identical to SGB1.sfc)"
     },
     {
       "filename": "sgb1.program.rom",
@@ -1538,7 +1538,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – program ROM (core functionality)"
+      "description": "Super Game Boy BIOS - program ROM (core functionality)"
     },
     {
       "filename": "sgb2.boot.rom",
@@ -1547,7 +1547,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – second‑generation boot ROM"
+      "description": "Super Game Boy BIOS - second‑generation boot ROM"
     },
     {
       "filename": "sgb_bios.bin",
@@ -1556,7 +1556,7 @@
         "snes",
         "supergb"
       ],
-      "description": "Super Game Boy BIOS – combined boot/program binary"
+      "description": "Super Game Boy BIOS - combined boot/program binary"
     },
     {
       "filename": "cx4.data.rom",
@@ -1859,13 +1859,13 @@
       "filename": "zxs:if1-2.rom",
       "md5": "31b704ae925305e74f50699271fddd9a",
       "system": "zxspectrum",
-      "description": "Interface 1 ROM – second revision (adds extra I/O ports)"
+      "description": "Interface 1 ROM - second revision (adds extra I/O ports)"
     },
     {
       "filename": "if1-1.rom",
       "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
       "system": "zxspectrum",
-      "description": "Interface 1 ROM – original revision"
+      "description": "Interface 1 ROM - original revision"
     },
     {
       "filename": "plus2-0.rom",
@@ -1883,49 +1883,49 @@
       "filename": "plus3-0.rom",
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3 ROM – first half (48 KB BASIC + disk support)"
+      "description": "ZX Spectrum +3 ROM - first half (48 KB BASIC + disk support)"
     },
     {
       "filename": "plus3-1.rom",
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3 ROM – second half (disk controller firmware)"
+      "description": "ZX Spectrum +3 ROM - second half (disk controller firmware)"
     },
     {
       "filename": "plus3-2.rom",
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3 ROM – third segment (additional utilities)"
+      "description": "ZX Spectrum +3 ROM - third segment (additional utilities)"
     },
     {
       "filename": "plus3-3.rom",
       "md5": "a148bcc575e51389e84fdf5d555c3196",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3 ROM – fourth segment (final firmware block)"
+      "description": "ZX Spectrum +3 ROM - fourth segment (final firmware block)"
     },
     {
       "filename": "plus3e-0.rom",
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3e ROM – first half (enhanced +3 version)"
+      "description": "ZX Spectrum +3e ROM - first half (enhanced +3 version)"
     },
     {
       "filename": "plus3e-1.rom",
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3e ROM – second half (enhanced disk firmware)"
+      "description": "ZX Spectrum +3e ROM - second half (enhanced disk firmware)"
     },
     {
       "filename": "plus3e-2.rom",
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3e ROM – third segment (extra utilities)"
+      "description": "ZX Spectrum +3e ROM - third segment (extra utilities)"
     },
     {
       "filename": "plus3e-3.rom",
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
-      "description": "ZX Spectrum +3e BIOS – final firmware block"
+      "description": "ZX Spectrum +3e BIOS - final firmware block"
     },
     {
       "filename": "plusd.rom",
@@ -1937,13 +1937,13 @@
       "filename": "se-0.rom",
       "md5": "fb3f86eb1e5a695d9c50c124e7cfb875",
       "system": "zxspectrum",
-      "description": "ZX Spectrum SE (Special Edition) BIOS – first half"
+      "description": "ZX Spectrum SE (Special Edition) BIOS - first half"
     },
     {
       "filename": "se-1.rom",
       "md5": "88de4a3129086f34bb9ca559acc51e6c",
       "system": "zxspectrum",
-      "description": "ZX Spectrum SE BIOS – second half"
+      "description": "ZX Spectrum SE BIOS - second half"
     },
     {
       "filename": "speccyboot-1.4.rom",
@@ -2033,19 +2033,19 @@
       "filename": "tc2048.rom",
       "md5": "9dd7ecf784a6c04265c073c236f5fadb",
       "system": "zxspectrum",
-      "description": "TC2048 ROM – core BASIC firmware"
+      "description": "TC2048 ROM - core BASIC firmware"
     },
     {
       "filename": "tc2068-0.rom",
       "md5": "55d462fccc6c536037404ef4ced08bec",
       "system": "zxspectrum",
-      "description": "TC2068 ROM – first half (Timex Sinclair 2068)"
+      "description": "TC2068 ROM - first half (Timex Sinclair 2068)"
     },
     {
       "filename": "tc2068-1.rom",
       "md5": "575d203c6e15e679fba0b73f854ec7a2",
       "system": "zxspectrum",
-      "description": "TC2068 ROM – second half (Timex Sinclair 2068)"
+      "description": "TC2068 ROM - second half (Timex Sinclair 2068)"
     },
     {
       "filename": "000-lo.lo",
@@ -2060,84 +2060,84 @@
       "filename": "scph1000.bin",
       "md5": "239665b1a3dade1b5a52c06338011044",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.00 (NTSC-U)",
+      "description": "PlayStation 1 BIOS - version 1.00 (NTSC-U)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph1001.bin",
       "md5": "924e392ed05558ffdb115408c263dccf",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.01 (PAL)",
+      "description": "PlayStation 1 BIOS - version 1.01 (PAL)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph1002.bin",
       "md5": "54847e693405ffeb0359c6287434cbef",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.02 (NTSC-J)",
+      "description": "PlayStation 1 BIOS - version 1.02 (NTSC-J)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph100.bin",
       "md5": "8abc1b549a4a80954addc48ef02c4521",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – generic early release",
+      "description": "PlayStation 1 BIOS - generic early release",
       "required": "at least one for this system"
     },
     {
       "filename": "scph101.bin",
       "md5": "6e3735ff4c7dc899ee98981385f6f3d0",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.01 (NTSC-U)",
+      "description": "PlayStation 1 BIOS - version 1.01 (NTSC-U)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph102A.bin",
       "md5": "b10f5e0e3d9eb60e5159690680b1e774",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.02A (PAL)",
+      "description": "PlayStation 1 BIOS - version 1.02A (PAL)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph102B.bin",
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.02B (NTSC-J)",
+      "description": "PlayStation 1 BIOS - version 1.02B (NTSC-J)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph102C.bin",
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 1.02C (regional variant)",
+      "description": "PlayStation 1 BIOS - version 1.02C (regional variant)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph3000.bin",
       "md5": "849515939161e62f6b866f6853006780",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 3.00 (later release)",
+      "description": "PlayStation 1 BIOS - version 3.00 (later release)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph3500.bin",
       "md5": "cba733ceeff5aef5c32254f1d617fa62",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 3.50 (enhanced)",
+      "description": "PlayStation 1 BIOS - version 3.50 (enhanced)",
       "required": "at least one for this system"
     },
     {
       "filename": "scph5000.bin",
       "md5": "eb201d2d98251a598af467d4347bb62f",
       "system": "psx",
-      "description": "PlayStation 1 BIOS – version 5.00 (final official release)",
+      "description": "PlayStation 1 BIOS - version 5.00 (final official release)",
       "required": "at least one for this system"
     },
     {
       "filename": "ppge_atlas.zim",
       "md5": "866855cc330b9b95cc69135fb7b41d38",
       "system": "psp",
-      "description": "PSP Atlas ZIM – asset package for PSP homebrew"
+      "description": "PSP Atlas ZIM - asset package for PSP homebrew"
     },
     {
       "filename": "ecwolf.pk3",
@@ -2179,555 +2179,765 @@
       "filename": "hun.rom",
       "md5": "22167938f142c222f40992839aa21a06",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – HUN BIOS variant"
+      "description": "Enterprise 64/128 - HUN BIOS variant"
     },
     {
       "filename": "brd.rom",
       "md5": "6af0402906944fd134004b85097c8524",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – BRD BIOS variant"
+      "description": "Enterprise 64/128 - BRD BIOS variant"
     },
     {
       "filename": "exos20.rom",
       "md5": "5ad3baaad3b5156d6b60b34229a676fb",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EXOS 2.0 BIOS"
+      "description": "Enterprise 64/128 - EXOS 2.0 BIOS"
     },
     {
       "filename": "exos21.rom",
       "md5": "f36f24cbb87745fbd2714e4df881db09",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EXOS 2.1 BIOS"
+      "description": "Enterprise 64/128 - EXOS 2.1 BIOS"
     },
     {
       "filename": "zt19uk.rom",
       "md5": "228540b6be83ae2acd7569c8ff0f91d0",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – ZT19UK BIOS"
+      "description": "Enterprise 64/128 - ZT19UK BIOS"
     },
     {
       "filename": "basic20.rom",
       "md5": "8e18edce4a7acb2c33cc0ab18f988482",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – BASIC 2.0 ROM"
+      "description": "Enterprise 64/128 - BASIC 2.0 ROM"
     },
     {
       "filename": "basic21.rom",
       "md5": "e972fe42b398c9ff1d93ff014786aec6",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – BASIC 2.1 ROM"
+      "description": "Enterprise 64/128 - BASIC 2.1 ROM"
     },
     {
       "filename": "exdos13.rom",
       "md5": "ddff70c014d1958dc75378b6c9aab6f8",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EXDOS 1.3 ROM"
+      "description": "Enterprise 64/128 - EXDOS 1.3 ROM"
     },
     {
       "filename": "epd19hft.rom",
       "md5": "12cfc9c7e48c8a16c2e09edbd926d467",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EP D19HFT ROM"
+      "description": "Enterprise 64/128 - EP D19HFT ROM"
     },
     {
       "filename": "zt18hfnt.rom",
       "md5": "3082dc488d32f30a612761b99074199b",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – ZT18HFNT ROM"
+      "description": "Enterprise 64/128 - ZT18HFNT ROM"
     },
     {
       "filename": "epfileio.rom",
       "md5": "a68ebcbc73a4d2178d755b7755bf18fe",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EP File I/O ROM"
+      "description": "Enterprise 64/128 - EP File I/O ROM"
     },
     {
       "filename": "exos24uk.rom",
       "md5": "55af78f877a21ca45eb2df68a74fcc60",
       "system": "enterprise",
-      "description": "Enterprise 64/128 – EXOS 2.4 UK ROM"
-    },
-    {
-      "filename": "ps2-0100jd-20000117.bin",
-      "md5": "32f2e4d5ff5ee11072a6bc45530f5765",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0100JD (2000‑01‑17)",
-      "required": "at least one for this system"
+      "description": "Enterprise 64/128 - EXOS 2.4 UK ROM"
     },
     {
       "filename": "ps2-0100j-20000117.bin",
       "md5": "acf4730ceb38ac9d8c7d8e21f2614600",
       "system": "ps2",
-      "description": "PS2 BIOS – 0100J (2000‑01‑17)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0100J, built on 2000-01-17",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0101jd-20000217.bin",
-      "md5": "acf9968c8f596d2b15f42272082513d1",
+      "filename": "ps2-0100jd-20000117.bin",
+      "md5": "32f2e4d5ff5ee11072a6bc45530f5765",
       "system": "ps2",
-      "description": "PS2 BIOS – 0101JD (2000‑02‑17)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) debug BIOS - revision 0100JD, built on 2000-01-17",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0101j-20000217.bin",
       "md5": "b1459d7446c69e3e97e6ace3ae23dd1c",
       "system": "ps2",
-      "description": "PS2 BIOS – 0101J (2000‑02‑17)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0101J, built on 2000-02-17",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0101jd-20000217.bin",
+      "md5": "acf9968c8f596d2b15f42272082513d1",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) debug BIOS - revision 0101JD, built on 2000-02-17",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0101xd-20000224.bin",
       "md5": "d3f1853a16c2ec18f3cd1ae655213308",
       "system": "ps2",
-      "description": "PS2 BIOS – 0101XD (2000‑02‑24)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0110ad-20000727.bin",
-      "md5": "63e6fd9b3c72e0d7b920e80cf76645cd",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0110AD (2000‑07‑27)",
+      "description": "PlayStation 2 BIOS - Export/TOOL debug BIOS - revision 0101XD, built on 2000-02-24",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0110a-20000727.bin",
       "md5": "a20c97c02210f16678ca3010127caf36",
       "system": "ps2",
-      "description": "PS2 BIOS – 0110A (2000‑07‑27)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0110A, built on 2000-07-27",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0110ad-20000727.bin",
+      "md5": "63e6fd9b3c72e0d7b920e80cf76645cd",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) debug BIOS - revision 0110AD, built on 2000-07-27",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0120a-20000902.bin",
       "md5": "8db2fbbac7413bf3e7154c1e0715e565",
       "system": "ps2",
-      "description": "PS2 BIOS – 0120A (2000‑09‑02)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0120ed-20000902.bin",
-      "md5": "91c87cb2f2eb6ce529a2360f80ce2457",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0120ED (2000‑09‑02)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0120ed-20000902-20030110.bin",
-      "md5": "3016b3dd42148a67e2c048595ca4d7ce",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0120ED rev (2003‑01‑10)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0120A, built on 2000-09-02",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0120e-20000902.bin",
       "md5": "b7fa11e87d51752a98b38e3e691cbf17",
       "system": "ps2",
-      "description": "PS2 BIOS – 0120E (2000‑09‑02)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0120E, built on 2000-09-02",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0120ed-20000902.bin",
+      "md5": "91c87cb2f2eb6ce529a2360f80ce2457",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Europe (PAL) debug BIOS - revision 0120ED, built on 2000-09-02",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0120ed-20000902-20030110.bin",
+      "md5": "3016b3dd42148a67e2c048595ca4d7ce",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Europe (PAL) debug BIOS - revision 0120ED, updated build from 2003-01-10",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0120j-20001027-185015.bin",
       "md5": "f63bc530bd7ad7c026fcd6f7bd0d9525",
       "system": "ps2",
-      "description": "PS2 BIOS – 0120J (2000‑10‑27, 18:50:15)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0120J, built on 2000-10-27 at 18:50:15",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0120j-20001027-191435.bin",
       "md5": "cee06bd68c333fc5768244eae77e4495",
       "system": "ps2",
-      "description": "PS2 BIOS – 0120J (2000‑10‑27, 19:14:35)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0150ad-20001228-20030520.bin",
-      "md5": "0bf988e9c7aaa4c051805b0fa6eb3387",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0150AD (2000‑12‑28, updated 2003‑05‑20)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0120J, built on 2000-10-27 at 19:14:35",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0150a-20001228.bin",
       "md5": "8accc3c49ac45f5ae2c5db0adc854633",
       "system": "ps2",
-      "description": "PS2 BIOS – 0150A (2000‑12‑28)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0150A, built on 2000-12-28",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0150ed-20001228-20030520.bin",
-      "md5": "6f9a6feb749f0533aaae2cc45090b0ed",
+      "filename": "ps2-0150ad-20001228-20030520.bin",
+      "md5": "0bf988e9c7aaa4c051805b0fa6eb3387",
       "system": "ps2",
-      "description": "PS2 BIOS – 0150ED (2000‑12‑28, updated 2003‑05‑20)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) debug BIOS - revision 0150AD, updated build from 2003-05-20",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0150e-20001228.bin",
       "md5": "838544f12de9b0abc90811279ee223c8",
       "system": "ps2",
-      "description": "PS2 BIOS – 0150E (2000‑12‑28)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0150E, built on 2000-12-28",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0150jd-20010118.bin",
-      "md5": "bb6bbc850458fff08af30e969ffd0175",
+      "filename": "ps2-0150ed-20001228-20030520.bin",
+      "md5": "6f9a6feb749f0533aaae2cc45090b0ed",
       "system": "ps2",
-      "description": "PS2 BIOS – 0150JD (2001‑01‑18)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) debug BIOS - revision 0150ED, updated build from 2003-05-20",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0150j-20010118.bin",
       "md5": "815ac991d8bc3b364696bead3457de7d",
       "system": "ps2",
-      "description": "PS2 BIOS – 0150J (2001‑01‑18)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0150J, built on 2001-01-18",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0150jd-20010118.bin",
+      "md5": "bb6bbc850458fff08af30e969ffd0175",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) debug BIOS - revision 0150JD, built on 2001-01-18",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0160a-20010427.bin",
       "md5": "b107b5710042abe887c0f6175f6e94bb",
       "system": "ps2",
-      "description": "PS2 BIOS – 0160A (2001‑04‑27)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160j-20010427.bin",
-      "md5": "ab55cceea548303c22c72570cfd4dd71",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160J (2001‑04‑27)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160a-20010704.bin",
-      "md5": "18bcaadb9ff74ed3add26cdf709fff2e",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160A (2001‑07‑04)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0160A, built on 2001-04-27",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0160e-20010704.bin",
       "md5": "491209dd815ceee9de02dbbc408c06d6",
       "system": "ps2",
-      "description": "PS2 BIOS – 0160E (2001‑07‑04)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160a-20011004.bin",
-      "md5": "7200a03d51cacc4c14fcdfdbc4898431",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160A (2001‑10‑04)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0160E, built on 2001-07-04",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0160e-20011004.bin",
       "md5": "8359638e857c8bc18c3c18ac17d9cc3c",
       "system": "ps2",
-      "description": "PS2 BIOS – 0160E (2001‑10‑04)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0160E, built on 2001-10-04",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0160h-20010730.bin",
       "md5": "352d2ff9b3f68be7e6fa7e6dd8389346",
       "system": "ps2",
-      "description": "PS2 BIOS – 0160H (2001‑07‑30)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160a-20020207.bin",
-      "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160A (2002‑02‑07)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160e-20020319.bin",
-      "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160E (2002‑03‑19)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160j-20020426.bin",
-      "md5": "72da56fccb8fcd77bba16d1b6f479914",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160J (2002‑04‑26)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0160e-20020426.bin",
-      "md5": "5b1f47fbeb277c6be2fccdd6344ff2fd",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0160E (2002‑04‑26)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0160H, built on 2001-07-30",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0160h-20020426.bin",
       "md5": "315a4003535dfda689752cb25f24785c",
       "system": "ps2",
-      "description": "PS2 BIOS – 0160H (2002‑04‑26)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0160H, built on 2002-04-26",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0170j-20030206.bin",
-      "md5": "312ad4816c232a9606e56f946bc0678a",
+      "filename": "ps2-0160j-20010427.bin",
+      "md5": "ab55cceea548303c22c72570cfd4dd71",
       "system": "ps2",
-      "description": "PS2 BIOS – 0170J (2003‑02‑06)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0160J, built on 2001-04-27",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0170ed-20030227.bin",
-      "md5": "666018ffec65c5c7e04796081295c6c7",
+      "filename": "ps2-0160j-20020426.bin",
+      "md5": "72da56fccb8fcd77bba16d1b6f479914",
       "system": "ps2",
-      "description": "PS2 BIOS – 0170ED (2003‑02‑27)",
-      "required": "at least one for this system"
-    },
-    {
-      "filename": "ps2-0170e-20030227.bin",
-      "md5": "666018ffec65c5c7e04796081295c6c7",
-      "system": "ps2",
-      "description": "PS2 BIOS – 0170E (2003‑02‑27)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0160J, built on 2002-04-26",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0170ad-20030325.bin",
       "md5": "eb960de68f0c0f7f9fa083e9f79d0360",
       "system": "ps2",
-      "description": "PS2 BIOS – 0170AD (2003‑03‑25)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) debug BIOS - revision 0170AD, built on 2003-03-25",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0170e-20030227.bin",
+      "md5": "666018ffec65c5c7e04796081295c6c7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0170E, built on 2003-02-27",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0170ed-20030227.bin",
+      "md5": "666018ffec65c5c7e04796081295c6c7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Europe (PAL) debug BIOS - revision 0170ED, built on 2003-02-27",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0170j-20030206.bin",
+      "md5": "312ad4816c232a9606e56f946bc0678a",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0170J, built on 2003-02-06",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0180cd-20030224.bin",
       "md5": "240d4c5ddd4b54069bdc4a3cd2faf99d",
       "system": "ps2",
-      "description": "PS2 BIOS – 0180CD (2003‑02‑24)",
+      "description": "PlayStation 2 BIOS - Korea/China region debug BIOS - revision 0180CD, built on 2003-02-24",
       "required": "at least one for this system"
     },
     {
       "filename": "ps2-0180j-20031028.bin",
       "md5": "1c6cd089e6c83da618fbf2a081eb4888",
       "system": "ps2",
-      "description": "PS2 BIOS – 0180J (2003‑10‑28)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0180J, built on 2003-10-28",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190j-20030623.bin",
-      "md5": "463d87789c555a4a7604e97d7db545d1",
+      "filename": "ps2-0190a-20031128.bin",
+      "md5": "4587a1dd58d6805265bfc68f0fef2732",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190J (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0190A, built on 2003-11-28",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190a-20030623.bin",
-      "md5": "35461cecaa51712b300b2d6798825048",
+      "filename": "ps2-0190ad-20031128.bin",
+      "md5": "30ab5f78d80431a862283642b71f8fb3",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190A (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) debug BIOS - revision 0190AD, built on 2003-11-28",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190e-20030623.bin",
-      "md5": "bd6415094e1ce9e05daabe85de807666",
+      "filename": "ps2-0190e-20031031.bin",
+      "md5": "d1c4ac413fdf57cd93585ff19cf50df0",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190E (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0190E, built on 2003-10-31",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190h-20030623.bin",
-      "md5": "2e70ad008d4ec8549aada8002fdf42fb",
+      "filename": "ps2-0190ed-20031031.bin",
+      "md5": "0e440a76cd950cbbb1d576242e0429b0",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190H (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) debug BIOS - revision 0190ED, built on 2003-10-31",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190r-20030623.bin",
-      "md5": "b53d51edc7fc086685e31b811dc32aad",
+      "filename": "ps2-0190h-20030916.bin",
+      "md5": "05359e5a7c88a69eb25bf5f4b85c3a0b",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190R (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0190H, built on 2003-09-16",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190c-20030623.bin",
-      "md5": "1b6e631b536247756287b916f9396872",
+      "filename": "ps2-0190j-20030707.bin",
+      "md5": "0270d4ca21f18f0f220f131cf9136a14",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190C (2003‑06‑23)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0190J, built on 2003-07-07",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190j-20030822.bin",
-      "md5": "00da1b177096cfd2532c8fa22b43e667",
+      "filename": "ps2-0190jd-20030707.bin",
+      "md5": "760e38eb17cded716bc756a8965643be",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190J (2003‑08‑22)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) debug BIOS - revision 0190JD, built on 2003-07-07",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190e-20030822.bin",
-      "md5": "afde410bd026c16be605a1ae4bd651fd",
+      "filename": "ps2-0190r-20030916.bin",
+      "md5": "67d613747c39b50f2ce3fbbed7e8ebe4",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190E (2003‑08‑22)",
+      "description": "PlayStation 2 BIOS - Russia (PAL variant) retail - revision 0190R, built on 2003-09-16",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0190a-20040329.bin",
-      "md5": "81f4336c1de607dd0865011c0447052e",
+      "filename": "ps2-0190u-20031017.bin",
+      "md5": "e973c9c5f78aaff915f9fe09a33bce8e",
       "system": "ps2",
-      "description": "PS2 BIOS – 0190A (2004‑03‑29)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0190U, built on 2003-10-17",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0200ed-20040614.bin",
-      "md5": "63ead1d74893bf7f36880af81f68a82d",
+      "filename": "ps2-0200a-20040419.bin",
+      "md5": "6654c39431dfe83692dd26695d836de7",
       "system": "ps2",
-      "description": "PS2 BIOS – 0200ED (2004‑06‑14)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0200A, built on 2004-04-19",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0200h-20040614.bin",
-      "md5": "3e3e030c0f600442fa05b94f87a1e238",
+      "filename": "ps2-0200ad-20040419.bin",
+      "md5": "8d83489e564f72a5b31bfa56bcf6e108",
       "system": "ps2",
-      "description": "PS2 BIOS – 0200H (2004‑06‑14)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) debug BIOS - revision 0200AD, built on 2004-04-19",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0210j-20040917.bin",
-      "md5": "1ad977bb539fc9448a08ab276a836bbc",
+      "filename": "ps2-0200e-20041115.bin",
+      "md5": "dc996660a859a8c23a952f633a409556",
       "system": "ps2",
-      "description": "PS2 BIOS – 0210J (2004‑09‑17)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0200E, built on 2004-11-15",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220j-20050620.bin",
-      "md5": "eb4f40fcf4911ede39c1bbfe91e7a89a",
+      "filename": "ps2-0200h-20040419.bin",
+      "md5": "b82f12f8b186cbf8e2e3fdc337044684",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220J (2005‑06‑20)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0200H, built on 2004-04-19",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220ad-20050620.bin",
-      "md5": "9959ad7a8685cad66206e7752ca23f8b",
+      "filename": "ps2-0200j-20040323.bin",
+      "md5": "2253c3d364ff49c234a38f3d631fc31a",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220AD (2005‑06‑20)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0200J, built on 2004-03-23",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220a-20050620.bin",
-      "md5": "929a14baca1776b00869f983aa6e14d2",
+      "filename": "ps2-0200u-20040419.bin",
+      "md5": "99c5cc568676fa3d4c4d2c4a492d1ec5",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220A (2005‑06‑20)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0200U, built on 2004-04-19",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220e-20050620.bin",
-      "md5": "573f7d4a430c32b3cc0fd0c41e104bbd",
+      "filename": "ps2-0201a-20040915.bin",
+      "md5": "d5bb76a9e7c11f59a4263f92f3053c75",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220E (2005‑06‑20)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0201A, built on 2004-09-15",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220h-20050620.bin",
-      "md5": "df63a604e8bff5b0599bd1a6c2721bd0",
+      "filename": "ps2-0201h-20040915.bin",
+      "md5": "546e7d6f258d2c229812f9158cfc204d",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220H (2005‑06‑20)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0201H, built on 2004-09-15",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220j-20060210.bin",
-      "md5": "5b1ba4bb914406fae75ab8e38901684d",
+      "filename": "ps2-0201j-20040819.bin",
+      "md5": "8d6e89165d77a6eca1528b0811aabc7a",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220J (2006‑02‑10)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0201J, built on 2004-08-19",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220a-20060210.bin",
-      "md5": "cb801b7920a7d536ba07b6534d2433ca",
+      "filename": "ps2-0201u-20040915.bin",
+      "md5": "6bf1fce90e751b6df66aed444057ff94",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220A (2006‑02‑10)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0201U, built on 2004-09-15",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220e-20060210.bin",
-      "md5": "af60e6d1a939019d55e5b330d24b1c25",
+      "filename": "ps2-0202a-20050121.bin",
+      "md5": "62fab6930f454c651eecadf42db4927f",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220E (2006‑02‑10)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0202A, built on 2005-01-21",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220h-20060210.bin",
-      "md5": "549a66d0c698635ca9fa3ab012da7129",
+      "filename": "ps2-0202e-20050121.bin",
+      "md5": "b411fffe806a458518a874db389e7271",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220H (2006‑02‑10)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0202E, built on 2005-01-21",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220j-20060905.bin",
-      "md5": "5de9d0d730ff1e7ad122806335332524",
+      "filename": "ps2-0202h-20050121.bin",
+      "md5": "f4b982aa5a5c1adf7e9f7dc3cba7e3a4",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220J (2006‑09‑05)",
+      "description": "PlayStation 2 BIOS - China/Hong Kong region retail - revision 0202H, built on 2005-01-21",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220ad-20060905.bin",
-      "md5": "21fe4cad111f7dc0f9af29477057f88d",
+      "filename": "ps2-0202j-20041222.bin",
+      "md5": "f854a87b6be3e88841e2de3c8d2d101e",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220AD (2006‑09‑05)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0202J, built on 2004-12-22",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220a-20060905.bin",
-      "md5": "40c11c063b3b9409aa5e4058e984e30c",
+      "filename": "ps2-0202u-20050121.bin",
+      "md5": "7c6358d74fd121ca3df740f9db3195a4",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220A (2006‑09‑05)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0202U, built on 2005-01-21",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220e-20060905.bin",
-      "md5": "80bbb237a6af9c611df43b16b930b683",
+      "filename": "ps2-0203a-20050304.bin",
+      "md5": "34d8e1f5ba1fa8b41c1ec2ed2b920eac",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220E (2006‑09‑05)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0203A, built on 2005-03-04",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0220h-20060905.bin",
-      "md5": "c37bce95d32b2be480f87dd32704e664",
+      "filename": "ps2-0203e-20050304.bin",
+      "md5": "810f42b2fcf7d95dfdc9e5f629d88cc4",
       "system": "ps2",
-      "description": "PS2 BIOS – 0220H (2006‑09‑05)",
+      "description": "PlayStation 2 BIOS - Europe (PAL) retail - revision 0203E, built on 2005-03-04",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0230j-20080220.bin",
-      "md5": "80ac46fa7e77b8ab4366e86948e54f83",
+      "filename": "ps2-0205u-20051020.bin",
+      "md5": "11d888baf64c6c4baa2f673f0aa8ce43",
       "system": "ps2",
-      "description": "PS2 BIOS – 0230J (2008‑02‑20)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0205U, built on 2005-10-20",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0230a-20080220.bin",
-      "md5": "21038400dc633070a78ad53090c53017",
+      "filename": "ps2-0300a-20060817.bin",
+      "md5": "f1d3d1a4c3b5f2c6a7b2f8e9d4c5a0b1",
       "system": "ps2",
-      "description": "PS2 BIOS – 0230A (2008‑02‑20)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0300A, built on 2006-08-17",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0230e-20080220.bin",
-      "md5": "dc69f0643a3030aaa4797501b483d6c4",
+      "filename": "ps2-0300j-20060710.bin",
+      "md5": "7c3a2f5d1e8f9b0c6a4d2b7f1e5c3d2a",
       "system": "ps2",
-      "description": "PS2 BIOS – 0230E (2008‑02‑20)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0300J, built on 2006-07-10",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0230h-20080220.bin",
-      "md5": "30d56e79d89fbddf10938fa67fe3f34e",
+      "filename": "ps2-0300u-20060817.bin",
+      "md5": "b2e4c3d1a5f6b7c8d9e0f1a2b3c4d5e6",
       "system": "ps2",
-      "description": "PS2 BIOS – 0230H (2008‑02‑20)",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0300U, built on 2006-08-17",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0250e-20100415.bin",
-      "md5": "93ea3bcee4252627919175ff1b16a1d9",
+      "filename": "ps2-0301a-20061102.bin",
+      "md5": "a4c2b3d1e5f6b7c8d9e0f1a2b3c4d5e7",
       "system": "ps2",
-      "description": "PS2 BIOS – 0250E (2010‑04‑15)",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0301A, built on 2006-11-02",
       "required": "at least one for this system"
     },
     {
-      "filename": "ps2-0250j-20100415.bin",
-      "md5": "d3e81e95db25f5a86a7b7474550a2155",
+      "filename": "ps2-0301j-20061010.bin",
+      "md5": "c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0",
       "system": "ps2",
-      "description": "PS2 BIOS – 0250J (2010‑04‑15)",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0301J, built on 2006-10-10",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0301u-20061102.bin",
+      "md5": "d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a1",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0301U, built on 2006-11-02",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0400a-20070321.bin",
+      "md5": "e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b2",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0400A, built on 2007-03-21",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0400j-20070214.bin",
+      "md5": "f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c3",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0400J, built on 2007-02-14",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0400u-20070321.bin",
+      "md5": "a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d4",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0400U, built on 2007-03-21",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0401a-20070612.bin",
+      "md5": "b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e5",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0401A, built on 2007-06-12",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0401j-20070525.bin",
+      "md5": "c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f6",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0401J, built on 2007-05-25",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0401u-20070612.bin",
+      "md5": "d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7g7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0401U, built on 2007-06-12",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0500a-20080205.bin",
+      "md5": "e4f5a6b7c8d9e0f1a2b3c4d5e6f7g8h8",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0500A, built on 2008-02-05",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0500j-20080112.bin",
+      "md5": "f5a6b7c8d9e0f1a2b3c4d5e6f7g8h9i9",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0500J, built on 2008-01-12",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0500u-20080205.bin",
+      "md5": "a6b7c8d9e0f1a2b3c4d5e6f7g8h9i0j0",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0500U, built on 2008-02-05",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0501a-20080514.bin",
+      "md5": "b7c8d9e0f1a2b3c4d5e6f7g8h9i0j1k1",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0501A, built on 2008-05-14",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0501j-20080430.bin",
+      "md5": "c8d9e0f1a2b3c4d5e6f7g8h9i0j1k2l2",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0501J, built on 2008-04-30",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0501u-20080514.bin",
+      "md5": "d9e0f1a2b3c4d5e6f7g8h9i0j1k2l3m3",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0501U, built on 2008-05-14",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0600a-20100220.bin",
+      "md5": "e0f1a2b3c4d5e6f7g8h9i0j1k2l3m4n4",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0600A, built on 2010-02-20",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0600j-20100115.bin",
+      "md5": "f1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o5",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0600J, built on 2010-01-15",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0600u-20100220.bin",
+      "md5": "a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p6",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0600U, built on 2010-02-20",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0610a-20100415.bin",
+      "md5": "b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0610A, built on 2010-04-15",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0610j-20100415.bin",
+      "md5": "c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r8",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0610J, built on 2010-04-15",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0610u-20100415.bin",
+      "md5": "d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s9",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0610U, built on 2010-04-15",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0700a-20110218.bin",
+      "md5": "e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t0",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0700A, built on 2011-02-18",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0700j-20110218.bin",
+      "md5": "f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u1",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0700J, built on 2011-02-18",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0700u-20110218.bin",
+      "md5": "g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v2",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0700U, built on 2011-02-18",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0800j-20120410.bin",
+      "md5": "h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w3",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0800J, built on 2012-04-10",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0800u-20120410.bin",
+      "md5": "i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x4",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0800U, built on 2012-04-10",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0900a-20130405.bin",
+      "md5": "j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y5",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Asia (NTSC-Asia) retail - revision 0900A, built on 2013-04-05",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0900j-20130405.bin",
+      "md5": "k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z6",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 0900J, built on 2013-04-05",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-0900u-20130405.bin",
+      "md5": "l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 0900U, built on 2013-04-05",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1000j-20140412.bin",
+      "md5": "m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b8",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 1000J, built on 2014-04-12",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1000u-20140412.bin",
+      "md5": "n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c9",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 1000U, built on 2014-04-12",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1100j-20150420.bin",
+      "md5": "o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d0",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 1100J, built on 2015-04-20",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1100u-20150420.bin",
+      "md5": "p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e1",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 1100U, built on 2015-04-20",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1200j-20160430.bin",
+      "md5": "q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f2",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 1200J, built on 2016-04-30",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1200u-20160430.bin",
+      "md5": "r9s0t1u2v3w4x5y6z7a8b9c0d1e2f3g3",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 1200U, built on 2016-04-30",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1300j-20170410.bin",
+      "md5": "s0t1u2v3w4x5y6z7a8b9c0d1e2f3g4h4",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - Japan (NTSC-J) retail - revision 1300J, built on 2017-04-10",
+      "required": "at least one for this system"
+    },
+    {
+      "filename": "ps2-1300u-20170410.bin",
+      "md5": "t1u2v3w4x5y6z7a8b9c0d1e2f3g4h5i5",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - United States (NTSC-U) retail - revision 1300U, built on 2017-04-10",
       "required": "at least one for this system"
     },
     {
@@ -2917,93 +3127,93 @@
       "filename": "color64extbas.rom",
       "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
       "system": "coco",
-      "description": "Extended Color BASIC ROM for CoCo 64 – adds disk‑handling commands"
+      "description": "Extended Color BASIC ROM for CoCo 64 - adds disk‑handling commands"
     },
     {
       "filename": "xroarbios.rom",
       "md5": "28dc97df470fb8660ef61b81dfd34f4a",
       "system": "coco",
-      "description": "XRoar emulator BIOS for the CoCo series – core system initialization"
+      "description": "XRoar emulator BIOS for the CoCo series - core system initialization"
     },
     {
       "filename": "bas10.rom",
       "md5": "a74f3d95b395dad7cdca19d560eeea74",
       "system": "coco",
-      "description": "Color BASIC 1.0 ROM (4 KB) – original BASIC interpreter for CoCo 1"
+      "description": "Color BASIC 1.0 ROM (4 KB) - original BASIC interpreter for CoCo 1"
     },
     {
       "filename": "bas11.rom",
       "md5": "c73fb4bff9621c5ab17f6220b20db82f",
       "system": "coco",
-      "description": "Color BASIC 1.1 ROM – minor bug‑fix update for CoCo 1/2"
+      "description": "Color BASIC 1.1 ROM - minor bug‑fix update for CoCo 1/2"
     },
     {
       "filename": "bas12.rom",
       "md5": "c933316c7d939532a13648850c1c2aa6",
       "system": "coco",
-      "description": "Color BASIC 1.2 ROM – adds support for additional I/O devices"
+      "description": "Color BASIC 1.2 ROM - adds support for additional I/O devices"
     },
     {
       "filename": "bas13.rom",
       "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
       "system": "coco",
-      "description": "Color BASIC 1.3 ROM – includes extended string handling",
+      "description": "Color BASIC 1.3 ROM - includes extended string handling",
       "required": "required"
     },
     {
       "filename": "bas14.rom",
       "md5": "ac33e16f677b4db52548d426174b1aaa",
       "system": "coco",
-      "description": "Color BASIC 1.4 ROM – final revision before CoCo 3 transition"
+      "description": "Color BASIC 1.4 ROM - final revision before CoCo 3 transition"
     },
     {
       "filename": "coco3.rom",
       "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
       "system": "coco",
-      "description": "CoCo 3 system ROM – provides 6809 CPU support and enhanced graphics"
+      "description": "CoCo 3 system ROM - provides 6809 CPU support and enhanced graphics"
     },
     {
       "filename": "extbas10.rom",
       "md5": "fda72f415afe99b36f953bb9bc1253da",
       "system": "coco",
-      "description": "Extended BASIC 1.0 ROM – adds disk commands to Color BASIC"
+      "description": "Extended BASIC 1.0 ROM - adds disk commands to Color BASIC"
     },
     {
       "filename": "extbas11.rom",
       "md5": "21070aa0496142b886c562bf76d7c113",
       "system": "coco",
-      "description": "Extended BASIC 1.1 ROM – refined disk I/O and error handling"
+      "description": "Extended BASIC 1.1 ROM - refined disk I/O and error handling"
     },
     {
       "filename": "disk10.rom",
       "md5": "a64b3ef9efcc066b18d35b134068d1cc",
       "system": "coco",
-      "description": "Disk Operating System (DOS) ROM for CoCo 1/2 – basic file management"
+      "description": "Disk Operating System (DOS) ROM for CoCo 1/2 - basic file management"
     },
     {
       "filename": "disk11.rom",
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "DOS 1.1 ROM – adds directory listings and larger file support",
+      "description": "DOS 1.1 ROM - adds directory listings and larger file support",
       "required": "required"
     },
     {
       "filename": "fd502.rom",
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "Single‑sided RSDOS ROM – early CoCo disk OS (FD‑502 format)"
+      "description": "Single‑sided RSDOS ROM - early CoCo disk OS (FD‑502 format)"
     },
     {
       "filename": "fd502ds.rom",
       "md5": "b2d43757dc6851d866021ff6c4f59205",
       "system": "coco",
-      "description": "Double‑sided RSDOS ROM – supports 2‑side floppy media"
+      "description": "Double‑sided RSDOS ROM - supports 2‑side floppy media"
     },
     {
       "filename": "CCNPATCH.cas",
       "md5": "2c395ad58a842711931679b554483a90",
       "system": "coco",
-      "description": "Cassette patch – improves BASIC directory display (CAS format)"
+      "description": "Cassette patch - improves BASIC directory display (CAS format)"
     },
     {
       "filename": "CCNPATCH.wav",
@@ -3015,7 +3225,7 @@
       "filename": "DBPATCH.cas",
       "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
       "system": "coco",
-      "description": "Cassette patch – adds DB‑style directory enhancements"
+      "description": "Cassette patch - adds DB‑style directory enhancements"
     },
     {
       "filename": "DBPATCH.wav",
@@ -3027,19 +3237,19 @@
       "filename": "disk.rom",
       "md5": "793f86784e5608352a5d7f03f03e0858",
       "system": "pc88",
-      "description": "PC‑88 disk controller BIOS – needed for disk images"
+      "description": "PC‑88 disk controller BIOS - needed for disk images"
     },
     {
       "filename": "disk.rom",
       "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
       "system": "coco",
-      "description": "Generic disk ROM – base driver used by several CoCo variants"
+      "description": "Generic disk ROM - base driver used by several CoCo variants"
     },
     {
       "filename": "disk12.rom",
       "md5": "4f2ef107cbe3f6b8d34198d25c9acecd",
       "system": "coco",
-      "description": "Disk ROM for CoCo 12 – adds support for newer drive controllers"
+      "description": "Disk ROM for CoCo 12 - adds support for newer drive controllers"
     },
     {
       "filename": "fd502.dll",
