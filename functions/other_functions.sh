@@ -771,6 +771,8 @@ finit() {
 
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
+  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+
   local finit_choices=()
 
   while read -r manifest_file; do
@@ -796,7 +798,6 @@ finit() {
   --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⏳<span foreground='$purple'><b>This may take up to a minute or two</b></span>⏳\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
-  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
   prepare_component "reset" "all"
   update_component_presets
   deploy_helper_files
