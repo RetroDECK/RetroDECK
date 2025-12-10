@@ -212,11 +212,16 @@ else # If the config file is existing i just read the variables
   if [[ ! -d "$rd_home_path" ]]; then
     configurator_generic_dialog "RetroDECK Setup - 🛑 Warning: No Data Folder Found 🛑" "The RetroDECK data folder was not found in the expected location.\nThis may occur after a OS update or if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>"retrodeck"</b></span> folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
-    set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
-    conf_read
-    prepare_component "postmove" "framework"
-    prepare_component "postmove" "all"
-    conf_write
+    if [[ -n "$new_home_path" ]]; then
+      set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
+      conf_read
+      prepare_component "postmove" "framework"
+      prepare_component "postmove" "all"
+      conf_write
+    else
+      log w "User exited the RetroDECK home path repair process."
+      quit_retrodeck
+    fi
   fi
 
   # Static variables dependent on $rd_conf values, need to be set after reading $rd_conf
