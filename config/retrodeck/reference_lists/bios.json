@@ -3364,64 +3364,64 @@
       "description": "Generic disk ROM - base driver used by several CoCo variants"
     },
     {
-      "filename": "disk12.rom",
-      "md5": "4f2ef107cbe3f6b8d34198d25c9acecd",
-      "system": "coco",
-      "description": "Disk ROM for CoCo 12 - adds support for newer drive controllers"
-    },
-    {
-      "filename": "fd502.dll",
-      "md5": "256573beb9e91d27926325c7cc986e0f",
-      "system": "coco",
-      "description": "Dynamic library version of the single‑sided RSDOS driver"
-    },
-    {
       "filename": "kick33180.A500",
       "md5": "85ad74194e87c08904327de1a9443b7a",
       "system": "amiga",
-      "description": "Kickstart 1.3 ROM (31.180) used in early Amiga 500 systems, offering strong compatibility with classic games and demos."
+      "description": "Kickstart v1.2 rev 33.180 for the Amiga 500, an early ROM offering foundational Workbench 1.x support."
     },
     {
       "filename": "kick34005.A500",
       "md5": "82a21c1890cae844b3df741f2762d48d",
       "system": "amiga",
-      "description": "Kickstart 3.0 ROM (34.005) adapted for Amiga 500 configurations, often used in custom or emulation setups."
+      "description": "Kickstart v1.3 rev 34.005 for the Amiga 500, the most common ROM known for excellent game compatibility."
     },
     {
-      "filename": "kick40068.A1200",
-      "md5": "646773759326fbac3b2311fd8c8793ee",
+      "filename": "kick37175.A500",
+      "md5": "dc10d7bdd1b6f450773dfb558477c230",
       "system": "amiga",
-      "description": "Kickstart 3.1 ROM (40.068) for the Amiga 1200, providing improved stability, updated libraries, and better hardware support."
+      "description": "Kickstart v2.04 rev 37.175 for the Amiga 500+, introducing the updated Workbench 2.x interface and system enhancements."
     },
     {
       "filename": "kick40063.A600",
       "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
       "system": "amiga",
-      "description": "Kickstart 3.1 ROM (40.063) for the Amiga 600, enhancing IDE compatibility and delivering refined AmigaOS 3.x functionality."
+      "description": "Kickstart v3.1 rev 40.063 for the Amiga 600, providing improved IDE handling and refined AmigaOS 3.x support."
     },
     {
-      "filename": "kick12.rom",
-      "md5": "1a96ab3177d651a5dba7bfd4d46e4d8e",
+      "filename": "kick40068.A1200",
+      "md5": "646773759326fbac3b2311fd8c8793ee",
       "system": "amiga",
-      "description": "Kickstart 1.2 ROM used in early Amiga 500/2000 systems, providing the foundational operating environment for Workbench 1.x."
+      "description": "Kickstart v3.1 rev 40.068 for the Amiga 1200, offering enhanced hardware compatibility and updated ROM modules."
     },
     {
-      "filename": "kick13.rom",
-      "md5": "192d6d950d0ed3df8040b788502831c2",
+      "filename": "kick40068.A4000",
+      "md5": "9bdedde6a4f33555b4a270c8ca53297d",
       "system": "amiga",
-      "description": "Kickstart 1.3 ROM widely used in Amiga 500 and 2000 systems, known for its stability and excellent game compatibility."
+      "description": "Kickstart v3.1 rev 40.068 for the Amiga 4000, enabling advanced system features and improved AmigaOS 3.x functionality."
     },
     {
-      "filename": "kick20.rom",
-      "md5": "dc10d7bdd1b6f450773dfb558477c230",
+      "filename": "kick34005.CDTV",
+      "md5": "89da1838a24460e4b93f4f0c5d92d48d",
       "system": "amiga",
-      "description": "Kickstart 2.0 ROM introducing the updated Workbench 2.x interface and improved system libraries for later Amiga models."
+      "description": "CDTV Extended ROM v1.00 for the Commodore CDTV, adding system extensions required for multimedia titles."
     },
     {
-      "filename": "kick31.rom",
-      "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
+      "filename": "kick40060.CD32",
+      "md5": "5f8924d013dd57a89cf349f4cdedc6b1",
       "system": "amiga",
-      "description": "Kickstart 3.1 ROM supporting AmigaOS 3.x, offering enhanced filesystem features and broader hardware compatibility."
+      "description": "Kickstart v3.1 rev 40.060 for the Amiga CD32, the primary console ROM used for booting CD-based titles."
+    },
+    {
+      "filename": "kick40060.CD32.ext",
+      "md5": "bb72565701b1b6faece07d68ea5da639",
+      "system": "amiga",
+      "description": "CD32 Extended ROM rev 40.060 providing additional system modules used by enhanced CD32 software."
+    },
+    {
+      "filename": "kick40060.CD32.full",
+      "md5": "f2f241bf094168cfb9e7805dc2856433",
+      "system": "amiga",
+      "description": "Combined CD32 Kickstart and Extended ROM v3.1 rev 40.060, used by some emulators as an all-in-one CD32 firmware."
     }
   ]
 }
