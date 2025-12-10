@@ -640,7 +640,10 @@ prepare_component() {
     while IFS= read -r prepare_component_file; do
       log d "Found component file $prepare_component_file"
       source "$prepare_component_file"
-    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+    done < <({
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh" | grep "^$rd_components/framework/component_prepare.sh" || true
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh" | grep -v "^$rd_components/framework/component_prepare.sh" | sort
+           })
   else
     if [[ -f "$rd_components/$component/component_prepare.sh" ]]; then
       log d "Found component file $rd_components/$component/component_prepare.sh for component $component"
