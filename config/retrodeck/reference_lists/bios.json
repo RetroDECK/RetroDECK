@@ -201,6 +201,10 @@
     },
     {
       "filename": "ngp.zip",
+      "md5": [
+        "3655aacebb43a963607d4cf821fc1301",
+        "3655aacebb43a963607d4cf821fc1301"
+      ],
       "system": "fbneo",
       "description": "NeoGeo Pocket BIOS",
       "required": "required"
@@ -1136,6 +1140,12 @@
       "required": "optional"
     },
     {
+      "filename": "iplromco.dat",
+      "md5": "cc78d4f4900f622bd6de1aed7f52592f",
+      "system": "x68000",
+      "description": "X68000 alternative name flash IPL ROM variant (for CDC and flash memory models)"
+    },
+    {
       "filename": "iplromxv.dat",
       "md5": "0617321daa182c3f3d6f41fd02fb3275",
       "system": "x68000",
@@ -1654,6 +1664,15 @@
         "supergb"
       ],
       "description": "Super Game Boy BIOS - boot ROM (identical to SGB1.sfc)"
+    },
+    {
+      "filename": "sgb_bios.bin",
+      "md5": "d574d4f9c12f305074798f54c091a8b4",
+      "system": [
+        "snes",
+        "supergb"
+      ],
+      "description": "Super Game Boy BIOS Other Name - boot ROM (identical to SGB1.sfc)"
     },
     {
       "filename": "sgb1.program.rom",
@@ -3470,6 +3489,669 @@
       "md5": "20b6885c6dc2d42c38754a365b043d71",
       "system": "c64",
       "description": "JiffyDOS custom BIOS for the Commodore 1581 drive offering high-speed transfers and improved directory handling."
+    },
+    {
+      "filename": "mac.rom",
+      "md5": "af343f3f1362bf29cefd630687efaa25",
+      "system": "macintosh",
+      "description": "Macintosh ROM (can also be PERFORMA.ROM) providing the core system firmware for classic Mac models."
+    },
+    {
+      "filename": "disk.img",
+      "md5": "64c507ce3395f96e5bbb09a13834fbba",
+      "system": "macintosh",
+      "description": "Startup disk image (can also be MacStartup.img) containing the system disk required to boot the classic Mac."
+    },
+    {
+      "filename": "PERFORMA.ROM",
+      "md5": "af343f3f1362bf29cefd630687efaa25",
+      "system": "macintosh",
+      "description": "ROM for the Macintosh Performa series providing the core firmware for system initialization."
+    },
+    {
+      "filename": "MacStartup.img",
+      "md5": "64c507ce3395f96e5bbb09a13834fbba",
+      "system": "macintosh",
+      "description": "Startup disk image for classic Macintosh systems required to boot the operating system."
+    },
+    {
+      "filename": "vMac.ROM",
+      "md5": "4a89c35e11d0bcb3c174cabfa4b1cd09",
+      "system": "macintosh",
+      "description": "ROM used by vMac emulator to replicate classic Macintosh firmware for system boot and compatibility."
+    },
+    {
+      "filename": "ARAB1.ROM",
+      "md5": "7fa0558bcec9dba310579521623d9f6a",
+      "system": "msx",
+      "description": "Arabic language ROM for MSX1 systems, provides Arabic character support"
+    },
+    {
+      "filename": "ARABIC.rom",
+      "md5": "20c4b5d1d9469c201b145f082ec32658",
+      "system": "msx",
+      "description": "Arabic language ROM for MSX, adds Arabic keyboard and display support"
+    },
+    {
+      "filename": "BEERIDE.ROM",
+      "md5": "b32279f2700652a5ce0a809318626763",
+      "system": "msx",
+      "description": "BeerIDE ROM, adds IDE disk interface support for MSX systems"
+    },
+    {
+      "filename": "FMPAC.rom",
+      "md5": "6f69cc8b5ed761b03afd78000dfb0e19",
+      "system": "msx",
+      "description": "FMPAC Music/Sound ROM for Yamaha FM-PAC interface, optional sound enhancement"
+    },
+    {
+      "filename": "GCVMX80.ROM",
+      "md5": "fd0b8f1766dc6dcc03a43d9c79dc4e37",
+      "system": "msx",
+      "description": "GCVMX80 system ROM, core firmware for specialized MSX-compatible machines"
+    },
+    {
+      "filename": "HANGUL.rom",
+      "md5": "9baf17b190f631405b6b0eeeeb162b87",
+      "system": "msx",
+      "description": "Hangul language ROM, adds Korean character support for MSX systems"
+    },
+    {
+      "filename": "KANJI.rom",
+      "md5": "acf53887c2d2783dc059a9b442c86b90",
+      "system": "msx",
+      "description": "Kanji font ROM for MSX, provides Japanese character set support"
+    },
+    {
+      "filename": "MICROSOLDISK.ROM",
+      "md5": "02e8b1f96049f09d6d3a735647cbbb2a",
+      "system": "msx",
+      "description": "Microsol Disk ROM, adds disk I/O support for MSX computers"
+    },
+    {
+      "filename": "MOONSOUND.rom",
+      "md5": "42af93619160ef2116416f74a6cb12f2",
+      "system": "msx",
+      "description": "MoonSound sound expansion ROM, enhances music capabilities on MSX"
+    },
+    {
+      "filename": "MSX2AREXT.ROM",
+      "md5": "be5d1ec8001d945ca1432285722e9d16",
+      "system": "msx",
+      "description": "MSX2A Extended ROM, adds advanced MSX2 features for FS-A1 series"
+    },
+    {
+      "filename": "MSX2AR.ROM",
+      "md5": "91764e84f977671ac7caa50b36273fd2",
+      "system": "msx",
+      "description": "MSX2 Arabic ROM, adds Arabic support for MSX2 machines"
+    },
+    {
+      "filename": "MSX2BREXT.rom",
+      "md5": "355c6d5ee31da441d485cd89ca906413",
+      "system": "msx",
+      "description": "MSX2B Extended ROM, enhances MSX2B capabilities with extra functions"
+    },
+    {
+      "filename": "MSX2BR.rom",
+      "md5": "d3df424728a225b301510f5384cae583",
+      "system": "msx",
+      "description": "MSX2B ROM, core BIOS for MSX2B compatible systems"
+    },
+    {
+      "filename": "MSX2EXT.rom",
+      "md5": "2183c2aff17cf4297bdb496de78c2e8a",
+      "system": "msx",
+      "description": "MSX2 Extended ROM, adds extra MSX2 functions and routines"
+    },
+    {
+      "filename": "MSX2FREXT.rom",
+      "md5": "6ffe789cca2eca9d2e71ca7b69b97e6b",
+      "system": "msx",
+      "description": "MSX2 French Extended ROM, localization and additional MSX2 features"
+    },
+    {
+      "filename": "MSX2FR.rom",
+      "md5": "7af9e84da1520a8a7fb82e73703e5075",
+      "system": "msx",
+      "description": "MSX2 French ROM, adds French language support to MSX2 BIOS"
+    },
+    {
+      "filename": "MSX2GEXT.rom",
+      "md5": "4047ce143a8bf391e21991835aa65b59",
+      "system": "msx",
+      "description": "MSX2 German Extended ROM, adds extra features and German language support"
+    },
+    {
+      "filename": "MSX2G.rom",
+      "md5": "b6c33b7b3508d691d7872589c778f808",
+      "system": "msx",
+      "description": "MSX2 German ROM, core BIOS for German MSX2 machines"
+    },
+    {
+      "filename": "MSX2HAN.rom",
+      "md5": "7b9466546009d419ebd0dc27db90c30e",
+      "system": "msx",
+      "description": "MSX2 Hangul ROM, adds Korean language support to MSX2 systems"
+    },
+    {
+      "filename": "MSX2JEXT.rom",
+      "md5": "8aabde714a42256bef36ea9b04f6ef59",
+      "system": "msx",
+      "description": "MSX2 Japanese Extended ROM, enhances MSX2J with extra features"
+    },
+    {
+      "filename": "MSX2J.rom",
+      "md5": "53bec1c22b30c0a15263e04b91a7814f",
+      "system": "msx",
+      "description": "MSX2 Japanese ROM, core BIOS for Japanese MSX2 systems"
+    },
+    {
+      "filename": "MSX2KREXT.rom",
+      "md5": "30a0b3402a0a13b516af76d39f45a365",
+      "system": "msx",
+      "description": "MSX2 Korean Extended ROM, adds extra Korean language support"
+    },
+    {
+      "filename": "MSX2KR.rom",
+      "md5": "6819a1533502261bfdd52436b8346073",
+      "system": "msx",
+      "description": "MSX2 Korean ROM, core BIOS with Korean language features"
+    },
+    {
+      "filename": "MSX2PEXT.rom",
+      "md5": "7c8243c71d8f143b2531f01afa6a05dc",
+      "system": "msx",
+      "description": "MSX2+ Extended ROM, enhances MSX2+ system with extra functions"
+    },
+    {
+      "filename": "MSX2PMUS.rom",
+      "md5": "f877f32e6d8687474ac5ee83e40de23b",
+      "system": "msx",
+      "description": "MSX2+ Music extension ROM, adds sound support to MSX2+ machines"
+    },
+    {
+      "filename": "MSX2P.rom",
+      "md5": "847cc025ffae665487940ff2639540e5",
+      "system": "msx",
+      "description": "MSX2+ BIOS, core system firmware for MSX2+ compatible machines"
+    },
+    {
+      "filename": "MSX2R2.ROM",
+      "md5": "704bdd980fa56c6be5c680358458eeeb",
+      "system": "msx",
+      "description": "MSX2 R2 ROM, advanced MSX2 routines and enhancements"
+    },
+    {
+      "filename": "MSX2REXT.rom",
+      "md5": "8e4af1124e2b82fbdc74a7bc5f20dc6e",
+      "system": "msx",
+      "description": "MSX2 R Extended ROM, adds extra MSX2 routines and localization"
+    },
+    {
+      "filename": "MSX2.rom",
+      "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef",
+      "system": "msx",
+      "description": "MSX2 BIOS, core ROM for MSX2 machines"
+    },
+    {
+      "filename": "MSX2R.rom",
+      "md5": "db56360c85ef8410dc4bcf8e8602f61e",
+      "system": "msx",
+      "description": "MSX2 R ROM, provides extra routines for MSX2 systems"
+    },
+    {
+      "filename": "MSX2SE.rom",
+      "md5": "fb8f7ab15e32a91147204bd7f7a1b451",
+      "system": "msx",
+      "description": "MSX2 SE ROM, special edition ROM with enhanced MSX2 features"
+    },
+    {
+      "filename": "MSX2SPEXT.rom",
+      "md5": "d71842ce8f559a8aed2721766bc15f2b",
+      "system": "msx",
+      "description": "MSX2 SP Extended ROM, adds additional system routines and localization"
+    },
+    {
+      "filename": "MSX2SP.rom",
+      "md5": "79caefa20a0d056fb42eaeca856c6f82",
+      "system": "msx",
+      "description": "MSX2 SP ROM, core BIOS for SP variant of MSX2"
+    },
+    {
+      "filename": "MSXAR.ROM",
+      "md5": "793e3b833c33be7aaf834beacb8fb926",
+      "system": "msx",
+      "description": "MSX Arabic ROM, adds Arabic support for MSX1 and MSX2 machines"
+    },
+    {
+      "filename": "MSXBR.rom",
+      "md5": "d13c1fc9ad4897c322f51aab3ad3b30d",
+      "system": "msx",
+      "description": "MSX Brazilian ROM, provides Portuguese localization for MSX BIOS"
+    },
+    {
+      "filename": "MSXDOS23.ROM",
+      "md5": "56bf5b02fed377b7bb9d91f914965431",
+      "system": "msx",
+      "description": "MSX-DOS 2.3 ROM, adds disk operating system routines for MSX computers"
+    },
+    {
+      "filename": "MSXFR.rom",
+      "md5": "6f43d28ac4a69182c860c2db0e18ee6d",
+      "system": "msx",
+      "description": "MSX French ROM, adds French localization and system routines"
+    },
+    {
+      "filename": "MSXG.rom",
+      "md5": "4655329d3f37bf1a655d05f2abd1aa62",
+      "system": "msx",
+      "description": "MSX German ROM, core BIOS with German language support"
+    },
+    {
+      "filename": "MSXHAN.rom",
+      "md5": "394efbc50fb7df1151130d8c162f85c3",
+      "system": "msx",
+      "description": "MSX Hangul ROM, adds Korean language and system support"
+    },
+    {
+      "filename": "MSXJ.rom",
+      "md5": "f005e55c680ba6e7b19f6d4dc8f73ce5",
+      "system": "msx",
+      "description": "MSX Japanese ROM, core BIOS for Japanese MSX machines"
+    },
+    {
+      "filename": "MSXKANJI.rom",
+      "md5": "9dfdebfaa6b547222a40aab8bb2e29f8",
+      "system": "msx",
+      "description": "MSX Kanji ROM, adds Japanese Kanji support for system and BASIC"
+    },
+    {
+      "filename": "MSXKR.rom",
+      "md5": "c84f362c44192659273d45ae97462362",
+      "system": "msx",
+      "description": "MSX Korean ROM, core BIOS with Korean language routines"
+    },
+    {
+      "filename": "MSXR2.rom",
+      "md5": "704bdd980fa56c6be5c680358458eeeb",
+      "system": "msx",
+      "description": "MSX R2 ROM, advanced system routines for MSX2-compatible computers"
+    },
+    {
+      "filename": "MSX.rom",
+      "md5": [
+        "364a1a579fe5cb8dba54519bcfcdac0d",
+        "aa95aea2563cd5ec0a0919b44cc17d47"
+      ],
+      "system": "msx",
+      "description": "MSX1 BIOS ROM, core firmware for MSX 1 computers"
+    },
+    {
+      "filename": "MSXR.rom",
+      "md5": "0db9592930488259fc1a5c127215e784",
+      "system": "msx",
+      "description": "MSX R ROM, additional routines for MSX1 systems"
+    },
+    {
+      "filename": "MSXSE.ROM",
+      "md5": "161cb768c52a13f5b38ba46e721b68c1",
+      "system": "msx",
+      "description": "MSX Special Edition ROM, adds enhanced features for MSX1 systems"
+    },
+    {
+      "filename": "MSXSP.ROM",
+      "md5": "51af5b19aeccf94eb8e03bce0b5d33c4",
+      "system": "msx",
+      "description": "MSX SP ROM, adds special system routines for MSX machines"
+    },
+    {
+      "filename": "MSXTREXT.ROM",
+      "md5": "824b1c4475a3bd3b91c5ae81ea940aa2",
+      "system": "msx",
+      "description": "MSX TurboR Extended ROM, adds enhanced routines and extra system features"
+    },
+    {
+      "filename": "MSXTRMUS.ROM",
+      "md5": "c688a229f834f95f8c64df7d33188cd8",
+      "system": "msx",
+      "description": "MSX TurboR Music ROM, adds audio support for TurboR systems"
+    },
+    {
+      "filename": "MSXTROPT.ROM",
+      "md5": "2cba0d812ec445cfe63ffa2cac8d42c2",
+      "system": "msx",
+      "description": "MSX TurboR Optional ROM, provides extra TurboR system features"
+    },
+    {
+      "filename": "MSXTR.ROM",
+      "md5": "fd9513736823e470965949f2a3ec6a43",
+      "system": "msx",
+      "description": "MSX TurboR ROM, core firmware for MSX TurboR machines"
+    },
+    {
+      "filename": "NATIONALDISK.rom",
+      "md5": "86269da485e852d9f581ac27f4ba32ff",
+      "system": "msx",
+      "description": "National Disk ROM, provides disk interface support for MSX computers"
+    },
+    {
+      "filename": "NOVAXIS.rom",
+      "md5": "20989124671593ab04eeb01d52a1e25c",
+      "system": "msx",
+      "description": "Novaxis ROM, adds system extensions and optional utilities for MSX"
+    },
+    {
+      "filename": "PAINT.rom",
+      "md5": "41db0d7b37be479296ffd59fcd6775f0",
+      "system": "msx",
+      "description": "MSX Painter ROM, provides graphics and drawing routines"
+    },
+    {
+      "filename": "PANASONICDISK.rom",
+      "md5": "00aa02b6077de40a0b51d71a3c3e1d5f",
+      "system": "msx",
+      "description": "Panasonic Disk ROM, adds disk support for FS-A1 series MSX machines"
+    },
+    {
+      "filename": "PHILIPSDISK.rom",
+      "md5": "01dd1d72ed9bb6afe8a9b441c198a1cd",
+      "system": "msx",
+      "description": "Philips Disk ROM, adds disk I/O support for MSX-compatible Philips machines"
+    },
+    {
+      "filename": "RS232.ROM",
+      "md5": "55cca200bbbdd0a1ec5c9d70966c05c0",
+      "system": "msx",
+      "description": "RS232 Serial ROM, adds serial port support for MSX systems"
+    },
+    {
+      "filename": "SUNRISEIDE.rom",
+      "md5": "7b564497beb2c0de0847f107dec00ddf",
+      "system": "msx",
+      "description": "Sunrise IDE ROM, adds IDE disk interface for Sunrise MSX machines"
+    },
+    {
+      "filename": "SWP.rom",
+      "md5": "490db04e2a3c1c993a2a9d3611949c76",
+      "system": "msx",
+      "description": "MSX SWP ROM, adds special system utilities or functions"
+    },
+    {
+      "filename": "XBASIC2.rom",
+      "md5": "0b6120f289336538bc564548109f97c6",
+      "system": "msx",
+      "description": "MSX X-BASIC2 ROM, alternative BASIC interpreter for MSX computers"
+    },
+    {
+      "filename": "nms8250_disk.rom",
+      "md5": "dab3e6f36843392665b71b04178aadd",
+      "system": "msx",
+      "description": "Disk ROM for NMS8250 MSX system, handles disk I/O operations"
+    },
+    {
+      "filename": "nms8250_basic-bios2.rom",
+      "md5": "6103b39f1e38d1aa2d84b1c3219c44f1",
+      "system": "msx",
+      "description": "BASIC BIOS v2 for NMS8250, provides core interpreter and system routines"
+    },
+    {
+      "filename": "nms8250_msx2sub.rom",
+      "md5": "5c1f9c7fb655e43d38e5dd1fcc6b942b",
+      "system": "msx",
+      "description": "MSX2 Sub BIOS for NMS8250, extends system functions for MSX2 compatibility"
+    },
+    {
+      "filename": "fmpac.rom",
+      "md5": "9d789166e3caf28e4742fe933d962e99",
+      "system": "msx",
+      "description": "FMPAC Music/Sound ROM for Yamaha FM-PAC interface, optional for sound support"
+    },
+    {
+      "filename": "phc-70fd2_basickun.rom",
+      "md5": "22b3191d865010264001b9d896186a98",
+      "system": "msx",
+      "description": "BASIC-Kun ROM for PHC-70FD2, provides Japanese BASIC interpreter"
+    },
+    {
+      "filename": "yrw801.rom",
+      "md5": "32760893ce06db3e3930627755ba065c",
+      "system": "msx",
+      "description": "YR-W801 system ROM, core firmware for YRW801 MSX-compatible machines"
+    },
+    {
+      "filename": "fs-a1wsx_kanjifont.rom",
+      "md5": "5aff2d9b6efc723bc395b0f96f0adfa8",
+      "system": "msx",
+      "description": "Kanji font ROM for FS-A1WSX MSX2+ system, adds Japanese character support"
+    },
+    {
+      "filename": "fs-a1wsx_basic-bios2p.rom",
+      "md5": "f4433752d3bf876bfefb363c749d4d2e",
+      "system": "msx",
+      "description": "BASIC BIOS 2P for FS-A1WSX MSX2+, provides core interpreter and system routines"
+    },
+    {
+      "filename": "fs-a1wsx_fmbasic.rom",
+      "md5": "aad42ba4289b33d8eed225d42cea930b",
+      "system": "msx",
+      "description": "FM-BASIC ROM for FS-A1WSX MSX2+, supports advanced music programming"
+    },
+    {
+      "filename": "fs-a1wsx_msx2psub.rom",
+      "md5": "fe0254cbfc11405b79e7c86c7769bd6",
+      "system": "msx",
+      "description": "MSX2+ Sub BIOS for FS-A1WSX, adds enhanced MSX2+ system routines"
+    },
+    {
+      "filename": "fs-a1wsx_kanjibasic.rom",
+      "md5": "dcc3a67732aa01c4f2ee8d1ad886444a",
+      "system": "msx",
+      "description": "Kanji BASIC extension ROM for FS-A1WSX, supports Japanese language in BASIC programs"
+    },
+    {
+      "filename": "fs-a1wsx_disk.rom",
+      "md5": "7ed7c55e0359737ac5e68d38cb6903f9",
+      "system": "msx",
+      "description": "Disk ROM for FS-A1WSX, handles disk input/output for MSX2+ system"
+    },
+    {
+      "filename": "fs-a1wsx_firmware.rom",
+      "md5": "3330d9b6b76e3c4ccb7cf252496ed15d",
+      "system": "msx",
+      "description": "System firmware for FS-A1WSX, provides core BIOS routines for MSX2+ operation"
+    },
+    {
+      "filename": "fs-a1gt_firmware.rom",
+      "md5": "e779c338eb91a7dea3ff75f3fde76b8a",
+      "system": "msx",
+      "description": "TurboR firmware for FS-A1GT, core BIOS for advanced MSX-TurboR functionality"
+    },
+    {
+      "filename": "fs-a1gt_kanjifont.rom",
+      "md5": "5aff2d9b6efc723bc395b0f96f0adfa8",
+      "system": "msx",
+      "description": "Kanji font ROM for FS-A1GT TurboR, supports Japanese characters in system and BASIC"
+    },
+    {
+      "filename": "N88.ROM",
+      "md5": "3b31fc68fa7f47b21c1a1cb027b86b9e",
+      "system": "pc8800",
+      "description": "Main PC-8800 system BIOS, required for basic operation and hardware initialization"
+    },
+    {
+      "filename": "N88SUB.ROM",
+      "md5": "bb7103a0818850a039c67ff666a31ce4",
+      "system": "pc8800",
+      "description": "PC-8800 disk controller BIOS, used for disk operations and media access"
+    },
+    {
+      "filename": "DISK.ROM",
+      "md5": "bb7103a0818850a039c67ff666a31ce4",
+      "system": "pc8800",
+      "description": "Alternate name for N88SUB.ROM, used for disk access on PC-8800"
+    },
+    {
+      "filename": "N88N.ROM",
+      "md5": "5b922ed9de07d2a729bdf1da7b57c50d",
+      "system": "pc8800",
+      "description": "PC-8800 N80 BIOS, provides extended system routines and memory management"
+    },
+    {
+      "filename": "N80.ROM",
+      "md5": "5b922ed9de07d2a729bdf1da7b57c50d",
+      "system": "pc8800",
+      "description": "Alternate name for N88N.ROM, same N80 BIOS with extended routines"
+    },
+    {
+      "filename": "N88EXT0.ROM",
+      "md5": "d239c26ad7ac5efac6e947b0e9549b15",
+      "system": "pc8800",
+      "description": "PC-8800 extension ROM 0, adds additional system functionality and support for peripherals"
+    },
+    {
+      "filename": "N88_0.ROM",
+      "md5": "d239c26ad7ac5efac6e947b0e9549b15",
+      "system": "pc8800",
+      "description": "Alternate name for N88EXT0.ROM, provides same extension routines"
+    },
+    {
+      "filename": "N88EXT1.ROM",
+      "md5": "8528eef7946edf6501a6ccb1f416b60c",
+      "system": "pc8800",
+      "description": "PC-8800 extension ROM 1, provides further hardware and software extensions"
+    },
+    {
+      "filename": "N88_1.ROM",
+      "md5": "8528eef7946edf6501a6ccb1f416b60c",
+      "system": "pc8800",
+      "description": "Alternate name for N88EXT1.ROM, same extension functionality"
+    },
+    {
+      "filename": "N88EXT2.ROM",
+      "md5": "b7c8bcea219b77d9cc3ee0efafe343cc",
+      "system": "pc8800",
+      "description": "PC-8800 extension ROM 2, adds system enhancements and optional hardware support"
+    },
+    {
+      "filename": "N88_2.ROM",
+      "md5": "b7c8bcea219b77d9cc3ee0efafe343cc",
+      "system": "pc8800",
+      "description": "Alternate name for N88EXT2.ROM, provides same ROM enhancements"
+    },
+    {
+      "filename": "N88EXT3.ROM",
+      "md5": "efce0b51cab9f0da6cf68507757f1245",
+      "system": "pc8800",
+      "description": "PC-8800 extension ROM 3, provides additional BIOS routines for advanced system features"
+    },
+    {
+      "filename": "N88_3.ROM",
+      "md5": "efce0b51cab9f0da6cf68507757f1245",
+      "system": "pc8800",
+      "description": "Alternate name for N88EXT3.ROM, same advanced routines"
+    },
+    {
+      "filename": "N88KNJ1.ROM",
+      "md5": "82e11a177af6a5091dd67f50a2f4bafd",
+      "system": "pc8800",
+      "description": "PC-8800 Kanji font ROM 1, enables display of Japanese Kanji characters in menus and applications"
+    },
+    {
+      "filename": "KANJI1.ROM",
+      "md5": "82e11a177af6a5091dd67f50a2f4bafd",
+      "system": "pc8800",
+      "description": "Alternate name for N88KNJ1.ROM, provides Japanese character display support"
+    },
+    {
+      "filename": "N88KNJ2.ROM",
+      "md5": "7e6591cd465cbb35d6d3446c5a83b46d",
+      "system": "pc8800",
+      "description": "PC-8800 Kanji font ROM 2, supports extended Japanese character sets for software and games"
+    },
+    {
+      "filename": "N88JISHO.ROM",
+      "md5": "deef0cc2a9734ba891a6d6c022aa70ff",
+      "system": "pc8800",
+      "description": "PC-8800 Jisho dictionary ROM, provides kanji lookup and supports advanced text input in Japanese"
+    },
+    {
+      "filename": "JISYO.ROM",
+      "md5": "deef0cc2a9734ba891a6d6c022aa70ff",
+      "system": "pc8800",
+      "description": "Alternate name for N88JISHO.ROM, contains the same kanji dictionary functionality"
+    },
+    {
+      "filename": "2608_BD.WAV",
+      "md5": "29aad51cd243c8e449d311d14613f0b1",
+      "system": "pc9800",
+      "description": "Bass drum waveform for PC-9800 sound system, used in music and sound effects"
+    },
+    {
+      "filename": "2608_HH.WAV",
+      "md5": "59a009ee444318bd57d99a19068731e4",
+      "system": "pc9800",
+      "description": "Hi-hat waveform for PC-9800 sound system, provides percussion sounds in music playback"
+    },
+    {
+      "filename": "2608_RIM.WAV",
+      "md5": "943290d1c5c6ae6295bd02be4411c7c0",
+      "system": "pc9800",
+      "description": "Rimshot waveform for PC-9800 sound system, adds snare rim percussion effects"
+    },
+    {
+      "filename": "2608_SD.WAV",
+      "md5": "c99156118789b6cba662c864ebadc62e",
+      "system": "pc9800",
+      "description": "Snare drum waveform for PC-9800 sound system, used in rhythm and music sequences"
+    },
+    {
+      "filename": "2608_TOM.WAV",
+      "md5": "c321a6835b26ad125b2eb78be56394a4",
+      "system": "pc9800",
+      "description": "Tom-tom drum waveform for PC-9800 sound system, provides melodic percussion tones"
+    },
+    {
+      "filename": "2608_TOP.WAV",
+      "md5": "9e73ff2345236ebe72f7a937e477f0bd",
+      "system": "pc9800",
+      "description": "Top cymbal waveform for PC-9800 sound system, used for high-frequency percussion sounds"
+    },
+    {
+      "filename": "BIOS.ROM",
+      "md5": "e246140dec5124c5e404869a84caefce",
+      "system": "pc9800",
+      "description": "Main BIOS for PC-9800 system, required for hardware initialization and system startup"
+    },
+    {
+      "filename": "FONT.ROM",
+      "md5": "2af6179d7de4893ea0b705c00e9a98d6",
+      "system": "pc9800",
+      "description": "Font ROM for PC-9800, contains standard character set used in text display and system menus"
+    },
+    {
+      "filename": "SOUND.ROM",
+      "md5": "caf90f22197aed6f14c471c21e64658d",
+      "system": "pc9800",
+      "description": "Sound ROM for PC-9800, provides default instrument and waveform data for the audio system"
+    },
+    {
+      "filename": "ITF.ROM",
+      "md5": "e9fc3890963b12cf15d0a2eea5815b72",
+      "system": "pc9800",
+      "description": "Interface ROM for PC-9800, provides routines and drivers for peripheral connectivity"
+    },
+    {
+      "filename": "IPLROM.X1",
+      "crc32": "eeeea1cd29c6e0e8b094790ae969bfa7",
+      "system": "sharpx1",
+      "description": "Main IPL ROM for Sharp X1 series, required for system boot in emulators"
+    },
+    {
+      "filename": "IPLROM.X1T",
+      "crc32": "56c28adcf1f3a2f87cf3d57c378013f5",
+      "system": "sharpx1",
+      "description": "Alternate IPL ROM for Sharp X1T model, used for system boot in emulators"
     }
   ]
 }
