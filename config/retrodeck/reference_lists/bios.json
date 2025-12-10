@@ -201,10 +201,7 @@
     },
     {
       "filename": "ngp.zip",
-      "md5": [
-        "3655aacebb43a963607d4cf821fc1301",
-        "3655aacebb43a963607d4cf821fc1301"
-      ],
+      "md5": "3655aacebb43a963607d4cf821fc1301",
       "system": "fbneo",
       "description": "NeoGeo Pocket BIOS",
       "required": "required"
