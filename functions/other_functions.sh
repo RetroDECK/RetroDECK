@@ -1204,7 +1204,7 @@ quit_retrodeck() {
   pkill -f "es-de"
 
   # if steam sync is on do the magic
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") == "true" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") =~ (true|native|flatpak) ]]; then
     export CONFIGURATOR_GUI="zenity"
     steam_sync
   fi
