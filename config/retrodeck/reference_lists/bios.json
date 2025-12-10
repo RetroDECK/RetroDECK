@@ -1209,7 +1209,7 @@
       "filename": "ps1_rom.bin",
       "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
       "system": "psx",
-      "description": "Generic PlayStation BIOS (universal copy for emulator compatibility, region-independent)",
+      "description": "Generic PlayStation BIOS from the Playstation 3 (universal copy for emulator compatibility, region-independent)",
       "required": "at least one for this system"
     },
     {
