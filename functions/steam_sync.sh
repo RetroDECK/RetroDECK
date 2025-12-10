@@ -23,9 +23,20 @@ steam_sync() {
   echo "[]" > "${retrodeck_favorites_file}.new" # Initialize favorites JSON file
 
   # Static definitions for all JSON objects
-  target="flatpak"
-  launch_command="run net.retrodeck.retrodeck"
-  startIn=""
+  local steam_mode=$(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options")
+  if [[ "$steam_mode" =~ (true|native) ]]; then
+    target="flatpak"
+    launch_command="run net.retrodeck.retrodeck"
+    startIn=""
+  elif [[ "$steam_mode" == "flatpak" ]]; then
+    target="flatpak-spawn --host"
+    launch_command="flatpak run net.retrodeck.retrodeck"
+    startIn=""
+  else # Fallback to legacy default behavior
+    target="flatpak"
+    launch_command="run net.retrodeck.retrodeck"
+    startIn=""
+  fi
 
   for system_path in "$rd_home_path/ES-DE/gamelists/"*/; do
     # Skip the CLEANUP folder
