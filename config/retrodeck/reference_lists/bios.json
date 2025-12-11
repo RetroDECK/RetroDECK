@@ -4173,6 +4173,138 @@
       "md5": "9bc4cc42958a2a120670e5bc0bfc1d5e",
       "system": "trs-80",
       "description": "Level 4 BASIC ROM for TRS-80 Model 4P, required for booting and running Model 4P software"
+    },
+    {
+      "filename": "ROM_OS_A_NTSC",
+      "md5": "a3c1585b5d19719f8acfa2b093bea75f",
+      "system": "atari800",
+      "description": "Early NTSC Atari 400/800 OS."
+    },
+    {
+      "filename": "ROM_OS_A_PAL",
+      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
+      "system": "atari800",
+      "description": "PAL Atari 400/800 OS."
+    },
+    {
+      "filename": "ROM_OS_B_NTSC",
+      "md5": [
+        "4177f386a3bac989a981d3fe3388cb6c",
+        "f5b246fa5237b44c41c6c831ccf18a2d"
+      ],
+      "system": "atari800",
+      "description": "Late NTSC Atari 400/800 OS (LINBUG, two revisions)."
+    },
+    {
+      "filename": "ROM_OS_AA00R10",
+      "md5": "e3e8c74bfe1dcd6b56af50bd9a82dc15",
+      "system": "atari800",
+      "description": "Atari 1200XL OS R10."
+    },
+    {
+      "filename": "ROM_OS_AA00R11",
+      "md5": "eacb8069c45e2ec4e0a19978bf2fc334",
+      "system": "atari800",
+      "description": "Atari 1200XL OS R11."
+    },
+    {
+      "filename": "ROM_OS_BB00R1",
+      "md5": "9aea45e724d2588fbbeda658c7dc53ee",
+      "system": "atari800",
+      "description": "Atari 600XL OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R2",
+      "md5": "06daac977823773a3eea3422fd26a703",
+      "system": "atari800",
+      "description": "Atari 800XL / 65XE / 130XE OS."
+    },
+    {
+      "filename": "ROM_OS_BB02R3",
+      "md5": "2dbc73da0d34994d1e2e62e22eb49224",
+      "system": "atari800",
+      "description": "Atari 1450XLD prototype OS (R3V2)."
+    },
+    {
+      "filename": "ROM_OS_BB02R3V4",
+      "md5": "9f5449c881475a5cca40849c743205f8",
+      "system": "atari800",
+      "description": "Atari 1450XLD prototype OS (R3V4)."
+    },
+    {
+      "filename": "ROM_OS_CC01R4",
+      "md5": "65020266380e33cce50ebf8b9d91122a",
+      "system": "atari800",
+      "description": "Reconstructed OS build (2014)."
+    },
+    {
+      "filename": "ROM_OS_BB01R3",
+      "md5": "54e704558a6aedfc45cebf8f8ac9c312",
+      "system": "atari800",
+      "description": "Late Atari 65XE/130XE OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R4",
+      "md5": "b7a2a04677d34f069eeb643d5238bf86",
+      "system": "atari800",
+      "description": "Atari XEGS OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R59",
+      "md5": "d467f55fb7643553b69b34bf7e805b7d",
+      "system": "atari800",
+      "description": "Arabic Atari XEGS OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R59A",
+      "md5": "69396860e53f58d798421d06d766c3ba",
+      "system": "atari800",
+      "description": "Arabic Atari 65XE OS."
+    },
+    {
+      "filename": "ROM_XEGAME",
+      "md5": "d7eb37aec6960cba36bc500e0e5d00bc",
+      "system": "atari800",
+      "description": "Atari XEGS built-in game ROM."
+    },
+    {
+      "filename": "ROM_400/800_CUSTOM",
+      "md5": [
+        "a3e8d617c95d08031fe1b20d541434b2",
+        "7e5e4ce9508edef684ebe2c5a0e6f0d3"
+      ],
+      "system": "atari800",
+      "description": "NTSC PCXFormer hack BIOS (LINBUG base, corrected checksum version)."
+    },
+    {
+      "filename": "ROM_BASIC_A",
+      "md5": "a4dc52536d526ecc51ea857b9fa2b90f",
+      "system": "atari800",
+      "description": "Atari BASIC for 400/800 (Rev. A)."
+    },
+    {
+      "filename": "ROM_BASIC_B",
+      "md5": "04ea6a4e386601445ca5bfc8e37fb620",
+      "system": "atari800",
+      "description": "Atari BASIC for 600XL/early 800XL (Rev. B)."
+    },
+    {
+      "filename": "ROM_BASIC_C",
+      "md5": "(Alternative Name) 0bac0c6a50104045d902df4503a4c30b",
+      "system": "atari5200",
+      "description": "Atari BASIC for 800XL/XE/XEGS (Rev. C)."
+    },
+    {
+      "filename": "ROM_5200",
+      "md5": "281f20ea4320404ec820fb7ec0693b38",
+      "system": "atari5200",
+      "description": "(Alternative Name) BIOS for 4-port and early 2-port Atari 5200."
+    },
+    {
+      "filename": "ROM_5200_A",
+      "md5": "ee7b85f5ca384dcb1f284946f3c12ac4",
+      "system": "atari5200",
+      "description": "BIOS for late 2-port Atari 5200."
     }
   ]
 }
