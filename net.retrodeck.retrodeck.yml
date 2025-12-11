@@ -30,13 +30,13 @@ add-extensions:
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
 
-# Gamescope for Steam Deck
-  org.freedesktop.Platform.VulkanLayer.gamescope:
-    directory: lib/gamescope     
-    add-ld-path: . 
-    version: '25.08'
-    cleanup-commands:
-      - mkdir -p "${FLATPAK_DEST}/lib/gamescope"
+# VulkanLayer Gamescope for Steam Deck (Disabled for now)
+#  org.freedesktop.Platform.VulkanLayer.gamescope:
+#    directory: lib/gamescope     
+#    add-ld-path: . 
+#    version: '25.08'
+#    cleanup-commands:
+#      - mkdir -p "${FLATPAK_DEST}/lib/gamescope"
       
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -103,6 +103,9 @@ finish-args:
 
   # Network 
   - --share=network
+  
+  # Environmental Paths: MangoHud, JRE (Java based Systems), Gamescope and OBS (Disabled for now) 
+  # - --env=PATH=/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
 
   # Sound: PulseAudio, PipeWire
   - --socket=pulseaudio
