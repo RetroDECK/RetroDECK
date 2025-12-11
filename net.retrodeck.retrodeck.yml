@@ -30,7 +30,7 @@ add-extensions:
     cleanup-commands:
       - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
 
-# VulkanLayer Gamescope for Steam Deck (Disabled for now)
+# VulkanLayer Gamescope for HDR (Disabled for now)
 #  org.freedesktop.Platform.VulkanLayer.gamescope:
 #    directory: lib/gamescope     
 #    add-ld-path: . 
