@@ -17,7 +17,8 @@
     "borders_path": "/home/deck/retrodeck/borders",
     "cheats_path": "/home/deck/retrodeck/cheats",
     "sdcard": "/run/media/mmcblk0p1",
-    "storage_path": "/home/deck/retrodeck/storage"
+    "storage_path": "/home/deck/retrodeck/storage",
+    "videos_path": "/home/deck/retrodeck/videos"
   },
   "options": {
     "power_user_warning": "true",
