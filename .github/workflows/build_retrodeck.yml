@@ -41,7 +41,7 @@ jobs:
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
-          if [ -d "$HOME/*/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*; fi
+          if [ -d "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/"*; fi
 
       # Clone Repository
       - name: Clone RetroDECK repo
