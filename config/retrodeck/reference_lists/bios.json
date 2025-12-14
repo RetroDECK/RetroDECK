@@ -10236,472 +10236,535 @@
       "required": "optional"
     },
     {
+      "filename": "megadrive_rom_jcart_micromac96.zip",
+      "md5": "47ded6dee9e345c51c9b16d73b13dae1",
+      "system": "mame",
+      "description": "Mega Drive J-Cart Micromac96: Special cartridge for Mega Drive.",
+      "required": "optional"
+    },
+    {
+      "filename": "megadrive_rom_jcart_sampras.zip",
+      "md5": "47ded6dee9e345c51c9b16d73b13dae1",
+      "system": "mame",
+      "description": "Mega Drive J-Cart Sampras: Sampras themed cartridge.",
+      "required": "optional"
+    },
+    {
+      "filename": "megadrive_rom_jcart_sskid.zip",
+      "md5": "47ded6dee9e345c51c9b16d73b13dae1",
+      "system": "mame",
+      "description": "Mega Drive J-Cart SSKid: SSKid themed cartridge.",
+      "required": "optional"
+    },
+    {
+      "filename": "megaplay.zip",
+      "md5": "1b5e4572439839af22bf682e409f9e8b",
+      "system": "mame",
+      "description": "Mega Play Module: Mega Drive arcade unit module.",
+      "required": "optional"
+    },
+    {
       "filename": "mg1_kbd_device.zip",
       "md5": "bffd570a3b144e4eab113865ab97732f",
       "system": "mame",
-      "description": "MG1 Keyboard Device",
+      "description": "MG1 Keyboard Device: Keyboard peripheral for MG1.",
       "required": "optional"
     },
     {
       "filename": "mga2064w.zip",
       "md5": "0580cf1cd553dc0bff806399b26cb227",
       "system": "mame",
-      "description": "MGA 2064W Module",
+      "description": "MGA 2064W Module: Graphics module for MGA systems.",
       "required": "optional"
     },
     {
       "filename": "microtan_kbd_mt009.zip",
       "md5": "4a5a2748faf41e459f904efbcb9b0982",
       "system": "mame",
-      "description": "Microtan Keyboard MT009",
+      "description": "Microtan Keyboard MT009: Keyboard for Microtan systems.",
       "required": "optional"
     },
     {
       "filename": "microtouch.zip",
       "md5": "7b2a4db61eb910f60c8f2fe159fd5802",
       "system": "mame",
-      "description": "Microtouch Module",
+      "description": "Microtouch Module: Touchscreen module.",
       "required": "optional"
     },
     {
       "filename": "midssio.zip",
       "md5": "5904b0de768d1d506e766aa7e18994c1",
       "system": "mame",
-      "description": "MID SSIO Module",
+      "description": "MID SSIO Module: MIDI sound interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "mie.zip",
       "md5": "e95415b161121bef35ade12367138c63",
       "system": "mame",
-      "description": "MIE Module",
+      "description": "MIE: MSX expansion module.",
       "required": "optional"
     },
     {
       "filename": "megatech.zip",
       "md5": "0196924b2b5c08fff9a5a2daab763a9e",
       "system": "mame",
-      "description": "Megatech Module",
+      "description": "Megatech: Arcade module for MSX.",
       "required": "optional"
     },
     {
       "filename": "midcsd.zip",
       "md5": "7065d765ab1ee2576f1467a92927851d",
       "system": "mame",
-      "description": "MID CSD Module",
+      "description": "MID CSD: MIDI CSD module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mindset_rs232_module.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "Mindset RS232 Module",
+      "description": "Mindset RS232: RS232 module for Mindset.",
       "required": "optional"
     },
     {
       "filename": "mindset_sound_module.zip",
       "md5": "b6734b751348af05c25a389d5edea9d0",
       "system": "mame",
-      "description": "Mindset Sound Module",
+      "description": "Mindset Sound: Sound module for Mindset.",
       "required": "optional"
     },
     {
       "filename": "miuchiz.zip",
       "md5": "2725e99e7b29a549a915267a6ebbeb94",
       "system": "mame",
-      "description": "Miuchiz Module",
+      "description": "Miuchiz: MSX expansion module.",
       "required": "optional"
     },
     {
       "filename": "mks3.zip",
       "md5": "0afe39e0314bf6633532c9b510199644",
       "system": "mame",
-      "description": "MKS3 Module",
+      "description": "MKS3: MSX peripheral module.",
       "required": "optional"
     },
     {
       "filename": "minichif.zip",
       "md5": "e699a2459159b8ff9822d91db5291e38",
       "system": "mame",
-      "description": "Mini Chif Module",
+      "description": "Mini Chif: MSX expansion module.",
       "required": "optional"
     },
     {
       "filename": "mm1kb.zip",
       "md5": "2e572250c60100b5394e427cf80f5254",
       "system": "mame",
-      "description": "MM1 Keyboard",
+      "description": "MM1 Keyboard: Keyboard for MM1.",
       "required": "optional"
     },
     {
       "filename": "model1io.zip",
       "md5": "804ad0e72a9e18b67dfcf630f5b79985",
       "system": "mame",
-      "description": "Model 1 IO Module",
+      "description": "Model 1 IO: I/O module for Model 1.",
       "required": "optional"
     },
     {
       "filename": "mm5740.zip",
       "md5": "f6c0e52e1a84a5185885f30bcb233c29",
       "system": "mame",
-      "description": "MM5740 Module",
+      "description": "MM5740: MSX module.",
       "required": "optional"
     },
     {
       "filename": "model1io2.zip",
       "md5": "d127e8d24b7492566ec518f33bffa32e",
       "system": "mame",
-      "description": "Model 1 IO Module 2",
+      "description": "Model 1 IO 2: Extended I/O module.",
       "required": "optional"
     },
     {
       "filename": "mockingboardd.zip",
       "md5": "6c7d62a781867ad9ea8e7c6e5691e8bf",
       "system": "mame",
-      "description": "Mockingboard D Module",
+      "description": "Mockingboard D: Sound module for Apple II.",
       "required": "optional"
     },
     {
       "filename": "mpcb849.zip",
       "md5": "e264de54a5fa0ec5db826ecfeee82ff5",
       "system": "mame",
-      "description": "MPCB 849",
+      "description": "MPCB 849: MSX peripheral module.",
       "required": "optional"
     },
     {
       "filename": "mpcb828.zip",
       "md5": "ff5f2761b3f2cce0949e76a84af3db8d",
       "system": "mame",
-      "description": "MPCB 828",
+      "description": "MPCB 828: MSX expansion board.",
       "required": "optional"
     },
     {
       "filename": "mpcb896.zip",
       "md5": "f478b36c475ba318017ca8d39a1ae8f8",
       "system": "mame",
-      "description": "MPCB 896",
+      "description": "MPCB 896: MSX peripheral module.",
       "required": "optional"
     },
     {
       "filename": "mpcba79.zip",
       "md5": "cef322e8f7fcf22abbb232b7703b457f",
       "system": "mame",
-      "description": "MPCB A79",
+      "description": "MPCB A79: MSX peripheral board.",
       "required": "optional"
     },
     {
       "filename": "mpcb963.zip",
       "md5": "1f9fc96ef3444aa6a941d0f42cae3f20",
       "system": "mame",
-      "description": "MPCB 963",
+      "description": "MPCB 963: MSX peripheral board.",
       "required": "optional"
     },
     {
       "filename": "mpcbb68.zip",
       "md5": "9824d1ea8e817a14595e10fcc50d10f9",
       "system": "mame",
-      "description": "MPCBB 68",
+      "description": "MPCBB 68: MSX expansion board.",
       "required": "optional"
     },
     {
       "filename": "mpf1_epb.zip",
       "md5": "8dbe28ea4c3e52ec7c81452d5a9a851b",
       "system": "mame",
-      "description": "MPF1 EPB",
+      "description": "MPF1 EPB: EPB module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpcbb92.zip",
       "md5": "f7fdb3250ffcb67d250dad2901a767b7",
       "system": "mame",
-      "description": "MPCBB 92",
+      "description": "MPCBB 92: MSX peripheral board.",
       "required": "optional"
     },
     {
       "filename": "mpf1_iom_ip.zip",
       "md5": "70a0d143ba02663ee9d936cd00ee7409",
       "system": "mame",
-      "description": "MPF1 IOM IP",
+      "description": "MPF1 IOM IP: I/O module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpf1_epb_ibp.zip",
       "md5": "b017d70ff35d77e9501b0550888a7d2f",
       "system": "mame",
-      "description": "MPF1 EPB IBP",
+      "description": "MPF1 EPB IBP: Expanded EPB module.",
       "required": "optional"
     },
     {
       "filename": "mpf1_prt.zip",
       "md5": "934a9f6d4ee79999b88e4890ee09b1c7",
       "system": "mame",
-      "description": "MPF1 PRT",
+      "description": "MPF1 PRT: Printer interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpf1_prt_ip.zip",
       "md5": "3fe83c41b79aa860c768087755c3c8e1",
       "system": "mame",
-      "description": "MPF1 PRT IP",
+      "description": "MPF1 PRT IP: Printer interface for MSX (IP).",
       "required": "optional"
     },
     {
       "filename": "mpf1_sgb.zip",
       "md5": "613b25182a8753cd490cebefd226967d",
       "system": "mame",
-      "description": "MPF1 SGB",
+      "description": "MPF1 SGB: Super Game Boy module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpf1_tva_ip.zip",
       "md5": "c8d58d43318b32c4b00c59cf9b6c15d7",
       "system": "mame",
-      "description": "MPF1 TVA IP",
+      "description": "MPF1 TVA IP: TV output module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpf1_vid.zip",
       "md5": "75186ab021d436b9c8598dfb3991fb62",
       "system": "mame",
-      "description": "MPF1 VID",
+      "description": "MPF1 VID: Video interface module for MSX.",
       "required": "optional"
     },
     {
       "filename": "mpf1_ssb.zip",
       "md5": "967ddb070af9b1d4c3ca2d34264db039",
       "system": "mame",
-      "description": "MPF1 SSB",
+      "description": "MPF1 SSB: Sound and soundboard for MSX.",
       "required": "optional"
     },
     {
       "filename": "mps1200.zip",
       "md5": "bdcac298c8627aa562828dfccbdc1b56",
       "system": "mame",
-      "description": "MPS 1200",
+      "description": "MPS 1200: Dot matrix printer for MSX.",
       "required": "optional"
     },
     {
       "filename": "mps1250.zip",
       "md5": "612c9f8b64f5deece2c1963c47af9380",
       "system": "mame",
-      "description": "MPS 1250",
+      "description": "MPS 1250: Improved dot matrix printer for MSX.",
       "required": "optional"
     },
     {
       "filename": "mr9735_002.zip",
       "md5": "17fcf012011c88d9d1287807daa3f544",
       "system": "mame",
-      "description": "MR9735 002",
+      "description": "MR9735 002: A peripheral for MSX systems.",
       "required": "optional"
     },
     {
       "filename": "ms7004.zip",
       "md5": "a1ca17c523f9f0d99382a8e3ab41152d",
       "system": "mame",
-      "description": "MS 7004",
+      "description": "MS 7004: MSX-compatible system controller.",
       "required": "optional"
     },
     {
       "filename": "mpu401.zip",
       "md5": "97f162fd6e4686cc4c0d6001d97b5733",
       "system": "mame",
-      "description": "MPU401",
+      "description": "MPU401: MIDI interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "msdsd1.zip",
       "md5": "06edb9e3c50bbfb5f23400466c42ad98",
       "system": "mame",
-      "description": "MSDSD1",
+      "description": "MSDSD1: MSX disk controller.",
       "required": "optional"
     },
     {
       "filename": "msdsd2.zip",
       "md5": "a5de66de02892e40535e56a732d893e5",
       "system": "mame",
-      "description": "MSDSD2",
+      "description": "MSDSD2: Another MSX disk controller.",
       "required": "optional"
     },
     {
       "filename": "mpu_pc98.zip",
       "md5": "97f162fd6e4686cc4c0d6001d97b5733",
       "system": "mame",
-      "description": "MPU PC98",
+      "description": "MPU PC98: MIDI interface for PC98.",
       "required": "optional"
     },
     {
       "filename": "msm6222b01.zip",
       "md5": "fc9370a8450f0b2fda69b18fb516a978",
       "system": "mame",
-      "description": "MSM6222B01",
+      "description": "MSM6222B01: MSX peripheral for clock management.",
       "required": "optional"
     },
     {
       "filename": "mshark.zip",
       "md5": "d603d6d729ebd99386e212cec92b4df5",
       "system": "mame",
-      "description": "Mshark",
+      "description": "Mshark: Audio expansion for MSX.",
       "required": "optional"
     },
     {
       "filename": "msmt070.zip",
       "md5": "2bcaa4686dea1adcbbe208bfb7630d62",
       "system": "mame",
-      "description": "MSMT070",
+      "description": "MSMT070: MSX cartridge interface.",
       "required": "optional"
     },
     {
       "filename": "msmt071.zip",
       "md5": "de9b0d8b2ff5c5f461b7a804292707b6",
       "system": "mame",
-      "description": "MSMT071",
+      "description": "MSMT071: Another MSX cartridge interface.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_bm_012.zip",
       "md5": "f39430f74f74f47cd5c70c13da39cbf0",
       "system": "mame",
-      "description": "MSX Cart BM 012",
+      "description": "MSX Cart BM 012: MSX cartridge with custom expansion.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_easispeech.zip",
       "md5": "181ba927a7230771fcd480f0ab42577a",
       "system": "mame",
-      "description": "MSX Cart Easispeech",
+      "description": "MSX Cart Easispeech: Speech synthesizer for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_fmpac.zip",
       "md5": "21ba73df83aab5f2c82f986abdd5e22a",
       "system": "mame",
-      "description": "MSX Cart FMPAC",
+      "description": "MSX Cart FMPAC: FM synthesizer for MSX.",
       "required": "optional"
     },
     {
       "filename": "msmt094.zip",
       "md5": "85bb869cac6a1c21e84637cebffaadeed",
       "system": "mame",
-      "description": "MSMT094",
+      "description": "MSMT094: MSX expansion module.",
       "required": "optional"
     },
     {
       "filename": "msmt081.zip",
       "md5": "b666165f9fa6dc88c7e069b8c100fcd5",
       "system": "mame",
-      "description": "MSMT081",
+      "description": "MSMT081: Another MSX expansion module.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_gouda_scsi.zip",
       "md5": "19559bd848c41f4274d3abc427a5ae12",
       "system": "mame",
-      "description": "MSX Cart Gouda SCSI",
+      "description": "MSX Cart Gouda SCSI: SCSI interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_sfg01.zip",
       "md5": "54ba28c0ec2f9058ce7f5dc38f606998",
       "system": "mame",
-      "description": "MSX Cart SFG01",
+      "description": "MSX Cart SFG01: SFG sound module for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_sfg05.zip",
       "md5": "96acb8b1fc99e4b990bd48cc157430f9",
       "system": "mame",
-      "description": "MSX Cart SFG05",
+      "description": "MSX Cart SFG05: Enhanced sound module for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_skw01.zip",
       "md5": "5d651ccb61728dba200ba030f4e32853",
       "system": "mame",
-      "description": "MSX Cart SKW01",
+      "description": "MSX Cart SKW01: MSX keyboard expansion.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_mega_scsi.zip",
       "md5": "19559bd848c41f4274d3abc427a5ae12",
       "system": "mame",
-      "description": "MSX Cart Mega SCSI",
+      "description": "MSX Cart Mega SCSI: SCSI interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_segactrl.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "MSX Segactrl",
+      "description": "MSX Segactrl: Controller interface for MSX systems.",
       "required": "optional"
     },
     {
       "filename": "msx_slot_rs232.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "MSX Slot RS232",
+      "description": "MSX Slot RS232: RS232 serial interface for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_slotexpander.zip",
       "md5": "3a4f1b45f73735799fbcc86fa34eb122",
       "system": "mame",
-      "description": "MSX Cart Slotexpander",
+      "description": "MSX Cart Slot Expander: Expands cartridge slots on MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_sunrise_ataide.zip",
       "md5": "bb00036ec80e5062a198b6d05249f13a",
       "system": "mame",
-      "description": "MSX Cart Sunrise ATAIDE",
+      "description": "MSX Cart Sunrise ATAIDE: ATA storage for MSX via cartridge.",
       "required": "optional"
     },
     {
       "filename": "msx_moonsound.zip",
       "md5": "ece74907e9c6e1d08b8d439b2eeef540",
       "system": "mame",
-      "description": "MSX Moonsound",
+      "description": "MSX Moonsound: Enhanced audio card for MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_slot_rs232_mitsubishi.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "MSX Slot RS232 Mitsubishi",
+      "description": "MSX Slot RS232 Mitsubishi: RS232 interface for MSX by Mitsubishi.",
       "required": "optional"
     },
     {
       "filename": "msx_slot_rs232_svi738.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "MSX Slot RS232 SVI738",
+      "description": "MSX Slot RS232 SVI738: RS232 interface for SVI738 MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_cart_ucn01.zip",
       "md5": "736d5eb37278f267b96bcb3c5d2c9304",
       "system": "mame",
-      "description": "MSX Cart UCN01",
+      "description": "MSX Cart UCN01: Unique MSX cartridge for specific peripherals.",
       "required": "optional"
     },
     {
       "filename": "msx_slot_rs232_toshiba.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "MSX Slot RS232 Toshiba",
+      "description": "MSX Slot RS232 Toshiba: RS232 expansion for Toshiba MSX.",
       "required": "optional"
     },
     {
       "filename": "msx_slot_rs232_sony.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "MSX Slot RS232 Sony",
+      "description": "MSX Slot RS232 Sony: RS232 interface for Sony MSX.",
       "required": "optional"
     },
     {
       "filename": "mtx_cfx.zip",
       "md5": "5637a0c00e45381cc1cea5c8c48e5688",
       "system": "mame",
-      "description": "MTX CFX",
+      "description": "MTX CFX: Disk expansion for MTX computers.",
+      "required": "optional"
+    },
+    {
+      "filename": "msx_slot_rs232_toshiba_hx3x.zip",
+      "md5": "4aceda4e6e17b113546f0d3eac859125",
+      "system": "mame",
+      "description": "MSX Slot RS232 Toshiba HX3X: RS232 expansion for Toshiba HX3X MSX.",
+      "required": "optional"
+    },
+    {
+      "filename": "mtx_sdxbas.zip",
+      "md5": "f15fa1ffd21e26ec12d8ceab589878ff",
+      "system": "mame",
+      "description": "MTX SDXBASE: Base system for MTX with SD support.",
+      "required": "optional"
+    },
+    {
+      "filename": "mu5lcd.zip",
+      "md5": "424057cff5dc04207b1db60d6952cc46",
+      "system": "mame",
+      "description": "MU5 LCD Module: LCD interface for the MU5 computer.",
+      "required": "optional"
+    },
+    {
+      "filename": "mvme120.zip",
+      "md5": "56ab7546fbb0707a1d6214cfbdefb0d9",
+      "system": "mame",
+      "description": "MVME 120: Motorola MVME120 system for embedded applications.",
+      "required": "optional"
+    },
+    {
+      "filename": "mtx_sdxcpm.zip",
+      "md5": "45f64839fae3e43dbd2a249a55271eae",
+      "system": "mame",
+      "description": "MTX SDXCPM: SD card interface for MTX with CPM compatibility.",
       "required": "optional"
     },
     {
