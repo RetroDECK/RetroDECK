@@ -44,15 +44,15 @@
   <description>
     <p><b>RetroDECK</b> is a powerful, all-in-one <b>Retro Gaming Platform</b> for modern Linux systems, including handheld gaming PCs like the <b>Steam Deck</b>, full Linux desktops, HTPC setups, and Linux-based PC consoles such as the <b>Steam Machine</b>.</p>
     <p>Delivered as a fully self-contained <b>Flatpak application</b>, RetroDECK provides a complete retro gaming environment out of the box—no manual configuration, no custom firmware, and no system modifications required. Everything is bundled, organized, and ready to play.</p>
-    <p>By seamlessly integrating components: emulators, multi-emulators, native game engines, ports, clients and powerful management tools, RetroDECK brings your entire retro game collection together in one polished, unified experience.</p>
+    <p>By seamlessly integrating components: emulators, multi-emulators, native game engines, ports, clients and powerful management tools, RetroDECK brings your entire retro game experince together in one polished, unified package.</p>
     <p>
       <b>Why Choose RetroDECK?</b>
     </p>
     <ul>
-      <li><b>True All-in-One Solution</b> All Components: Emulators, Multi-Emulators, Engines, Ports, Tools, Clients and Frontend are all included and pre-configured.</li>
+      <li><b>True All-in-One Solution</b> all Components: Emulators, Multi-Emulators, Engines, Ports, Tools, Clients and Frontend are all included and pre-configured.</li>
       <li><b>Zero System Changes:</b> Enjoy the benefits of an retro gaming-focused OS without replacing or modifying your operating system.</li>
       <li><b>Effortless Maintenance:</b> Install, update, and remove RetroDECK easily through your software center like any other Flatpak app.</li>
-      <li><b>Designed for Controllers:</b> Optimized for handhelds and living-room setups, with excellent gamepad and Steam Input support.</li>
+      <li><b>Designed for You:</b> Optimized for Linux handhelds, gaming PCs and living-room setups, with excellent gamepad and Steam Input support.</li>
     </ul>
     <p>
       <b>What is Included?</b>
@@ -60,7 +60,7 @@
     <ul>
       <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, and more—supporting a vast range of classic systems.</li>
       <li><b>Multi-Emulator Platforms:</b> Unified emulation through powerful frameworks like RetroArch and MAME.</li>
-      <li><b>Native Game Engines:</b> Play engine-based titles using Solarus, OpenBOR, and GZDoom, including RetroDECKs custom <code>.doom</code> format.</li>
+      <li><b>Native Game Engines:</b> Play engine-based titles using Solarus, OpenBOR, and GZDoom, including RetroDECKs custom .doom format.</li>
       <li><b>ES-DE Frontend:</b> A modern, controller-friendly interface for browsing, organizing, and launching your games.</li>
       <li><b>PortMaster Integration:</b> Install and manage community-supported Linux game ports with ease.</li>
       <li><b>RetroDECK Configurator:</b> A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more—all from one place.</li>
@@ -115,7 +115,7 @@
         </p>
         <ul>
           <li><b>New Emulators:</b> XRoar (Tandy/Dragon), Azahar (Nintendo 3DS, new default), Ryubing (Nintendo Switch).</li>
-          <li><b>New Engine:</b> OpenBOR with a custom RetroDECK launcher supporting <code>.bor</code> and <code>.openbor</code> formats.</li>
+          <li><b>New Engine:</b> OpenBOR with a custom RetroDECK launcher supporting .bor and .openbor formats.</li>
           <li><b>New System:</b> Flips (IPS/BPS ROM patching tool), available directly in the RetroDECK Configurator.</li>
         </ul>
         <p>
@@ -132,8 +132,8 @@
           <b>New Storage and Organization Features</b>
         </p>
         <ul>
-          <li>New <code>retrodeck/storage</code> directory for user-accessible game data, assets, and future expansions.</li>
-          <li>New <code>retrodeck/videos</code> directory to separate video recordings from screenshots.</li>
+          <li>New retrodeck/storage directory for user-accessible game data, assets, and future expansions.</li>
+          <li>New retrodeck/videos directory to separate video recordings from screenshots.</li>
           <li>Introduced folder iconset support, including the new Lahrs iconset.</li>
         </ul>
         <p>
@@ -143,7 +143,7 @@
           <li>All components: emulators, engines, systems, and clients have been updated to newer versions.</li>
           <li>Expanded and corrected exposed folders for shaders, texture packs, logs, plugins, and captures across many components (Dolphin, PrimeHack, PPSSPP, RPCS3, Vita3K, Cemu, and others).</li>
           <li>Enhanced RetroArch configuration, including fixes for long-standing palettr issues.</li>
-          <li>Improved GZDoom <code>.doom</code> wrapper with spaces, symlinks support and additional IWAD compatibility.</li>
+          <li>Improved GZDoom .doom wrapper with spaces, symlinks support and additional IWAD compatibility.</li>
           <li>Steam ROM Manager now supports Flatpak Steam.</li>
         </ul>
       </description>
