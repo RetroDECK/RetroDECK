@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2022-2026 RetroDECK Team-->
- <component type="desktop-application">
+<component type="desktop-application">
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
    <name>RetroDECK</name>
@@ -43,14 +43,15 @@
    </screenshots>
    </screenshots>
    <description>
-      <p><b>RetroDECK</b> is a powerful, all-in-one <b>Retro Gaming Platform</b> for modern Linux systems,
-         including handheld gaming PCs like the <b>Steam Deck</b>, full Linux desktops, HTPC setups,
-         and Linux-based PC consoles such as the <b>Steam Machine</b>.</p>
+      <p><b>RetroDECK</b> is a powerful, all-in-one <b>Retro Gaming Platform</b> for modern Linux
+         systems, including handheld gaming PCs like the <b>Steam Deck</b>, full Linux desktops,
+         HTPC setups, and Linux-based PC consoles such as the <b>Steam Machine</b>.</p>
       <p>Delivered as a fully self-contained <b>Flatpak application</b>, RetroDECK provides a
          complete retro gaming environment out of the box—no manual configuration, no custom
          firmware, and no system modifications required. Everything is bundled, organized, and ready
          to play.</p>
-      <p>By seamlessly integrating emulators, multi-emulators, native game engines, ports, clients and
+      <p>By seamlessly integrating emulators, multi-emulators, native game engines, ports, clients
+         and
          powerful management tools, RetroDECK brings your entire retro game collection together in
          one polished, unified experience.</p>
       <p>
@@ -70,7 +71,7 @@
          <b>What’s Included?</b>
       </p>
       <ul>
-         <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, ares, and
+         <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, and
             more—supporting a vast range of classic systems.</li>
          <li><b>Multi-Emulator Platforms:</b> Unified emulation through powerful frameworks like
             RetroArch and MAME.</li>
@@ -95,7 +96,8 @@
          <b>Built for Power Users — Friendly for Everyone</b>
       </p>
       <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture
-         packs, mods, screenshots, and more—while keeping the underlying components safely sandboxed.
+         packs, mods, screenshots, and more—while keeping the underlying components safely
+         sandboxed.
          Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided
          experience.</p>
       <p>
@@ -136,7 +138,8 @@
             <ul>
                <li>RetroDECK has been fully re-engineered with a modular, component-based
                   infrastructure.</li>
-               <li>Each component: emulator, engine, client and system now runs in its own isolated sub-sandbox.</li>
+               <li>Each component: emulator, engine, client and system now runs in its own isolated
+                  sub-sandbox.</li>
                <li>Upgraded runtime to <b>org.kde.Platform 6.10</b>.</li>
                <li>Significantly reduced default application permissions with clearer,
                   purpose-driven access rules.</li>
@@ -178,7 +181,8 @@
                <b>Component Updates and Fixes</b>
             </p>
             <ul>
-               <li>All components: emulators, engines, systems, and clients have been updated to newer versions.</li>
+               <li>All components: emulators, engines, systems, and clients have been updated to
+                  newer versions.</li>
                <li>Expanded and corrected exposed folders for shaders, texture packs, logs, dumps,
                   plugins, and captures across many components (Dolphin, PrimeHack, PPSSPP, RPCS3,
                   Vita3K, Cemu, and others).</li>
@@ -1045,10 +1049,11 @@
          hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt;
          PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
             <li>Due to a Steam limitation, external controllers and keyboard seems not to be
-         working, expecially in the desktop mode</li>
-         </ul> IMPORTANT NOTE: At the moment
-         the emulator configs are reset during every update, this was made because every version
-         they may bring new configurations, please back them up if you did some manual configs. </description>
+               working, expecially in the desktop mode</li>
+         </ul> IMPORTANT NOTE: At the
+         moment the emulator configs are reset during every update, this was made because every
+         version they may bring new configurations, please back them up if you did some manual
+         configs. </description>
    </release>
    <release version="0.4.4b" date="2022-07-18">
       <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.4b</url>
@@ -1075,10 +1080,11 @@
          hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt;
          PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
             <li>Due to a Steam limitation, external controllers and keyboard seems not to be
-         working, expecially in the desktop mode</li>
-         </ul> IMPORTANT NOTE: At the moment
-         the emulator configs are reset during every update, this was made because every version
-         they may bring new configurations, please back them up if you did some manual configs. </description>
+               working, expecially in the desktop mode</li>
+         </ul> IMPORTANT NOTE: At the
+         moment the emulator configs are reset during every update, this was made because every
+         version they may bring new configurations, please back them up if you did some manual
+         configs. </description>
    </release>
    <release version="0.4.3b" date="2022-07-07">
       <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.3b</url>
