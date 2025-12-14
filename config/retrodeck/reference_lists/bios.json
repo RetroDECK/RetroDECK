@@ -1329,7 +1329,7 @@
       "filename": "channelf.zip",
       "md5": "2f2f8de3827ae1faf2495e497ca95232",
       "system": "channelf",
-      "description": "Fairchild Channel F consolidated BIOS archive containing the required system ROMs for emulation."
+      "description": "Fairchild Channel F consolidated BIOS archive containing the required system ROMs."
     },
     {
       "filename": "sl31254.bin",
@@ -9662,10 +9662,10 @@
       "required": "optional"
     },
     {
-      "filename": "kayproiikbd.zip",
-      "md5": "28db19f64315220581849bb77bf152ba",
+      "filename": "iteagle.zip",
+      "md5": "fa000dfb262f8bbd99c3c9cb10489283",
       "system": "mame",
-      "description": "Kaypro II Keyboard",
+      "description": "IT Eagle expansion module.",
       "required": "optional"
     },
     {
@@ -9735,504 +9735,504 @@
       "filename": "kc_d002.zip",
       "md5": "7dd7de82d478b6f621bca09d5eda24b3",
       "system": "mame",
-      "description": "KC D002 Keyboard Controller",
+      "description": "KC D002 keyboard controller module.",
       "required": "optional"
     },
     {
       "filename": "kc_d004.zip",
       "md5": "0fe8660efa0a6174c8eb61ca500d0646",
       "system": "mame",
-      "description": "KC D004 Keyboard Controller",
+      "description": "KC D004 keyboard controller module.",
       "required": "optional"
     },
     {
       "filename": "km035.zip",
       "md5": "2f15270f29fca963de2d3679b9aeedea",
       "system": "mame",
-      "description": "KM035 Keyboard Module",
+      "description": "KM035 keyboard module.",
       "required": "optional"
     },
     {
       "filename": "keytronic_pc3270.zip",
       "md5": "d7616bc3749fae91ee3314f9b2d03bf3",
       "system": "mame",
-      "description": "Keytronic 3270 PC Keyboard",
+      "description": "Keytronic 3270 PC keyboard.",
       "required": "optional"
     },
     {
       "filename": "keytronic_l2207.zip",
       "md5": "8e2ee9d778b88e30f205a070d9c0b97f",
       "system": "mame",
-      "description": "Keytronic L2207 Keyboard",
+      "description": "Keytronic L2207 keyboard.",
       "required": "optional"
     },
     {
       "filename": "keytronic_pc3270_at.zip",
       "md5": "d7616bc3749fae91ee3314f9b2d03bf3",
       "system": "mame",
-      "description": "Keytronic 3270 AT Keyboard",
+      "description": "Keytronic 3270 AT keyboard.",
       "required": "optional"
     },
     {
       "filename": "kc_d004_gide.zip",
       "md5": "09194bf2aedb8a8eb9c16feb90b9357f",
       "system": "mame",
-      "description": "KC D004 Gide Keyboard Controller",
+      "description": "KC D004 Gide keyboard controller.",
       "required": "optional"
     },
     {
       "filename": "konamigv.zip",
       "md5": "0ae0cea76cee8287e5a0b6d97a883793",
       "system": "mame",
-      "description": "Konami GV Module",
+      "description": "Konami GV system module.",
       "required": "optional"
     },
     {
       "filename": "konendev.zip",
       "md5": "0e287d95d6b6f0619285adea1bcb2cae",
       "system": "mame",
-      "description": "Konami Development Module",
+      "description": "Konami development module.",
       "required": "optional"
     },
     {
       "filename": "kpython.zip",
       "md5": "915e6a56c7a51b6d3be844711f9eaa91",
       "system": "mame",
-      "description": "KPython Module",
+      "description": "KPython interpreter module.",
       "required": "optional"
     },
     {
       "filename": "konamigx.zip",
       "md5": "981fa4057f4bd5c064ce446963d8ac33",
       "system": "mame",
-      "description": "Konami GX Module",
+      "description": "Konami GX system module.",
       "required": "optional"
     },
     {
       "filename": "kviper.zip",
       "md5": "b446b6daa5cf4d381f856557f5a70c26",
       "system": "mame",
-      "description": "Viper Module",
+      "description": "Viper expansion module.",
       "required": "optional"
     },
     {
       "filename": "labtam_8086cpu.zip",
       "md5": "9a002dcf5616f51330cea76d66281771",
       "system": "mame",
-      "description": "Labtam 8086 CPU Module",
+      "description": "Labtam 8086 CPU module.",
       "required": "optional"
     },
     {
       "filename": "labtam_3232.zip",
       "md5": "662185922829dd7603f59a100927b290",
       "system": "mame",
-      "description": "Labtam 3232 Module",
+      "description": "Labtam 3232 module.",
       "required": "optional"
     },
     {
       "filename": "ks0066.zip",
       "md5": "db5f05f96858d72741e45e9b20ca0b56",
       "system": "mame",
-      "description": "KS0066 Module",
+      "description": "KS0066 display controller module.",
       "required": "optional"
     },
     {
       "filename": "labtam_vducom.zip",
       "md5": "f76b9a78b3cfa0ac159179e01a465324",
       "system": "mame",
-      "description": "Labtam VDU Communications Module",
+      "description": "Labtam VDU communication module.",
       "required": "optional"
     },
     {
       "filename": "kpython2.zip",
       "md5": "fee3f2ca570e668bb5eaab65c4002b4b",
       "system": "mame",
-      "description": "KPython 2 Module",
+      "description": "KPython 2 interpreter module.",
       "required": "optional"
     },
     {
       "filename": "lba_enhancer.zip",
       "md5": "54fce9f1564b195362ba3d7e1760fa04",
       "system": "mame",
-      "description": "LBA Enhancer Module",
+      "description": "LBA system enhancer module.",
       "required": "optional"
     },
     {
       "filename": "labtam_z80sbc.zip",
       "md5": "6387334d620fc1958f4db2cc6293dd22",
       "system": "mame",
-      "description": "Labtam Z80 SBC",
+      "description": "Labtam Z80 single-board computer.",
       "required": "optional"
     },
     {
       "filename": "lc7985.zip",
       "md5": "28897c78f81d9fccde4f55068988c423",
       "system": "mame",
-      "description": "LC7985 Module",
+      "description": "LC7985 display module.",
       "required": "optional"
     },
     {
       "filename": "ldv1000.zip",
       "md5": "d8af59208d04f60e644f19d1fa627955",
       "system": "mame",
-      "description": "LDV1000 Module",
+      "description": "LDV1000 expansion module.",
       "required": "optional"
     },
     {
       "filename": "lk201.zip",
       "md5": "27af84d91a575002a8f161fd13437222",
       "system": "mame",
-      "description": "LK201 Keyboard",
+      "description": "LK201 system keyboard.",
       "required": "optional"
     },
     {
       "filename": "lm24014h.zip",
       "md5": "15cc329dc27de1937b7840986ff5d73d",
       "system": "mame",
-      "description": "LM24014H Module",
+      "description": "LM24014H display module.",
       "required": "optional"
     },
     {
       "filename": "lindbios.zip",
       "md5": "74a0ed6ae5a559eeaf2069cfda2c73c4",
       "system": "mame",
-      "description": "Lind BIOS",
-      "required": "optional"
+      "description": "Lind system BIOS.",
+      "required": "required"
     },
     {
       "filename": "lux10828.zip",
       "md5": "891076cb3646e5b066aaef764d2576b0",
       "system": "mame",
-      "description": "Lux10828 Module",
+      "description": "Lux10828 module.",
       "required": "optional"
     },
     {
       "filename": "lrk331.zip",
       "md5": "1313af8322f6069ce864da93ca5c1bd3",
       "system": "mame",
-      "description": "LRK331 Module",
+      "description": "LRK331 module.",
       "required": "optional"
     },
     {
       "filename": "lux21046.zip",
       "md5": "4e49099910a17a49baedfa96f1cff572",
       "system": "mame",
-      "description": "Lux21046 Module",
+      "description": "Lux21046 module.",
       "required": "optional"
     },
     {
       "filename": "lx810l.zip",
       "md5": "032b556d0211cf1acf435886fc938270",
       "system": "mame",
-      "description": "LX810L Module",
+      "description": "LX810L module.",
       "required": "optional"
     },
     {
       "filename": "lx800.zip",
       "md5": "d1da593cb4bfc75f45b0e694b66dddb5",
       "system": "mame",
-      "description": "LX800 Module",
+      "description": "LX800 module.",
       "required": "optional"
     },
     {
       "filename": "m1comm.zip",
       "md5": "e15fe4534600fa2863a118569ac2d4aa",
       "system": "mame",
-      "description": "M1 Communications Module",
+      "description": "M1 communications interface module.",
       "required": "optional"
     },
     {
       "filename": "m20_8086.zip",
       "md5": "ae1f302c295b3017628c6c517b21c3ed",
       "system": "mame",
-      "description": "M20 8086 Module",
+      "description": "M20 8086 CPU module.",
       "required": "optional"
     },
     {
       "filename": "m24_z8000.zip",
       "md5": "e58960cb0e7ab2006e6b8b765c767e18",
       "system": "mame",
-      "description": "M24 Z8000 Module",
+      "description": "M24 Z8000 CPU module.",
       "required": "optional"
     },
     {
       "filename": "m24_kbd.zip",
       "md5": "bdb590b9272dafda7478d707be0e928b",
       "system": "mame",
-      "description": "M24 Keyboard",
+      "description": "M24 system keyboard.",
       "required": "optional"
     },
     {
       "filename": "m50458.zip",
       "md5": "db99eb6378b126fc2c878460d197276d",
       "system": "mame",
-      "description": "M50458 Module",
+      "description": "M50458 expansion module.",
       "required": "optional"
     },
     {
       "filename": "m68705p3.zip",
       "md5": "a7ab00a0f5352d8a006a35e536443600",
       "system": "mame",
-      "description": "M68705P3 MCU",
+      "description": "M68705P3 microcontroller.",
       "required": "optional"
     },
     {
       "filename": "lux4105.zip",
       "md5": "19559bd848c41f4274d3abc427a5ae12",
       "system": "mame",
-      "description": "Lux4105 Module",
+      "description": "Lux4105 expansion module.",
       "required": "optional"
     },
     {
       "filename": "lux21056.zip",
       "md5": "8e5ab8428700857a47ef52c85daac649",
       "system": "mame",
-      "description": "Lux21056 Module",
+      "description": "Lux21056 expansion module.",
       "required": "optional"
     },
     {
       "filename": "m68705p5.zip",
       "md5": "d846842bf12d07bfa7ca3e9f0537c213",
       "system": "mame",
-      "description": "M68705P5 MCU",
+      "description": "M68705P5 microcontroller.",
       "required": "optional"
     },
     {
       "filename": "m50dass.zip",
       "md5": "994e557aa89cabf92cb4392d49ee7690",
       "system": "mame",
-      "description": "M50 DASS Module",
+      "description": "M50 DASS expansion module.",
       "required": "optional"
     },
     {
       "filename": "m68705r3.zip",
       "md5": "d962db9c813779496e02044a17ca4aed",
       "system": "mame",
-      "description": "M68705R3 MCU",
+      "description": "M68705R3 microcontroller.",
       "required": "optional"
     },
     {
       "filename": "m68hc05pge.zip",
       "md5": "691edfe0d411217035c7d16ffc504f33",
       "system": "mame",
-      "description": "M68HC05PGE MCU",
+      "description": "M68HC05PGE microcontroller.",
       "required": "optional"
     },
     {
       "filename": "m68705u3.zip",
       "md5": "d962db9c813779496e02044a17ca4aed",
       "system": "mame",
-      "description": "M68705U3 MCU",
+      "description": "M68705U3 microcontroller.",
       "required": "optional"
     },
     {
       "filename": "macf108.zip",
       "md5": "3eb3b1a4bfdbde0d704b074e7793715e",
       "system": "mame",
-      "description": "Mac F108 Module",
+      "description": "Mac F108 expansion module.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110a_f.zip",
       "md5": "7602a38a3aff4854e29275c1fef6cb41",
       "system": "mame",
-      "description": "Mac Keyboard M0110A F",
+      "description": "Mac M0110A keyboard (French layout).",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110a_j.zip",
       "md5": "7602a38a3aff4854e29275c1fef6cb41",
       "system": "mame",
-      "description": "Mac Keyboard M0110A J",
+      "description": "Mac M0110A keyboard (Japanese layout).",
       "required": "optional"
     },
     {
       "filename": "mach64isa.zip",
       "md5": "8524abb5debbe47a437c9c602328f312",
       "system": "mame",
-      "description": "Mach64 ISA Module",
+      "description": "Mach64 ISA graphics module.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110a.zip",
       "md5": "7602a38a3aff4854e29275c1fef6cb41",
       "system": "mame",
-      "description": "Mac Keyboard M0110A",
+      "description": "Mac M0110A standard keyboard.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110.zip",
       "md5": "7c1c124f62929aa44690da226dd03beb",
       "system": "mame",
-      "description": "Mac Keyboard M0110",
+      "description": "Mac M0110 keyboard.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110b.zip",
       "md5": "7c1c124f62929aa44690da226dd03beb",
       "system": "mame",
-      "description": "Mac Keyboard M0110B",
+      "description": "Mac M0110B keyboard variant.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110f.zip",
       "md5": "7c1c124f62929aa44690da226dd03beb",
       "system": "mame",
-      "description": "Mac Keyboard M0110F",
+      "description": "Mac M0110F keyboard variant.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110t.zip",
       "md5": "7c1c124f62929aa44690da226dd03beb",
       "system": "mame",
-      "description": "Mac Keyboard M0110T",
+      "description": "Mac M0110T keyboard variant.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0110j.zip",
       "md5": "7c1c124f62929aa44690da226dd03beb",
       "system": "mame",
-      "description": "Mac Keyboard M0110J",
+      "description": "Mac M0110J keyboard variant.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0120.zip",
       "md5": "f53272ef8c98ba0c64036bdf1315ed5d",
       "system": "mame",
-      "description": "Mac Keyboard M0120",
+      "description": "Mac M0120 keyboard.",
       "required": "optional"
     },
     {
       "filename": "mackbd_m0120p.zip",
       "md5": "f53272ef8c98ba0c64036bdf1315ed5d",
       "system": "mame",
-      "description": "Mac Keyboard M0120P",
+      "description": "Mac M0120P keyboard variant.",
       "required": "optional"
     },
     {
       "filename": "mcpx_apu.zip",
       "md5": "9fd8e53632c86b0bf04541287f9f63f5",
       "system": "mame",
-      "description": "MCPX Audio Processing Unit",
+      "description": "Audio Processing Unit for MCPX systems.",
       "required": "optional"
     },
     {
       "filename": "mc1502_rom.zip",
       "md5": "feb8b81bc22a77f3222d4208dd2c41ea",
       "system": "mame",
-      "description": "MC1502 ROM",
-      "required": "optional"
+      "description": "MC1502 system ROM for emulation.",
+      "required": "required"
     },
     {
       "filename": "macsbios.zip",
       "md5": "2d8bb01c90040684b5ff7c2636ec7574",
       "system": "mame",
-      "description": "Macintosh BIOS",
-      "required": "optional"
+      "description": "BIOS for Macintosh emulation.",
+      "required": "required"
     },
     {
       "filename": "maxaflex.zip",
       "md5": "91b5c47c17119eb2850eca5d4b5047ec",
       "system": "mame",
-      "description": "Maxaflex Module",
+      "description": "Maxaflex module for system expansion.",
       "required": "optional"
     },
     {
       "filename": "mcx128.zip",
       "md5": "97f7d6607f7942da131b5301cd23ddad",
       "system": "mame",
-      "description": "MCX128 Module",
+      "description": "MCX128 module with enhanced features.",
       "required": "optional"
     },
     {
       "filename": "md_jcart.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive J-Cart",
+      "description": "Mega Drive J-Cart with additional ports.",
       "required": "optional"
     },
     {
       "filename": "md_rom_svp.zip",
       "md5": "7471a14fed6d53d771698bb17770fdb0",
       "system": "mame",
-      "description": "Mega Drive SVP ROM",
-      "required": "optional"
+      "description": "SVP ROM for enhanced Mega Drive graphics.",
+      "required": "required"
     },
     {
       "filename": "md_kbd.zip",
       "md5": "b29efc03371956e9ac5693f665ff1879",
       "system": "mame",
-      "description": "Mega Drive Keyboard",
+      "description": "Keyboard peripheral for Mega Drive.",
       "required": "optional"
     },
     {
       "filename": "mdisplay2.zip",
       "md5": "ae514a44d8423bd729c1a185fcdb500b",
       "system": "mame",
-      "description": "MD Display 2 Module",
+      "description": "Display module 2 for Mega Drive systems.",
       "required": "optional"
     },
     {
       "filename": "md_seprom_codemast.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive SEPROM Codemaster",
+      "description": "Codemaster SEPROM for Mega Drive cartridges.",
       "required": "optional"
     },
     {
       "filename": "md_seprom_mm96.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive SEPROM MM96",
+      "description": "MM96 SEPROM for Mega Drive cartridge support.",
       "required": "optional"
     },
     {
       "filename": "megadrive_ar.zip",
       "md5": "c16da7ee9d69835df190103b15516e4d",
       "system": "mame",
-      "description": "Mega Drive AR Module",
+      "description": "Augmented Reality module for Mega Drive.",
       "required": "optional"
     },
     {
       "filename": "megadrive_rom_jcart_micromac2.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive J-Cart Micromac2",
+      "description": "J-Cart Micromac2 for Mega Drive with extra controller ports.",
       "required": "optional"
     },
     {
       "filename": "mediagx_cs5530_ide.zip",
       "md5": "b1b4c0fc4b02bd8c91c56f5a4147f8b0",
       "system": "mame",
-      "description": "MediaGX CS5530 IDE",
+      "description": "IDE controller module for MediaGX CS5530 systems.",
       "required": "optional"
     },
     {
       "filename": "megadrive_rom_jcart_micromac96.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive J-Cart Micromac96",
+      "description": "J-Cart Micromac96 for Mega Drive with extra ports.",
       "required": "optional"
     },
     {
       "filename": "megadrive_rom_jcart_sampras.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive J-Cart Sampras",
+      "description": "J-Cart Sampras for Mega Drive with dual controller support.",
       "required": "optional"
     },
     {
       "filename": "megadrive_rom_jcart_sskid.zip",
       "md5": "47ded6dee9e345c51c9b16d73b13dae1",
       "system": "mame",
-      "description": "Mega Drive J-Cart SSKid",
+      "description": "J-Cart SSKid for Mega Drive with extra controller ports.",
       "required": "optional"
     },
     {
       "filename": "megaplay.zip",
       "md5": "1b5e4572439839af22bf682e409f9e8b",
       "system": "mame",
-      "description": "Mega Play Module",
+      "description": "Arcade-to-home Mega Play module for game conversion.",
       "required": "optional"
     },
     {
@@ -13610,52 +13610,66 @@
       "required": "optional"
     },
     {
+      "filename": "steeltal_board.zip",
+      "md5": "4aceda4e6e17b113546f0d3eac859125",
+      "system": "mame",
+      "description": "Steel Talp interface board for expansions and peripherals.",
+      "required": "optional"
+    },
+    {
+      "filename": "stic.zip",
+      "md5": "c33e7ca6f37f93b15ebbe1efa0ae1fd6",
+      "system": "mame",
+      "description": "Specialized Interface Chip (STIC) for video output.",
+      "required": "optional"
+    },
+    {
       "filename": "steeltal1_board.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "Steel Talp 1 Board interface module.",
+      "description": "First version of the Steel Talp expansion board.",
       "required": "optional"
     },
     {
       "filename": "su2000.zip",
       "md5": "9a3e9ef9fe9d504b01511e23b1f12986",
       "system": "mame",
-      "description": "SU2000 system expansion.",
+      "description": "SU2000 module adds extra hardware capabilities.",
       "required": "optional"
     },
     {
       "filename": "strtdriv_board.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "Startup drive interface for system expansions.",
+      "description": "Interface board for connecting boot or storage devices.",
       "required": "optional"
     },
     {
       "filename": "stunrun_board.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "Stunrun Board - Expansion module.",
+      "description": "Stunrun expansion board for extra modules.",
       "required": "optional"
     },
     {
       "filename": "stvbios.zip",
       "md5": "5e73dbf39b3c7b8ed429cb3f053912ce",
       "system": "mame",
-      "description": "BIOS for STVB series systems.",
+      "description": "BIOS ROM for STVB systems to boot and run firmware.",
       "required": "optional"
     },
     {
       "filename": "sv603.zip",
       "md5": "911c2763a00ce60855eb477603d1c7e7",
       "system": "mame",
-      "description": "SV603 system file.",
+      "description": "System ROM for SV603, provides essential firmware.",
       "required": "optional"
     },
     {
       "filename": "sun1cpu.zip",
       "md5": "6fc640737d1e11d7e80a97fd16568561",
       "system": "mame",
-      "description": "Sun 1 CPU file for emulation.",
+      "description": "CPU ROM for Sun-1 with boot and system routines.",
       "required": "optional"
     },
     {
@@ -13760,49 +13774,49 @@
       "filename": "t5182.zip",
       "md5": "e78d8d7be86b9648e7d36126652d09a4",
       "system": "mame",
-      "description": "T5182 system file for emulation.",
+      "description": "T5182 system file.",
       "required": "optional"
     },
     {
       "filename": "taito68705tiger.zip",
       "md5": "d846842bf12d07bfa7ca3e9f0537c213",
       "system": "mame",
-      "description": "Taito 68705 Tiger MCU for emulation.",
+      "description": "Taito 68705 Tiger MCU.",
       "required": "optional"
     },
     {
       "filename": "taitosjsecmcu.zip",
       "md5": "d846842bf12d07bfa7ca3e9f0537c213",
       "system": "mame",
-      "description": "Taito SJSec MCU for emulation.",
+      "description": "Taito SJSec MCU.",
       "required": "optional"
     },
     {
       "filename": "tanbus_ravdu.zip",
       "md5": "9d8d256328a2e15b07ca95d07678136f",
       "system": "mame",
-      "description": "Tanbus Ravdu device interface for emulation.",
+      "description": "Tanbus Ravdu device interface.",
       "required": "optional"
     },
     {
       "filename": "tanbus_mpvdu.zip",
       "md5": "721afdaf784a325e5c82f3028ad98aa9",
       "system": "mame",
-      "description": "Tanbus MPVDU device interface for emulation.",
+      "description": "Tanbus MPVDU device interface.",
       "required": "optional"
     },
     {
       "filename": "tanbus_ra32krom.zip",
       "md5": "6b4b2c4b69df198083465065fe5e62b0",
       "system": "mame",
-      "description": "Tanbus RA32KROM memory interface for emulation.",
+      "description": "Tanbus RA32KROM memory interface.",
       "required": "optional"
     },
     {
       "filename": "taitotz.zip",
       "md5": "4206eebec4342ee2f91c877515135587",
       "system": "mame",
-      "description": "Taito TZ system interface for emulation.",
+      "description": "Taito TZ system interface.",
       "required": "optional"
     },
     {
@@ -13816,7 +13830,7 @@
       "filename": "tanbus_vid8082.zip",
       "md5": "3d066a5b34d4eeec65e38f46521248e9",
       "system": "mame",
-      "description": "Tanbus VID8082 video interface for emulation.",
+      "description": "Tanbus VID8082 video interface.",
       "required": "optional"
     },
     {
@@ -13865,7 +13879,7 @@
       "filename": "technica.zip",
       "md5": "9d34c24f098fb02346c625b4bd5b10a5",
       "system": "mame",
-      "description": "Technica system interface for emulation.",
+      "description": "Technica system interface.",
       "required": "optional"
     },
     {
@@ -13879,7 +13893,7 @@
       "filename": "tdl12.zip",
       "md5": "e1419023e94f8ea1d15c9218e01483ac",
       "system": "mame",
-      "description": "TDL12 system file for emulation.",
+      "description": "TDL12 system file.",
       "required": "optional"
     },
     {
@@ -13914,28 +13928,28 @@
       "filename": "ti99_ccdcc.zip",
       "md5": "5070d754be19b51feb63bd74581f79e6",
       "system": "mame",
-      "description": "TI99 CCDDC Controller for emulation.",
+      "description": "TI99 CCDDC Controller.",
       "required": "optional"
     },
     {
       "filename": "ti99_arcturus.zip",
       "md5": "628d54d894f1f5362569c7fec47cab39",
       "system": "mame",
-      "description": "TI99 ARCTURUS system file for emulation.",
+      "description": "TI99 ARCTURUS system file.",
       "required": "optional"
     },
     {
       "filename": "ti99_bwg.zip",
       "md5": "bff83301e2ecad615135daa5510f23bf",
       "system": "mame",
-      "description": "TI99 BWG system interface for emulation.",
+      "description": "TI99 BWG system interface.",
       "required": "optional"
     },
     {
       "filename": "ti8x_tconn.zip",
       "md5": "4aceda4e6e17b113546f0d3eac859125",
       "system": "mame",
-      "description": "TI-8X TConn connection for emulation.",
+      "description": "TI-8X TConn connection.",
       "required": "optional"
     },
     {
@@ -13956,14 +13970,14 @@
       "filename": "ti99_fdc.zip",
       "md5": "8bd34a61ae3f77d11e3f9a7bbff40a94",
       "system": "mame",
-      "description": "TI99 Floppy Disk Controller (FDC) for emulation.",
+      "description": "TI99 Floppy Disk Controller (FDC).",
       "required": "optional"
     },
     {
       "filename": "ti99_ddcc1.zip",
       "md5": "2639d30df2673c9b5e56952f5528d333",
       "system": "mame",
-      "description": "TI99 DDC1 peripheral interface for emulation.",
+      "description": "TI99 DDC1 peripheral interface.",
       "required": "optional"
     },
     {
@@ -13984,14 +13998,14 @@
       "filename": "ti99_myarcmem.zip",
       "md5": "3a53d4296141cc2a30addec05736df2f",
       "system": "mame",
-      "description": "TI99 Myarc memory module for emulation.",
+      "description": "TI99 Myarc memory module.",
       "required": "optional"
     },
     {
       "filename": "ti99_pcode.zip",
       "md5": "625a9bb8b5cc1c45cc30155bd36b6a8b",
       "system": "mame",
-      "description": "TI99 P-code software for emulation.",
+      "description": "TI99 P-code software.",
       "required": "optional"
     },
     {
@@ -14019,14 +14033,14 @@
       "filename": "ti99_tipi.zip",
       "md5": "fd6595fe7f277daf9cdc14fe1b2a2d45",
       "system": "mame",
-      "description": "TI99 TIPI expansion module for emulation.",
+      "description": "TI99 TIPI expansion module.",
       "required": "optional"
     },
     {
       "filename": "ti99_speech.zip",
       "md5": "9ca62f89005e566b10bc1e3aaaf0d30e",
       "system": "mame",
-      "description": "TI99 Speech synthesis module for emulation.",
+      "description": "TI99 Speech synthesis module.",
       "required": "optional"
     },
     {
@@ -14040,84 +14054,84 @@
       "filename": "ti99_speechconn.zip",
       "md5": "9ca62f89005e566b10bc1e3aaaf0d30e",
       "system": "mame",
-      "description": "TI99 Speech connection module for emulation.",
+      "description": "TI99 Speech connection module.",
       "required": "optional"
     },
     {
       "filename": "ti_hx5102.zip",
       "md5": "84fc46c0ce8a7260206621c615395ed2",
       "system": "mame",
-      "description": "TI HX5102 hardware interface for emulation.",
+      "description": "TI HX5102 hardware interface.",
       "required": "optional"
     },
     {
       "filename": "tms32030.zip",
       "md5": "7cd555e9bbd66770762fd32585100a24",
       "system": "mame",
-      "description": "TMS32030 DSP processor for emulation.",
+      "description": "TMS32030 DSP processor.",
       "required": "optional"
     },
     {
       "filename": "tiki100_8088.zip",
       "md5": "a91edf6e17ccca117f40ad61b285a2e4",
       "system": "mame",
-      "description": "Tiki 100 8088 CPU interface for emulation.",
+      "description": "Tiki 100 8088 CPU interface.",
       "required": "optional"
     },
     {
       "filename": "tim011_kbd.zip",
       "md5": "3607708cb899d6a6da12d2e557d008f5",
       "system": "mame",
-      "description": "TIM011 keyboard interface for emulation.",
+      "description": "TIM011 keyboard interface.",
       "required": "optional"
     },
     {
       "filename": "tk02.zip",
       "md5": "228584c6a7c24bbf0e0d091da01779ee",
       "system": "mame",
-      "description": "TK02 system file for emulation.",
+      "description": "TK02 system file.",
       "required": "optional"
     },
     {
       "filename": "tms32031.zip",
       "md5": "9b42e551a0d987c040bd11d9ac2649de",
       "system": "mame",
-      "description": "TMS32031 DSP processor for emulation.",
+      "description": "TMS32031 DSP processor.",
       "required": "optional"
     },
     {
       "filename": "tms32032.zip",
       "md5": "51ea9cd95e16737e3b7d0d043d0da461",
       "system": "mame",
-      "description": "TMS32032 DSP processor for emulation.",
+      "description": "TMS32032 DSP processor.",
       "required": "optional"
     },
     {
       "filename": "tms32033.zip",
       "md5": "9b42e551a0d987c040bd11d9ac2649de",
       "system": "mame",
-      "description": "TMS32033 DSP processor for emulation.",
+      "description": "TMS32033 DSP processor.",
       "required": "optional"
     },
     {
       "filename": "tourvis.zip",
       "md5": "07c1c17a3b8c575bcaee8cb1fa896b74",
       "system": "mame",
-      "description": "TourVis display system for emulation.",
+      "description": "TourVis display system.",
       "required": "optional"
     },
     {
       "filename": "tp880v.zip",
       "md5": "92b41391280f7196495e0eba912a9aeb",
       "system": "mame",
-      "description": "TP880V system interface for emulation.",
+      "description": "TP880V system interface.",
       "required": "optional"
     },
     {
       "filename": "tp881v.zip",
       "md5": "98ff7d900ece4f6f0e58b87033019a94",
       "system": "mame",
-      "description": "TP881V system interface for emulation.",
+      "description": "TP881V system interface.",
       "required": "optional"
     },
     {
@@ -14159,14 +14173,14 @@
       "filename": "tvc_hbf.zip",
       "md5": "fee803fa58e4c3ee3bb90e60031b2260",
       "system": "mame",
-      "description": "TVC HBF system for emulation.",
+      "description": "TVC HBF system.",
       "required": "optional"
     },
     {
       "filename": "tv955kb.zip",
       "md5": "1c419dbfdcc91163680d5f15160ea3a6",
       "system": "mame",
-      "description": "TV955 keyboard for emulation.",
+      "description": "TV955 keyboard.",
       "required": "optional"
     },
     {
@@ -14180,77 +14194,77 @@
       "filename": "ubpnic.zip",
       "md5": "eca6134dc5dcdaed40b36bfff4c5d966",
       "system": "mame",
-      "description": "UBPNIC network interface for emulation.",
+      "description": "UBPNIC network interface.",
       "required": "optional"
     },
     {
       "filename": "tv950kb.zip",
       "md5": "248557f998b6f074fff4e1275c3ba45d",
       "system": "mame",
-      "description": "TV950 keyboard interface for emulation.",
+      "description": "TV950 keyboard interface.",
       "required": "optional"
     },
     {
       "filename": "ultra12f32.zip",
       "md5": "7137174439ec011823431d754499aba2",
       "system": "mame",
-      "description": "Ultra12 F32 system for emulation.",
+      "description": "Ultra12 F32 system.",
       "required": "optional"
     },
     {
       "filename": "ultra12f.zip",
       "md5": "0c64873b1cd274792e3dd9fda2aeadd9",
       "system": "mame",
-      "description": "Ultra12 F system for emulation.",
+      "description": "Ultra12 F system.",
       "required": "optional"
     },
     {
       "filename": "ultra14f.zip",
       "md5": "5993203223fa8255cc17911ac708c514",
       "system": "mame",
-      "description": "Ultra14 F system for emulation.",
+      "description": "Ultra14 F system.",
       "required": "optional"
     },
     {
       "filename": "umc6650.zip",
       "md5": "da6cebe6b22a91a34a67074adbbec3a3",
       "system": "mame",
-      "description": "UMC 6650 processor for emulation.",
+      "description": "UMC 6650 processor.",
       "required": "optional"
     },
     {
       "filename": "ultra24f.zip",
       "md5": "90bb24d5b62011b6354bb248613877ea",
       "system": "mame",
-      "description": "Ultra24 F system for emulation.",
+      "description": "Ultra24 F system.",
       "required": "optional"
     },
     {
       "filename": "upd7220.zip",
       "md5": "6d4ec82eb881a4f06115ec75a0b8f7d9",
       "system": "mame",
-      "description": "UPD7220 graphics chip for emulation.",
+      "description": "UPD7220 graphics chip.",
       "required": "optional"
     },
     {
       "filename": "upc82c710.zip",
       "md5": "30cabd4aad9a5899e1fb3a8a6263a55a",
       "system": "mame",
-      "description": "UPC82C710 controller for emulation.",
+      "description": "UPC82C710 controller.",
       "required": "optional"
     },
     {
       "filename": "upc82c711.zip",
       "md5": "30cabd4aad9a5899e1fb3a8a6263a55a",
       "system": "mame",
-      "description": "UPC82C711 controller for emulation.",
+      "description": "UPC82C711 controller.",
       "required": "optional"
     },
     {
       "filename": "uts_400kbd.zip",
       "md5": "da55174f19e9d1b542e3a844707ff5e9",
       "system": "mame",
-      "description": "UTS 400 keyboard interface for emulation.",
+      "description": "UTS 400 keyboard interface.",
       "required": "optional"
     },
     {
@@ -14264,42 +14278,42 @@
       "filename": "v50_kbd.zip",
       "md5": "7e3927d4f113acfabde244e5faa811e5",
       "system": "mame",
-      "description": "V50 keyboard interface for emulation.",
+      "description": "V50 keyboard interface.",
       "required": "optional"
     },
     {
       "filename": "v102_kbd.zip",
       "md5": "f3000e12f5221dee2af5ae3bf13a962b",
       "system": "mame",
-      "description": "V102 keyboard interface for emulation.",
+      "description": "V102 keyboard interface.",
       "required": "optional"
     },
     {
       "filename": "vanta.zip",
       "md5": "3d3914438c1ec60422054bd63bdcc727",
       "system": "mame",
-      "description": "Vanta graphics processor for emulation.",
+      "description": "Vanta graphics processor.",
       "required": "optional"
     },
     {
       "filename": "uts_extw.zip",
       "md5": "af456cf5a506eccfbbda3cafbeaf4f47",
       "system": "mame",
-      "description": "UTS external work interface for emulation.",
+      "description": "UTS external work interface.",
       "required": "optional"
     },
     {
       "filename": "v550_kbd.zip",
       "md5": "e34a509028cfc0443a33a887396ae1b9",
       "system": "mame",
-      "description": "V550 keyboard interface for emulation.",
+      "description": "V550 keyboard interface.",
       "required": "optional"
     },
     {
       "filename": "vector4_kbd.zip",
       "md5": "79a646b9063f417f9da844d1207f3637",
       "system": "mame",
-      "description": "Vector4 keyboard interface for emulation.",
+      "description": "Vector4 keyboard interface.",
       "required": "optional"
     },
     {
