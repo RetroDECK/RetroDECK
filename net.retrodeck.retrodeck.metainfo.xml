@@ -56,8 +56,8 @@
       <b>Why Choose RetroDECK?</b>
     </p>
     <ul>
-      <li><b>True All-in-One Solution:</b> Emulators, engines, ports, tools, clients and
-        frontend-all included and pre-configured.</li>
+      <li><b>True All-in-One Solution</b> All Components: Emulators, Multi-Emulators, Engines, Ports, Tools, Clients and
+        Frontend are all included and pre-configured.</li>
       <li><b>Zero System Changes:</b> Enjoy the benefits of an retro gaming-focused OS without
         replacing or modifying your operating system.</li>
       <li><b>Effortless Maintenance:</b> Install, update, and remove RetroDECK easily through your
@@ -66,7 +66,7 @@
         excellent gamepad and Steam Input support.</li>
     </ul>
     <p>
-      <b>What’s Included?</b>
+      <b>What is Included?</b>
     </p>
     <ul>
       <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, and
@@ -74,7 +74,7 @@
       <li><b>Multi-Emulator Platforms:</b> Unified emulation through powerful frameworks like
         RetroArch and MAME.</li>
       <li><b>Native Game Engines:</b> Play engine-based titles using Solarus, OpenBOR, and GZDoom,
-        including RetroDECK’s custom <code>.doom</code> format.</li>
+        including RetroDECKs custom <code>.doom</code> format.</li>
       <li><b>ES-DE Frontend:</b> A modern, controller-friendly interface for browsing, organizing,
         and launching your games.</li>
       <li><b>PortMaster Integration:</b> Install and manage community-supported Linux game ports
@@ -95,8 +95,7 @@
     </p>
     <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture
       packs, mods, screenshots, and more—while keeping the underlying components safely
-      sandboxed.
-      Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided
+      sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided
       experience.</p>
     <p>
       <b>Join the RetroDECK Community</b>
