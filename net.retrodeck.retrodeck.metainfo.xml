@@ -43,7 +43,7 @@
   </screenshots>
   <description>
     <p><b>RetroDECK</b> is a powerful, all-in-one <b>Retro Gaming Platform</b> for modern Linux systems, including handheld gaming PCs like the <b>Steam Deck</b>, full Linux desktops, HTPC setups, and Linux-based PC consoles such as the <b>Steam Machine</b>.</p>
-    <p>Delivered as a fully self-contained <b>Flatpak application</b>, RetroDECK provides a complete retro gaming environment out of the box—no manual configuration, no custom firmware, and no system modifications required. Everything is bundled, organized, and ready to play.</p>
+    <p>Delivered as a fully self-contained <b>Flatpak application</b>, RetroDECK provides a complete retro gaming environment out of the box-no manual configuration, no custom firmware, and no system modifications required. Everything is bundled, organized, and ready to play.</p>
     <p>By seamlessly integrating components: emulators, multi-emulators, native game engines, ports, clients and powerful management tools, RetroDECK brings your entire retro game experince together in one polished, unified package.</p>
     <p>
       <b>Why Choose RetroDECK?</b>
@@ -58,21 +58,21 @@
       <b>What is Included?</b>
     </p>
     <ul>
-      <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, and more—supporting a vast range of classic systems.</li>
+      <li><b>Wide Emulator Coverage:</b> Includes RetroArch, MAME, PCSX2, Vita3K, and more-supporting a vast range of classic systems.</li>
       <li><b>Multi-Emulator Platforms:</b> Unified emulation through powerful frameworks like RetroArch and MAME.</li>
       <li><b>Native Game Engines:</b> Play engine-based titles using Solarus, OpenBOR, and GZDoom, including RetroDECKs custom .doom format.</li>
       <li><b>ES-DE Frontend:</b> A modern, controller-friendly interface for browsing, organizing, and launching your games.</li>
-      <li><b>PortMaster Integration:</b> Install and manage community-supported Linux game ports with ease.</li>
-      <li><b>RetroDECK Configurator:</b> A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more—all from one place.</li>
+      <li><b>PortMaster Integration:</b> Install and manage community-supported Linux game port with ease.</li>
+      <li><b>RetroDECK Configurator:</b> A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more-all from one place.</li>
       <li><b>RetroDECK Framework:</b> A unique component-based backend that isolates and layers software for maximum stability and flexibility.</li>
       <li><b>RetroDECK RetroENGINE:</b> A headless game runner for advanced users and developers, enabling fast, direct game launching.</li>
       <li><b>Steam Input Support:</b> Preconfigured controller layouts, radial menus, and system-specific hotkeys when added to Steam.</li>
       <li><b>Steam Library Sync:</b> Automatically add and sync favorite games to Steam using the built-in Steam ROM Manager integration.</li>
     </ul>
     <p>
-      <b>Built for Power Users — Friendly for Everyone</b>
+      <b>Built for Power Users - Friendly for Everyone</b>
     </p>
-    <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture packs, mods, screenshots, and more—while keeping the underlying components safely sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided experience.</p>
+    <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture packs, mods, screenshots, and more-while keeping the underlying components safely sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided experience.</p>
     <p>
       <b>Join the RetroDECK Community</b>
     </p>
@@ -98,8 +98,13 @@
     <release version="0.10.0b" date="2025-12-31">
       <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.10.0b</url>
       <description>
-        <p><b>RetroDECK 0.10.0b</b> is a major milestone release featuring a complete internal rebuild of the platform. While much of this work happens behind the scenes, it significantly improves stability, maintainability, security, and future expandability.</p>
-        <p><b>Important:</b> Ponzu is <b>not compatible</b> with RetroDECK 0.10.0b due to the new layered Flatpak architecture. Users who rely on Ponzu should remain on an earlier version.</p>
+        <p><b>RetroDECK 0.10.0b</b> is a major milestone release featuring a complete internalrebuild of the platform. While much of this work happens behind the scenes, it significantly improves stability, maintainability, security, and future expandability.</p>
+        <p>
+          <b>Important:</b>
+        </p>
+        <ul>
+          <li>Ponzu is <b>not compatible</b> with RetroDECK 0.10.0b due to the new layered Flatpak architecture. Users who rely on Ponzu should remain on an earlier version.</li>
+        </ul>
         <p>
           <b>Core Changes</b>
         </p>
@@ -182,13 +187,10 @@
           <li>BIOS CHECKER: Refactored to be smarter and faster.</li>
           <li>CLI: Added "repair-paths", "steam-sync" and "steam-sync purge" options.</li>
           <li>COMPRESSOR: Better multi-file compression logic and speed.</li>
-          <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file
-            and multi-file modes.</li>
-          <li>CONFIGURATOR: Added Logging Level Changer tool: Informational, Warnings, Errors,
-            Debug.</li>
+          <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file and multi-file modes.</li>
+          <li>CONFIGURATOR: Added Logging Level Changer tool: Informational, Warnings, ErrorsDebug.</li>
           <li>CONFIGURATOR: Added Repair Paths Tool: Repair RetroDECK paths without a full reset.</li>
-          <li>CONFIGURATOR: Added Steam Sync Purge Tool: Removes all synced shortcuts from Steam
-            Sync.</li>
+          <li>CONFIGURATOR: Added Steam Sync Purge Tool: Removes all synced shortcuts from Steam Sync.</li>
           <li>CONFIGURATOR: Several functions have improved multithreading.</li>
           <li>ES-DE: Updated to version 3.2.0: WiFi, Bluetooth, and battery indicators.</li>
           <li>NEW SYSTEMS: Sega Mark III and Vircon32.</li>
@@ -249,17 +251,13 @@
           <li>RetroAchievements: PPSSPP support added (by Cohee)</li>
           <li>RetroAchievements: Dolphin support added</li>
           <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
-          <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and
-            `Factory Reset`</li>
+          <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and `Factory Reset`</li>
           <li>CONFIGURATOR: refacotred open component menu</li>
           <li>CONFIGURATOR: scaled UI to 1.5x</li>
-          <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more
-            information</li>
-          <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with
-            `--open --list` for a list of available components or emulator to open</li>
+          <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
+          <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with  `--open --list` for a list of available components or emulator to open</li>
           <li>New CLI argument `--reset` that replaces the previous ones</li>
-          <li>New CLI argument `--factory-reset` that resets RetroDECK completely and brings the
-            user to the first setup</li>
+          <li>New CLI argument `--factory-reset` that resets RetroDECK completely and brings the user to the first setup</li>
           <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
           <li>GAME COMPRESSOR: refactored</li>
           <li>CHANGE PRESET DIALOG: added enable all and disable all buttons</li>
@@ -270,8 +268,7 @@
         <ul>
           <li>CONFIGURATOR: restructured menus for better navigation and clarity</li>
           <li>RETROARCH: fixed a bug where the cores were not updated along with RetroArch itself</li>
-          <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing
-            from the build</li>
+          <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
           <li>DOLPHIN: fixed a bug where it wouldn't start in some Wayland configurations</li>
           <li>DOLPHIN: fixed a trigger issue in the controller configuration</li>
           <li>PRIMEHACK: fixed an issue where wii folder was not mapped as roms path in GTK GUI</li>
@@ -299,23 +296,17 @@
           <li>New Flash system via the standalone emulator: Ruffle</li>
           <li>New RetroArch experimental core: Panda3DS</li>
           <li>PortMaster is now included in RetroDECK!</li>
-          <li>Steam Sync is now available: favorite your games and enable Steam Sync in the
-            Configurator to find them as standalone Steam games, thanks to Steam Rom Manager
-            acting as an engine</li>
-          <li>New game engine added to run games via CLI. Just run `flatpak run
-            net.retrodeck.retrodeck retrodeck/roms/system/game.ext`, use `--help` for more info</li>
-          <li>New feature for Desktop: RetroENGINE. RetroDECK can now be used as a headless engine
-            to run your games. Just double-click them!</li>
-          <li>New default theme: RetroDECK now has its own custom theme for ES-DE. Do you like it?
-            Feel free to give us feedback!</li>
+          <li>Steam Sync is now available: favorite your games and enable Steam Sync in theConfigurator to find them as standalone Steam games, thanks to Steam Rom Manager acting as an engine</li>
+          <li>New game engine added to run games via CLI. Just run `flatpak run net.retrodeck.retrodeck retrodeck/roms/system/game.ext`, use `--help` for more info</li>
+          <li>New feature for Desktop: RetroENGINE. RetroDECK can now be used as a headless engine to run your games. Just double-click them!</li>
+          <li>New default theme: RetroDECK now has its own custom theme for ES-DE. Do you like it? Feel free to give us feedback!</li>
           <li>We soft-launched our new website earlier. Come take a look at retrodeck.net!</li>
         </ul>
         <p>Changes:</p>
         <ul>
           <li>RetroDECK is on a diet: we saved around 600MB on the final build, about 40% less!</li>
           <li>Updated all outdated emulators possible</li>
-          <li>Duckstation, due to licensing changes, is frozen at the latest possible build,
-            becoming de facto: Legacy</li>
+          <li>Duckstation, due to licensing changes, is frozen at the latest possible build, becoming de facto: Legacy</li>
           <li>Duckstation configured to use OpenGL as Vulkan seems to be broken in some cases</li>
           <li>Because of Steam Sync, the Favorites collection is now enabled by default on ES-DE</li>
           <li>ES-DE updated to 3.1.1 with language support and more</li>
@@ -356,8 +347,7 @@
       <description>
         <p>Bug fixes:</p>
         <ul>
-          <li>FRAMEWORK: Fixed a bug where the ES-DE folders were not correctly migrated from
-            retrodeck folder to retrodeck/ES-DE folder</li>
+          <li>FRAMEWORK: Fixed a bug where the ES-DE folders were not correctly migrated from retrodeck folder to retrodeck/ES-DE folder</li>
         </ul>
         <p>Known issues:</p>
         <ul>
@@ -388,29 +378,21 @@
           <li>ES-DE: updated to 3.0.3</li>
           <li>RUNTIME: updated to KDE 6.7</li>
           <li>All emulators and engines updated</li>
-          <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some
-            type of files to be converted</li>
-          <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to
-            the Godot Configurator)</li>
-          <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to
-            cleanup the roms folder by deleting the empty folders</li>
-          <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary
-            to the previous one:by recreating the whole roms folder structure</li>
+          <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
+          <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
+          <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
+          <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
           <li>CONFIGURATOR: chd compression functionality restored</li>
-          <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were
-            not correctly placed, this caused errors on ES-DE as themes and downloaded_media
-            folder could not be found after a reset or first install</li>
+          <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
           <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
           <li>CEMU: added microphone blow input to R3</li>
-          <li>DOLPHIN: now supports RetroAchivements but must be manually enabled from the
-            emulator as the Configurator is not yet prepared for that</li>
+          <li>DOLPHIN: now supports RetroAchivements but must be manually enabled from the emulator as the Configurator is not yet prepared for that</li>
           <li>DUCKSTATION: now out of the rolling release</li>
           <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
         </ul>
         <p>Known issues:</p>
         <ul>
-          <li>Ryujinx is broken in this version, we plan to fix it soon, check the known issues to
-            learn more</li>
+          <li>Ryujinx is broken in this version, we plan to fix it soon, check the known issues to learn more</li>
           <li>Please check the know issues in the Wiki under General Information</li>
         </ul>
       </description>
