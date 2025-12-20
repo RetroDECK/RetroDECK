@@ -169,13 +169,49 @@
     "borders": "widescreen"
   },
   "helper_files": {
-    "custom_systems_systems": {
+    "custom_systems_es_find_rules": {
+      "filename": "es_find_rules.xml",
+      "location": "$rd_home_path/ES-DE/custom_systems"
+    },
+    "custom_systems_es_systems": {
       "filename": "es_systems.xml",
       "location": "$rd_home_path/ES-DE/custom_systems"
     },
-    "custom_systems_": {
-      "filename": "es_find_rules.xml",
-      "location": "$rd_home_path/ES-DE/custom_systems"
+    "doom_guide": {
+      "filename": "doom_guide.txt",
+      "location": "$roms_path/doom"
+    },
+    "mods_guide": {
+      "filename": "mods_guide.txt",
+      "location": "$mods_path"
+    },
+    "mugen_guide": {
+      "filename": "mugen_guide.txt",
+      "location": "$roms_path/mugen"
+    },
+    "openbor_guide": {
+      "filename": "openbor_guide.txt",
+      "location": "$roms_path/openbor"
+    },
+    "portmaster_guide": {
+      "filename": "portmaster_guide.txt",
+      "location": "$portmaster_path"
+    },
+    "rpcs3_guide": {
+      "filename": "rpcs3_guide.txt",
+      "location": "$roms_path/ps3"
+    },
+    "scummvm_guide": {
+      "filename": "scummvm_guide.txt",
+      "location": "$roms_path/scummvm"
+    },
+    "texture_packs_guide": {
+      "filename": "texture_packs_guide.txt",
+      "location": "$texture_packs_path"
+    },
+    "vita3k_guide": {
+      "filename": "vita3k_guide.txt",
+      "location": "$roms_path/psvita"
     }
   },
   "compression_targets": {
