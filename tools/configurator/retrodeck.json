@@ -69,6 +69,7 @@
 		"rd_home_shaders_path": "/run/media/tim/DATA/retrodeck/shaders",
 		"rd_home_backups_path": "/run/media/tim/DATA/retrodeck/backups",
 		"rd_home_storage_path": "/run/media/tim/DATA/retrodeck/storage",
+		"rd_home_portmaster_path": "/run/media/tim/DATA/retrodeck/PortMaster",
 		"rd_home_videos": "/run/media/tim/DATA/retrodeck/videos"
 	},
 	"quick_resume": {

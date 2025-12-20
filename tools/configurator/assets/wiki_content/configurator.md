@@ -1,171 +1,159 @@
-# The RetroDECK Configurator
+# RetroDECK Configurator
 
-**Please note that we are going to rebuild the Configurator into a controller friendly GODOT application and that the current version is not the final design.**
+ **Note:** 
+ 
+- The Configurator will undergo a full redesign into a controller-friendly **Godot-based application** in the long term.
+- The interface shown here represents the current implementation and is **not the final design**.
 
-<img src="../../wiki_images/graphics/configurator/configurator.png" width="500">
 
-The `RetroDECK Configurator` is a unique multi-use utility that exists within RetroDECK to manage many aspects of the application and exposes functions from the `RetroDECK Framework` to the user.
+---
 
-The `RetroDECK Configurator` can be opened from:
+## Overview
 
-- The main menu inside the ES-DE interface and choose `RetroDECK Configurator`.
+The **RetroDECK Configurator** is a comprehensive, multi-purpose utility integrated directly into RetroDECK.
+It serves as the primary management interface, giving users access to both core functionality and advanced tooling within the **RetroDECK Framework**.
 
-<img src="../../wiki_images/graphics/configurator/configurator-esde.png" width="500">
+Key capabilities include:
 
-* From the `RetroDECK Configurator.desktop` desktop shortcut, available in your application menu.
+- Managing numerous system-wide RetroDECK features and settings.
+- Providing access to maintenance tools, data operations, and component-level controls.
+- Acting as the bridge between the user interface and RetroDECK’s underlying framework and automation systems.
 
-<img src="../../wiki_images/graphics/configurator/configurator-kde.png" width="500">
+---
 
-* From CLI by calling `flatpak run net.retrodeck.retrodeck --configurator`
+## How to Open the RetroDECK Configurator
 
-What follows are the commands you can use inside the Configurator (more commands will be added during development).
+The Configurator can be launched through multiple methods:
 
-## Presets & Settings
-In this menu you can set various presets.
+**1. From ES-DE (Recommended)**
 
-#### Widescreen: Enable/Disable
-Enables or disables Widescreen in all supported emulators and cores.
+Navigate to the main ES-DE menu and select **RetroDECK Configurator**.
 
-#### Ask to Exit prompt: Enable/Disable
-Enables or disables ask to exit prompts in all supported emulators and cores.
-Note: If you disable this, the emulators will directly exit.
+**2. From the Desktop Environment**
 
-### Global: Presets & Settings
-In this menu you will find presets and settings that span over multiple emulators.
+Use the `RetroDECK Configurator.desktop` shortcut available in your applications menu.
 
-#### RetroAchivements: Login
-Login to RetroAchievements in all supported emulators and cores.
+**3. From the Command Line (CLI)**
 
-#### RetroAchivements: Logut
-Logut from RetroAchievements in all supported emulators and cores.
+Run RetroDECK with the `--configurator` flag:
 
-#### RetroAchivements: Hardcore Mode
-Enables `Hardcore Mode` from RetroAchievements in all supported emulators and cores.
+```
+flatpak run net.retrodeck.retrodeck --configurator
+```
 
-#### Swap A/B and X/Y: Enable/Disable
-Swaps `A/B` `X/Y` in supported emulators and cores.
+---
 
-#### Quick Resume: Enable/Disable
-Enables `Quick Resume` aka  `Auto Save` + `Auto Load` on exit in supported emulators and cores.
+## RetroDECK Configurator - Main Menu
 
-### RetroArch: Presets & Settings
-In this menu you will find presets and settings for RetroArch.
+| **Choice**                 | **Action**                                                                 | **Comments**                       |
+|----------------------------|-----------------------------------------------------------------------------|------------------------------------|
+| **About RetroDECK 📖**     | View patch notes, credits, and other project information.                   |      |
+| **Data Management 📂**     | Move, clean, empty or rebuild RetroDECK directories.                        |          |
+| **Open Component 🔧**      | Manually launch and configure individual components.  | *Advanced Users Only*       |
+| **Reset Components 🔄**    | Reset a specific component or restore all RetroDECK defaults.               |       |
+| **Settings ⚙️**            | Adjust core RetroDECK: Presets, Visuals, Tweaks, and Logins.                |           |
+| **Steam Tools 🕹️**        | Synchronize ES-DE ☀️ Favorites ☀️ or add RetroDECK to Steam.                |           |
+| **Tools ☎️**               | Run various tools: BIOS Checker, File Compressor, optional features, etc.   |     |
 
-#### Borders: Enable/Disable
-Enable / Disable borders across the RetroArch cores you choose.
+---
 
-#### Rewind: Enable/Disable
-Enable / Disable rewind across all of RetroArch (this may impact performance on some more demanding systems).
+## RetroDECK Configurator - About RetroDECK
 
-### Wii & Gamecube: Presets & Settings
-In this menu you will find presets and settings for Dolphin and Primehack.
+| **Choice**                         | **Action**                                                           | **Comments** |
+|------------------------------------|-----------------------------------------------------------------------|--------------|
+| RetroDECK: Team Credits 🏆        | View contributor credits for RetroDECK.                              |              |
+| RetroDECK: Version History 📖     | View the changelog and version history of RetroDECK.                 |              |
 
+---
 
+## RetroDECK Configurator -  Data Management
 
-#### Dolphin Textures: Universal Dynamic Input
-Enable / Disable Venomalias's Universal Dynamic Input Texture for Dolphin.
+| **Choice**                                    | **Action**                                                                                           | **Comments** |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------|--------------|
+| Backup RetroDECK 📦                           | Backup and compress RetroDECK userdata into a `.tar` file.                                           |              |
+| Move: All of RetroDECK 🚚                     | Move the entire RetroDECK data folder (`retrodeck`) to a new location.                              |              |
+| Move: BIOS folder 🚚                          | Move the BIOS folder to a new location.                                                               |              |
+| Move: Cheats folder 🚚                        | Move the cheats folder to a new location.                                                             |              |
+| Move: Downloaded Media folder 🚚              | Move the ES-DE downloaded_media folder to a new location.                                           |              |
+| Move: Mods folder 🚚                          | Move the mods folder to a new location.                                                               |              |
+| Move: ROMs folder 🚚                          | Move the ROMs folder to a new location.                                                               |              |
+| Move: Saves folder 🚚                         | Move the saves folder to a new location.                                                              |              |
+| Move: Screenshots folder 🚚                   | Move the screenshots folder to a new location.                                                        |              |
+| Move: Shaders folder 🚚                       | Move the shaders folder to a new location.                                                            |              |
+| Move: States folder 🚚                        | Move the states folder to a new location.                                                             |              |
+| Move: Themes folder 🚚                        | Move the ES-DE themes folder to a new location.                                                       |              |
+| Move: Texture Packs folder 🚚                 | Move the texture_packs folder to a new location.                                                    |              |
+| ROMs Folder: Clean Empty Systems 🧹           | Remove empty system folders from the ROMs directory.                                                  |              |
+| ROMs Folder: Rebuild Systems 🔧               | Recreate any missing system folders in the ROMs directory.                                           |              |
 
+---
 
+## RetroDECK Configurator - Open Component
 
-#### Primehack Textures: Universal Dynamic Input
-Enable / Disable Venomalias's Universal Dynamic Input Texture for Primehack.
+The **Open Component** menu is intended for **advanced users** who wish to tweak or modify default RetroDECK settings for individual components.
 
+⚠️ **Warning:** Making manual changes to a component's configuration may create serious issues. Some settings may be overwritten during RetroDECK updates or when using presets.
 
+⚠️ **Warning:** If a component undergoes major changes to its configuration system in future updates, your manual modifications may be **overwritten**.
 
-## Open Emulator
+The RetroDECK team encourages experimentation, but if anything goes wrong, use the built-in **reset tools** inside the RetroDECK Configurator.
 
-Here you launch and configure each emulator's settings, the option you choose will open that emulators GUI. For documentation on how to change the settings of each emulator's settings please check the website of each emulator.
+---
 
-(Please note that most of the emulator interfaces where not designed with controller input in mind for handling the applications GUI, just the games. You might need to use other inputs like the Steam Decks touchscreen or a mouse and keyboard to navigate properly).
+## RetroDECK Configurator - Reset Components
 
+The **Reset Components** menu allows users to restore **specific components**, multiple components, or the **entire RetroDECK system** to their default settings.
 
-## RetroDECK: Tools
+⚠️ **Warning:** Using this feature will overwrite any custom configurations or changes made to the selected components. Use with caution, especially if you have modified system or component settings manually.
 
+---
 
-### Tool: Remove empty ROM folders
+## RetroDECK Configurator  -  Settings Menu
 
-This tool removes all the roms folders under retrodeck/roms/ that are empty to only leave those that are populated with content.
+| **Choice**                                | **Action**                                                                                                      | **Comments** |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------------|--------------|
+| Ask-To-Exit ❓                             | Enable or disable: Show a confirmation pop-up when exiting a game (for certain components).                     |              |
+| Borders 🖼️                                | Enable or disable: Borders in supported components.                                                              |              |
+| PortMaster in ES-DE 🧭                    | Enable or disable: PortMaster entry in ES-DE.                                                                    |              |
+| Quick Resume ⚡                           | Enable or disable: Automatic save/load of game states in supported components.                                   |              |
+| RetroAchievements 🏆                      | Logging in/out of RetroAchievements in supported components.                                                     |              |
+| RetroAchievements: Hardcore Mode 💀       | Enable or disable: Hardcore mode for RetroAchievements (no cheats, rewind, or save states).                      |              |
+| RetroDECK Folder Iconset 🎨              | Enable or disable: RetroDECK folder iconset.                                                                     |              |
+| Rewind ⏪                                 | Enable or disable: Rewind functionality in supported components.                                                 |              |
+| Savestate Auto Load ⏱️                    | Enable or disable: Automatic load of the last saved state in supported components.                               |              |
+| Savestate on Exit 💾                      | Enable or disable: Automatic save on exit in supported components.                                               |              |
+| Swap A/B and X/Y Buttons 🟧              | Enable or disable: Swapped A/B and X/Y button layout in supported components.                                   |              |
+| Universal Dynamic Input Textures 🎮       | Enable or disable: Universal Dynamic Input Textures in supported components.                                     |              |
+| Widescreen 🖥️                             | Enable or disable: Widescreen mode in supported components.                                                      |              |
 
-### Tool: Rebuild all ROM folders
+---
 
-This tool rebuilds rom folders you have accidentally removed or used the `Remove empty ROM folders` tool.
+## RetroDECK Configurator - Steam Tools Menu
 
-### Tool: Move files
-This option lets you choose the installation path of the RetroDECK folder that handles ROMS, Saves, BIOS, etc... to a new location.
-You get the following three options.
+| **Choice**                                 | **Action**                                                                                                                           | **Comments** |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| **Add RetroDECK to Steam ➕**               | Integrate RetroDECK itself into your Steam library and enable Steam Input support.                                                    |              |
+| **Automatic Steam Synchronization 🔄**      | Enable or disable automatic synchronization of all marked 🌟 Favorites 🌟 from ES-DE to your Steam library.                           |              |
+| **Manual Steam Synchronization 🖱️**        | Manually synchronize all marked 🌟 Favorites 🌟 from ES-DE to your Steam library.                                                      |              |
+| **Remove Synchronized Favorites 🗑️**        | Completely remove all previously synchronized 🌟 Favorites 🌟 from your Steam library.                                                 |              |
 
-`Internal Storage` - Moves the folder to the internal storage.
-`SD CARD` - Moves the folder to the SD CARD
-`Custom Location` - Choose where you want the RetroDECK folder to be.
 
+---
 
+## RetroDECK Configurator - Tools Menu 
 
-### Tool: Compress games
-This option enables you to compress disc-based game image files `.gdi` `.iso` `.bin` `.cue` to the less space demanding `.chd` format.
-You can choose either a single game or many.
+| **Choice**                             | **Action**                                                                                     | **Comments** |
+|----------------------------------------|-------------------------------------------------------------------------------------------------|--------------|
+| **BIOS Checker 🔍**                    | Checks BIOS and firmware availability and displays key details.                                 |              |
+| **Change Logging Level 📒**            | Adjust RetroDECK logging level for debugging purposes.                                          |              |
+| **Games Compressor 📦**                | Compresses games into various formats for supported systems.                                    |              |
+| **Install: RPCS3 Firmware 🧱**         | Download and install PlayStation 3 firmware for the RPCS3 emulator.                             |              |
+| **Install: Steam Controller Templates 🎮** | Installs RetroDECK controller templates to Steam.                                              |              |
+| **Install: Vita3K Firmware 🧱**        | Download and install PlayStation Vita firmware for the Vita3K emulator.                         |              |
+| **M3U Multi-File Validator 🔎**        | Validates the structure of multi-file or multi-disc games.                                      |              |
+| **Repair RetroDECK Paths 🔧**          | Fix RetroDECK folder paths for missing or misconfigured directories.                             |              |
+| **Update Notification 🌐**             | Enable or disable notifications for new RetroDECK versions.                                     |              |
 
+---
 
 
-### Install: RetroDECK SD Controller Profile
-This option installs the Steam controller profiles that RetroDECK into Steam.
-
-
-### Install: PS3 Firmware
-This option downloads and installs the latest PS3 firmware. At the end of the download, RPCS3 will open requesting the user to install it (just press OK).
-
-
-
-### RetroDECK: Change update settings (cooker only)
-This option lets you turn on or off automatic updates on launch.
-
-
-
-## RetroDECK: Troubleshooting
-Various troubleshooting options.
-
-
-### Backup Userdata
-Creates backups of the user data folders
-
-
-
-### Verify Multi-file Structure
-Verifies the structure of multi disc/file games that uses `.m3u` files.
-
-
-
-### Check & Verify: BIOS
-Shows a detailed BIOS list of missing and current BIOS.
-
-
-
-### RetroDECK: Reset
-The reset menu resets various features
-
-
-
-#### Reset Specific Emulator
-Opens a menu where you can reset a specific emulator
-
-
-#### Reset All Emulators
-Resets all the emulators at once
-
-
-
-#### Reset RetroDECK
-Resets the entirety of RetroDECK.
-`⚠️ WARNING! BACK UP YOUR DATA BEFORE RUNNING THIS! ⚠️`
-
-
-
-## RetroDECK: About
-This menu contains information about RetroDECK
-
-### Version history
-Displays the changelogs
-
-
-
-### Credits
-Displays the credits
