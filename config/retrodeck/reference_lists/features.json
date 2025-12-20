@@ -170,11 +170,11 @@
   },
   "helper_files": {
     "dolphin_mods": {
-      "filename": "how-to-install-dolphin-mods.txt",
+      "filename": "dolphin-guide.txt",
       "location": "$mods_path/Dolphin"
     },
     "primehack_mods": {
-      "filename": "how-to-install-primehack-mods.txt",
+      "filename": "primehack-guide.txt",
       "location": "$mods_path/Primehack"
     },
     "mesen_textures": {
@@ -183,7 +183,7 @@
     },
     "ppsspp_textures": {
       "filename": "how-to-install-PPSSPP-textures.txt",
-      "location": "$texture_packs_path/PPSSPP-SA"
+      "location": "$texture_packs_path/PPSSPP"
     },
     "pcsx2_textures": {
       "filename": "how-to-install-PCSX2-textures.txt",
@@ -191,7 +191,7 @@
     },
     "mupen64plus_cache_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_path/retroarch/Mupen64Plus/cache"
+      "location": "$texture_packs_path/retroarch/Mupen64Plus"
     },
     "mupen64plus_hires_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",

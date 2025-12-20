@@ -414,7 +414,8 @@ configurator_developer_dialog() {
   echo "# Loading RetroDECK Configurator..."
   sleep 2  # Simulate a brief delay for the loading screen
   echo "100"
-) |
+) 
+
 rd_zenity --progress --no-cancel --pulsate --auto-close \
   --title="RetroDECK Configurator ⚙️" \
   --text="Starting RetroDECK Configurator ⚙️" \

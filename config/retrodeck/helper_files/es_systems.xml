@@ -1,9 +1,17 @@
 <?xml version="1.0"?>
 <!--
-This is an example of a custom system, you can add as many as you want by following this template.
-More info on the official ES-DE Documentation:
-https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#game-system-customizations
+Custom System in RetroDECK
+
+Custom systems typically do not work by default in RetroDECK. To enable this functionality, follow the instructions provided in the official documentation.
+
+This is an example of a custom system.
+
+For further details, refer to the following resources:
+- https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#game-system-customizations
+- https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/external-emulator
+
 -->
+
 <systemList>
     <!--
     <system>
