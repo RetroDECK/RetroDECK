@@ -6,9 +6,9 @@ Custom systems typically do not work by default in RetroDECK. To enable this fun
 
 This is an example of several custom rules.
 
-For more information, check the official ES-DE and RetroDECK Documentation:
-https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#game-system-customizations
-https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/external-emulator
+For further details, refer to the following resources:
+- https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md - Under the Game System Customizations section.
+- https://retrodeck.readthedocs.io/en/latest/ - Under the experiments section. 
 -->
 <ruleList>
   <!--

@@ -7,8 +7,8 @@ Custom systems typically do not work by default in RetroDECK. To enable this fun
 This is an example of a custom system.
 
 For further details, refer to the following resources:
-- https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#game-system-customizations
-- https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/external-emulator
+- https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md - Under the Game System Customizations section.
+- https://retrodeck.readthedocs.io/en/latest/ - Under the experiments section. 
 
 -->
 <systemList>
