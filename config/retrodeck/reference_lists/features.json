@@ -169,44 +169,12 @@
     "borders": "widescreen"
   },
   "helper_files": {
-    "dolphin_mods": {
-      "filename": "dolphin-guide.txt",
-      "location": "$mods_path/Dolphin"
-    },
-    "primehack_mods": {
-      "filename": "primehack-guide.txt",
-      "location": "$mods_path/Primehack"
-    },
-    "mesen_textures": {
-      "filename": "how-to-install-Mesen-textures.txt",
-      "location": "$texture_packs_path/retroarch/Mesen"
-    },
-    "ppsspp_textures": {
-      "filename": "how-to-install-PPSSPP-textures.txt",
-      "location": "$texture_packs_path/PPSSPP"
-    },
-    "pcsx2_textures": {
-      "filename": "how-to-install-PCSX2-textures.txt",
-      "location": "$texture_packs_path/pcsx2"
-    },
-    "mupen64plus_cache_textures": {
-      "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_path/retroarch/Mupen64Plus"
-    },
-    "mupen64plus_hires_textures": {
-      "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_path/retroarch/Mupen64Plus/hires_texture"
-    },
-    "duckstation_textures": {
-      "filename": "how-to-install-Duckstation-textures.txt",
-      "location": "$texture_packs_path/Duckstation"
-    },
-    "psvita_games": {
-      "filename": "how-to-install-psvita-games.txt",
-      "location": "$roms_path/psvita"
-    },
-    "custom_systems": {
+    "custom_systems_systems": {
       "filename": "es_systems.xml",
+      "location": "$rd_home_path/ES-DE/custom_systems"
+    },
+    "custom_systems_": {
+      "filename": "es_find_rules.xml",
       "location": "$rd_home_path/ES-DE/custom_systems"
     }
   },

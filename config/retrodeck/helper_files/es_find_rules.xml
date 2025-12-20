@@ -10,10 +10,8 @@ For more information, check the official ES-DE and RetroDECK Documentation:
 https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#game-system-customizations
 https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/external-emulator
 -->
-
-
 <ruleList>
-    <!--
+  <!--
 
     <emulator name="RETROARCH">
         <rule type="systempath">
@@ -78,5 +76,3 @@ https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/ex
     </emulator>
     -->
 </ruleList>
-
-

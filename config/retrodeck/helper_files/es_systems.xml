@@ -11,9 +11,8 @@ For further details, refer to the following resources:
 - https://retrodeck.readthedocs.io/en/latest/wiki_experiments/external-emulator/external-emulator
 
 -->
-
 <systemList>
-    <!--
+  <!--
     <system>
         <name>mysystem</name>
         <fullname>An example fake system</fullname>
