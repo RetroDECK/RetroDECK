@@ -8,19 +8,20 @@ This is an example of a custom system.
 
 For further details, refer to the following resources:
 - https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md - Under the Game System Customizations section.
-- https://retrodeck.readthedocs.io/en/latest/ - Under the experiments section. 
+- https://retrodeck.readthedocs.io/en/latest/ - Under the experiments section.
 
 -->
 <systemList>
-  <!--
-    <system>
-        <name>mysystem</name>
-        <fullname>An example fake system</fullname>
-        <path>%ROMPATH%/mysystem</path>
-        <extension>.bin .BIN .chd .CHD .cue .CUE .iso .ISO .7z .7Z .zip .ZIP</extension>
-        <command label="MyEmulator">%EMULATOR_SOMETHING% %ROM%</command>
-        <platform>mysystem</platform>
-        <theme>mysystem</theme>
-    </system>
-    -->
+<!--
+  <system>
+    <name>mysystem</name>
+    <fullname>An example fake system</fullname>
+    <path>%ROMPATH%/mysystem</path>
+    <extension>.bin .BIN .chd .CHD .cue .CUE .iso .ISO .7z .7Z .zip .ZIP</extension>
+    <command label="MyEmulator">%EMULATOR_SOMETHING% %ROM%</command>
+    <command label="MyEmulator2">%EMULATOR_FLATPAK-SPAWN% %ROM%</command>
+    <platform>mysystem</platform>
+    <theme>mysystem</theme>
+  </system>
+-->
 </systemList>
