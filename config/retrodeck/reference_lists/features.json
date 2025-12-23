@@ -46,14 +46,14 @@
   "splash_screens": {
     "new_year": {
       "start_date": "1231",
-      "end_date": "0106",
+      "end_date": "0101",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
     "chinese_new_year": {
-      "start_date": "0128",
-      "end_date": "0212",
+      "start_date": "0217",
+      "end_date": "0219",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-lunar-snake-splash.svg"
