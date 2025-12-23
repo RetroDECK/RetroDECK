@@ -1352,8 +1352,8 @@ check_if_updated() {
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything and Fresh Install" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK - 🍲 RetroDECK Cooker: Upgrade 🍲" \
-        --text="You are upgrading a cooker build of RetroDECK.\n\n Press the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> ☢️ button deletes all data (including ROMs, BIOS, Saves and everything else stored in /retrodeck). Do not press it unless you know what you are doing!")
+        --title="RetroDECK - 🍲 RetroDECK Cooker: Upgrade 🍲" \
+        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> ☢️ button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ "$choice" =~ "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
