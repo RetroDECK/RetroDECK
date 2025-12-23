@@ -823,7 +823,7 @@ finit() {
     --ok-label="Start RetroDECK" \
     --cancel-label="Return to Desktop" \
     --title "RetroDECK Initial Setup - Complete" \
-    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span>.\n\nPlace your <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\nRetroDECK Team"
+    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> or <span foreground='$purple'><b>Return to Desktop</b></span>.\n\nPlace your <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\nRetroDECK Team"
 
   local rc=$?
   if [[ $rc == "1" ]]; then
@@ -860,7 +860,7 @@ install_retrodeck_controller_profile() {
       rsync -rlD --mkpath "$rd_core_files/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
     fi
   else
-    configurator_generic_dialog "RetroDECK - Install: 🎮 Steam Controller Templates 🎮" "The target directories for the controller profile do not exist.\n\nThis may occur if <span foreground='$purple'><b>Steam is not installed</b></span> or if the location does not have <span foreground='$purple'><b>read permissions</b></span>."
+    configurator_generic_dialog "RetroDECK - Install: Steam Controller Templates" "The target directories for the controller profile do not exist.\n\nThis may occur if <span foreground='$purple'><b>Steam is not installed</b></span> or if the location does not have <span foreground='$purple'><b>read permissions</b></span>."
   fi
 }
 
@@ -1353,7 +1353,7 @@ check_if_updated() {
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything and Fresh Install" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title="RetroDECK - RetroDECK Cooker: Upgrade" \
-        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\nWarning!\n\nPressing the <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
+        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\nWarning!\n\nPressing the <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ "$choice" =~ "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.

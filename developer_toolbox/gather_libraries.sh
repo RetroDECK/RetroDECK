@@ -277,7 +277,7 @@ gather_libraries() {
     if [[ $failed_libs -gt 0 ]]; then
       log w "  📋 Failed libraries:" "$logfile"
       echo -e "$failed_list" | while read -r line; do
-        [[ -n "$line" ]] && log w "    ❌ $line" "$logfile"
+        [[ -n "$line" ]] && log w "    $line" "$logfile"
       done
     fi
     
@@ -309,7 +309,7 @@ gather_libraries() {
         if [[ $failed_libs -gt 0 ]]; then
           echo "### Failed Libraries"
           echo -e "$failed_list" | while read -r line; do
-            [[ -n "$line" ]] && echo "- ❌ $line"
+            [[ -n "$line" ]] && echo "- $line"
           done
           echo ""
         fi

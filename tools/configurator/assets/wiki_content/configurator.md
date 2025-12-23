@@ -123,7 +123,7 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | Savestate Auto Load ⏱️                    | Enable or disable: Automatic load of the last saved state in supported components.                               |              |
 | Savestate on Exit 💾                      | Enable or disable: Automatic save on exit in supported components.                                               |              |
 | Swap A/B and X/Y Buttons 🟧              | Enable or disable: Swapped A/B and X/Y button layout in supported components.                                   |              |
-| Universal Dynamic Input Textures 🎮       | Enable or disable: Universal Dynamic Input Textures in supported components.                                     |              |
+| Universal Dynamic Input Textures       | Enable or disable: Universal Dynamic Input Textures in supported components.                                     |              |
 | Widescreen                             | Enable or disable: Widescreen mode in supported components.                                                      |              |
 
 ---
@@ -148,7 +148,7 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | **Change Logging Level 📒**            | Adjust RetroDECK logging level for debugging purposes.                                          |              |
 | **Games Compressor 📦**                | Compresses games into various formats for supported systems.                                    |              |
 | **Install: RPCS3 Firmware 🧱**         | Download and install PlayStation 3 firmware for the RPCS3 emulator.                             |              |
-| **Install: Steam Controller Templates 🎮** | Installs RetroDECK controller templates to Steam.                                              |              |
+| **Install: Steam Controller Templates** | Installs RetroDECK controller templates to Steam.                                              |              |
 | **Install: Vita3K Firmware 🧱**        | Download and install PlayStation Vita firmware for the Vita3K emulator.                         |              |
 | **M3U Multi-File Validator 🔎**        | Validates the structure of multi-file or multi-disc games.                                      |              |
 | **Repair RetroDECK Paths**          | Fix RetroDECK folder paths for missing or misconfigured directories.                             |              |
