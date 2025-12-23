@@ -329,51 +329,51 @@
   ],
   "presets": {
     "ask_to_exit": {
-      "name": "Ask-To-Exit ❓",
+      "name": "Ask-To-Exit",
       "desc": "Enable or disable: Show a confirmation pop-up when exiting a game (for certain components)."
     },
     "borders": {
-      "name": "Borders 🖼️",
+      "name": "Borders",
       "desc": "Enable or disable: Borders in supported components."
     },
     "discord_rich_presence": {
-      "name": "Discord Rich Presence 💬",
+      "name": "Discord Rich Presence",
       "desc": "Enable or disable: Discord Rich Presence in supported components."
     },
     "cheevos": {
-      "name": "RetroAchievements 🏆",
+      "name": "RetroAchievements",
       "desc": "Logging in/out of RetroAchievements in supported components."
     },
     "cheevos_hardcore": {
-      "name": "RetroAchievements: Hardcore Mode 💀",
+      "name": "RetroAchievements: Hardcore Mode",
       "desc": "Enable or disable: Hardcore mode for RetroAchievements (no cheats, rewind, or save states) in supported components."
     },
     "quick_resume": {
-      "name": "Quick Resume ⚡",
+      "name": "Quick Resume",
       "desc": "Enable or disable: Automatic save/load of game states in supported components."
     },
     "rewind": {
-      "name": "Rewind ⏪",
+      "name": "Rewind",
       "desc": "Enable or disable: Rewind functionality in supported components."
     },
     "savestate_auto_load": {
-      "name": "Savestate Auto Load ⏱️",
+      "name": "Savestate Auto Load",
       "desc": "Enable or disable: Automatic load of the last saved state in supported components."
     },
     "savestate_on_exit": {
-      "name": "Savestate on Exit 💾",
+      "name": "Savestate on Exit",
       "desc": "Enable or disable: Automatic save on exit in supported components."
     },
     "abxy_button_swap": {
-      "name": "Swap A/B and X/Y Buttons 🔀",
+      "name": "Swap A/B and X/Y Buttons",
       "desc": "Enable or disable: Swapped A/B and X/Y button layout in supported components."
     },
     "universal_dyn_input": {
-      "name": "Universal Dynamic Input Textures 🎮",
+      "name": "Universal Dynamic Input Textures",
       "desc": "Enable or disable: Universal Dynamic Input Textures in supported components."
     },
     "widescreen": {
-      "name": "Widescreen 🖥️",
+      "name": "Widescreen",
       "desc": "Enable or disable: Widescreen mode in supported components."
     }
   }
