@@ -218,7 +218,7 @@ configurator_change_preset_dialog() {
             export cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
             export cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
-            configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
+            configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
             return 1
           fi
@@ -373,7 +373,7 @@ configurator_change_preset_value_dialog() {
             export cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
             export cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
-            configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
+            configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
             configurator_change_preset_dialog "$preset"
             return 1
           fi
@@ -382,7 +382,7 @@ configurator_change_preset_value_dialog() {
       if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
         configurator_change_preset_dialog "$preset"
       else
-        configurator_generic_dialog "RetroDECK Configurator - 🔩 Change Preset 🔩" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$result</b></span>\n\nCheck the RetroDECK logs for more details."
+        configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$result</b></span>\n\nCheck the RetroDECK logs for more details."
         configurator_change_preset_dialog "$preset"
       fi
     fi
