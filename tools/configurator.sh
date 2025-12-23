@@ -100,17 +100,17 @@ source /app/libexec/global.sh
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
-    "About RetroDECK 📖" "View patch notes, credits, and other project information."
-    "Data Management 📁" "Move, clean empty or rebuild RetroDECK directories."
-    "Open Component 🔧" "Manually launch and configure individual components 🛑 Advanced Users Only 🛑." 
-    "Reset Components 🔄" "Reset a specific component or restore all RetroDECK defaults."
-    "Settings ⚙️" "Adjust core RetroDECK: Presets, Visuals, Tweaks and Logins."
-    "Steam Tools 🚂" "Synchronize ES-DE 🌟 Favorites 🌟 or add RetroDECK to Steam."
-    "Tools 🧰" "Run various tools: BIOS Checker, File Compressor, Install optional features and more."
+    "About RetroDECK" "View patch notes, credits, and other project information."
+    "Data Management" "Move, clean empty or rebuild RetroDECK directories."
+    "Open Component" "Manually launch and configure individual components. Advanced Users Only." 
+    "Reset Components" "Reset a specific component or restore all RetroDECK defaults."
+    "Settings" "Adjust core RetroDECK: Presets, Visuals, Tweaks and Logins."
+    "Steam Tools" "Synchronize ES-DE Favorites or add RetroDECK to Steam."
+    "Tools" "Run various tools: BIOS Checker, File Compressor, Install optional features and more."
   )
 
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options+=("Developer Options 🧑‍💻" "Welcome to the 💥 DANGER ZONE 💥")
+    welcome_menu_options+=("Developer Options" "Welcome to the DANGER ZONE")
   fi
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator" --cancel-label="Quit" --ok-label="OK" \
@@ -120,42 +120,42 @@ configurator_welcome_dialog() {
 
   case $choice in
 
-  "Settings ⚙️" )
+  "Settings" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Open Component 🔧" )
+  "Open Component" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
 
-  "Reset Components 🔄" )
+  "Reset Components" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_reset_dialog
   ;;
 
-  "Tools 🧰" )
+  "Tools" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_tools_dialog
   ;;
 
-  "About RetroDECK 📖" )
+  "About RetroDECK" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_about_retrodeck_dialog
   ;;
 
-  "Steam Tools 🚂" )
+  "Steam Tools" )
     configurator_steam_tools_dialog
   ;;
 
-  "Developer Options 🧑‍💻" )
+  "Developer Options" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" "<span foreground='$purple'><b>WARNING: These features and options can be EXTREMELY DANGEROUS to your RetroDECK installation!</b></span>\n\nThey represent the bleeding edge of upcoming or experimental RetroDECK functionality and should never be used when you have important saves, states, ROMs, or other content that is not fully backed up.\n\n<b>Affected data may include (but is not limited to):</b>\n\n• BIOS files\n• Borders\n• Media\n• Gamelists\n• Mods\n• ROMs\n• Saves\n• States\n• Screenshots\n• Texture packs\n• Themes\n• And more\n\n<span foreground='$purple'><b>All of this data may be lost, damaged, or completely corrupted if you continue.</b></span>\n\n⚠️ <span foreground='$purple'><b>YOU HAVE BEEN WARNED</b></span> ⚠️"
+    configurator_generic_dialog "RetroDECK Configurator - Developer Options" "<span foreground='$purple'><b>WARNING: These features and options can be EXTREMELY DANGEROUS to your RetroDECK installation!</b></span>\n\nThey represent the bleeding edge of upcoming or experimental RetroDECK functionality and should never be used when you have important saves, states, ROMs, or other content that is not fully backed up.\n\n<b>Affected data may include (but is not limited to):</b>\n\n• BIOS files\n• Borders\n• Media\n• Gamelists\n• Mods\n• ROMs\n• Saves\n• States\n• Screenshots\n• Texture packs\n• Themes\n• And more\n\n<span foreground='$purple'><b>All of this data may be lost, damaged, or completely corrupted if you continue.</b></span>\n\n<span foreground='$purple'><b>YOU HAVE BEEN WARNED</b></span>"
     configurator_developer_dialog
   ;;
 
-  "Data Management 📁" )
+  "Data Management" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_data_management_dialog
   ;;
@@ -216,10 +216,10 @@ configurator_open_component_dialog() {
     configurator_welcome_dialog
   fi
   ) |
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ⏳ Gathering Component Information ⏳" \
-      --text="Gathering RetroDECK component information.\n\n⏳Please wait...⏳"
+      --title "RetroDECK Configurator - Gathering Component Information" \
+      --text="Gathering RetroDECK component information.\n\nPlease wait..."
 }
 
 configurator_tools_dialog() {
@@ -272,7 +272,7 @@ configurator_reset_dialog() {
   build_zenity_reset_component_menu_array reset_component_list
   
   choice=$(rd_zenity --list \
-  --title "RetroDECK Configurator - ↩️ Reset Components ↩️" --cancel-label="Cancel"  \
+  --title "RetroDECK Configurator - Reset Components" --cancel-label="Cancel"  \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --checklist --ok-label="Reset Selected" --extra-button="Reset All" --extra-button="Factory Reset" \
   --print-column=2 --hide-column=2 \
@@ -289,7 +289,7 @@ configurator_reset_dialog() {
   if [[ "$choice" =~ "Factory Reset" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
+      --title "RetroDECK Configurator - Factory Reset" \
       --text="<span foreground='$purple'><b>This action will reset all RetroDECK settings to their default values.</b></span> It will also restart the first-time setup process.\n\nYour personal data: including games, saves, and scraped artwork, will not be affected.\n\n<span foreground='$purple'><b>Are you sure you want to proceed?</b></span>"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       prepare_component "factory-reset"
@@ -300,7 +300,7 @@ configurator_reset_dialog() {
   elif [[ "$choice" =~ "Reset All" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ☢️ Factory Reset ☢️" \
+      --title "RetroDECK Configurator - Factory Reset" \
       --text="<span foreground='$purple'><b>This action will reset all RetroDECK settings to their default values.</b></span> It will also restart the first-time setup process.\n\nYour personal data: including games, saves, and scraped artwork, will not be affected.\n\n<span foreground='$purple'><b>Are you sure you want to proceed?</b></span>"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
@@ -308,8 +308,8 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting all components\n\n⏳Please wait while the process finishes...⏳"
+      --title "RetroDECK Configurator - Reset in Progress" \
+      --text="Resetting all components\n\nPlease wait while the process finishes..."
       configurator_process_complete_dialog "resetting all components"
     else # User clicked "Cancel"
       configurator_welcome_dialog
@@ -322,7 +322,7 @@ configurator_reset_dialog() {
     done
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ↩️ Reset Components ↩️" \
+      --title "RetroDECK Configurator - Reset Components" \
       --text="You selected the following components to be reset:\n\n$(printf '%s\n' ${pretty_choices[@]})\n\nDo you want to continue?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
@@ -332,8 +332,8 @@ configurator_reset_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ⏳ Reset in Progress ⏳" \
-      --text="Resetting selected components.\n\n⏳ <span foreground='$purple'><b>Please wait while the process finishes...</b></span> ⏳"
+      --title "RetroDECK Configurator - Reset in Progress" \
+      --text="Resetting selected components.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
     else # User clicked "Cancel"
       configurator_reset_dialog
     fi
@@ -343,16 +343,16 @@ configurator_reset_dialog() {
     configurator_welcome_dialog
   fi
   ) |
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - ⏳ Gathering Component Information ⏳" \
-      --text="Gathering RetroDECK component information.\n\n⏳Please wait...⏳"
+      --title "RetroDECK Configurator - Gathering Component Information" \
+      --text="Gathering RetroDECK component information.\n\nPlease wait..."
 }
 
 configurator_about_retrodeck_dialog() {
   build_zenity_menu_array choices about_retrodeck # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧾 About RetroDECK 🧾" --cancel-label="Back" --ok-label="OK"\
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - About RetroDECK" --cancel-label="Back" --ok-label="OK"\
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -371,7 +371,7 @@ configurator_about_retrodeck_dialog() {
 configurator_steam_tools_dialog() {
   build_zenity_menu_array choices steam_tools # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🚂 Steam Tools 🚂" --cancel-label="Back" --ok-label="OK" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Steam Tools" --cancel-label="Back" --ok-label="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -390,7 +390,7 @@ configurator_steam_tools_dialog() {
 configurator_developer_dialog() {
   build_zenity_menu_array choices developer_options # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - 🧑‍💻 Developer Options 🧑‍💻" --cancel-label="Back" --ok-label="OK" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Developer Options" --cancel-label="Back" --ok-label="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
@@ -417,8 +417,8 @@ configurator_developer_dialog() {
 ) 
 
 rd_zenity --progress --no-cancel --pulsate --auto-close \
-  --title="RetroDECK Configurator ⚙️" \
-  --text="Starting RetroDECK Configurator ⚙️" \
+  --title="RetroDECK Configurator" \
+  --text="Starting RetroDECK Configurator" \
   --width=400 --height=100 &
 
 configurator_welcome_dialog

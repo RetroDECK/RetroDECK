@@ -14,8 +14,8 @@ post_update() {
 
   # Optional userdata backup prior to update
 
-  choice=$(rd_zenity --title "RetroDECK Update - 🗄️ Backup Userdata 🗄️" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\n\Please choose a backup method for your RetroDECK userdata:\n\n\🧩 Core Backup:\nOnly essential files will be saved, including game saves, save states, and gamelists.\n\n\🎛️ Custom Backup:\nSelect specific folders to include in your backup. Ideal for tailored data preservation.\n\n\📦 Complete Backup:\nAll userdata will be backed up, including games and downloaded media.\n\n\<span foreground='purple'>⚠️ <b>WARNING:</b> A complete backup may require a very large amount of storage space. ⚠️</span>")
+  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\nPlease choose a backup method for your RetroDECK userdata:\n\nCore Backup:\nOnly essential files will be saved, including game saves, save states, and gamelists.\n\nCustom Backup:\nSelect specific folders to include in your backup. Ideal for tailored data preservation.\n\nComplete Backup:\nAll userdata will be backed up, including games and downloaded media.\n\n<span foreground='purple'><b>WARNING:</b> A complete backup may require a very large amount of storage space.</span>")
 
   local rc=$?
   if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
@@ -130,7 +130,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
-  --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n⏳ <span foreground='$purple'><b>Please wait while the setup process completes...</b></span> ⏳"
+  --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>"
 
   conf_read
   version="$hard_version"

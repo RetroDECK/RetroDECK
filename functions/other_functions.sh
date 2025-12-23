@@ -348,7 +348,7 @@ backup_retrodeck_userdata() {
     shift # Remove the first argument
   else
     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "No valid backup option chosen. Valid options are <standard> and <custom>."
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "No valid backup option chosen. Valid options are <standard> and <custom>."
     fi
     log e "No valid backup option chosen. Valid options are <complete>, <core> and <custom>."
     return 1
@@ -379,7 +379,7 @@ backup_retrodeck_userdata() {
         log i "Adding to backup: $folder_name = $path_value"
       else
         if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The <span foreground='$purple'><b>$folder_name</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
+          configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The <span foreground='$purple'><b>$folder_name</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
         fi
         log i "Warning: Path does not exist: $folder_name = $path_value"
       fi
@@ -390,7 +390,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
     fi
@@ -399,7 +399,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/gamelists")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE gamelists folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/gamelists</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE gamelists folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/gamelists</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
     fi
@@ -408,7 +408,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/custom_systems")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
     fi
@@ -416,7 +416,7 @@ backup_retrodeck_userdata() {
     # Check if we found any valid paths
     if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "<span foreground='$purple'><b>No valid userdata folders were found.</b></span>\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "<span foreground='$purple'><b>No valid userdata folders were found.</b></span>\nSomething may be wrong with your RetroDECK installation."
       fi
       log e "Error: No valid paths found in config file"
       return 1
@@ -634,7 +634,7 @@ finit_browse() {
   path_selected=false
   while [ $path_selected == false ]
   do
-    local target="$(rd_zenity --file-selection --title="RetroDECK - 📂 retrodeck 📂 location" --directory)"
+    local target="$(rd_zenity --file-selection --title="RetroDECK - retrodeck location" --directory)"
     if [[ ! -z "$target" ]]; then
       if [[ -w "$target" ]]; then
         rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
@@ -671,7 +671,7 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "<b>Welcome to RetroDECKs first-time setup!</b>\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>🕹️ ROMs and Games \n⚙️ BIOS and Firmware \n💾 Game Saves \n🖼️ Art Data \n🧺 Etc...</b></span>." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "<b>Welcome to RetroDECKs first-time setup!</b>\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>ROMs and Games \nBIOS and Firmware \nGame Saves \nArt Data \nEtc...</b></span>." )
   
   if [[ "$finit_dest_choice" == "" ]]; then
     log i "User closed the window"
@@ -695,7 +695,7 @@ finit() {
     fi
   ;;
 
-  "SD Card 💾" )
+  "SD Card" )
     log i "SD Card selected"
     external_devices=()
 
@@ -706,8 +706,8 @@ finit() {
     done < <(df --output=size,target -h | grep "/run/media/" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
-      configurator_generic_dialog "RetroDeck Installation - 💾 SD Card 💾" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - ➡️ USB Migration Tool ➡️" --cancel-label="Back" \
+      configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
+      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
       --column "Device Name" \
@@ -1716,7 +1716,7 @@ handle_folder_iconsets() {
       done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
       set_setting_value "$rd_conf" "iconset" "$iconset" retrodeck "options"
     else
-      configurator_generic_dialog "RetroDeck Configurator - 🎨 Toggle Folder Iconsets 🎨" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> could not be found in the RetroDECK assets."
+      configurator_generic_dialog "RetroDeck Configurator - Toggle Folder Iconsets" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> could not be found in the RetroDECK assets."
       return 1
     fi
   else
@@ -1731,14 +1731,14 @@ install_retrodeck_controller_profile_and_add_to_steam() {
   install_retrodeck_controller_profile
   add_retrodeck_to_steam
   
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - 🚂 Steam Syncronization 🚂" --cancel-label="No" --ok-label "Yes" \
-    --text="Enable Steam synchronization?\n\nThis will scan your games for any 🌟 <span foreground='$purple'><b>Favorited</b></span> 🌟 games in ES-DE and add them to your Steam library as individual entries.\n\nYou will need to restart Steam for the changes to take effect."
+  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Steam Synchronization" --cancel-label="No" --ok-label "Yes" \
+    --text="Enable Steam synchronization?\n\nThis will scan your games for any <span foreground='$purple'><b>Favorited</b></span> games in ES-DE and add them to your Steam library as individual entries.\n\nYou will need to restart Steam for the changes to take effect."
 
   if [[ $? == 0 ]]; then
     configurator_enable_steam_sync
   fi
   if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") =~ (flatpak) ]]; then # If Flatpak Steam, warn about permission
-    configurator_generic_dialog "RetroDeck Configurator - ⚠️ Steam Flatpak Warning ⚠️" "You are using the <span foreground='purple'><b>Flatpak Version of Steam</b></span>.\n\n\To allow RetroDECK to launch, Steam must be granted the following permission:\n<span foreground='purple'><b>org.freedesktop.Flatpak</b></span>\n\n\Please read the RetroDECK wiki for instructions"
+    configurator_generic_dialog "RetroDeck Configurator - Steam Flatpak Warning" "You are using the <span foreground='purple'><b>Flatpak Version of Steam</b></span>.\n\nTo allow RetroDECK to launch, Steam must be granted the following permission:\n<span foreground='purple'><b>org.freedesktop.Flatpak</b></span>\n\nPlease read the RetroDECK wiki for instructions"
   fi
 }
 

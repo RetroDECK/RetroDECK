@@ -72,8 +72,8 @@ run_game() {
     if [[ -z "$game" || ! -e "$game" ]]; then
         rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK - 🛑 Warning: File not found 🛑" \
-            --text="🛑 Warning! 🛑 File: <span foreground='$purple'><b>\"$game\"</b></span> not found.\n\nMake sure RetroDECKs Flatpak has permission to access the specified path.\n\nf needed, add the path in Flatseal or terminal and try again."
+            --title "RetroDECK - Warning: File not found" \
+            --text="Warning: File: <span foreground='$purple'><b>\"$game\"</b></span> not found.\n\nMake sure RetroDECK's Flatpak has permission to access the specified path.\n\nIf needed, add the path in Flatseal or terminal and try again."
         log e "File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
         exit 1
     fi
