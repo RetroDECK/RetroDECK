@@ -431,7 +431,7 @@ backup_retrodeck_userdata() {
           log i "Adding to backup: $folder_name = $path_value"
         else
           if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-            configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The <span foreground='$purple'><b>$folder_name</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
+            configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The <span foreground='$purple'><b>$folder_name</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
           fi
           log i "Warning: Path does not exist: $folder_name = $path_value"
         fi
@@ -443,7 +443,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE collections folder was not found at its expected location, $rd_home_path/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE collections folder was not found at its expected location, $rd_home_path/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
     fi
@@ -452,7 +452,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/gamelists")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation.."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation.."
       fi
       log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
     fi
@@ -461,7 +461,7 @@ backup_retrodeck_userdata() {
       paths_to_backup+=("$rd_home_path/ES-DE/custom_systems")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
       fi
       log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
     fi
@@ -469,7 +469,7 @@ backup_retrodeck_userdata() {
     # Check if we found any valid paths
     if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "<span foreground='$purple'><b>No valid userdata folders were found.</b></span>\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "<span foreground='$purple'><b>No valid userdata folders were found.</b></span>\nSomething may be wrong with your RetroDECK installation."
       fi
       log e "Error: No valid paths found in config file"
       return 1
@@ -478,7 +478,7 @@ backup_retrodeck_userdata() {
   elif [[ "$backup_type" == "custom" ]]; then
     if [[ "$#" -eq 0 ]]; then # Check if any paths were provided in the arguments
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "<span foreground='$purple'><b>No valid backup locations were specified.</b></span> Please try again."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "<span foreground='$purple'><b>No valid backup locations were specified.</b></span> Please try again."
       fi
       log e "Error: No paths specified for custom backup"
       return 1
@@ -494,7 +494,7 @@ backup_retrodeck_userdata() {
           log i "Added to backup: $arg = $path_value"
         else
           if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-            configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The <span foreground='$purple'><b>$arg</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
+            configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The <span foreground='$purple'><b>$arg</b></span> was not found at its expected location: <span foreground='$purple'><b>$path_value</b></span>.\nSomething may be wrong with your RetroDECK installation."
           fi
           log e "Error: Path from variable '$arg' does not exist: $path_value"
           return 1
@@ -505,7 +505,7 @@ backup_retrodeck_userdata() {
         log i "Added to backup: $arg"
       else
         if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The path <span foreground='$purple'><b>$arg</b></span> was not found at its expected location.\nPlease check the path and try again."
+          configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The path <span foreground='$purple'><b>$arg</b></span> was not found at its expected location.\nPlease check the path and try again."
         fi
         log e "Error: '$arg' is neither a valid variable name nor an existing path"
         return 1
@@ -533,7 +533,7 @@ backup_retrodeck_userdata() {
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" \
+            --title "RetroDECK Configurator - Backup Userdata" \
             --text="Verifying there is enough free space for the backup.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
     total_size=$(cat "$total_size_file")
     rm "$total_size_file" # Clean up temp file
@@ -558,7 +558,7 @@ backup_retrodeck_userdata() {
   # Check if we have enough space (using uncompressed size as a conservative estimate)
   if [[ "$available_space" -lt "$total_size" ]]; then
     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "There is not enough free space to perform this backup.\n\nYou need at least <span foreground='$purple'><b>$(numfmt --to=iec-i --suffix=B "$total_size")</b></span>.\nPlease free up some space and try again."
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "There is not enough free space to perform this backup.\n\nYou need at least <span foreground='$purple'><b>$(numfmt --to=iec-i --suffix=B "$total_size")</b></span>.\nPlease free up some space and try again."
     fi
     log e "Error: Not enough space to perform backup. Need at least $(numfmt --to=iec-i --suffix=B "$total_size")"
     return 1
@@ -575,7 +575,7 @@ backup_retrodeck_userdata() {
         ls -t *_${backup_type}.tar.gz | tail -n +4 | xargs -r rm
 
         final_size=$(du -h "$backup_file" | cut -f1)
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "The backup to <span foreground='$purple'><b>$backup_file</b></span> was successful, final size is <span foreground='$purple'><b>$final_size</b></span>.\n\nThe backups have been rotated, keeping the last 3 of the <span foreground='$purple'><b>$backup_type</b></span> backup type."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup to <span foreground='$purple'><b>$backup_file</b></span> was successful, final size is <span foreground='$purple'><b>$final_size</b></span>.\n\nThe backups have been rotated, keeping the last 3 of the <span foreground='$purple'><b>$backup_type</b></span> backup type."
         log i "Backup completed successfully: $backup_file (Size: $final_size)"
         log i "Older backups rotated, keeping latest 3 of type $backup_type"
 
@@ -583,14 +583,14 @@ backup_retrodeck_userdata() {
           rm -f "$backup_log_file"
         fi
       else
-        configurator_generic_dialog "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" "Something went wrong with the backup process. Please check the log <span foreground='$purple'><b>$backup_log_file</b></span> for more information."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "Something went wrong with the backup process. Please check the log <span foreground='$purple'><b>$backup_log_file</b></span> for more information."
         log i "Error: Backup failed"
         return 1
       fi
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️ 🗄️" \
+            --title "RetroDECK Configurator - Backup Userdata" \
             --text="Compressing files into backup.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
   else
     if tar -czhf "$backup_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
