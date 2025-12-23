@@ -49,7 +49,7 @@ flatpak run net.retrodeck.retrodeck --configurator
 |----------------------------|-----------------------------------------------------------------------------|------------------------------------|
 | **About RetroDECK 📖**     | View patch notes, credits, and other project information.                   |      |
 | **Data Management 📂**     | Move, clean, empty or rebuild RetroDECK directories.                        |          |
-| **Open Component 🔧**      | Manually launch and configure individual components.  | *Advanced Users Only*       |
+| **Open Component**      | Manually launch and configure individual components.  | *Advanced Users Only*       |
 | **Reset Components 🔄**    | Reset a specific component or restore all RetroDECK defaults.               |       |
 | **Settings ⚙️**            | Adjust core RetroDECK: Presets, Visuals, Tweaks, and Logins.                |           |
 | **Steam Tools 🕹️**        | Synchronize ES-DE ☀️ Favorites ☀️ or add RetroDECK to Steam.                |           |
@@ -84,7 +84,7 @@ flatpak run net.retrodeck.retrodeck --configurator
 | Move: Themes folder 🚚                        | Move the ES-DE themes folder to a new location.                                                       |              |
 | Move: Texture Packs folder 🚚                 | Move the texture_packs folder to a new location.                                                    |              |
 | ROMs Folder: Clean Empty Systems 🧹           | Remove empty system folders from the ROMs directory.                                                  |              |
-| ROMs Folder: Rebuild Systems 🔧               | Recreate any missing system folders in the ROMs directory.                                           |              |
+| ROMs Folder: Rebuild Systems               | Recreate any missing system folders in the ROMs directory.                                           |              |
 
 ---
 
@@ -151,8 +151,8 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | **Install: Steam Controller Templates 🎮** | Installs RetroDECK controller templates to Steam.                                              |              |
 | **Install: Vita3K Firmware 🧱**        | Download and install PlayStation Vita firmware for the Vita3K emulator.                         |              |
 | **M3U Multi-File Validator 🔎**        | Validates the structure of multi-file or multi-disc games.                                      |              |
-| **Repair RetroDECK Paths 🔧**          | Fix RetroDECK folder paths for missing or misconfigured directories.                             |              |
-| **Update Notification 🌐**             | Enable or disable notifications for new RetroDECK versions.                                     |              |
+| **Repair RetroDECK Paths**          | Fix RetroDECK folder paths for missing or misconfigured directories.                             |              |
+| **Update Notification**             | Enable or disable notifications for new RetroDECK versions.                                     |              |
 
 ---
 

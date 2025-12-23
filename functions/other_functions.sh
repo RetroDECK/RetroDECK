@@ -92,7 +92,7 @@ move() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Move in Progress" \
-  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -534,7 +534,7 @@ backup_retrodeck_userdata() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️" \
-            --text="Verifying there is enough free space for the backup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+            --text="Verifying there is enough free space for the backup.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
     total_size=$(cat "$total_size_file")
     rm "$total_size_file" # Clean up temp file
   else # If running in CLI
@@ -591,7 +591,7 @@ backup_retrodeck_userdata() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - 🗄️ Backup Userdata 🗄️ 🗄️" \
-            --text="Compressing files into backup.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+            --text="Compressing files into backup.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
   else
     if tar -czhf "$backup_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
       # Rotate backups for the specific type
@@ -795,7 +795,7 @@ finit() {
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
-  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n⏳<span foreground='$purple'><b>This may take up to a minute or two</b></span>⏳\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
+  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n<span foreground='$purple'><b>This may take up to a minute or two</b></span>\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
   (
   prepare_component "reset" "all"
@@ -813,7 +813,7 @@ finit() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK: Installing 📀" \
-    --text="RetroDECK is completing its initial setup.\n\n\Please check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n⏳ <span foreground='$purple'><b>Please wait while the setup process completes...</b></span> ⏳"
+    --text="RetroDECK is completing its initial setup.\n\n\Please check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>"
 
   create_lock
 
@@ -822,8 +822,8 @@ finit() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --ok-label="Start RetroDECK" \
     --cancel-label="Return to Desktop" \
-    --title "RetroDECK Initial Setup - Complete ✅" \
-    --text="RetroDECK initial setup is Complete! ✅\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span> 🖥️.\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your ⚙️ <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
+    --title "RetroDECK Initial Setup - Complete" \
+    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span> 🖥️.\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your ⚙️ <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
 
   local rc=$?
   if [[ $rc == "1" ]]; then
@@ -979,7 +979,7 @@ install_release() {
         log d "downloading it to $rd_home_path/RetroDECK_Updates"
         if ! wget -q -O "$rd_home_path/RetroDECK_Updates/$(basename "$asset")" "$asset"; then
           log e "Failed to download $asset"
-          configurator_generic_dialog "Online Update - 🛑 Error: Archive 🛑" "Failed to download the Flatpak file: <span foreground='$purple'><b>RetroDECK update aborted.</b></span>\nPlease check your internet connection and try again."
+          configurator_generic_dialog "Online Update - Error: Archive" "Failed to download the Flatpak file: <span foreground='$purple'><b>RetroDECK update aborted.</b></span>\nPlease check your internet connection and try again."
           log d "$rd_home_path/RetroDECK_Updates folder contents:\n$(ls -l "$rd_home_path/RetroDECK_Updates")"
           return 1
         fi
@@ -994,7 +994,7 @@ install_release() {
         log d "Found archive $archive, extracting it..."
         if ! 7z x -aoa "$archive" && rm -f *.7z*; then
           log e "Failed to extract $archive"
-          configurator_generic_dialog "Online Update - 🛑 Error: Archive 🛑" "Failed to extract the split archive: <span foreground='$purple'><b>RetroDECK update aborted.</b></span>"
+          configurator_generic_dialog "Online Update - Error: Archive" "Failed to extract the split archive: <span foreground='$purple'><b>RetroDECK update aborted.</b></span>"
           log d "$rd_home_path/RetroDECK_Updates folder contents:\n$(ls -l "$rd_home_path/RetroDECK_Updates")"
           rm -rf "$rd_home_path/RetroDECK_Updates"
           return 1
@@ -1036,9 +1036,9 @@ install_release() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Updater" \
-    --text="RetroDECK is updating to the selected version.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+    --text="RetroDECK is updating to the selected version.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
 
-  configurator_generic_dialog "RetroDECK - 🌐 Online Update 🌐" "<span foreground='$purple'><b>The update process is now complete!</b></span>\n\nRetroDECK will now quit."
+  configurator_generic_dialog "RetroDECK - Online Update" "<span foreground='$purple'><b>The update process is now complete!</b></span>\n\nRetroDECK will now quit."
   quit_retrodeck
 }
 
@@ -1086,7 +1086,7 @@ release_selector() {
   if [[ -z "$main_release" ]]; then
     log e "Failed to fetch the main release"
     kill $progress_pid  # kill the progress bar
-    configurator_generic_dialog "Online Update - 🛑 Error: Main 🛑" "<span foreground='$purple'><b>Unable to fetch the main release.</b></span> Please check your internet connection or try again later."
+    configurator_generic_dialog "Online Update - Error: Main" "<span foreground='$purple'><b>Unable to fetch the main release.</b></span> Please check your internet connection or try again later."
     return 1
   fi
 
@@ -1105,7 +1105,7 @@ release_selector() {
   if [[ -z "$releases" ]]; then
     log e "Failed to fetch releases or no releases available"
     kill $progress_pid  # kill the progress bar
-    configurator_generic_dialog "Online Update - 🛑 Error: Releases 🛑" "<span foreground='$purple'><b>Unable to fetch releases.</b></span> Please check your internet connection or try again later."
+    configurator_generic_dialog "Online Update - Error: Releases" "<span foreground='$purple'><b>Unable to fetch releases.</b></span> Please check your internet connection or try again later."
     return 1
   fi
 
@@ -1144,7 +1144,7 @@ release_selector() {
   kill $progress_pid
 
   if [[ ${#release_array[@]} -eq 0 ]]; then
-    configurator_generic_dialog "RetroDECK - 🌐 Online Update 🌐" "<span foreground='$purple'><b>No available releases were found.</b></span> Exiting."
+    configurator_generic_dialog "RetroDECK - Online Update" "<span foreground='$purple'><b>No available releases were found.</b></span> Exiting."
     log d "No available releases found"
     return 1
   fi
@@ -1156,7 +1156,7 @@ release_selector() {
     rd_zenity --list \
       --icon-name=net.retrodeck.retrodeck \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - 🍲 RetroDECK Cooker: Select Release 🍲" \
+      --title "RetroDECK Configurator - RetroDECK Cooker: Select Release" \
       --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
       --separator="|" --print-column='ALL' "${release_array[@]}"
   )
@@ -1276,8 +1276,8 @@ add_retrodeck_to_steam() {
   ) |
   rd_zenity --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - ⏳ Adding RetroDECK to Steam ⏳" \
-    --text="RetroDECK is being added to Steam.\n\n⏳<span foreground='$purple'><b>Please wait while the process finishes...</b></span>⏳"
+    --title "RetroDECK Configurator - Adding RetroDECK to Steam" \
+    --text="RetroDECK is being added to Steam.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
   rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\n\<span foreground='$purple'><b>Please restart Steam to see the changes.</b></span>"
 }
 
@@ -1297,7 +1297,7 @@ repair_paths() {
         if [[ ! -d "$rd_home_path/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rd_home_path path
           if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
             log i "$path_name cannot be found at any expected location, having user locate it manually"
-            configurator_generic_dialog "RetroDECK Configurator - 🔧 Path Repair 🔧" "The RetroDECK <span foreground='$purple'><b>$path_name</b></span> was not found in the expected location.\nThis may occur if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>$path_name</b></span>."
+            configurator_generic_dialog "RetroDECK Configurator - Path Repair" "The RetroDECK <span foreground='$purple'><b>$path_name</b></span> was not found in the expected location.\nThis may occur if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>$path_name</b></span>."
             new_path=$(directory_browse "RetroDECK $path_name location")
             set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
@@ -1322,10 +1322,10 @@ repair_paths() {
     conf_read
     dir_prep "$logs_path" "$rd_xdg_config_logs_path"
     prepare_component "postmove" "all"
-    configurator_generic_dialog "RetroDECK Configurator - 🔧 Path Repair 🔧" "<span foreground='$purple'><b>One or more incorrectly configured paths were repaired.</b></span>"
+    configurator_generic_dialog "RetroDECK Configurator - Path Repair" "<span foreground='$purple'><b>One or more incorrectly configured paths were repaired.</b></span>"
   else
     log i "All folders were found at their expected locations"
-    configurator_generic_dialog "RetroDECK Configurator - 🔧 Path Repair 🔧" "<span foreground='$purple'><b>All RetroDECK folders were found at their expected locations.</b></span>"
+    configurator_generic_dialog "RetroDECK Configurator - Path Repair" "<span foreground='$purple'><b>All RetroDECK folders were found at their expected locations.</b></span>"
   fi
 }
 
@@ -1344,7 +1344,7 @@ check_if_updated() {
       log i "Config file's version is $version but the actual version is $hard_version"
       if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
         log d "Newly-installed version is a \"cooker\" build"
-        configurator_generic_dialog "RetroDECK - 🛑🍲 Warning: Cooker 🍲🛑" "<span foreground='$purple'><b>RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS!</b></span>\n\nAll of your RetroDECK data is at risk, including:\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Downloaded media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n\n<span foreground='$purple'><b>Proceeding may result in loss or corruption of these files!</b></span>"
+        configurator_generic_dialog "RetroDECK -Warning: Cooker" "<span foreground='$purple'><b>RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS!</b></span>\n\nAll of your RetroDECK data is at risk, including:\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Downloaded media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n\n<span foreground='$purple'><b>Proceeding may result in loss or corruption of these files!</b></span>"
         set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
         set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
         set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
@@ -1352,20 +1352,20 @@ check_if_updated() {
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything and Fresh Install" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="RetroDECK - 🍲 RetroDECK Cooker: Upgrade 🍲" \
-        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the ✅ <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\n🛑 Warning! 🛑\n\nPressing the ☢️ <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> ☢️ button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
+        --title="RetroDECK - RetroDECK Cooker: Upgrade" \
+        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the ❌ <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\nWarning!\n\nPressing the <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ "$choice" =~ "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
             log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
             set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
           elif [[ "$choice" =~ "Delete Everything and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
-            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything and Fresh Install ☢️" "<span foreground='$purple'><b>This will delete ALL RetroDECK data!</b></span>\n\nAffected data includes:\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n<span foreground='$purple'><b>• And more</b></span>\n\nAre you sure you want to continue?\n<span foreground='$purple'><b>Remember what happened last time!</b></span>") == "true" ]]; then
-              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything and Fresh Install ☢️: Reset 🍲" "<span foreground='$purple'><b>Are you absolutely sure?</b></span>\n\nThere is no going back from this process — everything will be permanently deleted.\n<span foreground='$purple'><b>Dust in the wind.</b></span>\n<span foreground='$purple'><b>Yesterday's omelette.</b></span>") == "true" ]]; then
-                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything and Fresh Install ☢️: Reset 🍲" "<span foreground='$purple'><b>But are you super DUPER sure?</b></span>\n\nWe REALLY want to make sure you understand what is about to happen.\n\nThe following folders and <b>ALL of their contents</b> will be <span foreground='$purple'><b>PERMANENTLY deleted like what happened to Rowan Skye!</b></span>:\n<span foreground='$purple'><b>• ~/retrodeck</b></span>\n<span foreground='$purple'><b>• ~/.var/app/net.retrodeck.retrodeck</b></span>\n\n<span foreground='$purple'><b>This is irreversible — proceed at your own risk!</b></span>") == "true" ]]; then
-                  configurator_generic_dialog "RetroDECK Cooker: ☢️ Delete Everything and Fresh Install ☢️" "<span foreground='$purple'><b>Ok, if you're that sure, here we go!</b></span>"
-                  if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: ☢️ Delete Everything and Fresh Install ☢️" "<span foreground='$purple'><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground='$purple'><b>No backsies...OK?!</b></span>") == "true" ]]; then
-                    log w "☢️ Deleting all RetroDECK Data & Fresh Install"
+            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>This will delete ALL RetroDECK data!</b></span>\n\nAffected data includes:\n<span foreground='$purple'><b>• BIOS files</b></span>\n<span foreground='$purple'><b>• Borders</b></span>\n<span foreground='$purple'><b>• Media</b></span>\n<span foreground='$purple'><b>• Gamelists</b></span>\n<span foreground='$purple'><b>• Mods</b></span>\n<span foreground='$purple'><b>• ROMs</b></span>\n<span foreground='$purple'><b>• Saves</b></span>\n<span foreground='$purple'><b>• States</b></span>\n<span foreground='$purple'><b>• Screenshots</b></span>\n<span foreground='$purple'><b>• Texture packs</b></span>\n<span foreground='$purple'><b>• Themes</b></span>\n<span foreground='$purple'><b>• And more</b></span>\n\nAre you sure you want to continue?\n<span foreground='$purple'><b>Remember what happened last time!</b></span>") == "true" ]]; then
+              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>Are you absolutely sure?</b></span>\n\nThere is no going back from this process — everything will be permanently deleted.\n<span foreground='$purple'><b>Dust in the wind.</b></span>\n<span foreground='$purple'><b>Yesterday's omelette.</b></span>") == "true" ]]; then
+                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>But are you super DUPER sure?</b></span>\n\nWe REALLY want to make sure you understand what is about to happen.\n\nThe following folders and <b>ALL of their contents</b> will be <span foreground='$purple'><b>PERMANENTLY deleted like what happened to Rowan Skye!</b></span>:\n<span foreground='$purple'><b>• ~/retrodeck</b></span>\n<span foreground='$purple'><b>• ~/.var/app/net.retrodeck.retrodeck</b></span>\n\n<span foreground='$purple'><b>This is irreversible — proceed at your own risk!</b></span>") == "true" ]]; then
+                  configurator_generic_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Ok, if you're that sure, here we go!</b></span>"
+                  if [[ $(configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground='$purple'><b>No backsies...OK?!</b></span>") == "true" ]]; then
+                    log w "Deleting all RetroDECK Data & Fresh Install"
                     rm -rf /var
                     rm -rf "$HOME/retrodeck"
                     rm -rf "$rd_home_path"

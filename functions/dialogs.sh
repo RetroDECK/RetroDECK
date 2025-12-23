@@ -1043,7 +1043,7 @@ configurator_rebuild_esde_systems() {
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Rebuilding Folder Iconsets ⏳ In Progress ⏳"
+            --title "RetroDECK Configurator Utility - Rebuilding Folder Iconsets In Progress"
   fi
   configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
@@ -1134,7 +1134,7 @@ configurator_online_update_channel_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Change Update Branch" \
-    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> 🍲 branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
+    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1241,7 +1241,7 @@ configurator_usb_import_dialog() {
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - ⏳ USB Import In Progress ⏳"
+            --title "RetroDECK Configurator - USB Import In Progress"
             configurator_generic_dialog "RetroDECK Configurator - ➡️ USB Migration Tool ➡️" "The import process is complete!"
           fi
         else
@@ -1251,7 +1251,7 @@ configurator_usb_import_dialog() {
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator - ⏳ USB Import In Progress ⏳"
+          --title "RetroDECK Configurator - USB Import In Progress"
           configurator_generic_dialog "RetroDECK Configurator - ➡️ USB Migration Tool ➡️" "The import process is complete!"
         fi
       fi
@@ -1282,7 +1282,7 @@ configurator_iconset_toggle_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - Toggle Folder Iconsets ⏳ In Progress ⏳ "
+            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress "
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \

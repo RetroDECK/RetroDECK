@@ -72,7 +72,7 @@ check_for_version_update() {
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore Version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK - 🆕🍲 New Cooker Version Available 🍲🆕" \
+          --title "RetroDECK - 🆕New Cooker Version Available🆕" \
           --text="RetroDECK Cooker version:\n\n🆕 <span foreground='$blue'><b>$online_version</b></span> 🆕\nis now available.\n\nYou are on version:\n\n🔴 <span foreground='$blue'><b>$hard_version</b></span> 🔴.\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.\n\n<b>Would you like to update now?</b>")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked

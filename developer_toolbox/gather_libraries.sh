@@ -263,7 +263,7 @@ gather_libraries() {
     if [[ $copied_libs -gt 0 ]]; then
       log i "  📋 Copied libraries:"  "$logfile"
       echo -e "$copied_list" | while read -r line; do
-        [[ -n "$line" ]] && log i "    ✅ $line" "$logfile"
+        [[ -n "$line" ]] && log i "    $line" "$logfile"
       done
     fi
     
@@ -295,7 +295,7 @@ gather_libraries() {
         if [[ $copied_libs -gt 0 ]]; then
           echo "### Copied Libraries"
           echo -e "$copied_list" | while read -r line; do
-            [[ -n "$line" ]] && echo "- ✅ $line"
+            [[ -n "$line" ]] && echo "- $line"
           done
           echo ""
         fi
