@@ -517,7 +517,7 @@ configurator_portmaster_toggle_dialog() {
   if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
     --text="PortMaster is currently <span foreground='$purple'><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground='$purple'><b>Note: The installed games will still be visible.</b></span>"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -525,13 +525,13 @@ configurator_portmaster_toggle_dialog() {
       portmaster_show "false"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
     --text="PortMaster is currently <span foreground='$purple'><b>Hidden</b></span> in ES-DE. Do you want to show it?"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -539,7 +539,7 @@ configurator_portmaster_toggle_dialog() {
       portmaster_show "true"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - 🛶 PortMaster Visibility 🛶" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
     fi
   fi
@@ -1045,7 +1045,7 @@ configurator_rebuild_esde_systems() {
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator Utility - Rebuilding Folder Iconsets In Progress"
   fi
-  configurator_generic_dialog "RetroDECK Configurator - 📁 Rebuild System Folders 📁" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
+  configurator_generic_dialog "RetroDECK Configurator - Rebuild System Folders" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
 
@@ -1084,7 +1084,7 @@ configurator_version_history_dialog() {
 configurator_retrodeck_credits_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - 🏆 RetroDECK Team Credits 🏆" \
+  --title "RetroDECK Configurator - RetroDECK Team Credits" \
   --filename="$rd_core_files/reference_lists/retrodeck_credits.txt"
   configurator_about_retrodeck_dialog
 }
@@ -1134,7 +1134,7 @@ configurator_online_update_channel_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Change Update Branch" \
-    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> 💎 branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
+    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1207,7 +1207,7 @@ configurator_usb_import_dialog() {
         create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground='$purple'><b>No USB devices were found.</b></span>"
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "<span foreground='$purple'><b>No USB devices were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;
@@ -1256,7 +1256,7 @@ configurator_usb_import_dialog() {
         fi
       fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - ⬇️ USB Import ⬇️" "<span foreground='$purple'><b>No USB devices with an importable folder were found.</b></span>"
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "<span foreground='$purple'><b>No USB devices with an importable folder were found.</b></span>"
     fi
     configurator_usb_import_dialog
   ;;

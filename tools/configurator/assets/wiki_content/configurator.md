@@ -61,7 +61,7 @@ flatpak run net.retrodeck.retrodeck --configurator
 
 | **Choice**                         | **Action**                                                           | **Comments** |
 |------------------------------------|-----------------------------------------------------------------------|--------------|
-| RetroDECK: Team Credits 🏆        | View contributor credits for RetroDECK.                              |              |
+| RetroDECK: Team Credits        | View contributor credits for RetroDECK.                              |              |
 | RetroDECK: Version History 📖     | View the changelog and version history of RetroDECK.                 |              |
 
 ---
@@ -116,10 +116,10 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | Borders 🖼️                                | Enable or disable: Borders in supported components.                                                              |              |
 | PortMaster in ES-DE 🧭                    | Enable or disable: PortMaster entry in ES-DE.                                                                    |              |
 | Quick Resume ⚡                           | Enable or disable: Automatic save/load of game states in supported components.                                   |              |
-| RetroAchievements 🏆                      | Logging in/out of RetroAchievements in supported components.                                                     |              |
+| RetroAchievements                      | Logging in/out of RetroAchievements in supported components.                                                     |              |
 | RetroAchievements: Hardcore Mode 💀       | Enable or disable: Hardcore mode for RetroAchievements (no cheats, rewind, or save states).                      |              |
 | RetroDECK Folder Iconset              | Enable or disable: RetroDECK folder iconset.                                                                     |              |
-| Rewind ⏪                                 | Enable or disable: Rewind functionality in supported components.                                                 |              |
+| Rewind                                 | Enable or disable: Rewind functionality in supported components.                                                 |              |
 | Savestate Auto Load ⏱️                    | Enable or disable: Automatic load of the last saved state in supported components.                               |              |
 | Savestate on Exit 💾                      | Enable or disable: Automatic save on exit in supported components.                                               |              |
 | Swap A/B and X/Y Buttons 🟧              | Enable or disable: Swapped A/B and X/Y button layout in supported components.                                   |              |
@@ -133,9 +133,9 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | **Choice**                                 | **Action**                                                                                                                           | **Comments** |
 |--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|--------------|
 | **Add RetroDECK to Steam ➕**               | Integrate RetroDECK itself into your Steam library and enable Steam Input support.                                                    |              |
-| **Automatic Steam Synchronization 🔄**      | Enable or disable automatic synchronization of all marked 🌟 Favorites 🌟 from ES-DE to your Steam library.                           |              |
-| **Manual Steam Synchronization 🖱️**        | Manually synchronize all marked 🌟 Favorites 🌟 from ES-DE to your Steam library.                                                      |              |
-| **Remove Synchronized Favorites 🗑️**        | Completely remove all previously synchronized 🌟 Favorites 🌟 from your Steam library.                                                 |              |
+| **Automatic Steam Synchronization 🔄**      | Enable or disable automatic synchronization of all marked Favorites from ES-DE to your Steam library.                           |              |
+| **Manual Steam Synchronization 🖱️**        | Manually synchronize all marked Favorites from ES-DE to your Steam library.                                                      |              |
+| **Remove Synchronized Favorites 🗑️**        | Completely remove all previously synchronized Favorites from your Steam library.                                                 |              |
 
 
 ---
