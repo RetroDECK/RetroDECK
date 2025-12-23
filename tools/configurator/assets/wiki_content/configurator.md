@@ -118,7 +118,7 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | Quick Resume ⚡                           | Enable or disable: Automatic save/load of game states in supported components.                                   |              |
 | RetroAchievements 🏆                      | Logging in/out of RetroAchievements in supported components.                                                     |              |
 | RetroAchievements: Hardcore Mode 💀       | Enable or disable: Hardcore mode for RetroAchievements (no cheats, rewind, or save states).                      |              |
-| RetroDECK Folder Iconset 🎨              | Enable or disable: RetroDECK folder iconset.                                                                     |              |
+| RetroDECK Folder Iconset              | Enable or disable: RetroDECK folder iconset.                                                                     |              |
 | Rewind ⏪                                 | Enable or disable: Rewind functionality in supported components.                                                 |              |
 | Savestate Auto Load ⏱️                    | Enable or disable: Automatic load of the last saved state in supported components.                               |              |
 | Savestate on Exit 💾                      | Enable or disable: Automatic save on exit in supported components.                                               |              |

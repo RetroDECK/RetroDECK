@@ -1234,7 +1234,7 @@ configurator_usb_import_dialog() {
 
       if [[ ! -z "$choice" ]]; then
         if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_path") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$bios_path") == "false" ]]; then
-          if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - ➡️ USB Migration Tool ➡️" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
+          if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
             rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_path"
             rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_path"
@@ -1242,7 +1242,7 @@ configurator_usb_import_dialog() {
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator - USB Import In Progress"
-            configurator_generic_dialog "RetroDECK Configurator - ➡️ USB Migration Tool ➡️" "The import process is complete!"
+            configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
           fi
         else
           (
@@ -1252,7 +1252,7 @@ configurator_usb_import_dialog() {
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Configurator - USB Import In Progress"
-          configurator_generic_dialog "RetroDECK Configurator - ➡️ USB Migration Tool ➡️" "The import process is complete!"
+          configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
         fi
       fi
     else
@@ -1272,7 +1272,7 @@ configurator_iconset_toggle_dialog() {
   if [[ ! $(get_setting_value "$rd_conf" "iconset" "retrodeck" "options") == "false" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
+    --title "RetroDECK Configurator - Folder Iconsets" \
     --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
     
     if [ $? == 0 ] # User clicked "Yes"
@@ -1285,13 +1285,13 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress "
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
+      --title "RetroDECK Configurator - Folder Iconsets" \
       --text="RetroDECK folder icons are now <span foreground='$purple'><b>Disabled</b></span>."
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - 🎨 Folder Iconsets 🎨" \
+    --title "RetroDECK Configurator - Folder Iconsets" \
     --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable them?"
 
     if [ $? == 0 ] # User clicked "Yes"
@@ -1304,7 +1304,7 @@ configurator_iconset_toggle_dialog() {
         --title "RetroDECK Configurator Utility - Toggle Folder Iconsets - In Progress"
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - 🎨 Toggle Folder Iconsets 🎨" \
+      --title "RetroDECK Configurator - Toggle Folder Iconsets" \
       --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
     fi
   fi
