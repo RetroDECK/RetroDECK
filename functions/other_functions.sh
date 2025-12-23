@@ -812,7 +812,7 @@ finit() {
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK: Installing 📀" \
+    --title "RetroDECK: Installing" \
     --text="RetroDECK is completing its initial setup.\n\n\Please check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>"
 
   create_lock
@@ -823,7 +823,7 @@ finit() {
     --ok-label="Start RetroDECK" \
     --cancel-label="Return to Desktop" \
     --title "RetroDECK Initial Setup - Complete" \
-    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span> 🖥️.\n\nPlace your 🕹️ <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your ⚙️ <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\n❤️ RetroDECK Team ❤️"
+    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> 🎮 or <span foreground='$purple'><b>Return to Desktop</b></span>.\n\nPlace your <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\nRetroDECK Team"
 
   local rc=$?
   if [[ $rc == "1" ]]; then

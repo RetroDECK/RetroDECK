@@ -124,7 +124,7 @@ The **Reset Components** menu allows users to restore **specific components**, m
 | Savestate on Exit 💾                      | Enable or disable: Automatic save on exit in supported components.                                               |              |
 | Swap A/B and X/Y Buttons 🟧              | Enable or disable: Swapped A/B and X/Y button layout in supported components.                                   |              |
 | Universal Dynamic Input Textures 🎮       | Enable or disable: Universal Dynamic Input Textures in supported components.                                     |              |
-| Widescreen 🖥️                             | Enable or disable: Widescreen mode in supported components.                                                      |              |
+| Widescreen                             | Enable or disable: Widescreen mode in supported components.                                                      |              |
 
 ---
 
