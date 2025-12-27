@@ -575,7 +575,7 @@ backup_retrodeck_userdata() {
         ls -t *_${backup_type}.tar.gz | tail -n +4 | xargs -r rm
 
         final_size=$(du -h "$backup_file" | cut -f1)
-        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup to <span foreground='$purple'><b>$backup_file</b></span> was successful, final size is <span foreground='$purple'><b>$final_size</b></span>.\n\nThe backups have been rotated, keeping the last 3 of the <span foreground='$purple'><b>$backup_type</b></span> backup type."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "Backup <span foreground='$purple'><b>$backup_file</b></span> completed successfully\n\nSize: <span foreground='$purple'><b>$final_size</b></span>\n\nRotated backups: last 3 <span foreground='$purple'><b>$backup_type</b></span>."
         log i "Backup completed successfully: $backup_file (Size: $final_size)"
         log i "Older backups rotated, keeping latest 3 of type $backup_type"
 
@@ -583,7 +583,7 @@ backup_retrodeck_userdata() {
           rm -f "$backup_log_file"
         fi
       else
-        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "Something went wrong with the backup process. Please check the log <span foreground='$purple'><b>$backup_log_file</b></span> for more information."
+        configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "Something went wrong during the backup.\n\nPlease review the log <span foreground='$purple'><b>$backup_log_file</b></span> for details."
         log i "Error: Backup failed"
         return 1
       fi
