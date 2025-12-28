@@ -215,7 +215,6 @@ else # If the config file is existing i just read the variables
     if [[ -n "$new_home_path" ]]; then
       set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
       conf_read
-      prepare_component "postmove" "framework"
       prepare_component "postmove" "all"
       conf_write
     else
