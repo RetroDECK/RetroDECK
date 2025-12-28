@@ -318,8 +318,6 @@ if [[ $update_check == "true" ]]; then
   log i "You're running the latest version"
 fi
 
-prepare_component "startup" "all"
-
 # Normal Startup
 start_retrodeck
 # After everything is closed we run the quit function
