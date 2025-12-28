@@ -615,6 +615,7 @@ prepare_component() {
   # The actions currently include "reset" and "postmove"
   # The "reset" action will initialize the component
   # The "postmove" action will update the component settings after one or more RetroDECK folders were moved
+  # The "startup" action will run any actions that are required during RetroDECK startup
   # An component can be called by name, by parent folder name in the $XDG_CONFIG_HOME root or use the option "all" to perform the action on all components equally
   # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
@@ -627,7 +628,6 @@ prepare_component() {
   action="$1"
   component="$2"
   call_source="${3:-}"
-  component_found="false"
 
   if [[ -z "$component" ]]; then
     echo "No components or action specified. Exiting."
