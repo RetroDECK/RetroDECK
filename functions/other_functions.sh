@@ -92,7 +92,7 @@ move() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Move in Progress" \
-  --text="Moving directory: <span foreground='$purple'><b>$(basename "$1")</b></span>\n\n To a new location: <span foreground='$purple'><b>$2</b></span>.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
+  --text="Moving directory:\n<span foreground='$purple'><b>$(basename "$1")</b></span>\n\nTo its new location:\n<span foreground='$purple'><b>$2</b></span>.\n\n<span foreground='$purple'><b>Please wait while the process finishes</b></span>.\nThis might take a while..."
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
