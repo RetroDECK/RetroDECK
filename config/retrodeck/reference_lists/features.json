@@ -334,7 +334,7 @@
     },
     "borders": {
       "name": "Borders",
-      "desc": "Enable or disable: Borders in supported components."
+      "desc": "Enable or disable: Borders/Bezels in supported components."
     },
     "discord_rich_presence": {
       "name": "Discord Rich Presence",
