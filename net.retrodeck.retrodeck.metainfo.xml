@@ -95,10 +95,15 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
-    <release version="RC1-0.10.0b" date="2025-12-31">
-      <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.10.0b</url>
+    <release version="RC-0.10.0b" date="2025-12-31">
+      <url type="Github: 0.10.0b">
+        https://github.com/RetroDECK/RetroDECK/releases/tag/0.10.0b
+      </url>
+      <url type="Full Patch Notes: 0.10.0b">
+        https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.0b/
+      </url>
       <description>
-        <p>RetroDECK 0.10.0b is a major milestone release featuring a complete internalrebuild of the platform. While much of this work happens behind the scenes, it significantly improves stability, maintainability, security, and future expandability.</p>
+        <p>RetroDECK 0.10.0b is a major milestone release featuring a complete rebuild of the platform. While much of this work happens behind the scenes, it significantly improves maintainability and future expandability.</p>
         <p>
           Important:
         </p>
