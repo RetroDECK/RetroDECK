@@ -95,7 +95,7 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
-    <release version="RC-0.10.0b" date="2025-12-31">
+    <release version="PRE-0.10.0b" date="2025-12-31">
       <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.0b/</url>
       <description>
         <p>RetroDECK 0.10.0b is a major milestone release featuring a complete rebuild of the platform. While much of this work happens behind the scenes, it significantly improves maintainability and future expandability.</p>
