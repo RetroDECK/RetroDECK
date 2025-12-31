@@ -1,6 +1,15 @@
-=====================================================================
-                        RETRODECK TEAM
-=====================================================================
+=========================================================================
+
+
+ ____      _             ____  _____ ____ _  __  _____
+|  _ \ ___| |_ _ __ ___ |  _ \| ____/ ___| |/ / |_   _|__  __ _ _ __ ___
+| |_) / _ \ __| '__/ _ \| | | |  _|| |   | ' /    | |/ _ \/ _` | '_ ` _ \
+|  _ <  __/ |_| | | (_) | |_| | |__| |___| . \    | |  __/ (_| | | | | | |
+|_| \_\___|\__|_|  \___/|____/|_____\____|_|\_\   |_|\___|\__,_|_| |_| |_|
+
+
+
+=========================================================================
 
 ▶ XARGONWAN
    • Founder – RetroDECK & Co‑founder of AmberELEC
@@ -34,13 +43,13 @@
    • Feature Requests & Issue Handling
    • Testing, Art & Assets, Wiki Documentation
 
-=====================================================================
+=========================================================================
 
 
 
-=====================================================================
+=========================================================================
                          SPECIAL THANKS
-=====================================================================
+=========================================================================
 
 We are deeply grateful to everyone who powers RetroDECK:
 
@@ -53,13 +62,13 @@ We are deeply grateful to everyone who powers RetroDECK:
 
 Your collective effort makes RetroDECK possible. Thank you!
 
-=====================================================================
+=========================================================================
 
 
 
-=====================================================================
-                        🎓 RETRODECK ALUMNI 🎓
-=====================================================================
+=========================================================================
+                        RETRODECK ALUMNI
+=========================================================================
 
 RetroDECK Alumni are former members of the RetroDECK Team that have moved on to other pastures.
 
@@ -72,15 +81,15 @@ RetroDECK Alumni are former members of the RetroDECK Team that have moved on to 
 ▶ MonkeyX
    • Did Godot and other improvements.
 
-=====================================================================
+=========================================================================
 
 
 
-=====================================================================
-                  🏝️ RETRODECK PAST HELPERS 🏝️
-=====================================================================
+=========================================================================
+                    RETRODECK PAST HELPERS
+=========================================================================
 
-People that have helped the project in the past and are worthy of recognition.
+Contributors that have helped the project in the past and are worthy of recognition.
 
 ▶ Niroku / Atari
    • Helped with community management during in the early days of RetroDECK.
@@ -94,4 +103,40 @@ People that have helped the project in the past and are worthy of recognition.
 ▶ Draco
    • Helped with Server Administration in the early days. 
 
-=====================================================================
+=========================================================================
+
+
+
+=========================================================================
+                    RETRODECK LOGO HELPERS
+=========================================================================
+
+The following contributors played important roles in the development of the first
+and second iterations of the RetroDECK logo, including work on
+color schemes, iconography, SteamGridDB assets, and overall conceptual design:
+
+▶ Pixelguin
+▶ antfortytwo
+▶ MorGuux
+▶ Weestuarty
+▶ Víctor R
+
+=========================================================================
+
+
+
+=========================================================================
+                      ADDITIONAL CREDITS / LICENCES
+=========================================================================
+
+
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-additional/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-alumni/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-art/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-collaborators/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-team/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/donations-licenses/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/easter-egg-splashes/
+▶ https://github.com/RetroDECK/RetroDECK/blob/main/other_licenses.txt
+▶ https://github.com/RetroDECK/RetroDECK/blob/main/LICENSE
+
