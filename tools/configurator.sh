@@ -218,8 +218,8 @@ configurator_open_component_dialog() {
   ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Gathering Component Information" \
-      --text="Gathering RetroDECK component information.\n\nPlease wait..."
+      --title "RetroDECK Configurator - Open Component" \
+      --text="The RetroDECK Component List is currently open.\n\n<span foreground='$purple'><b>To continue, open a component, close the active one, or exit the list.</b></span>"
 }
 
 configurator_tools_dialog() {
@@ -345,8 +345,8 @@ configurator_reset_dialog() {
   ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Gathering Component Information" \
-      --text="Gathering RetroDECK component information.\n\nPlease wait..."
+      --title "RetroDECK Configurator - Reset Component" \
+      --text="The RetroDECK Component List is currently open.\n\n<span foreground='$purple'><b>To continue, reset one or more components or exit the list.</b></span>"
 }
 
 configurator_about_retrodeck_dialog() {
