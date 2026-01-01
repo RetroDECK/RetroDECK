@@ -280,7 +280,25 @@ if [[ "$NO_BUILD" != "true" ]]; then
     # Create the Flatpak bundle
     echo ""
     echo "Creating the Flatpak bundle..."
-    flatpak build-bundle "$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
+    if ! flatpak build-bundle "$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck; then
+        echo "Error: Failed to create Flatpak bundle ($OUT_FOLDER/$FLATPAK_BUNDLE_NAME)" >&2
+        echo "Listing output folder for debugging:"
+        ls -la "$OUT_FOLDER" || true
+        echo "Disk usage info:"
+        df -h
+        exit 1
+    fi
+
+    # Verify bundle exists and is not empty
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" || ! -s "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then
+        echo "Error: Flatpak bundle was not created or is empty: $OUT_FOLDER/$FLATPAK_BUNDLE_NAME" >&2
+        echo "Listing output folder for debugging:"
+        ls -la "$OUT_FOLDER" || true
+        echo "Disk usage info:"
+        df -h
+        exit 1
+    fi
+
     sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
 
     # Generate final artifact archive
