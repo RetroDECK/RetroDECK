@@ -324,7 +324,7 @@ if [[ "$CICD" == "true" && "$NO_BUILD" != "true" ]]; then
     echo "  Cleanup for CI/CD to free disk space"
     echo "---------------------------------------"
 
-    rm -rf "$BUILD_FOLDER_NAME" "$REPO_FOLDER_NAME" "$ROOT_FOLDER_TMP"
+    rm -rf "$BUILD_FOLDER_NAME" "$REPO_FOLDER_NAME" "$ROOT_FOLDER_TMP" "/tmp/retrodeck-build-"*
     rm -rf "$ROOT_FOLDER/.flatpak-builder"
     df -h
 fi
