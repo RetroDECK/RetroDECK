@@ -126,6 +126,62 @@ color schemes, iconography, SteamGridDB assets, and overall conceptual design:
 
 
 =========================================================================
+                    RETRODECK ES-DE THEME
+=========================================================================
+
+
+The RetroDECK ES-DE theme is a remix of the LaunchBox Mini Banner theme created by:
+Weestuarty, DerSchlachter, and Dan Patrick.
+
+Adapted specifically for RetroDECK by:
+Weestuarty
+
+
+
+=========================================================================
+
+
+
+=========================================================================
+                    RetroDECK Folder Icons
+=========================================================================
+
+▶ Lahrs Folder Iconset - Main
+
+Team Member Lahrs made this Iconset for RetroDECK
+Some of these icons are based on the original work of Dan Patrick,
+for which Lahrs obtained permission to incorporate and adapt.
+
+
+
+=========================================================================
+
+
+
+=========================================================================
+            RetroDECK Mascot: Reiki the Cyber Shark
+=========================================================================
+
+
+▶ Artwork & Mascot Design - Tyson Tan
+
+We are honored to collaborate with a highly regarded FOSS artist
+who has generously contributed his time and passion to the RetroDECK Mascot.
+
+Tyson Tan
+
+Check out the portfolio: https://tysontan.com/
+
+
+▶ Assistance with the First Iteration of the VRoid Mascot
+
+Initial development support for the VRoid mascot was provided by @﹒⪩⪨﹒moth﹒⪩⪨﹒
+
+=========================================================================
+
+
+
+=========================================================================
                       ADDITIONAL CREDITS / LICENCES
 =========================================================================
 
@@ -139,4 +195,7 @@ color schemes, iconography, SteamGridDB assets, and overall conceptual design:
 ▶ https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/easter-egg-splashes/
 ▶ https://github.com/RetroDECK/RetroDECK/blob/main/other_licenses.txt
 ▶ https://github.com/RetroDECK/RetroDECK/blob/main/LICENSE
+▶ https://gitlab.com/es-de/themes/themes-list
 
+
+=========================================================================
