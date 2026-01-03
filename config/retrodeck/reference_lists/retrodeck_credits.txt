@@ -136,8 +136,6 @@ Weestuarty, DerSchlachter, and Dan Patrick.
 Adapted specifically for RetroDECK by:
 Weestuarty
 
-
-
 =========================================================================
 
 
@@ -151,8 +149,6 @@ Weestuarty
 Team Member Lahrs made this Iconset for RetroDECK
 Some of these icons are based on the original work of Dan Patrick,
 for which Lahrs obtained permission to incorporate and adapt.
-
-
 
 =========================================================================
 
@@ -196,6 +192,5 @@ Initial development support for the VRoid mascot was provided by @﹒⪩⪨﹒mo
 ▶ https://github.com/RetroDECK/RetroDECK/blob/main/other_licenses.txt
 ▶ https://github.com/RetroDECK/RetroDECK/blob/main/LICENSE
 ▶ https://gitlab.com/es-de/themes/themes-list
-
 
 =========================================================================
