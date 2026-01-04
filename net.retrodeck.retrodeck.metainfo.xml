@@ -60,11 +60,11 @@
     <ul>
       <li>Wide Emulator Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar, and many more. Supporting an extensive range of classic and modern systems.</li>
       <li>Multi-Emulator Platforms: Unified, streamlined emulation powered by robust frameworks including RetroArch and MAME.</li>
-      <li>Native Game Engines and Clients:</strong> Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO, and GZDoom.</li>
+      <li>Native Game Engines and Clients: Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO, and GZDoom.</li>
       <li>Custom Launch Wrappers: Effortlessly run complex Doom mods using RetroDECK’s streamlined .doom format, along with dedicated .bor support for OpenBOR.</li>
       <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your game library.</li>
       <li>PortMaster Integration: Easily install and manage community-supported Linux game ports.</li>
-      <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more—all from a single interface.</li>
+      <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more-all from a single interface.</li>
       <li>RetroDECK Framework: A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
       <li>RetroDECK RetroENGINE: A headless game runner designed for advanced users and developers, enabling fast and direct game launching.</li>
       <li>Steam Input Support: Preconfigured controller layouts, radial menus, and system-specific hotkeys when integrated with Steam.</li>
