@@ -49,25 +49,26 @@
       Why Choose RetroDECK?
     </p>
     <ul>
-      <li>True All-in-One Solution all Components: Emulators, Multi-Emulators, Engines, Ports, Tools, Clients and Frontend are all included and pre-configured.</li>
-      <li>Zero System Changes: Enjoy the benefits of an retro gaming-focused OS without replacing or modifying your operating system.</li>
-      <li>Effortless Maintenance: Install, update, and remove RetroDECK easily through your software center like any other Flatpak app.</li>
-      <li>Designed for You: Optimized for Linux handhelds, gaming PCs and living-room setups, with excellent gamepad and Steam Input support.</li>
+      <li>True All-in-One Solution: Emulators, multi-emulator frameworks, game engines, ports, tools, clients, and the frontend are all included and preconfigured.</li>
+      <li>Zero System Changes: Experience a retro gaming–focused environment without replacing or modifying your existing operating system.</li>
+      <li>Effortless Maintenance: Install, update, and remove RetroDECK directly from your software center, just like any other Flatpak application.</li>
+      <li>Designed for You: Optimized for Linux handhelds, gaming PCs, and living-room setups, with excellent gamepad support and deep Steam Input integration.</li>
     </ul>
     <p>
       What is Included?
     </p>
     <ul>
-      <li>Wide Emulator Coverage: Includes Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more! Supporting a vast range of classic systems.</li>
-      <li>Multi-Emulator Platforms: Unified emulation through powerful frameworks like RetroArch and MAME.</li>
-      <li>Native Game Engines and Clients: Play engine-based titles using Solarus, OpenBOR, and GZDoom.</li>
-      <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your games.</li>
-      <li>PortMaster Integration: Install and manage community-supported Linux game port with ease.</li>
-      <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more-all from one place.</li>
-      <li>RetroDECK Framework: A unique component-based backend that isolates and layers software for maximum stability and flexibility.</li>
-      <li>RetroDECK RetroENGINE: A headless game runner for advanced users and developers, enabling fast, direct game launching.</li>
-      <li>Steam Input Support: Preconfigured controller layouts, radial menus, and system-specific hotkeys when added to Steam.</li>
-      <li>Steam Library Sync: Automatically add and sync favorite games to Steam using the built-in Steam ROM Manager integration.</li>
+      <li>Wide Emulator Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar, and many more. Supporting an extensive range of classic and modern systems.</li>
+      <li>Multi-Emulator Platforms: Unified, streamlined emulation powered by robust frameworks including RetroArch and MAME.</li>
+      <li>Native Game Engines and Clients:</strong> Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO, and GZDoom.</li>
+      <li>Custom Launch Wrappers: Effortlessly run complex Doom mods using RetroDECK’s streamlined .doom format, along with dedicated .bor support for OpenBOR.</li>
+      <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your game library.</li>
+      <li>PortMaster Integration: Easily install and manage community-supported Linux game ports.</li>
+      <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more—all from a single interface.</li>
+      <li>RetroDECK Framework: A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
+      <li>RetroDECK RetroENGINE: A headless game runner designed for advanced users and developers, enabling fast and direct game launching.</li>
+      <li>Steam Input Support: Preconfigured controller layouts, radial menus, and system-specific hotkeys when integrated with Steam.</li>
+      <li>Steam Library Sync: Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
     </ul>
     <p>
       Built for Power Users - Friendly for Everyone
