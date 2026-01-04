@@ -140,13 +140,38 @@ else
         fi
     fi
 
-    release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq "[.[] | select(.name | test(\"$release_type\"))] | sort_by(.published_at) | reverse | .[0]")
-    release_name=$(echo "$release_json" | jq -r '.name')
-    release_tag=$(echo "$release_json" | jq -r '.tag_name')
-    release_url=$(echo "$release_json" | jq -r '.html_url')
-    release_published_at=$(echo "$release_json" | jq -r '.published_at')
+    # Select release depending on target (main or cooker)
+    if [[ "$release_type" == "main" ]]; then
+        # Prefer the release tagged 'latest'
+        REQUESTED_TAG="latest"
+        release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/tags/latest" || true)
+        release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
 
-    if [[ -z "$release_json" || "$release_json" == "null" ]]; then
+        if [[ -z "$release_tag" ]]; then
+            echo "No 'latest' tag found in RetroDECK/components. Falling back to newest non-draft release."
+            REQUESTED_TAG="newest"
+            release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.draft==false)] | sort_by(.published_at) | reverse | .[0]')
+            release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
+        fi
+    else
+        # Cooker: try 'latest-cooker' first, otherwise pick newest release excluding tag 'latest'
+        REQUESTED_TAG="latest-cooker"
+        release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/tags/latest-cooker" || true)
+        release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
+
+        if [[ -z "$release_tag" ]]; then
+            echo "No 'latest-cooker' tag found. Selecting newest release excluding tag 'latest'."
+            REQUESTED_TAG="newest"
+            release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.draft==false and .tag_name != "latest")] | sort_by(.published_at) | reverse | .[0]')
+            release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
+        fi
+    fi
+
+    release_name=$(echo "$release_json" | jq -r '.name // empty')
+    release_url=$(echo "$release_json" | jq -r '.html_url // empty')
+    release_published_at=$(echo "$release_json" | jq -r '.published_at // empty')
+
+    if [[ -z "$release_tag" ]]; then
         echo "No suitable release found in RetroDECK/components."
         exit 1
     fi
@@ -164,12 +189,8 @@ else
     echo "Downloading $release_type components..."
     echo ""
 
-    # Output version info to components/components-version
-    {
-        echo "name: $release_name"
-        echo "tag: $release_tag"
-        echo "url: $release_url"
-    } > "$COMPONENTS_DIR/components-version"
+    # Output version info to components/components-version (single-line tag for CI use)
+    echo "$release_tag" > "$COMPONENTS_DIR/components-version"
 
     echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
     echo "Downloading $name..."

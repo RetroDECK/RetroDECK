@@ -245,14 +245,27 @@ jobs:
           # Add components version information at the top
           if [ -f retrodeck-artifacts/components/components-version ]; then
             COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+            if [ -f retrodeck-artifacts/components/components-release-url ]; then
+              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
             echo "## Components Information" >> $RELEASE_BODY_FILE
-            echo "**Components Version:** [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION)" >> $RELEASE_BODY_FILE
-            echo "" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
+
+
+
           elif [ -f components/components-version ]; then
             COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f components/components-release-url ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
             echo "## Components Information" >> $RELEASE_BODY_FILE
-            echo "**Components Version:** [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION)" >> $RELEASE_BODY_FILE
-            echo "" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
+
+
           fi
 
           echo "**Cooker Builds** are for testers only – see [How‑to: Start Testing](https://retrodeck.readthedocs.io/en/latest/wiki_development/testing/retrodeck-testing/)." >> $RELEASE_BODY_FILE
@@ -336,10 +349,23 @@ jobs:
           
           # Read components version if available
           COMPONENTS_VERSION=""
+          COMPONENTS_URL=""
+          REQUESTED_TAG=""
           if [ -f "retrodeck-artifacts/components/components-version" ]; then
             COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+            if [ -f "retrodeck-artifacts/components/components-release-url" ]; then
+              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
           elif [ -f "components/components-version" ]; then
             COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f "components/components-release-url" ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
+
           fi
           
           # Create job summary
@@ -352,7 +378,12 @@ jobs:
           echo "| **Repository** | \`${{ env.REPO_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | \`${{ env.BRANCH_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
           if [ -n "$COMPONENTS_VERSION" ]; then
-            echo "| **Components Version** | [\`$COMPONENTS_VERSION\`](https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION) |" >> $GITHUB_STEP_SUMMARY
+            if [ -n "$COMPONENTS_URL" ]; then
+              echo "| **Components Version** | [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL) |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| **Components Version** | \`$COMPONENTS_VERSION\` |" >> $GITHUB_STEP_SUMMARY
+            fi
+
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Direct Link:** $RELEASE_URL" >> $GITHUB_STEP_SUMMARY
