@@ -30,6 +30,12 @@ RetroDECK*Artifact.tar.gz
 flathub.json
 version
 .shellcheckrc
+out
+release-body.md
+components
+net.retrodeck.retrodeck.reworked.yml
+temp-retrodeck
+temp-components
 
 #   Components artifacts   #
 ############################
@@ -42,3 +48,4 @@ __pycache__
 
 CMakeFiles
 build
+*.afphoto~lock~

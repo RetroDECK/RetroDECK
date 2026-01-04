@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - cooker*
-      - feat*
-      - branch/cooker*
     paths:
       - '.github/workflows/**'
       - 'automation_tools/**'
@@ -15,16 +13,14 @@ on:
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
       - 'tools/**'
-  pull_request_target:
-    types: [opened, synchronize, reopened]
-    branches:
-      - cooker*
-      - feat/*
+  # Disabled because is dangerous to execute outside code unsupervised
+  # pull_request_target:
+  #   types: [opened, synchronize, reopened]
+  #   branches:
+  #     - cooker*
+  #     - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
-    branches:
-      - cooker*
-      - feat/*
 
   workflow_dispatch:
 
@@ -37,18 +33,15 @@ jobs:
   # Build RetroDECK Job
   Build_RetroDECK:
     runs-on: retrodeck
+    #runs-on: ubuntu-latest
     outputs:
-      TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
-      MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
-      
+      VERSION: ${{ steps.build-retrodeck.outputs.VERSION }}
+
     steps:
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
-          sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-          sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-        continue-on-error: true
+          if [ -d "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/"*; fi
 
       # Clone Repository
       - name: Clone RetroDECK repo
@@ -66,30 +59,93 @@ jobs:
           submodules: true
 
       # Because we're using pull_request_target, we need to merge the PR code
-      - name: Merge PR Code
+      - name: Merge and Validate PR Code
         if: github.event_name == 'pull_request_target'
         run: |
+          echo "Fetching PR..."
           git fetch origin pull/${{ github.event.pull_request.number }}/head:pr
           git merge --no-ff pr || {
-            echo "Merge conflict detected. Please resolve conflicts manually.";
+            echo "Merge conflict detected.";
             exit 1;
           }
-      # In case of PR we merged the code so we want to check that is consistent
-      - name: Validate Merged Code
-        if: github.event_name == 'pull_request_target'
-        run: |
-          echo "Branch after merge:"
+          echo "Validation:"
           git branch
-          echo "Last commit:"
           git log -1 --oneline
 
-      # Install Dependencies
-      - name: Install dependencies
-        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
+      # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
+      - name: "Build Flatpak"
+        id: build-retrodeck
+        run: |
+          # git config --global credential.helper store
+          # echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            /bin/bash ./retrodeck_builder.sh --cicd
+          else # if cooker/feat branch
+            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
+          fi
 
-      # Generate Build ID
-      - name: Generate cooker build ID
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
+      # - name: Generate a token for Rekku
+      #   id: generate-rekku-token
+      #   uses: actions/create-github-app-token@v1
+      #   with:
+      #     app-id: ${{ vars.REKKU_APP_ID }}
+      #     private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+      #     repositories: "RetroDECK,Cooker"
+      #     owner: "RetroDECK"
+
+      - name: Split artifacts
+        run: |
+          for file in "${OUT_FOLDER}"/*; do
+            if [ -f "$file" ]; then
+              size_bytes=$(stat -c%s "$file")
+              if [ "$size_bytes" -ge $((2 * 1024 * 1024 * 1024)) ]; then
+                echo "Compressing and splitting $file (size: $size_bytes bytes) with 7z..."
+
+                # 7z automatically creates .001, .002, ... when using -v option
+                7z a -t7z -v1900m "${file}.7z" "$file"
+
+                # Remove original file if desired
+                rm -f "$file"
+              fi
+            fi
+          done
+
+      # Upload artifacts for other jobs
+      # OUT_FOLDER is initialized in the retrodeck_builder.sh script
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrodeck-artifacts
+          include-hidden-files: true
+          path: |
+            ${{ env.OUT_FOLDER }}/*
+            components/components_version_list.md
+
+  GitHub-publish:
+    runs-on: ubuntu-latest
+    needs: [Build_RetroDECK]
+    env:
+      VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
+    steps:
+
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
+      # Clone Repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+
+      - name: Generate a token for Rekku
+        id: generate-rekku-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.REKKU_APP_ID }}
+          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+          repositories: "RetroDECK,Cooker,Artifacts"
+          owner: "RetroDECK"
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4.1.8
 
       # Getting branch name, this needs as PR should be managed in a different way
       - name: Get Branch Name
@@ -101,19 +157,15 @@ jobs:
           fi
           echo "Branch name: $branch_name"
           echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV      
-        
+      
       # Generates a version tag based on the event type (main branch, PR, or cooker) and sets it as output.
       - name: Generate Version Tag
         id: version-tag
         run: |
-          # Source the version extractor script and fetch the actual version, including the build ID
-          source automation_tools/version_extractor.sh
-          VERSION="$(fetch_actual_version)"
-          echo "VERSION=$VERSION"
 
-          # Ensure the actual version was successfully extracted
+          # Ensure the actual version was successfully passed from the previous job
           if [[ -z "$VERSION" ]]; then
-            echo "[ERROR] Failed to extract the actual version."
+            echo "[ERROR] Failed to read the VERSION from GitHub environmental variables."
             exit 1
           fi
 
@@ -135,191 +187,131 @@ jobs:
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
           echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_OUTPUT
 
-      # backing up manifest in case download fails and hashes must be recalculated
-      - name: Manifest backup
-        run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
-
-      - name: Run pre-build automation tasks
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
-
-      - name: "Adding flatpak portal for automated updates (Cooker only)"
-        if: github.ref != 'refs/heads/main'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
-
       # Temporary disabled as the script is broken
       # - name: "Updating release notes in metainfo"
       #   run: "automation_tools/metainfo_management.sh"
-
-      - name: "[DEBUG] Outputting manifest"
-        run: cat net.retrodeck.retrodeck.yml
 
       # Get Commits Since Last Published Release (Cooker only)
       - name: Get commits since last published release
         id: get-commits
         if: github.ref != 'refs/heads/main'
         run: |
-          # Get the latest published release tag
-          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
+          # If this is a Pull Request
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            echo "[INFO] Pull Request detected."
 
-          if [ -z "$LATEST_TAG" ]; then
-            echo "[INFO] No previous release found. Using all commits."
-            COMMITS=$(git log HEAD --pretty=format:"- %s")
+            BASE_REF=${GITHUB_BASE_REF}
+            echo "[INFO] Base ref: $BASE_REF"
+
+            git fetch origin $BASE_REF
+            git log origin/$BASE_REF..HEAD --pretty=format:"- %s" > commits_list.txt
+            cp commits_list.txt commits_since_main.txt
           else
-            echo "[INFO] Latest published release tag: $LATEST_TAG"
-            COMMITS=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s")
+            # Get the latest published release tag
+            LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
+          
+            if [ -z "$LATEST_TAG" ]; then
+              echo "[INFO] No previous tag found."
+              echo "- No previous release." > commits_list.txt
+            else
+              echo "[INFO] Latest tag: $LATEST_TAG"
+              git log ${LATEST_TAG}..HEAD --pretty=format:"- %s" > commits_list.txt
+            fi
+
+            # Get the latest tag on the main branch
+            LATEST_MAIN_REF=$(git tag --merged origin/main --sort=-creatordate | head -n 1 || echo "")
+          
+            if [ -z "$LATEST_MAIN_REF" ]; then
+              echo "[INFO] No tag found on main branch."
+              echo "- No main release found." > commits_since_main.txt
+            else
+              echo "[INFO] Latest tag on main: $LATEST_MAIN_REF"
+              git log ${LATEST_MAIN_REF}..HEAD --pretty=format:"- %s" > commits_since_main.txt
+            fi
           fi
 
-          # Debug: Print the commits list
-          echo "Commits since $LATEST_TAG:"
-          echo "$COMMITS"
-
-          # Write the commits list to a file
-          echo "$COMMITS" > commits_list.txt
-
-          # Set the commits list as an environment variable
           echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
-
-
-      # - name: Extract XML Description
-      #   uses: Mudlet/xmlstarlet-action@master
-      #   id: extract-description
-      #   with:
-      #     args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml
+          echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV
 
       # Generate Release Body
       - name: Generate release body text
         id: generate-body
         run: |
-          # Initialize the release body text
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
-          echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
-          echo "## Commits since last release" >> $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/feat/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
-      
-          # Append commits from the file to the release body
-          if [ -f "${{ env.COMMITS_FILE }}" ]; then
-            echo "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
-            echo "" >> $RELEASE_BODY_FILE
-          else
-            echo "[ERROR] Commits file not found: ${{ env.COMMITS_FILE }}"
-            echo "[ERROR] Commits file not found" >> $RELEASE_BODY_FILE
+
+          # Add components version information at the top
+          if [ -f retrodeck-artifacts/components/components-version ]; then
+            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+            if [ -f retrodeck-artifacts/components/components-release-url ]; then
+              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
+            echo "## Components Information" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
+
+
+
+          elif [ -f components/components-version ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f components/components-release-url ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
+            echo "## Components Information" >> $RELEASE_BODY_FILE
+            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
+
+
           fi
-      
-          # Debug: Print the release body so far
-          echo "[DEBUG] Current release body contents:"
-          cat $RELEASE_BODY_FILE
-      
-          # Process raw description (if needed)
-          #raw_description="${{ steps.extract-description.outputs.result }}"
-          
-          # Convert <p> tags to markdown headers using sed
-          # raw_description="${{ steps.extract-description.outputs.result }}"
-          markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
-          # Convert <li> tags to bullet points and trim spaces
-          markdown_description=$(echo "$markdown_description" | sed -e 's|<ul>||g' -e 's|</ul>||g' -e 's|<li>|- |g' -e 's|</li>||g' | awk '{$1=$1;print}')
+          echo "**Cooker Builds** are for testers only – see [How‑to: Start Testing](https://retrodeck.readthedocs.io/en/latest/wiki_development/testing/retrodeck-testing/)." >> $RELEASE_BODY_FILE
+          echo "Do not file GitHub issues for Cooker builds. These nightly releases contain **unstable features** and may destabilize or corrupt your RetroDECK setup. The RetroDECK team is **not liable** for any data loss." >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
 
-          # Remove any remaining XML tags
-          markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
-      
-          # Debug: Print the markdown description
-          echo "Markdown Description:"
-          echo "$markdown_description"
-      
-          # Append markdown content to the release body file
-          echo "$markdown_description" >> $RELEASE_BODY_FILE
-      
-          # Output the file path to the environment and output variables
-          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_ENV
-          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_OUTPUT
-      
-          echo "[DEBUG] CHECKPOINT 8"
+          # Append changelog from metainfo
+          echo "## Changelog" >> $RELEASE_BODY_FILE
+          xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml \
+            | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+            | awk 'NF' \
+            | sed -E '
+              s/^[[:space:]]*(.*[^[:space:]]):$/### \1/;
+              t title
+              s/^/- / 
+              :title
+            ' >> $RELEASE_BODY_FILE
 
-      - name: Generate a token for Rekku
-        id: generate-rekku-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.REKKU_APP_ID }}
-          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-          repositories: "RetroDECK,Cooker"
-          owner: "RetroDECK"
+          # Fetch latest main to compare against
+          git fetch origin main
 
-      - name: "Build flatpak: download only"
-        id: flatpak-download
-        run: |
-          git config --global credential.helper store
-          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+          # Build comparison link
+          COMPARE_URL="https://github.com/${{ github.repository }}/compare/main...${{ github.sha }}"
 
-      # Sometimes flatpak download fails, in this case it tries a second time
-      - name: "Build flatpak: download only (retry)"
-        if: steps.flatpak-download.outcome == 'failure'
-        run: |
-          git config --global credential.helper store
-          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          echo "Download failed, maybe some hash changed since the build start."
-          echo "Recalculating hashes and retrying download..."
-          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          "${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+          # Append comparison link to release body
+          echo "" >> $RELEASE_BODY_FILE
+          echo "---" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
+          echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
 
-      - name: Build flatpak
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
-
-      - name: Create Bundle
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
-
-      # TODO: Until we add support for Flathub-beta this is restricted to main
-      - name: Create Artifact for Flathub
-        if: github.ref == 'refs/heads/main'
-        run: |
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            artifact_name="RetroDECK-Artifact"
-            artifact_folder="retrodeck-flatpak-main"
+          # Append components version list (detailed)
+          if [ -f retrodeck-artifacts/components/components_version_list.md ]; then
+            echo "## Detailed Components List" >> $RELEASE_BODY_FILE
+            cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
           else
-            artifact_name="RetroDECK-Artifact-cooker"
-            artifact_folder="retrodeck-flatpak-cooker"
+            echo "WARNING: components_version_list.md not found." >> $RELEASE_BODY_FILE
           fi
-          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/"$artifact_folder" .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/${artifact_name}.sha
+          echo "" >> $RELEASE_BODY_FILE
 
-      # Upload artifacts for other jobs
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: retrodeck-artifacts
-          include-hidden-files: true
-          path: |
-            RetroDECK*.flatpak
-            RetroDECK*.flatpak.sha
-            RetroDECK-Artifact*.tar.gz
-            RetroDECK-Artifact*.sha
+          # Output the final body
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
+          cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-  GitHub-publish:
-    runs-on: ubuntu-latest
-    needs: Build_RetroDECK
-    env:
-      TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
-      MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
-    steps:
-
-      - name: Generate a token for Rekku
-        id: generate-rekku-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.REKKU_APP_ID }}
-          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-          repositories: "RetroDECK,Cooker,Artifacts"
-          owner: "RetroDECK"
-
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
-          
+    
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
         id: set-repo
@@ -330,35 +322,109 @@ jobs:
             echo "REPO_NAME=Cooker" >> $GITHUB_ENV
           fi
 
+      - name: "[DEBUG] Listing produced artifacts"
+        run: |
+          echo "Produced artifacts:"
+          ls -lah retrodeck-artifacts/out
+
       # Publish Release
       - name: Publish release
+        id: publish-release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
-          body: ${{ env.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
+          body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
+          artifacts: "retrodeck-artifacts/out/*"
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
-      # Publish Artifacts
-      - name: Publish Artifacts
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ env.TAG }}
-          name: "RetroDECK Artifacts - ${{ env.TAG }}"
-          body: "Flathub artifacts for version ${{ env.TAG }}"
-          artifacts: "retrodeck-artifacts/RetroDECK-Artifact*.tar.gz,retrodeck-artifacts/RetroDECK-Artifact*.sha"
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          makeLatest: ${{ env.MAKE_LATEST }}
-          repo: Artifacts
-          token: ${{ steps.generate-rekku-token.outputs.token }}
+      # Display Job Summary
+      - name: Display Job Summary
+        run: |
+          RELEASE_URL="https://github.com/RetroDECK/${{ env.REPO_NAME }}/releases/tag/${{ env.TAG }}"
+          
+          # Read components version if available
+          COMPONENTS_VERSION=""
+          COMPONENTS_URL=""
+          REQUESTED_TAG=""
+          if [ -f "retrodeck-artifacts/components/components-version" ]; then
+            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
+            if [ -f "retrodeck-artifacts/components/components-release-url" ]; then
+              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
+          elif [ -f "components/components-version" ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f "components/components-release-url" ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
+            else
+              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
+            fi
 
-      - name: Post PR comment with artifacts
+          fi
+          
+          # Create job summary
+          echo "# Release Published Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Release URL** | [${{ env.TAG }}]($RELEASE_URL) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tag** | \`${{ env.TAG }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Repository** | \`${{ env.REPO_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ env.BRANCH_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$COMPONENTS_VERSION" ]; then
+            if [ -n "$COMPONENTS_URL" ]; then
+              echo "| **Components Version** | [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL) |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| **Components Version** | \`$COMPONENTS_VERSION\` |" >> $GITHUB_STEP_SUMMARY
+            fi
+
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Direct Link:** $RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          
+          # Add Library Hunter status if available
+          if [ -n "${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 🔍 Library Hunter Status" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Status:** ${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "${{ needs.Library_Hunter.outputs.HUNT_MESSAGE }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Add components information if available
+          if [ -f "retrodeck-artifacts/components/components_version_list.md" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat retrodeck-artifacts/components/components_version_list.md >> $GITHUB_STEP_SUMMARY
+          elif [ -f "components/components_version_list.md" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat components/components_version_list.md >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Also log to console
+          echo "Release published successfully!"
+          echo "Release URL: $RELEASE_URL"
+          echo "Tag: ${{ env.TAG }}"
+          echo "Repository: ${{ env.REPO_NAME }}"
+          echo "Branch: ${{ env.BRANCH_NAME }}"
+          if [ -n "$COMPONENTS_VERSION" ]; then
+            echo "🔧 Components Version: $COMPONENTS_VERSION"
+          fi
+          
+          # Create notice
+          echo "::notice title=Release Published::Release ${{ env.TAG }} has been published to $RELEASE_URL"
+
+      - name: Post PR comment with artifacts link
         if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
@@ -444,7 +510,7 @@ jobs:
         continue-on-error: true
         run: |
           ls -lah retrodeck-artifacts
-          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak
+          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak"
 
       # Run Post Build Checks
       - name: Run Post Build Checks

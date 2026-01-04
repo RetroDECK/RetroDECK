@@ -70,10 +70,10 @@ run_game() {
 
     # Check if realpath succeeded
     if [[ -z "$game" || ! -e "$game" ]]; then
-        rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+        rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK - File not found" \
-            --text="ERROR: File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again.This can happen if RetroDECK does not have permission to write to the selected location.\n\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
+            --title "RetroDECK - Warning: File not found" \
+            --text="Warning: File: <span foreground='$purple'><b>\"$game\"</b></span> not found.\n\nMake sure RetroDECK's Flatpak has permission to access the specified path.\n\nIf needed, add the path in Flatseal or terminal and try again."
         log e "File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
         exit 1
     fi
@@ -112,7 +112,7 @@ run_game() {
                           }
                           if (found && $0 ~ /<\/game>/) exit
                       }
-                      ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+                      ' "$rd_home_path/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
 
         if [[ -n "$altemulator" ]]; then
 
@@ -130,7 +130,7 @@ run_game() {
                                        exit
                                        }
                                    }
-                                   ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+                                   ' "$rd_home_path/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
             log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
             emulator=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
 
@@ -198,7 +198,7 @@ find_system_commands() {
     else
         # Show the list with Zenity and return the **command** (second column) selected
         selected_command=$(rd_zenity --list \
-            --title="Select an emulator for $system_name" \
+            --title="Select an component for $system_name" \
             --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
             --width=800 --height=400 --print-column=2 --hide-column=2)
     fi

@@ -1,6 +1,0 @@
-{
-    "title": "RetroDECK",
-    "target": "flatpak",
-    "launchOptions": "run net.retrodeck.retrodeck",
-    "startIn": ""
-}

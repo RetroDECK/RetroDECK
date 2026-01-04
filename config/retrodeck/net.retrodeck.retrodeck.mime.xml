@@ -35,7 +35,6 @@
 		<glob pattern="*.axf"/>
 		<glob pattern="*.bat"/>
 		<glob pattern="*.bbc"/>
-		<glob pattern="*.bin"/>
 		<glob pattern="*.bml"/>
 		<glob pattern="*.bms"/>
 		<glob pattern="*.bs"/>
@@ -67,7 +66,6 @@
 		<glob pattern="*.crt"/>
 		<glob pattern="*.cso"/>
 		<glob pattern="*.csw"/>
-		<glob pattern="*.cue"/>
 		<glob pattern="*.cv"/>
 		<glob pattern="*.cxi"/>
 		<glob pattern="*.d2m"/>
@@ -160,7 +158,9 @@
 		<glob pattern="*.k7"/>
 		<glob pattern="*.kcr"/>
 		<glob pattern="*.lha"/>
+		<glob pattern="*.lindbergh"/>
 		<glob pattern="*.lnx"/>
+		<glob pattern="*.lyx"/>
 		<glob pattern="*.lst"/>
 		<glob pattern="*.lua"/>
 		<glob pattern="*.lutro"/>
@@ -178,6 +178,7 @@
 		<glob pattern="*.mgw"/>
 		<glob pattern="*.min"/>
 		<glob pattern="*.minipsf"/>
+		<glob pattern="*.mmi"/>
 		<glob pattern="*.msa"/>
 		<glob pattern="*.mugen"/>
 		<glob pattern="*.mx1"/>
@@ -222,6 +223,7 @@
 		<glob pattern="*.prx"/>
 		<glob pattern="*.ps3"/>
 		<glob pattern="*.ps3dir"/>
+		<glob pattern="*.ps4"/>
 		<glob pattern="*.psexe"/>
 		<glob pattern="*.psf"/>
 		<glob pattern="*.psvita"/>
@@ -232,6 +234,7 @@
 		<glob pattern="*.rp9"/>
 		<glob pattern="*.rpk"/>
 		<glob pattern="*.rpx"/>
+		<glob pattern="*.ruf"/>
 		<glob pattern="*.rvz"/>
 		<glob pattern="*.rzx"/>
 		<glob pattern="*.sad"/>
@@ -286,6 +289,7 @@
 		<glob pattern="*.unf"/>
 		<glob pattern="*.unif"/>
 		<glob pattern="*.uze"/>
+		<glob pattern="*.v32"/>
 		<glob pattern="*.v64"/>
 		<glob pattern="*.vb"/>
 		<glob pattern="*.vboy"/>
@@ -319,6 +323,7 @@
 		<glob pattern="*.z1"/>
 		<glob pattern="*.z2"/>
 		<glob pattern="*.z3"/>
+		<glob pattern="*.z3dsx"/>
 		<glob pattern="*.z4"/>
 		<glob pattern="*.z5"/>
 		<glob pattern="*.z6"/>
@@ -332,5 +337,7 @@
 		<glob pattern="*.zlb"/>
 		<glob pattern="*.znx"/>
 		<glob pattern="*.zso"/>
+		<glob pattern="*.zcci"/>
+		<glob pattern="*.zcxi"/>
 	</mime-type>
 </mime-info>

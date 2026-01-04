@@ -6,22 +6,57 @@ set_setting_value() {
 
   local setting_name_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${5:-}")
 
   log d "Setting $setting_name_to_change=$setting_value_to_change in $1"
+  if [[ ! -f "$1" ]]; then
+    log e "File $1 does not exist, cannot set setting $setting_name_to_change"
+    return 1
+  fi
 
   case $4 in
 
-    "retrodeck" | "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
+    "retrodeck" )
+      if [[ -z "$current_section_name" ]]; then
+        if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+          jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+        else
+          sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+        fi
+      else
+        if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+          if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
+            parent_key=$(jq -r --arg section "$current_section_name" --arg setting "$setting_name_to_change" '
+                        .presets[$section]
+                        | paths(scalars)
+                        | select(.[-1] == $setting)
+                        | if length > 1 then .[-2] else $section end
+                        ' "$1") # Find parent key of supplied setting name, in case it is nested
+            if [[ "$current_section_name" == "$parent_key" ]]; then # Setting is not nested
+              jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+            else
+              jq --arg section "$current_section_name" --arg parent "$parent_key" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$parent][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+            fi
+          else
+            jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+          fi
+        else
+          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+        fi
+      fi
+      if [[ "$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options" ]]; then
+        log d "Exporting value of setting $setting_name_to_change as $setting_value_to_change"
+        declare -g "$setting_name_to_change=$setting_value_to_change"
+      fi
+    ;;
+
+    "melonds" | "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom" | "dosbox-x" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       fi
-      if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
-        declare -g "$setting_name_to_change=$setting_value_to_change"
-      fi
-      ;;
+    ;;
 
     "retroarch" )
       if [[ -z $current_section_name ]]; then
@@ -29,7 +64,7 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' = ^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' "$1"
       fi
-      ;;
+    ;;
 
     "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
@@ -37,7 +72,7 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' =^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' "$1"
       fi
-      ;;
+    ;;
 
     "rpcs3" | "vita3k" )
        # This does not currently work for settings with a $ in them
@@ -55,7 +90,7 @@ set_setting_value() {
           sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
         fi
       fi
-      ;;
+    ;;
 
     "cemu" )
       if [[ -z "$current_section_name" ]]; then
@@ -63,8 +98,8 @@ set_setting_value() {
       else
         xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
       fi
-      ;;
-    
+    ;;
+
     "mame" )
       # In this option, $current_section_name is the <system name> in the .cfg file.
 
@@ -74,11 +109,27 @@ set_setting_value() {
       elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
         sed -i '\^\<system name=\"'"$current_section_name"'\">^,\^<\/system>^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
       fi
-      ;;
+    ;;
+
+    "ryubing" )
+      if [[ -z "$current_section_name" ]]; then
+        jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $setting ] =
+                                                                                            ( if ($newval == "true")  then true
+                                                                                              elif ($newval == "false") then false
+                                                                                              else $newval
+                                                                                              end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      else
+        jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $section ][ $setting ] =
+                                                                                                                                  ( if ($newval == "true")  then true
+                                                                                                                                    elif ($newval == "false") then false
+                                                                                                                                    else $newval
+                                                                                                                                    end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      fi
+    ;;
 
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
-      ;;
+    ;;
 
   esac
 }
@@ -119,15 +170,52 @@ get_setting_value() {
 # USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
 
   local current_setting_name="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
-  "retrodeck" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+    "retrodeck" )
+    if [[ -z "$current_section_name" ]]; then
+      if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+        jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
+      else
+        echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
+      fi
+    else
+      if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+        if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
+          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section] | .. | objects | select(has($setting_name)) | .[$setting_name] // empty' "$1"
+        else
+          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
+        fi
+      else
+        sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
+      fi
+    fi
+  ;;
+
+  "melonds" | "yuzu" | "gzdoom" ) # For files with this syntax - setting_name=setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else
       sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
+    fi
+  ;;
+
+  "azahar" ) # For files with this syntax - setting_name=setting_value but also maybe backslashes in the setting name
+    escaped_setting_name=$(printf '%s\n' "$current_setting_name" | sed 's/[[\.*^$/]/\\&/g')
+
+    if [[ -n "$current_section_name" ]]; then
+        awk -F'=' -v section="[$current_section_name]" -v key="$escaped_setting_name" '
+            $0 == section { in_section=1; next }
+            /^\[/ { in_section=0 }
+            in_section && $1 == key { print $2; exit }
+        ' "$1"
+    else
+        awk -F'=' -v key="$escaped_setting_name" '
+            /^\[/ { exit }
+            $1 == key { print $2; exit }
+        ' "$1"
     fi
   ;;
 
@@ -171,6 +259,14 @@ get_setting_value() {
     fi
   ;;
 
+  "ryubing" )
+    if [[ -z "$current_section_name" ]]; then
+      jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
+    else
+      jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
+    fi
+  ;;
+
   "es_settings" )
     echo $(grep -o -P "(?<=$current_setting_name\" value=\").*(?=\")" "$1")
   ;;
@@ -183,7 +279,7 @@ add_setting_line() {
   # USAGE: add_setting_line $setting_file $setting_line $system $section (optional)
 
   local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
 
   case $3 in
 
@@ -208,7 +304,7 @@ add_setting() {
 
   local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local current_setting_value=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${5:-}")
 
   case $4 in
 
@@ -228,7 +324,7 @@ delete_setting() {
   # USAGE: delete_setting $setting_file $setting_name $system $section (optional)
 
   local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
 
   case $3 in
 
@@ -247,7 +343,7 @@ disable_setting() {
   # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
 
   local current_setting_line="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
@@ -267,7 +363,7 @@ enable_setting() {
   # USAGE: enable_setting $setting_file $setting_line $system $section (optional)
 
   local current_setting_line="$2"
-  local current_section_name="$4"
+  local current_section_name="${4:-}"
 
   case $3 in
 
@@ -514,52 +610,99 @@ do
 done < "$1"
 }
 
-get_steam_user() {
-  # This function populates environment variables with the actual logged Steam user data
-  if [ -f "$HOME/.steam/steam/config/loginusers.vdf" ]; then
-    # Extract the Steam ID of the most recent user
-    export steam_id=$(awk '
-      /"users"/ {flag=1} 
-      flag && /^[ \t]*"[0-9]+"/ {id=$1} 
-      flag && /"MostRecent".*"1"/ {print id; exit}' "$HOME/.steam/steam/config/loginusers.vdf" | tr -d '"')
+prepare_component() {
+  # This function will perform one of several actions on one or more components
+  # The actions currently include "reset" and "postmove"
+  # The "reset" action will initialize the component
+  # The "postmove" action will update the component settings after one or more RetroDECK folders were moved
+  # The "startup" action will run any actions that are required during RetroDECK startup
+  # An component can be called by name, by parent folder name in the $XDG_CONFIG_HOME root or use the option "all" to perform the action on all components equally
+  # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
-    # Extract the Steam username (AccountName)
-    export steam_username=$(awk -v steam_id="$steam_id" '
-      $0 ~ steam_id {flag=1} 
-      flag && /"AccountName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
-
-    # Extract the Steam pretty name (PersonaName)
-    export steam_prettyname=$(awk -v steam_id="$steam_id" '
-      $0 ~ steam_id {flag=1} 
-      flag && /"PersonaName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
-
-    # Log success
-    log i "Steam user found:"
-    log i "SteamID: $steam_id"
-    log i "Username: $steam_username"
-    log i "Name: $steam_prettyname"
-
-    if [[ -d "$srm_userdata" ]]; then
-      populate_steamuser_srm
-    fi
-    
-  else
-    # Log warning if file not found
-    log w "No Steam user found, proceeding" >&2
+  if [[ "$1" == "factory-reset" ]]; then
+    log i "User requested full RetroDECK reset"
+    rm -f "$rd_lockfile" && log d "Lockfile removed"
+    retrodeck
   fi
-}
 
-populate_steamuser_srm(){
-  # Populating SRM config with Steam Username
-      log d "Populating Steam Rom Manager config file with Steam Username"
-      jq --arg username "$steam_username" '
-        map(
-          if .userAccounts.specifiedAccounts then
-            .userAccounts.specifiedAccounts = [$username]
-          else
-            .
-          end
-        )
-      ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
-      mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
+  action="$1"
+  component="$2"
+  call_source="${3:-}"
+
+  if [[ -z "$component" ]]; then
+    echo "No components or action specified. Exiting."
+    exit 1
+  fi
+  log d "Preparing component: \"$component\", action: \"$action\""
+
+  # If component is "all", iterate over all components in $rd_components
+  if [[ "$component" == "all" ]]; then
+    while IFS= read -r prepare_component_file; do
+      log d "Found component file $prepare_component_file"
+      source "$prepare_component_file"
+    done < <({
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh" | grep "^$rd_components/framework/component_prepare.sh" || true
+            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh" | grep -v "^$rd_components/framework/component_prepare.sh" | sort
+           })
+  else
+    if [[ -f "$rd_components/$component/component_prepare.sh" ]]; then
+      log d "Found component file $rd_components/$component/component_prepare.sh for component $component"
+      source "$rd_components/$component/component_prepare.sh"
+    else
+      log e "No component_prepare.sh file found for component $component"
+      return 1
+    fi
+  fi
+
+  if [[ "$action" == "reset" ]]; then
+    while IFS= read -r preset # Iterate all presets listed in retrodeck.cfg
+    do
+      while IFS= read -r preset_compatible_component # Iterate all system names in this preset
+      do
+        if [[ "$component" == "all" || "$preset_compatible_component" =~ "$component" ]]; then
+          local child_component=""
+          local parent_component="$(jq -r --arg preset "$preset" --arg component "$preset_compatible_component" '
+                                                                                              .presets[$preset]
+                                                                                              | paths(scalars)
+                                                                                              | select(.[-1] == $component)
+                                                                                              | if length > 1 then .[-2] else $preset end
+                                                                                              ' "$rd_conf")"
+          
+          if [[ ! "$parent_component" == "$preset" ]]; then # If the given component is a nested core
+            parent_component="${parent_component%_cores}"
+            child_component="$preset_compatible_component"
+            local preset_compatible_component="$parent_component"
+          fi
+
+          local preset_disabled_state=$(jq -r --arg component "$preset_compatible_component" --arg core "$child_component" --arg preset "$preset" '
+                                    if $core != "" then
+                                      .[$component].compatible_presets[$core][$preset].[0] // empty
+                                    else
+                                      .[$component].compatible_presets[$preset].[0] // empty
+                                    end
+                                  ' "$rd_components/$preset_compatible_component/component_manifest.json")
+
+          if [[ -n "$child_component" ]]; then
+            preset_compatible_component="$child_component"
+          fi
+
+          local preset_current_state=$(get_setting_value "$rd_conf" "$preset_compatible_component" "retrodeck" "$preset")
+
+          if [[ ! "$preset_current_state" == "$preset_disabled_state" ]]; then
+            log d "Disabling preset $preset for component $preset_compatible_component"
+            set_setting_value "$rd_conf" "$preset_compatible_component" "$preset_disabled_state" "retrodeck" "$preset"
+          fi
+        fi
+      done < <(jq -r --arg preset "$preset" '.presets[$preset] | to_entries[] |
+                                          if (.key | endswith("_cores")) then 
+                                            .value | keys[]
+                                          else
+                                            .key
+                                          end' "$rd_conf")
+    done < <(jq -r '.presets | keys[]' "$rd_conf")
+  fi
+
+  if [[ "$component" =~ ^(all|framework) ]]; then # If core paths or options were reset or moved
+    conf_write
+  fi
 }

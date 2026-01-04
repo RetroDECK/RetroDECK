@@ -1,80 +1,196 @@
-The Team
-
-Those that make RetroDECK happen
-
----
-
-XargonWan
-
-RetroDECK project founder and also one of the founding members of AmberELEC.
-
----
-
-Lazorne
-
-Does community management/outreach, testing, documentation, emulator configurations, maestro and more.
-
----
-
-jiannazzone
-
-Does Web Development, Godot, Community management/outreach, testing, documentation and more.
-
----
-
-IceNine451
-
-Focus on scripting and creator of the RetroDECK Configurator the RetroDECK Framework and various cool things.
-
----
-
-WallK
-
-Does Godot, backend development and various cool things.
-
----
----
----
+=========================================================================
 
 
-RetroDECK Alumni
+ ____      _             ____  _____ ____ _  __  _____
+|  _ \ ___| |_ _ __ ___ |  _ \| ____/ ___| |/ / |_   _|__  __ _ _ __ ___
+| |_) / _ \ __| '__/ _ \| | | |  _|| |   | ' /    | |/ _ \/ _` | '_ ` _ \
+|  _ <  __/ |_| | | (_) | |_| | |__| |___| . \    | |  __/ (_| | | | | | |
+|_| \_\___|\__|_|  \___/|____/|_____\____|_|\_\   |_|\___|\__,_|_| |_| |_|
 
-RetroDECK Alumni are former members of the RetroDECK Team that have moved on to other pastures. They deserve their own special credit for the efforts done to make RetroDECK possible.
 
----
 
-dottormac
+=========================================================================
 
-Did bleeding edge cooker testing and provided valuable feedback.
+▶ XARGONWAN
+   • Founder – RetroDECK & Co‑founder of AmberELEC
+   • Primary Backend Architect (Framework, RetroENGINE, Configurator)
 
----
+▶ LAZORNE
+   • Community Manager & Outreach Lead
+   • Testing Coordinator
+   • Wiki Author & Maintainer
+   • Component‑Configuration Specialist
+   • Steam Input & Miscellaneous Input Integrations
 
-Lx32
+▶ JIANNAZZONE
+   • Web Development & Site Maintenance
+   • Godot Programming & UI/UX Design
+   • Community Outreach & Engagement
+   • Art & Asset Creation
 
-Did the work of getting SRM and Steam Sync into RetroDECK.
+▶ ICENINE451
+   • Lead Technical Architect
+   • Creator of RetroDECK Configurator & Framework
+   • Backend Development & API Design
 
----
+▶ WALLK
+   • Godot Development Specialist
 
-MonkeyX
+▶ LAHRS
+   • Arcade Veteran & Retro Knowledge Authority
+   • Component Configurations
+   • Community Management & Support
+   • Feature Requests & Issue Handling
+   • Testing, Art & Assets, Wiki Documentation
 
-Did several Godot Configurator things and backend improvements.
+=========================================================================
 
----
----
----
 
-We want give special thanks to:
 
-- Our Patreon and donors that keeps the build servers running and provide feedback.
+=========================================================================
+                         SPECIAL THANKS
+=========================================================================
 
-- All related emulation, front end and software projects that we are dependent on.
+We are deeply grateful to everyone who powers RetroDECK:
 
-- All people that have put both time and money into emulation projects.
+  • Donors – Keep our build servers humming and supply vital feedback.
+  • Upstream Projects – The emulators, front‑ends, engines, other components and libraries we rely on.
+  • Contributors – Those who donate time, code, expertise, love and financial support.
+  • Community Helpers – Users offering support, guidance, and a welcoming spirit.
+  • Testers & Bug Reporters – Helping us squash issues and improve stability.
+  • Artists & Asset Creators – Enriching the ecosystem with graphics, sounds, and more.
 
-- All the users who help others with support, guidance and good spirit.
+Your collective effort makes RetroDECK possible. Thank you!
 
-- All the users who help with testing and reporting issues.
+=========================================================================
 
-- All the community creators who creates various art and assets for the community.
 
-You are all the ones that makes this project possible.
+
+=========================================================================
+                        RETRODECK ALUMNI
+=========================================================================
+
+RetroDECK Alumni are former members of the RetroDECK Team that have moved on to other pastures.
+
+▶ Lx32
+   • Did the work that got in the end SRM into RetroDECK.
+
+▶ dottormac
+   • Did tons of bug hunting and testing in the early days.
+
+▶ MonkeyX
+   • Did Godot and other improvements.
+
+=========================================================================
+
+
+
+=========================================================================
+                    RETRODECK PAST HELPERS
+=========================================================================
+
+Contributors that have helped the project in the past and are worthy of recognition.
+
+▶ Niroku / Atari
+   • Helped with community management during in the early days of RetroDECK.
+
+▶ RavenKilit
+   • Helped with development and testing in the early days.
+
+▶ Gabeboii
+   • Helped with web development in the early days.
+
+▶ Draco
+   • Helped with Server Administration in the early days. 
+
+=========================================================================
+
+
+
+=========================================================================
+                    RETRODECK LOGO HELPERS
+=========================================================================
+
+The following contributors played important roles in the development of the first
+and second iterations of the RetroDECK logo, including work on
+color schemes, iconography, SteamGridDB assets, and overall conceptual design:
+
+▶ Pixelguin
+▶ antfortytwo
+▶ MorGuux
+▶ Weestuarty
+▶ Víctor R
+
+=========================================================================
+
+
+
+=========================================================================
+                    RETRODECK ES-DE THEME
+=========================================================================
+
+
+The RetroDECK ES-DE theme is a remix of the LaunchBox Mini Banner theme created by:
+Weestuarty, DerSchlachter, and Dan Patrick.
+
+Adapted specifically for RetroDECK by:
+Weestuarty
+
+=========================================================================
+
+
+
+=========================================================================
+                    RetroDECK Folder Icons
+=========================================================================
+
+▶ Lahrs Folder Iconset - Main
+
+Team Member Lahrs made this Iconset for RetroDECK
+Some of these icons are based on the original work of Dan Patrick,
+for which Lahrs obtained permission to incorporate and adapt.
+
+=========================================================================
+
+
+
+=========================================================================
+            RetroDECK Mascot: Reiki the Cyber Shark
+=========================================================================
+
+
+▶ Artwork & Mascot Design - Tyson Tan
+
+We are honored to collaborate with a highly regarded FOSS artist
+who has generously contributed his time and passion to the RetroDECK Mascot.
+
+Tyson Tan
+
+Check out the portfolio: https://tysontan.com/
+
+
+▶ Assistance with the First Iteration of the VRoid Mascot
+
+Initial development support for the VRoid mascot was provided by @﹒⪩⪨﹒moth﹒⪩⪨﹒
+
+=========================================================================
+
+
+
+=========================================================================
+                      ADDITIONAL CREDITS / LICENCES
+=========================================================================
+
+
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-additional/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-alumni/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-art/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-collaborators/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/credits/credits-team/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/donations-licenses/
+▶ https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/easter-egg-splashes/
+▶ https://github.com/RetroDECK/RetroDECK/blob/main/other_licenses.txt
+▶ https://github.com/RetroDECK/RetroDECK/blob/main/LICENSE
+▶ https://gitlab.com/es-de/themes/themes-list
+
+=========================================================================
