@@ -58,9 +58,9 @@
       What is Included?
     </p>
     <ul>
-      <li>Wide Emulator Coverage: Includes RetroArch, MAME, PCSX2, Vita3K, and more-supporting a vast range of classic systems.</li>
+      <li>Wide Emulator Coverage: Includes Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more! Supporting a vast range of classic systems.</li>
       <li>Multi-Emulator Platforms: Unified emulation through powerful frameworks like RetroArch and MAME.</li>
-      <li>Native Game Engines: Play engine-based titles using Solarus, OpenBOR, and GZDoom, including RetroDECKs custom .doom format.</li>
+      <li>Native Game Engines and Clients: Play engine-based titles using Solarus, OpenBOR, and GZDoom.</li>
       <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your games.</li>
       <li>PortMaster Integration: Install and manage community-supported Linux game port with ease.</li>
       <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more-all from one place.</li>
