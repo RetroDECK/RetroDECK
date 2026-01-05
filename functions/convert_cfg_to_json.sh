@@ -8,12 +8,12 @@ transform_key() {
   case "$section" in
     paths)
       if [[ -n "${PATH_KEY_MAP[$key]:-}" ]]; then
-          transformed="${PATH_KEY_MAP[$key]}"
+        transformed="${PATH_KEY_MAP[$key]}"
       fi
     ;;
     options)
       if [[ -n "${OPTIONS_KEY_MAP[$key]:-}" ]]; then
-          transformed="${OPTIONS_KEY_MAP[$key]}"
+        transformed="${OPTIONS_KEY_MAP[$key]}"
       fi
     ;;
   esac
