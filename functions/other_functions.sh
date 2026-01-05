@@ -314,21 +314,6 @@ dir_prep() {
   log i "$symlink is now $real"
 }
 
-update_rpcs3_firmware() {
-  create_dir "$roms_path/ps3/tmp"
-  chmod 777 "$roms_path/ps3/tmp"
-  download_file "$rpcs3_firmware_url" "$roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
-  rpcs3 --installfw "$roms_path/ps3/tmp/PS3UPDAT.PUP"
-  rm -rf "$roms_path/ps3/tmp"
-}
-
-update_vita3k_firmware() {
-  download_file "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" "/tmp/PSVUPDAT.PUP" "Vita3K Firmware file: PSVUPDAT.PUP"
-  download_file "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" "/tmp/PSP2UPDAT.PUP" "Vita3K Firmware file: PSP2UPDAT.PUP"
-  Vita3K --firmware /tmp/PSVUPDAT.PUP
-  Vita3K --firmware /tmp/PSP2UPDAT.PUP
-}
-
 backup_retrodeck_userdata() {
   # This function can compress one or more RetroDECK userdata folders into a single zip file for backup.
   # The function can do a "complete" backup of all userdata including ROMs and ES-DE media, so can end up being very large.
