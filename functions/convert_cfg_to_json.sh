@@ -77,6 +77,7 @@ convert_cfg_to_json() {
 
   declare -A OPTIONS_KEY_MAP=(
     ["logging_level"]="rd_logging_level"
+    ["branch"]="selected_branch"
   )
 
   declare -A PRESET_NESTING_MAP=(
