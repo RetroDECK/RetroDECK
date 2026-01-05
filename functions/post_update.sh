@@ -125,6 +125,7 @@ post_update() {
     update_splashscreens
     deploy_helper_files
     build_retrodeck_current_presets
+    handle_folder_iconsets "$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")"
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
