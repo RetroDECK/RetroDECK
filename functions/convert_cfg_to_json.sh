@@ -85,12 +85,12 @@ convert_cfg_to_json() {
     ["borders.gba"]="retroarch_cores.mgba_libretro"
     ["borders.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
     ["borders.gg"]="retroarch_cores.genesis_plus_gx_libretro_GG"
-    ["borders.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["borders.n64"]="retroarch_cores.mupen64plus-next_libretro"
     ["borders.psx_ra"]="retroarch_cores.swanstation_libretro"
     ["borders.snes"]="retroarch_cores.snes9x-current_libretro"
 
     ["widescreen.genesis"]="retroarch_cores.genesis_plus_gx_libretro_MS"
-    ["widescreen.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["widescreen.n64"]="retroarch_cores.mupen64plus-next_libretro"
     ["widescreen.psx_ra"]="retroarch_cores.swanstation_libretro"
     ["widescreen.snes"]="retroarch_cores.snes9x-current_libretro"
 
@@ -104,13 +104,14 @@ convert_cfg_to_json() {
     ["abxy_button_swap.gb"]="retroarch_cores.gambatte_libretro_GB"
     ["abxy_button_swap.gbc"]="retroarch_cores.gambatte_libretro_GBC"
     ["abxy_button_swap.gba"]="retroarch_cores.mgba_libretro"
-    ["abxy_button_swap.n64"]="retroarch_cores.mupen64plus_next_libretro"
+    ["abxy_button_swap.n64"]="retroarch_cores.mupen64plus-next_libretro"
     ["abxy_button_swap.snes"]="retroarch_cores.snes9x-current_libretro"
   )
 
   declare -a EXCLUDE_KEYS=(
     "abxy_button_swap.citra"
     "ask_to_exit.citra"
+    "ask_to_exit.rpcs3"
   )
 
   input_file="$1"
