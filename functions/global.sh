@@ -151,6 +151,7 @@ if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" && ! -f "$XDG_CONFIG_HOME/re
   if convert_cfg_to_json "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.json"; then
     log i "Conversion successful, backing up legacy file to $XDG_CONFIG_HOME/retrodeck/retrodeck.bak"
     mv "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"
+    update_rd_conf
   fi
 fi
 
