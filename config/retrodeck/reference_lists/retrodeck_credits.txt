@@ -159,19 +159,19 @@ for which Lahrs obtained permission to incorporate and adapt.
 =========================================================================
 
 
-▶ Artwork & Mascot Design - Tyson Tan
+▶ Artwork & Mascot Design - Tyson Tan (钛山)
 
 We are honored to collaborate with a highly regarded FOSS artist
 who has generously contributed his time and passion to the RetroDECK Mascot.
-
-Tyson Tan
 
 Check out the portfolio: https://tysontan.com/
 
 
 ▶ Assistance with the First Iteration of the VRoid Mascot
 
-Initial development support for the VRoid mascot was provided by @﹒⪩⪨﹒moth﹒⪩⪨﹒
+Initial development support for the VRoid mascot was provided by:
+
+@﹒⪩⪨﹒moth﹒⪩⪨﹒
 
 =========================================================================
 

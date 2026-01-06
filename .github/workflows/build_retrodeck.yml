@@ -299,7 +299,7 @@ jobs:
 
           # Append components version list (detailed)
           if [ -f retrodeck-artifacts/components/components_version_list.md ]; then
-            echo "## Detailed Components List" >> $RELEASE_BODY_FILE
+            echo "# Detailed Components List" >> $RELEASE_BODY_FILE
             cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
           else
             echo "WARNING: components_version_list.md not found." >> $RELEASE_BODY_FILE
