@@ -41,7 +41,16 @@ jobs:
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
-          if [ -d "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f "$HOME/"*"/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/"*; fi
+          # Remove stuck mounts if the directory exists and is mounted
+          ROFILES_DIR=$(find "$HOME" -type d -path "*/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" 2>/dev/null | head -n 1)
+          if [ -n "$ROFILES_DIR" ]; then
+            # Check if any subdirectory is a mount point and unmount it
+            for subdir in "$ROFILES_DIR"/*; do
+              if [ -d "$subdir" ] && mountpoint -q "$subdir"; then
+                sudo umount -f "$subdir"
+              fi
+            done
+          fi
 
       # Clone Repository
       - name: Clone RetroDECK repo
