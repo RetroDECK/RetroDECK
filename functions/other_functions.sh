@@ -349,6 +349,12 @@ backup_retrodeck_userdata() {
 
   # Build array of folder names and real paths from retrodeck.json
   while read -r config_path; do
+    if [[ $(check_version_is_older_than "$version_being_updated" "0.10.0b") == "true" ]]; then # Skip paths newly added in 0.10.0b, as they do not exist yet
+      if [[ "$config_path" =~ (portmaster_path|storage_path|videos_path) ]]; then
+        log i "Skipping $config_path as it is new to 0.10.0b and does not exist yet"
+        continue
+      fi
+    fi
     local path_var=$(echo "$config_path" | jq -r '.key')
     local path_value=$(echo "$config_path" | jq -r '.value')
     log d "Adding $path_value to compressible paths."
