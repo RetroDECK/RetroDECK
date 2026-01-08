@@ -142,28 +142,39 @@ else
 
     # Select release depending on target (main or cooker)
     if [[ "$release_type" == "main" ]]; then
-        # Prefer the release tagged 'latest'
+        # Use GitHub's /releases/latest endpoint (returns the latest published release)
         REQUESTED_TAG="latest"
-        release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/tags/latest" || true)
+        release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/latest" || true)
         release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
 
         if [[ -z "$release_tag" ]]; then
-            echo "No 'latest' tag found in RetroDECK/components. Falling back to newest non-draft release."
+            echo "No /releases/latest found. Falling back to newest non-draft release."
             REQUESTED_TAG="newest"
             release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.draft==false)] | sort_by(.published_at) | reverse | .[0]')
             release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
         fi
     else
-        # Cooker: try 'latest-cooker' first, otherwise pick newest release excluding tag 'latest'
+        # Cooker: try 'latest-cooker' tag first. If missing, check /releases/latest and accept it only if it's a cooker release,
+        # otherwise pick newest release excluding tag 'latest'.
         REQUESTED_TAG="latest-cooker"
         release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/tags/latest-cooker" || true)
         release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
 
         if [[ -z "$release_tag" ]]; then
-            echo "No 'latest-cooker' tag found. Selecting newest release excluding tag 'latest'."
-            REQUESTED_TAG="newest"
-            release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.draft==false and .tag_name != "latest")] | sort_by(.published_at) | reverse | .[0]')
+            echo "No 'latest-cooker' tag found. Checking GitHub /releases/latest for a cooker release..."
+            release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases/latest" || true)
             release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
+
+            # Accept /releases/latest only if tag name contains 'cooker'
+            if [[ -n "$release_tag" && "$release_tag" == *"cooker"* ]]; then
+                echo "Found /releases/latest pointing to a cooker release ($release_tag). Using that."
+                REQUESTED_TAG="latest"
+            else
+                echo "No cooker 'latest' found. Selecting newest release excluding tag 'latest'."
+                REQUESTED_TAG="newest"
+                release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.draft==false and .tag_name != "latest")] | sort_by(.published_at) | reverse | .[0]')
+                release_tag=$(echo "$release_json" | jq -r '.tag_name // empty')
+            fi
         fi
     fi
 
