@@ -7,9 +7,12 @@
   <summary>RetroDECK an all-in-one Retro Gaming Platform</summary>
   <developer_name>RetroDECK Team</developer_name>
   <url type="homepage">https://retrodeck.net</url>
-  <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
   <url type="help">https://retrodeck.readthedocs.io</url>
+  <url type="faq">https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/</url>
+  <url type="contribute">https://retrodeck.readthedocs.io/en/latest/wiki_credits_social/contibute-retrodeck/</url>
   <url type="donation">https://opencollective.com/RetroDECK</url>
+  <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
+  <url type="vcs-browser">https://github.com/RetroDECK/RetroDECK</url>
   <content_rating type="oars-1.0" />
   <screenshots>
     <screenshot type="default">
