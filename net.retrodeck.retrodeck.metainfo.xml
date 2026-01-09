@@ -149,7 +149,7 @@
         <ul>
           <li>All components: emulators, engines, systems, and clients have been updated to newer versions.</li>
           <li>Expanded and corrected exposed folders for shaders, texture packs, logs, plugins, and captures across many components (Dolphin, PrimeHack, PPSSPP, RPCS3, Vita3K, Cemu, and others).</li>
-          <li>Enhanced RetroArch configuration, including fixes for long-standing palettr issues.</li>
+          <li>Enhanced RetroArch configuration, including fixes for long-standing palette issues.</li>
           <li>Improved GZDoom .doom wrapper with spaces, symlinks support and additional IWAD compatibility.</li>
           <li>Steam ROM Manager now supports Flatpak Steam.</li>
         </ul>

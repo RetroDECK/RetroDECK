@@ -23950,10 +23950,6 @@ Pixel Art is made by the group: Weestuarty, DerSchlachter (LaunchBox), Dan Patri
 
 Permission by representive Weestuarty to use in RetroDECK.
 
---- Sanke design for Chinese new year ---
-
-Designed by Freepik
-https://support.freepik.com/s/article/Attribution-How-when-and-where
 
 --- Dungeon Crawl Stone Soup ---
 
@@ -23962,6 +23958,12 @@ CC0
 --- Steam Deck & Steam Deck Logo ---
 
 The Steam Deck logo and Steam Deck device is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.
+
+--- Splash screens ---
+
+Setsubun: https://japaclip.com/en/terms/
+Lunar Snake: https://support.freepik.com/s/article/Attribution-How-when-and-where
+Lunar Horse: https://www.vecteezy.com/free-vector/horse
 
 --- Other Trademarks in Documentation and Wiki ---
 
