@@ -165,10 +165,17 @@
     },
     "halloween": {
       "start_date": "1028",
-      "end_date": "1101",
+      "end_date": "1131",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
+    },
+    "dia_de_los_muertos": {
+      "start_date": "1101",
+      "end_date": "1102",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-dia-de-los-muertos-splash.svg"
     },
     "xmas": {
       "start_date": "1201",

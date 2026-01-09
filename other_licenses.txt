@@ -23961,10 +23961,12 @@ The Steam Deck logo and Steam Deck device is a registered trademark of Valve Cor
 
 --- Splash screens ---
 
+https://pixabay.com/
+https://openclipart.org
+
 Setsubun: https://japaclip.com/en/terms/
 Lunar Snake: https://support.freepik.com/s/article/Attribution-How-when-and-where
 Lunar Horse: https://www.vecteezy.com/free-vector/horse
-Walpurgis: https://pixabay.com/vectors/koster-flame-fire-1898042/ , https://pixabay.com/users/clker-free-vector-images-3736/
 
 --- Other Trademarks in Documentation and Wiki ---
 
