@@ -142,22 +142,18 @@
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
-    "may_day": {
-      "start_date": "0405",
-      "end_date": "0405",
+    "la_tomatina": {
+      "start_date": "0826",
+      "end_date": "0826",
       "start_time": "0000",
       "end_time": "2359",
-      "full_start_date": "2024-04-05",
-      "full_end_date": "2024-04-05",
-      "filename": "placeholder.svg"
+      "filename": "rd-la-tomatina-splash.svg"
     },
     "oktoberfest": {
       "start_date": "0920",
       "end_date": "1004",
       "start_time": "0000",
       "end_time": "2359",
-      "full_start_date": "2025-09-20",
-      "full_end_date": "2025-10-04",
       "filename": "placeholder.svg"
     },
     "tsukimi": {
@@ -165,17 +161,13 @@
       "end_date": "1010",
       "start_time": "0000",
       "end_time": "2359",
-      "full_start_date": "2025-10-05",
-      "full_end_date": "2025-10-10",
       "filename": "placeholder.svg"
     },
     "halloween": {
-      "start_date": "1025",
-      "end_date": "1102",
+      "start_date": "1028",
+      "end_date": "1101",
       "start_time": "0000",
       "end_time": "2359",
-      "full_start_date": "2025-10-25",
-      "full_end_date": "2025-11-02",
       "filename": "placeholder.svg"
     },
     "xmas": {
