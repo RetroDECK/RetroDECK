@@ -177,9 +177,16 @@
       "end_time": "2359",
       "filename": "rd-dia-de-los-muertos-splash.svg"
     },
+    "lucia": {
+      "start_date": "1213",
+      "end_date": "1213",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-lucia-splash.svg"
+    },
     "xmas": {
-      "start_date": "1201",
-      "end_date": "1231",
+      "start_date": "1219",
+      "end_date": "1226",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-xmas-splash.svg"
