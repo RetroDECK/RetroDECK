@@ -56,7 +56,7 @@
       "end_date": "0203",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-setsubun.svg"
+      "filename": "rd-setsubun-splash.svg"
     },
     "chinese_new_year": {
       "start_date": "0217",
@@ -93,12 +93,26 @@
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
+    "walpurgis": {
+      "start_date": "0430",
+      "end_date": "0430",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-walpurgis-splash.svg"
+    },
+    "mayday": {
+      "start_date": "0501",
+      "end_date": "0501",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
     "kodomo_golden_week": {
-      "start_date": "0429",
+      "start_date": "0502",
       "end_date": "0505",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-kodomo-golden.svg"
+      "filename": "rd-kodomo-golden-splash.svg"
     },
     "midsommarafton": {
       "start_date": "0620",
@@ -112,7 +126,7 @@
       "end_date": "0707",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "tanabata.svg"
+      "filename": "rd-tanabata-splash.svg"
     },
     "mountain_day": {
       "start_date": "0811",
