@@ -133,6 +133,11 @@ jobs:
   GitHub-publish:
     runs-on: ubuntu-latest
     needs: [Build_RetroDECK]
+    outputs:
+      TAG: ${{ steps.version-tag.outputs.TAG }}
+      MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
+      RELEASE_BODY: ${{ steps.generate-body.outputs.RELEASE_BODY }}
+      IS_DRAFT: ${{ steps.set-repo.outputs.IS_DRAFT }}
     env:
       VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
     steps:
@@ -322,14 +327,20 @@ jobs:
 
     
       # Determine if Target Repository is Main or not, in that case is a Cooker build
-      - name: Determine target repository
+      - name: Determine target repository and draft status
         id: set-repo
         run: |
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            echo "REPO_NAME=RetroDECK" >> $GITHUB_ENV
+            REPO_NAME="RetroDECK"
+            IS_DRAFT="true"
           else
-            echo "REPO_NAME=Cooker" >> $GITHUB_ENV
+            REPO_NAME="Cooker"
+            IS_DRAFT="false"
           fi
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_ENV
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
+          echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_OUTPUT
 
       - name: "[DEBUG] Listing produced artifacts"
         run: |
@@ -350,6 +361,7 @@ jobs:
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
+          draft: ${{ env.IS_DRAFT }}
 
       # Display Job Summary
       - name: Display Job Summary
@@ -469,17 +481,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
 
-  # As backup we're even publishing the build on our own selfhosted Fogejo instance
-  # Forgejo Publish Job if main branch
+  # As backup we're even publishing the build on our own selfhosted Forgejo instance (kept commented until instance available)
+  # Forgejo Publish Job (main branch only)
   # Forgejo-publish:
   #   runs-on: ubuntu-latest
-  #   needs: Build_RetroDECK
+  #   needs: GitHub-publish
   #   env:
-  #     TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-  #     RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
-  #     MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
+  #     TAG: ${{ needs.GitHub-publish.outputs.TAG }}
+  #     RELEASE_BODY: "${{ needs.GitHub-publish.outputs.RELEASE_BODY }} || No release body found"
+  #     MAKE_LATEST: ${{ needs.GitHub-publish.outputs.MAKE_LATEST }}
+  #     IS_DRAFT: "${{ needs.GitHub-publish.outputs.IS_DRAFT }}"
   #   steps:
-  #
   #     - name: Download all workflow run artifacts
   #       uses: actions/download-artifact@v4.1.8
   #
@@ -487,10 +499,11 @@ jobs:
   #       if: github.ref == 'refs/heads/main'
   #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
   #       with:
-  #         release_body: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
-  #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
+  #         release_body: "${{ needs.GitHub-publish.outputs.RELEASE_BODY }} || No release body found"
+  #         artifacts: "retrodeck-artifacts/out/*"
   #         tag: ${{ env.TAG }}
-
+  #         make_latest: ${{ env.MAKE_LATEST }}
+  #         draft: ${{ env.IS_DRAFT }}
 
   # Automated Tests
   Automated_Tests:
