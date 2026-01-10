@@ -86,6 +86,13 @@
       "end_time": "2359",
       "filename": "rd-gm-bday-splash.svg"
     },
+    "womens_day": {
+      "start_date": "0308",
+      "end_date": "0308",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-womans-day-splash.svg"
+    },
     "st_patricks_day": {
       "start_date": "0317",
       "end_date": "0317",
@@ -190,6 +197,13 @@
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-dia-de-los-muertos-splash.svg"
+    },
+    "mens_day": {
+      "start_date": "1119",
+      "end_date": "1119",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-mens-day-splash.svg"
     },
     "lucia": {
       "start_date": "1213",
