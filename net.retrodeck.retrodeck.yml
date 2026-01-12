@@ -362,7 +362,6 @@ modules:
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
-      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -rf res/folder-iconsets ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg

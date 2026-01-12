@@ -122,7 +122,6 @@ post_update() {
       install_retrodeck_controller_profile
     fi
 
-    update_splashscreens
     deploy_helper_files
     build_retrodeck_current_presets
     handle_folder_iconsets "$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")"

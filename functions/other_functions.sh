@@ -862,17 +862,6 @@ create_lock() {
   touch "$rd_lockfile"
 }
 
-update_splashscreens() {
-  # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
-  # USAGE: update_splashscreens
-
-  log i "Updating splash screen"
-
-  rm -rf "$XDG_CONFIG_HOME/ES-DE/resources/graphics"
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "$XDG_CONFIG_HOME/ES-DE/resources/graphics/"
-
-}
-
 deploy_helper_files() {
   # This script will distribute helper documentation files throughout the filesystem according to the JSON configuration
   # USAGE: deploy_helper_files
@@ -921,6 +910,7 @@ splash_screen() {
     new_splash_file="$default_splash_file"
   fi
 
+  mkdir -p "$XDG_CONFIG_HOME/ES-DE/resources/graphics"
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 

@@ -9,9 +9,9 @@ rd_update_patch="$XDG_CONFIG_HOME/retrodeck/rd_update.patch"                    
 bios_checklist="$rd_core_files/reference_lists/bios.json"                                    # A config file listing BIOS file information that can be verified
 input_validation="$rd_core_files/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$rd_core_files/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
-splashscreen_dir="$XDG_CONFIG_HOME/ES-DE/resources/graphics/extra_splashes"                                   # The default location of extra splash screens
+splashscreen_dir="/app/retrodeck/graphics/extra_splashes"                                   # The default location of extra splash screens
 current_splash_file="$XDG_CONFIG_HOME/ES-DE/resources/graphics/splash.svg"                                    # The active splash file that will be shown on boot
-default_splash_file="$XDG_CONFIG_HOME/ES-DE/resources/graphics/splash-orig.svg"                               # The default RetroDECK splash screen
+default_splash_file="/app/retrodeck/graphics/splash.svg"                               # The default RetroDECK splash screen
 # TODO: instead of this maybe we can iterate the features.json
 multi_user_emulator_config_dirs="$rd_core_files/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                   # The directory where themes packaged with RetroDECK are stored
