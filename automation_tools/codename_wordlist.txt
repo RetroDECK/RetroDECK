@@ -152,6 +152,7 @@ deepgnome
 delorean
 derro
 desktop
+detective
 devil
 dice
 digi
@@ -184,6 +185,7 @@ emulation
 engine
 epatraktor
 ettin
+eva
 evangelion
 exe
 faerie
@@ -332,6 +334,7 @@ kitsune
 kitty
 kladdkaka
 klonoa
+klops
 knack
 knackebrod
 knuckles
@@ -412,6 +415,7 @@ marsipan
 master
 matrix
 mayonaka
+mecha
 medal
 medusa
 mega
@@ -458,6 +462,7 @@ nen
 neon
 night
 ninja
+nintama
 nisse
 noahsdhq
 noclip
@@ -477,6 +482,7 @@ okage
 okonomi
 omega
 one
+oni
 onizuka
 onsen
 onyx
@@ -486,6 +492,7 @@ optimus
 oracle
 orc
 osaka
+oshiri
 ost
 ostkaka
 overlord
@@ -527,6 +534,7 @@ poker
 pony
 portable
 power
+precure
 predacon
 predator
 preservedplum
@@ -555,6 +563,7 @@ rakshasa
 rancher
 ranger
 rangers
+rantaro
 raptor
 redbeanpaste
 redmond
@@ -725,6 +734,7 @@ tails
 tale
 tan
 tanuki
+tantei
 tardis
 taro
 tarot
@@ -790,6 +800,7 @@ vittra
 vortbrod
 vrock
 wallk
+ware
 wario
 warlock
 warlord
@@ -810,7 +821,6 @@ wonton
 wraith
 wrap
 xargon
-xargonsaigf
 xiaolongbao
 xorn
 yaki
