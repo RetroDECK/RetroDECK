@@ -47,9 +47,6 @@ finish-args:
   # D-Bus: Manage user session (systemd-logind)
   - --talk-name=org.freedesktop.login1.Manager
 
-  # D-Bus: Enables generic inter-process communication
-  - --talk-name=org.freedesktop.DBus
-
   # D-Bus: Share IPC namespace for inter-process communication
   - --share=ipc
 
