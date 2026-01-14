@@ -543,7 +543,9 @@ jobs:
         continue-on-error: true
         run: /bin/bash ./automation_tools/search_missing_libs.sh
    
-      # Uninstall RetroDECK Flatpak - Not needed on a thorwaway ubuntu-latest
-      # - name: Uninstall RetroDECK Flatpak
-      #   run: |
-      #     flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
+      # Uninstall RetroDECK Flatpak (only needed on non-ubuntu-latest / self-hosted runners)
+      - name: Uninstall RetroDECK Flatpak
+        if: ${{ github.runner_environment == 'self-hosted' }}
+        run: |
+          flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
+
