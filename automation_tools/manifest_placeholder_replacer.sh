@@ -45,7 +45,6 @@ if [ -z "$ROOT_FOLDER" ]; then
 fi
 
 rd_manifest="$ROOT_FOLDER/net.retrodeck.retrodeck.yml"
-automation_task_list="$ROOT_FOLDER/automation_tools/automation_task_list.cfg"
 cache_file="$ROOT_FOLDER/placeholders.cache"
 
 # Check if cache file exists
@@ -77,10 +76,6 @@ current_branch=$(get_current_branch)
 current_repo_url=$(get_repo_url)
 
 echo "Manifest location: $rd_manifest"
-echo "Automation task list location: $automation_task_list"
-echo
-echo "Task list contents:"
-cat "$automation_task_list"
 echo
 
 # Function to get hash from cache or calculate it
@@ -225,21 +220,3 @@ handle_thisrepo() {
   /bin/sed -i 's^'"$placeholder"'^'"$current_repo_url"'^g' "$rd_manifest"
 }
 
-# Process the task list
-while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
-  if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
-    case "$action" in
-      "branch" ) handle_branch "$placeholder" ;;
-      "hash" ) handle_hash "$placeholder" "$url" ;;
-      "latestcommit" ) handle_latestcommit "$placeholder" "$url" "$branch" ;;
-      "latestghtag" ) handle_latestghtag "$placeholder" "$url" ;;
-      "latestghrelease" ) handle_latestghrelease "$placeholder" "$url" "$branch" ;;
-      "latestghreleasesha" ) handle_latestghreleasesha "$placeholder" "$url" "$branch" ;;
-      "outside_file" ) handle_outside_file "$placeholder" "$url" ;;
-      "outside_env_var" ) handle_outside_env_var "$placeholder" "$url" ;;
-      "custom_command" ) handle_custom_command "$url" ;;
-      "url" ) handle_url "$placeholder" "$url" ;;
-      "THISREPO" ) handle_thisrepo "$placeholder" ;;
-    esac
-  fi
-done < "$automation_task_list"
