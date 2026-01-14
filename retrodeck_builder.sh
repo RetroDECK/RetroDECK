@@ -231,9 +231,9 @@ if [[ "$NO_BUILD" == "true" ]]; then
     return
 else
     if [[ "$CICD" == "true" ]]; then
-        "$ROOT_FOLDER/automation_tools/manage_components.sh" --cicd "$ROOT_FOLDER/components"
+        "$ROOT_FOLDER/automation_tools/fetch_components.sh" --cicd "$ROOT_FOLDER/components"
     else
-        "$ROOT_FOLDER/automation_tools/manage_components.sh" "$ROOT_FOLDER/components"
+        "$ROOT_FOLDER/automation_tools/fetch_components.sh" "$ROOT_FOLDER/components"
     fi
 fi
 

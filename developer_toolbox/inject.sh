@@ -52,7 +52,7 @@ sudo cp -vfr "net.retrodeck.retrodeck.metainfo.xml" "$app/share/metainfo/net.ret
 echo ""
 
 echo "Components injection is possible, be sure that your components folder contains the desired components."
-echo "If you want to update the components, run the 'manage_components.sh' script first and re-run this script."
+echo "If you want to update the components, run the 'fetch_components.sh' script first and re-run this script."
 echo ""
 read -p "Do you want to inject RetroDECK Components? (Y/n): " inject_components
 
