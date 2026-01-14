@@ -12,8 +12,8 @@ flathub_target_repo='flathub/net.retrodeck.retrodeck'
 retrodeck_repo='RetroDECK/RetroDECK'
 
 # Get the latest artifact SHA and download URL from the RetroDECK Artifacts repository
-artifacts_sha_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.sha").browser_download_url')
-artifacts_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.tar.gz").browser_download_url')
+artifacts_sha_link=$(curl -s https://api.github.com/repos/RetroDECK/RetroDECK/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.sha").browser_download_url')
+artifacts_link=$(curl -s https://api.github.com/repos/RetroDECK/RetroDECK/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.tar.gz").browser_download_url')
 
 # Remove existing gits_folder if it exists and create a new one
 if [ -d "$gits_folder" ] ; then
