@@ -114,13 +114,11 @@ modules:
       no-autogen: true
       sources:
         - type: archive
-          url: https://github.com/p7zip-project/p7zip/archive/v17.04/p7zip-v17.04.tar.gz
-          sha256: ea029a2e21d2d6ad0a156f6679bd66836204aa78148a4c5e498fe682e77127ef
+          url: https://github.com/p7zip-project/p7zip/archive/v17.06/p7zip-v17.06.tar.gz
+          sha256: c35640020e8f044b425d9c18e1808ff9206dc7caf77c9720f57eb0849d714cd1
         - type: shell
           commands:
             - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
-      post-install:
-        - mv "${FLATPAK_DEST}/bin/7za" "${FLATPAK_DEST}/bin/7z"
       cleanup:
         - /man
 
