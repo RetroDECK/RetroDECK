@@ -117,7 +117,7 @@
           <li>Upgraded runtime to org.kde.Platform 6.10.</li>
           <li>Significantly reduced default application permissions with clearer, purpose-driven access rules.</li>
           <li>New build and assembly pipeline reduces overall application size by approximately 800 MB.</li>
-          <li>Restricted Flatpak permissions for safety compliance: now RetroDECk can natively write only in the `home` folder and external drives under `/media` and `/mnt`</li>
+          <li>Adjusted Flatpak permissions for safety compliance removing unused permissions.</li>
         </ul>
         <p>
           New Components:
