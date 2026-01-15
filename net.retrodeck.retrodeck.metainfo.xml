@@ -98,7 +98,7 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
-    <release version="0.10.0b" date="2026-01-16">
+    <release version="0.10.0b" date="2026-01-17">
       <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.0b/</url>
       <description>
         <p>RetroDECK 0.10.0b is a major milestone release featuring a complete rebuild of the platform. While much of this work happens behind the scenes, it significantly improves maintainability and future expandability.</p>
@@ -117,6 +117,7 @@
           <li>Upgraded runtime to org.kde.Platform 6.10.</li>
           <li>Significantly reduced default application permissions with clearer, purpose-driven access rules.</li>
           <li>New build and assembly pipeline reduces overall application size by approximately 800 MB.</li>
+          <li>Adjusted Flatpak permissions for safety compliance removing unused permissions.</li>
         </ul>
         <p>
           New Components:
@@ -135,6 +136,7 @@
           <li>Improved device-aware data folder selection.</li>
           <li>Expanded BIOS checker and with clearer descriptions.</li>
           <li>New tools to enable or remove folder iconsets.</li>
+          <li>Added new splashes for: Setsubun (Japan), Horse New Year (China), Eid Al Fitr (Sweden), Midsummer (Sweden), Halloween, </li>
         </ul>
         <p>
           New Storage and Organization Features:

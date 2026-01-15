@@ -231,9 +231,9 @@ if [[ "$NO_BUILD" == "true" ]]; then
     return
 else
     if [[ "$CICD" == "true" ]]; then
-        "$ROOT_FOLDER/automation_tools/manage_components.sh" --cicd "$ROOT_FOLDER/components"
+        "$ROOT_FOLDER/automation_tools/fetch_components.sh" --cicd "$ROOT_FOLDER/components"
     else
-        "$ROOT_FOLDER/automation_tools/manage_components.sh" "$ROOT_FOLDER/components"
+        "$ROOT_FOLDER/automation_tools/fetch_components.sh" "$ROOT_FOLDER/components"
     fi
 fi
 
@@ -301,13 +301,19 @@ if [[ "$NO_BUILD" != "true" ]]; then
 
     sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
 
-    # Generate final artifact archive
     echo ""
-    echo "Generating artifacts archive..."
-    tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
-    ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
-    echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
-    echo "Artifacts archive created."
+    if [[ "$NO_ARTIFACTS" != "true" ]]; then   
+        # Generate final artifact archive
+        echo "Generating artifacts archive..."
+        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
+        ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
+        echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
+        echo "Artifacts archive created."
+    else
+        echo "Skipping artifact generation as no-artifacts flag is set."
+    fi
+
+    
 else
     echo "Skipping build (NO_BUILD)."
     # Create fake bundle, artifacts and sha if they don't exist
