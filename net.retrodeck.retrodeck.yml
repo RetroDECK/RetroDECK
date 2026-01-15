@@ -56,19 +56,17 @@ finish-args:
   # Devices: Bluetooth access (used for various inputs)
   - --allow=bluetooth
 
-  # Filesystem: External Drives
-  - --filesystem=/run/media
+  # Filesystem: host to make the user place retrodeck folder freely
+  - --filesystem=host
+
+  # Filesystem: External Drives, not provided by host flag
   - --filesystem=/mnt
-  - --filesystem=/media
 
   # Filesystem: Discord (For the components that has an option for Discord Rich Presence)
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
 
   # Filesystem: GTK‑3 configuration (read‑only)
   - --filesystem=xdg-config/gtk-3.0:ro
-
-  # Filesystem: Home (/home folder access)
-  - --filesystem=home
 
   # Filesystem: Steam ROM Manager / Steam Integration
   - --filesystem=~/.steam/steam:rw
