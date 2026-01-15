@@ -305,7 +305,7 @@ if [[ "$NO_BUILD" != "true" ]]; then
     if [[ "$NO_ARTIFACTS" != "true" ]]; then   
         # Generate final artifact archive
         echo "Generating artifacts archive..."
-        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
+        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$REPO_FOLDER_NAME" .
         ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
         echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
         echo "Artifacts archive created."
