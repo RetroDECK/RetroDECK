@@ -156,7 +156,6 @@ else
   artifact_sha=$(curl -sL "$artifacts_sha_link" | awk '/RetroDECK-Artifact\.tar\.gz/{print $1; exit} {first=$1} END{if (NR>0 && length(first)>0) print first}' | head -n 1)
   echo "Artifact SHA (parsed from $artifacts_sha_link): $artifact_sha"
   cat << EOF >> "$manifest"
-       - tar -xf RetroDECK-Artifact.tar.gz -C . || (echo "Failed to extract tar.gz" && exit 1)
        - cp -rn files/* /app || echo "Some files have been skipped"
       sources:
         - type: archive
