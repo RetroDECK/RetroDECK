@@ -115,9 +115,7 @@
           <li>RetroDECK has been fully re-engineered with a modular, component-based infrastructure.</li>
           <li>Each component: emulator, engine, client and system now runs in its own isolated sub-sandbox.</li>
           <li>Upgraded runtime to org.kde.Platform 6.10.</li>
-          <li>Significantly reduced default application permissions with clearer, purpose-driven access rules.</li>
           <li>New build and assembly pipeline reduces overall application size by approximately 800 MB.</li>
-          <li>Adjusted Flatpak permissions for safety compliance removing unused permissions.</li>
         </ul>
         <p>
           New Components:
@@ -143,13 +141,14 @@
         </p>
         <ul>
           <li>New retrodeck/storage directory for user-accessible game data, assets, and future expansions.</li>
+          <li>New retrodeck/vidoes directory for saved videos.</li>
           <li>Introduced folder iconset support, including the new Lahrs iconset.</li>
         </ul>
         <p>
           Component Updates and Fixes:
         </p>
         <ul>
-          <li>All components: emulators, engines, systems, and clients have been updated to newer versions.</li>
+          <li>All components: clients, engines, emulators, multi‑emulators, systems have been updated to newer versions.</li>
           <li>Expanded and corrected exposed folders for shaders, texture packs, logs, plugins, and captures across many components (Dolphin, PrimeHack, PPSSPP, RPCS3, Vita3K, Cemu, and others).</li>
           <li>Enhanced RetroArch configuration, including fixes for long-standing palette issues.</li>
           <li>Improved GZDoom .doom wrapper with spaces, symlinks support and additional IWAD compatibility.</li>
