@@ -197,7 +197,7 @@ if [ -z "$retrodeck_commit" ] && [ -d "$gits_folder/RetroDECK/.git" ]; then
 fi
 
 if [ -z "$retrodeck_commit" ]; then
-  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK.git" "$rd_branch" | awk '{print $1; exit}')
+  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK" "$rd_branch" | awk '{print $1; exit}')
 fi
 
 retrodeck_commit=${retrodeck_commit:-$release_name}
@@ -247,7 +247,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
-  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK.git\n          commit: ${retrodeck_commit}\n"
+  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n"
 
   # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
   awk -v newentries="$sources_entries" '
@@ -300,7 +300,7 @@ if [ -z "$retrodeck_commit" ] && [ -d "$gits_folder/RetroDECK/.git" ]; then
 fi
 
 if [ -z "$retrodeck_commit" ]; then
-  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK.git" "$rd_branch" | awk '{print $1; exit}')
+  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK" "$rd_branch" | awk '{print $1; exit}')
 fi
 
 retrodeck_commit=${retrodeck_commit:-$release_name}
@@ -311,7 +311,7 @@ finisher_entries=$(cat <<-YAML
       - type: dir
         path: .
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK.git
+        url: https://github.com/RetroDECK/RetroDECK
         commit: ${retrodeck_commit}
 YAML
 )
