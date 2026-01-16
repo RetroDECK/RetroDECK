@@ -65,12 +65,12 @@ fi
 git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
 
 if [ "$LOCAL" -eq 1 ]; then
-    echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding .github)"
+    echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding .github and .git)"
     if [ ! -d "$LOCAL_PATH" ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
     # Copy local repo contents on top of the cloned repo (preserve .git so push works)
-    rsync -a --delete --exclude='.github' "$LOCAL_PATH/" "$gits_folder/flathub/"
+    rsync -a --delete --exclude='.github' --exclude='.git' "$LOCAL_PATH/" "$gits_folder/flathub/"
 fi
 
 # Get RetroDECK repository (use local when --local)
