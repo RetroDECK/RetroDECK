@@ -179,7 +179,7 @@ git clean -fxd # restoring git index
 cp -rfv "$gits_folder/RetroDECK/"* automation_tools "$gits_folder/flathub/"
 
 # Add "version" file to flathub repo folder
-echo "$release_version" >> "$gits_folder/flathub/version
+echo "$release_version" >> "$gits_folder/flathub/version"
 
 cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
 ls -lah
