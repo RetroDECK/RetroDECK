@@ -88,14 +88,14 @@ fi
 
 # Clone the flathub repository (always). If --local is set, overlay local contents after cloning.
 # Clone flathub
-git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
+git clone --depth=1 --recursive "https://github.com/$flathub_target_repo" "$gits_folder/flathub"
 
 if [ "$LOCAL" -eq 1 ]; then
     echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding: ${EXCLUDES[*]})"
     if [ ! -d "$LOCAL_PATH" ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
-    # Copy local repo contents on top of the cloned repo (preserve .git so push works)
+    # Copy local repo contents on top of the cloned repo
     rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
 fi
 
@@ -107,11 +107,11 @@ if [ "$LOCAL" -eq 1 ]; then
         rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
     else
         echo "Warning: $LOCAL_PATH does not appear to contain a RetroDECK repo, falling back to remote clone"
-        git clone --depth=1 --recursive "https://github.com/$components_repo.git" "$gits_folder/RetroDECK"
+        git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
     fi
 else
     # Always get RetroDECK repository fresh
-    git clone --depth=1 --recursive "https://github.com/$components_repo.git" "$gits_folder/RetroDECK"
+    git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
 fi
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
