@@ -36,9 +36,12 @@ else
     gits_folder="/tmp/gits" # without last /
 fi
 
+#If not LOCAL set branch to main
 rd_branch="main"
 flathub_target_repo='flathub/net.retrodeck.retrodeck'
-retrodeck_repo='RetroDECK/components'
+
+# RetroDECK components repo to take the components from
+components_repo='RetroDECK/components'
 
 # Remove existing gits_folder if it exists and create a new one
 if [ -d "$gits_folder" ] ; then
@@ -80,17 +83,17 @@ if [ "$LOCAL" -eq 1 ]; then
         rsync -a --delete --exclude='.github' "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
     else
         echo "Warning: $LOCAL_PATH does not appear to contain a RetroDECK repo, falling back to remote clone"
-        git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" "$gits_folder/RetroDECK"
+        git clone --depth=1 --recursive "https://github.com/$components_repo.git" "$gits_folder/RetroDECK"
     fi
 else
     # Always get RetroDECK repository fresh
-    git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" "$gits_folder/RetroDECK"
+    git clone --depth=1 --recursive "https://github.com/$components_repo.git" "$gits_folder/RetroDECK"
 fi
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
-release_name=$(curl -s "https://api.github.com/repos/$retrodeck_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
+release_name=$(curl -s "https://api.github.com/repos/$components_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
 if [ -z "$release_name" ]; then
-    release_name=$(curl -s https://api.github.com/repos/$retrodeck_repo/releases/latest | jq -r .tag_name)
+    release_name=$(curl -s https://api.github.com/repos/$components_repo/releases/latest | jq -r .tag_name)
 fi
 echo "Using release: $release_name"
 
@@ -118,9 +121,9 @@ manifest='net.retrodeck.retrodeck.yml'
 cp "$gits_folder/RetroDECK/net.retrodeck.retrodeck.yml" "$manifest"
 
 # Fetch the asset list from the RetroDECK release (tag), fallback to latest
-release_json=$(curl -s "https://api.github.com/repos/$retrodeck_repo/releases/tags/$release_name")
+release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/tags/$release_name")
 if echo "$release_json" | jq -e '.message == "Not Found"' >/dev/null 2>&1; then
-  release_json=$(curl -s "https://api.github.com/repos/$retrodeck_repo/releases/latest")
+  release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/latest")
 fi
 
 # Extract release link for logging
@@ -138,14 +141,7 @@ fi
 echo "Generating install-components sources from release assets..."
 mapfile -t assets < <(echo "$release_json" | jq -r '.assets[]? | select(.name | test("\\.sha$") | not) | @base64')
 if [ "${#assets[@]}" -gt 0 ]; then
-  install_block="$(cat <<'YAML'
-  - name: install-components
-    buildsystem: simple
-    build-commands:
-      - bash automation_tools/install_components.sh --cicd
-    sources:
-YAML
-)"
+  sources_entries=""
   for a in "${assets[@]}"; do
     name=$(echo "$a" | base64 --decode | jq -r '.name')
     url=$(echo "$a" | base64 --decode | jq -r '.browser_download_url')
@@ -153,7 +149,7 @@ YAML
     # Prefer an explicitly uploaded .sha asset if present
     sha_url=$(echo "$release_json" | jq -r --arg s "${name}.sha" '.assets[]? | select(.name == $s) | .browser_download_url // empty')
     if [ -z "$sha_url" ]; then
-      sha_url="https://github.com/$retrodeck_repo/releases/download/$release_name/${name}.sha"
+      sha_url="https://github.com/$components_repo/releases/download/$release_name/${name}.sha"
     fi
 
     sha=$(curl -sL "$sha_url" | awk '{print $1; exit}')
@@ -162,18 +158,51 @@ YAML
       sha=""
     fi
 
-    install_block+="        - type: file\n          url: ${url}\n          sha256: ${sha}\n          dest: components\n"
+    sources_entries+="        - type: file\n          url: ${url}\n          sha256: ${sha}\n          dest: components\n"
   done
 
-  # Replace the existing install-components block in the manifest with the generated one
-  awk -v new="$install_block" '
-    /^  - name: install-components/ {print new; skip=1; next}
-    skip { if(/^  - name:/) {skip=0; print; next} else {next} }
+  # Ensure a trailing newline after the generated entries so the next manifest section is separated
+  sources_entries+=$'\n'
+
+  # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
+  awk -v newentries="$sources_entries" '
+    BEGIN{in_install=0; inserted=0; skipping=0}
+    /^  - name: install-components/ { print; in_install=1; next }
+
+    in_install {
+      if (/^[[:space:]]*sources:/) {
+        print "    sources:";
+        n = split(newentries, lines, "\n");
+        for (i=1;i<=n;i++) if (length(lines[i])) print lines[i];
+        print "";
+        skipping=1; next
+      }
+
+      if (skipping) {
+        if (/^  - name:/) { skipping=0; in_install=0; print; next }
+        # Skip old source entries
+        next
+      }
+
+      # If we reach next module header without seeing sources, insert them first
+      if (/^  - name:/ && inserted==0) {
+        print "    sources:";
+        n = split(newentries, lines, "\n");
+        for (i=1;i<=n;i++) if (length(lines[i])) print lines[i];
+        print "";
+        inserted=1
+      }
+
+      print; next
+    }
+
     { print }
   ' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
 else
   echo "No release assets found to populate install-components sources. Leaving manifest as-is."
 fi
+
+
 
 # Create a flathub.json file specifying the architecture
 cat << EOF >> flathub.json
