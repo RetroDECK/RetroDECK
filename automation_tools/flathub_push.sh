@@ -243,7 +243,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
       fi
     fi
 
-    sources_entries+="        - type: file\n          url: ${url}.git\n          sha256: ${sha}\n          dest: components\n"
+    sources_entries+="        - type: file\n          url: ${url}\n          sha256: ${sha}\n          dest: components\n"
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
