@@ -15,10 +15,15 @@ for arg in "$@"; do
       LOCAL=1
       LOCAL_PATH="${arg#--local=}"
       ;;
+    --exclude=*)
+      # Append to EXCLUDE_LIST (comma-separated): --exclude=pattern
+      EXCLUDE_LIST="${EXCLUDE_LIST:+$EXCLUDE_LIST,}${arg#--exclude=}"
+      ;;
     -h|--help)
-      echo "Usage: $0 [--dry-run] [--local[=PATH]]"
+      echo "Usage: $0 [--dry-run] [--local[=PATH]] [--exclude=PATTERN]"
       echo "  --dry-run       Run locally but do not commit/push or auth to GitHub."
       echo "  --local[=PATH]  Use an existing local flathub repository (default: current dir); do not clone from GitHub."
+      echo "  --exclude=PATTERN  Exclude additional files/dirs from rsync (can be passed multiple times or via EXCLUDE_LIST env var, comma-separated)"
       exit 0
       ;;
   esac
@@ -28,6 +33,27 @@ done
 if [ "$LOCAL" -eq 1 ] && [ -z "$LOCAL_PATH" ]; then
   LOCAL_PATH="$PWD"
 fi
+
+# Default excludes; can be extended with --exclude flags or EXCLUDE_LIST env var (comma-separated)
+# Flathub manifest folder cannot be larger than 25MB, so we need to exclude unnecessary files
+EXCLUDES=(.github .git "res/Affinity Files" "res/screenshots/new" "res/screenshots/old" "automation_tools/archive_later")
+
+# If EXCLUDE_LIST is set (either via --exclude flags or environment), append those excludes (comma-separated)
+if [ -n "${EXCLUDE_LIST:-}" ]; then
+  IFS=',' read -r -a extra_excludes <<< "$EXCLUDE_LIST"
+  for e in "${extra_excludes[@]}"; do
+    e_trim=$(echo "$e" | xargs)
+    if [ -n "$e_trim" ]; then
+      EXCLUDES+=("$e_trim")
+    fi
+  done
+fi
+
+# Build rsync exclude options
+rsync_exclude_opts=()
+for e in "${EXCLUDES[@]}"; do
+  rsync_exclude_opts+=(--exclude="$e")
+done
 
 # Check if GITHUB_WORKSPACE is set, if not, set gits_folder to /tmp/gits
 if [ -z "${GITHUB_WORKSPACE}" ]; then
@@ -65,12 +91,12 @@ fi
 git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
 
 if [ "$LOCAL" -eq 1 ]; then
-    echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding .github and .git)"
+    echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding: ${EXCLUDES[*]})"
     if [ ! -d "$LOCAL_PATH" ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
     # Copy local repo contents on top of the cloned repo (preserve .git so push works)
-    rsync -a --delete --exclude='.github' --exclude='.git' "$LOCAL_PATH/" "$gits_folder/flathub/"
+    rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
 fi
 
 # Get RetroDECK repository (use local when --local)
@@ -78,7 +104,7 @@ if [ "$LOCAL" -eq 1 ]; then
     echo "Using local RetroDECK repository from: $LOCAL_PATH"
     if [ -d "$LOCAL_PATH" ] && [ -f "$LOCAL_PATH/net.retrodeck.retrodeck.yml" ]; then
         # Copy the local RetroDECK repo into the temp workspace
-        rsync -a --delete --exclude='.github' "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
+        rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
     else
         echo "Warning: $LOCAL_PATH does not appear to contain a RetroDECK repo, falling back to remote clone"
         git clone --depth=1 --recursive "https://github.com/$components_repo.git" "$gits_folder/RetroDECK"
