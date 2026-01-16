@@ -36,7 +36,7 @@ fi
 
 # Default excludes; can be extended with --exclude flags or EXCLUDE_LIST env var (comma-separated)
 # Flathub manifest folder cannot be larger than 25MB, so we need to exclude unnecessary files
-EXCLUDES=(.github .git "res/Affinity Files" "res/screenshots/new" "res/screenshots/old" "automation_tools/archive_later")
+EXCLUDES=(.github .git "res" "automation_tools/archive_later" "config" "developer_toolbox" "functions" "tools" "retrodeck_builder.sh")
 
 # If EXCLUDE_LIST is set (either via --exclude flags or environment), append those excludes (comma-separated)
 if [ -n "${EXCLUDE_LIST:-}" ]; then
@@ -249,6 +249,58 @@ else
   echo "No release assets found to populate install-components sources. Leaving manifest as-is."
 fi
 
+# Determine RetroDECK commit/ref to embed in finisher sources (prefer local repo when --local)
+retrodeck_commit=""
+if [ "$LOCAL" -eq 1 ] && [ -d "${LOCAL_PATH:-}" ] ; then
+  if [ -d "$LOCAL_PATH/.git" ]; then
+    retrodeck_commit=$(git -C "$LOCAL_PATH" rev-parse --verify HEAD 2>/dev/null || true)
+  else
+    retrodeck_commit=$(git -C "$LOCAL_PATH" rev-parse --verify HEAD 2>/dev/null || true) || true
+  fi
+fi
+
+if [ -z "$retrodeck_commit" ] && [ -d "$gits_folder/RetroDECK/.git" ]; then
+  retrodeck_commit=$(git -C "$gits_folder/RetroDECK" rev-parse --verify HEAD 2>/dev/null || true)
+fi
+
+if [ -z "$retrodeck_commit" ]; then
+  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK.git" "$rd_branch" | awk '{print $1; exit}')
+fi
+
+retrodeck_commit=${retrodeck_commit:-$release_name}
+echo "Using RetroDECK commit/ref: $retrodeck_commit"
+
+finisher_entries=$(cat <<-YAML
+    sources:
+      - type: dir
+        path: .
+      - type: git
+        url: https://github.com/RetroDECK/RetroDECK
+        commit: ${retrodeck_commit}
+
+YAML
+)
+
+awk -v newentries="$finisher_entries" '
+  BEGIN{in_fin=0; inserted=0; skipping=0}
+  /^  - name: finisher/ { print; in_fin=1; next }
+  in_fin {
+    if (/^[[:space:]]*sources:/) {
+      printf "%s\n", newentries;
+      skipping=1; next
+    }
+    if (skipping) {
+      if (/^  - name:/) { skipping=0; in_fin=0; print; next }
+      next
+    }
+    if (/^  - name:/ && inserted==0) {
+      printf "%s\n", newentries;
+      inserted=1
+    }
+    print; next
+  }
+  { print }
+' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
 
 
 # Create a flathub.json file specifying the architecture
@@ -324,5 +376,6 @@ else
   echo "COMPONENT_RELEASE_URL=${release_html:-}" >> "$out_file" || true
   echo "FLATHUB_BRANCH=$release_version" >> "$out_file" || true
   echo "FLATHUB_BRANCH_URL=https://github.com/${flathub_target_repo}/tree/${release_version}" >> "$out_file" || true
+  echo "RETRODECK_COMMIT=${retrodeck_commit:-}" >> "$out_file" || true
 fi
 
