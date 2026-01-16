@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 1
           
       - name: Preparing data to push
-        run: automation_tools/flathub_push_main.sh --local
+        run: automation_tools/flathub_push.sh --local
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
