@@ -182,6 +182,27 @@ else
 fi
 
 
+# Determine RetroDECK commit/ref to embed in finisher sources (prefer local repo when --local)
+retrodeck_commit=""
+if [ "$LOCAL" -eq 1 ] && [ -d "${LOCAL_PATH:-}" ] ; then
+  if [ -d "$LOCAL_PATH/.git" ]; then
+    retrodeck_commit=$(git -C "$LOCAL_PATH" rev-parse --verify HEAD 2>/dev/null || true)
+  else
+    retrodeck_commit=$(git -C "$LOCAL_PATH" rev-parse --verify HEAD 2>/dev/null || true) || true
+  fi
+fi
+
+if [ -z "$retrodeck_commit" ] && [ -d "$gits_folder/RetroDECK/.git" ]; then
+  retrodeck_commit=$(git -C "$gits_folder/RetroDECK" rev-parse --verify HEAD 2>/dev/null || true)
+fi
+
+if [ -z "$retrodeck_commit" ]; then
+  retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK.git" "$rd_branch" | awk '{print $1; exit}')
+fi
+
+retrodeck_commit=${retrodeck_commit:-$release_name}
+echo "Using RetroDECK commit/ref: $retrodeck_commit"
+
 # Generate install-components sources from release assets
 # For each non-.sha asset in the release, add a `type: file` source with url and sha256
 # The SHA is read from the corresponding `.sha` file (either as a separate asset or via the -asset.sha URL)
@@ -226,7 +247,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
-  sources_entries+=$'\n'
+  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n\n"
 
   # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
   awk -v newentries="$sources_entries" '
@@ -237,7 +258,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
       if (/^[[:space:]]*sources:/) {
         print "    sources:";
         n = split(newentries, lines, "\n");
-        for (i=1;i<=n;i++) if (length(lines[i])) print lines[i];
+        for (i=1;i<=n;i++) print lines[i];
         print "";
         skipping=1; next
       }
@@ -252,7 +273,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
       if (/^  - name:/ && inserted==0) {
         print "    sources:";
         n = split(newentries, lines, "\n");
-        for (i=1;i<=n;i++) if (length(lines[i])) print lines[i];
+        for (i=1;i<=n;i++) print lines[i];
         print "";
         inserted=1
       }
@@ -294,7 +315,6 @@ finisher_entries=$(cat <<-YAML
       - type: git
         url: https://github.com/RetroDECK/RetroDECK
         commit: ${retrodeck_commit}
-
 YAML
 )
 
