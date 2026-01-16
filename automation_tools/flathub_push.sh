@@ -43,6 +43,8 @@ flathub_target_repo='flathub/net.retrodeck.retrodeck'
 # RetroDECK components repo to take the components from
 components_repo='RetroDECK/components'
 
+release_version=
+
 # Remove existing gits_folder if it exists and create a new one
 if [ -d "$gits_folder" ] ; then
     rm -rf "$gits_folder"
@@ -95,6 +97,29 @@ echo "Using release: $release_name"
 
 # Checkout the main branch in the RetroDECK repository
 cd "$gits_folder/RetroDECK" && echo "Moving in $gits_folder/RetroDECK" && git checkout "$rd_branch"
+
+# Extract release_version from net.retrodeck.retrodeck.metainfo.xml using xmlstarlet
+# Selector: component.releases.release.version
+release_version=""
+if command -v xmlstarlet >/dev/null 2>&1; then
+    if [ -f "net.retrodeck.retrodeck.metainfo.xml" ]; then
+        release_version=$(xmlstarlet sel -t -v '(/component/releases/release/@version)[1]' net.retrodeck.retrodeck.metainfo.xml 2>/dev/null | tr -d '[:space:]') || true
+        if [ -z "$release_version" ]; then
+            echo "Warning: could not extract release_version from metainfo (empty)" >&2
+        else
+            echo "Detected release_version from metainfo: $release_version"
+        fi
+    else
+        echo "Warning: metainfo file not found: net.retrodeck.retrodeck.metainfo.xml" >&2
+    fi
+else
+    echo "Warning: xmlstarlet not installed; cannot extract release_version" >&2
+fi
+# Fallback to release_name if we couldn't parse a version
+if [ -z "$release_version" ]; then
+    release_version="$release_name"
+    echo "Using fallback release_version: $release_version"
+fi
 
 # Create a new branch in the flathub repository with the release name
 cd "$gits_folder"/flathub && echo "Moving in $gits_folder/flathub" || exit 1
@@ -231,29 +256,31 @@ if [ "$DRY_RUN" -eq 1 ]; then
 else
   cd "$gits_folder/flathub" || exit 1
   git add .
-  git commit -m "Update RetroDECK to v$release_name from RetroDECK/$rd_branch"
+  git commit -m "Update RetroDECK to v$release_version from RetroDECK/$rd_branch"
 
   if [ "$LOCAL" -eq 1 ]; then
     echo "Git remotes in $gits_folder/flathub:"
     git remote -v || true
 
-    # Ensure we have a remote named 'flathub' pointing to the target repo, but do not override 'origin'
-    if git remote get-url flathub >/dev/null 2>&1; then
-      remote_name="flathub"
+    # Use same push logic as the non-local case: when running in GitHub Actions, set origin to the authenticated URL.
+    if [ -n "${GITHUB_WORKFLOW}" ]; then
+      if [ -z "${GH_TOKEN}" ]; then
+        echo "ERROR: GH_TOKEN not set; cannot authenticate to push to flathub" && exit 1
+      fi
+      git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}"
+      git push --force origin "$release_name"
     else
-      echo "Adding remote 'flathub' -> https://github.com/${flathub_target_repo}"
-      git remote add flathub "https://github.com/${flathub_target_repo}" || true
-      remote_name="flathub"
+      git push --force "https://github.com/${flathub_target_repo}" "$release_name"
     fi
-
-    echo "Pushing branch '$release_name' to remote '$remote_name' ($(git remote get-url $remote_name))"
-    git push --force "$remote_name" "$release_name"
   else
     # Push the changes to the remote repository, using authentication if in a GitHub workflow
     echo "Git remotes in $gits_folder/flathub:"
     git remote -v || true
     if [ -n "${GITHUB_WORKFLOW}" ]; then
-      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}
+      if [ -z "${GH_TOKEN}" ]; then
+        echo "ERROR: GH_TOKEN not set; cannot authenticate to push to flathub" && exit 1
+      fi
+      git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}"
       git push --force origin "$release_name"
     else
       git push --force "https://github.com/${flathub_target_repo}" "$release_name"
