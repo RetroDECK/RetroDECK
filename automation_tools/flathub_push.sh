@@ -121,10 +121,10 @@ if [ -z "$release_version" ]; then
     echo "Using fallback release_version: $release_version"
 fi
 
-# Create a new branch in the flathub repository with the release name
+# Create a new branch in the flathub repository with the release version
 cd "$gits_folder"/flathub && echo "Moving in $gits_folder/flathub" || exit 1
-git checkout -b "$release_name"
-echo "Current directory: $(pwd)"
+git checkout -b "$release_version"
+echo "Current directory: $(pwd) (branch: $release_version)"
 ls -lah
 
 # Remove all files in the flathub repository and clean the git index
@@ -252,7 +252,7 @@ fi
 # Commit the changes and push to the new branch
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "DRY RUN enabled: skipping git commit/push/auth."
-  echo "Generated changes are in: $gits_folder/flathub (branch: $release_name)"
+  echo "Generated changes are in: $gits_folder/flathub (branch: $release_version)"
 else
   cd "$gits_folder/flathub" || exit 1
   git add .
