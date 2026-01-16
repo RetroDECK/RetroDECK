@@ -62,6 +62,14 @@ else
     gits_folder="/tmp/gits" # without last /
 fi
 
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+#                             Variables
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
 #If not LOCAL set branch to main
 rd_branch="main"
 flathub_target_repo='flathub/net.retrodeck.retrodeck'
@@ -69,7 +77,11 @@ flathub_target_repo='flathub/net.retrodeck.retrodeck'
 # RetroDECK components repo to take the components from
 components_repo='RetroDECK/components'
 
-release_version=
+# Release version that will be populated later
+release_version="unknown"
+
+# Modules in the manifest where we want to replace the local "." path with a git source poiting to RetroDECK repo
+replace_pwd_source=("install-components" "finisher")
 
 # Remove existing gits_folder if it exists and create a new one
 if [ -d "$gits_folder" ] ; then
@@ -85,6 +97,12 @@ fi
 if [ -d flathub ]; then
     rm -rf "$gits_folder/RetroDECK"
 fi
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#
+#                             Main Script
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Clone the flathub repository (always). If --local is set, overlay local contents after cloning.
 # Clone flathub
@@ -247,7 +265,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
-  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n"
+  sources_entries+="        - type: dir\n          path: .\n"
 
   # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
   awk -v newentries="$sources_entries" '
@@ -310,9 +328,6 @@ finisher_entries=$(cat <<-YAML
     sources:
       - type: dir
         path: .
-      - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        commit: ${retrodeck_commit}
 YAML
 )
 
@@ -335,6 +350,32 @@ awk -v newentries="$finisher_entries" '
       inserted=1
     }
     print; next
+  }
+  { print }
+' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
+
+# Replace `- type: dir path: .` with git entry in modules listed in replace_pwd_source
+awk -v modules="${replace_pwd_source[*]}" -v repo_url="https://github.com/RetroDECK/RetroDECK" -v commit="${retrodeck_commit}" '
+  BEGIN{ split(modules, m, " "); for (i in m) target[m[i]]=1; in_mod=0; in_sources=0 }
+  /^[[:space:]]*- name: / {
+    name=$0; sub(/^[[:space:]]*- name:[[:space:]]*/, "", name); gsub(/^[ \t]+|[ \t]+$/, "", name);
+    if (name in target) in_mod=1; else in_mod=0;
+    print; next
+  }
+  in_mod && /^[[:space:]]*sources:/ { print; in_sources=1; next }
+  in_mod && in_sources {
+    if (/^[[:space:]]*- type: dir[[:space:]]*$/) {
+      getline nextline
+      if (nextline ~ /^[[:space:]]*path:[[:space:]]*\.$/) {
+        print "        - type: git";
+        printf "          url: %s\n", repo_url;
+        printf "          commit: %s\n", commit;
+        next
+      } else {
+        print $0; print nextline; next
+      }
+    }
+    if (/^[[:space:]]*- name:/) { in_sources=0 }
   }
   { print }
 ' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
