@@ -36,6 +36,7 @@ components
 net.retrodeck.retrodeck.reworked.yml
 temp-retrodeck
 temp-components
+flathub_push_info.env
 
 #   Components artifacts   #
 ############################

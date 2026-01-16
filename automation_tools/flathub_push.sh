@@ -286,5 +286,16 @@ else
       git push --force "https://github.com/${flathub_target_repo}" "$release_version"
     fi
   fi
+
+  # Write a small info file into the GitHub workspace so downstream jobs can read it
+  if [ -n "${GITHUB_WORKSPACE}" ]; then
+    out_file="${GITHUB_WORKSPACE}/flathub_push_info.env"
+  else
+    out_file="$PWD/flathub_push_info.env"
+  fi
+
+  echo "COMPONENT_VERSION=$release_version" > "$out_file" || true
+  echo "FLATHUB_BRANCH=$release_version" >> "$out_file" || true
+  echo "FLATHUB_BRANCH_URL=https://github.com/${flathub_target_repo}/tree/${release_version}" >> "$out_file" || true
 fi
 

@@ -22,3 +22,38 @@ jobs:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
           GH_TOKEN: ${{ secrets.FLATHUB_PUSH }}
+
+  Summary:
+    needs: Pushing_branch_to_flathub
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout RetroDECK repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Write Flathub push summary
+        run: |
+          set -e
+          file=net.retrodeck.retrodeck.metainfo.xml
+          release_version=""
+          if [ -f "$file" ]; then
+            release_version=$(sed -n 's/.*<release version="\([^"]*\)".*/\1/p' "$file" | head -n1 || true)
+          fi
+          # Fallback: read info file created by the push script in the workspace
+          if [ -z "$release_version" ] && [ -f "flathub_push_info.env" ]; then
+            # shellcheck disable=SC1091
+            source flathub_push_info.env || true
+            release_version="${COMPONENT_VERSION:-$release_version}"
+          fi
+          if [ -z "$release_version" ]; then
+            release_version="unknown"
+          fi
+          flathub_repo="https://github.com/flathub/net.retrodeck.retrodeck"
+          branch_url="$flathub_repo/tree/$release_version"
+
+          echo "### Flathub push summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "* Component version used: **$release_version**" >> "$GITHUB_STEP_SUMMARY"
+          echo "* Flathub branch pushed: **$release_version**" >> "$GITHUB_STEP_SUMMARY"
+          echo "* Branch link: [$branch_url]($branch_url)" >> "$GITHUB_STEP_SUMMARY"
