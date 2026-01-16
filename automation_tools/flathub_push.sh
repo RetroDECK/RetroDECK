@@ -295,6 +295,7 @@ else
   fi
 
   echo "COMPONENT_VERSION=$release_version" > "$out_file" || true
+  echo "COMPONENT_RELEASE_URL=${release_html:-}" >> "$out_file" || true
   echo "FLATHUB_BRANCH=$release_version" >> "$out_file" || true
   echo "FLATHUB_BRANCH_URL=https://github.com/${flathub_target_repo}/tree/${release_version}" >> "$out_file" || true
 fi
