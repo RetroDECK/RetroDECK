@@ -268,9 +268,9 @@ else
         echo "ERROR: GH_TOKEN not set; cannot authenticate to push to flathub" && exit 1
       fi
       git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}"
-      git push --force origin "$release_name"
+      git push --force origin "$release_version"
     else
-      git push --force "https://github.com/${flathub_target_repo}" "$release_name"
+      git push --force "https://github.com/${flathub_target_repo}" "$release_version"
     fi
   else
     # Push the changes to the remote repository, using authentication if in a GitHub workflow
@@ -281,9 +281,9 @@ else
         echo "ERROR: GH_TOKEN not set; cannot authenticate to push to flathub" && exit 1
       fi
       git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}"
-      git push --force origin "$release_name"
+      git push --force origin "$release_version"
     else
-      git push --force "https://github.com/${flathub_target_repo}" "$release_name"
+      git push --force "https://github.com/${flathub_target_repo}" "$release_version"
     fi
   fi
 fi
