@@ -178,6 +178,9 @@ git clean -fxd # restoring git index
 # Copy all files from the RetroDECK repository to the flathub repository
 cp -rfv "$gits_folder/RetroDECK/"* automation_tools "$gits_folder/flathub/"
 
+# Add "version" file to flathub repo folder
+echo "$release_version" >> "$gits_folder/flathub/version
+
 cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
 ls -lah
 
@@ -466,4 +469,3 @@ else
   echo "FLATHUB_BRANCH_URL=https://github.com/${flathub_target_repo}/tree/${release_version}" >> "$out_file" || true
   echo "RETRODECK_COMMIT=${retrodeck_commit:-}" >> "$out_file" || true
 fi
-
