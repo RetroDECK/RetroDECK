@@ -247,7 +247,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
-  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n\n"
+  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n"
 
   # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
   awk -v newentries="$sources_entries" '
@@ -259,7 +259,6 @@ if [ "${#assets[@]}" -gt 0 ]; then
         print "    sources:";
         n = split(newentries, lines, "\n");
         for (i=1;i<=n;i++) print lines[i];
-        print "";
         skipping=1; next
       }
 
@@ -274,7 +273,6 @@ if [ "${#assets[@]}" -gt 0 ]; then
         print "    sources:";
         n = split(newentries, lines, "\n");
         for (i=1;i<=n;i++) print lines[i];
-        print "";
         inserted=1
       }
 
@@ -323,6 +321,7 @@ awk -v newentries="$finisher_entries" '
   /^  - name: finisher/ { print; in_fin=1; next }
   in_fin {
     if (/^[[:space:]]*sources:/) {
+      print "";
       printf "%s\n", newentries;
       skipping=1; next
     }
@@ -331,6 +330,7 @@ awk -v newentries="$finisher_entries" '
       next
     }
     if (/^  - name:/ && inserted==0) {
+      print "";
       printf "%s\n", newentries;
       inserted=1
     }
@@ -339,6 +339,16 @@ awk -v newentries="$finisher_entries" '
   { print }
 ' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
 
+# Remove the 'summary' module entirely from the generated manifest
+awk 'BEGIN{del=0}
+/^[[:space:]]*- name: summary/ {del=1; next}
+{
+  if (del) {
+    if (/^[[:space:]]*- name:/) { del=0; print; next }
+    next
+  }
+  print
+}' "$manifest" > "$manifest.tmp" && mv "$manifest.tmp" "$manifest"
 
 # Create a flathub.json file specifying the architecture
 cat << EOF >> flathub.json
