@@ -199,10 +199,27 @@ if [ "${#assets[@]}" -gt 0 ]; then
       sha_url="https://github.com/$components_repo/releases/download/$release_name/${name}.sha"
     fi
 
-    sha=$(curl -sL "$sha_url" | awk '{print $1; exit}')
-    if [ -z "$sha" ]; then
-      echo "Warning: could not fetch sha for $name (tried $sha_url)"
-      sha=""
+    # Try to fetch a .sha file and validate it is a real SHA256 (64 hex chars). If not present or invalid,
+    # download the asset, compute its sha256, and remove the temporary file.
+    sha=$(curl -sL "$sha_url" | awk '{print $1; exit}' || true)
+    if ! echo "$sha" | grep -Eq '^[0-9a-fA-F]{64}$'; then
+      echo "Warning: could not fetch valid sha for $name (tried $sha_url); computing sha256 from asset..." >&2
+      tmpfile=$(mktemp) || tmpfile="/tmp/${name}.tmp"
+      if curl -sL -f -o "$tmpfile" "$url"; then
+        # compute sha256 and remove the tmpfile
+        if command -v sha256sum >/dev/null 2>&1; then
+          sha=$(sha256sum "$tmpfile" | awk '{print $1}')
+        else
+          # fallback to shasum -a 256 if sha256sum not available
+          sha=$(shasum -a 256 "$tmpfile" | awk '{print $1}')
+        fi
+        rm -f "$tmpfile"
+        echo "Computed sha256 for $name: $sha" >&2
+      else
+        echo "Warning: failed to download asset to compute sha for $name (tried $url)" >&2
+        rm -f "$tmpfile" || true
+        sha=""
+      fi
     fi
 
     sources_entries+="        - type: file\n          url: ${url}\n          sha256: ${sha}\n          dest: components\n"
