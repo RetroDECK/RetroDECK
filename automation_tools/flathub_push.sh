@@ -58,21 +58,17 @@ if [ -d flathub ]; then
     rm -rf "$gits_folder/RetroDECK"
 fi
 
-# Clone the flathub and RetroDECK repositories
+# Clone the flathub repository (always). If --local is set, overlay local contents after cloning.
+# Clone flathub
+git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
+
 if [ "$LOCAL" -eq 1 ]; then
-    echo "Using local flathub repository from: $LOCAL_PATH"
+    echo "Overlaying local flathub contents from: $LOCAL_PATH (excluding .github)"
     if [ ! -d "$LOCAL_PATH" ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
-    # Remove any previous temp copy
-    if [ -d "$gits_folder/flathub" ]; then
-        rm -rf "$gits_folder/flathub"
-    fi
-    mkdir -p "$gits_folder"
-    # Copy local repo into temporary workspace (preserve .git so push works)
+    # Copy local repo contents on top of the cloned repo (preserve .git so push works)
     rsync -a --delete --exclude='.github' "$LOCAL_PATH/" "$gits_folder/flathub/"
-else
-    git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
 fi
 
 # Get RetroDECK repository (use local when --local)
@@ -238,10 +234,24 @@ else
   git commit -m "Update RetroDECK to v$release_name from RetroDECK/$rd_branch"
 
   if [ "$LOCAL" -eq 1 ]; then
-    echo "Pushing branch '$release_name' to local repo origin..."
-    git push --force origin "$release_name"
+    echo "Git remotes in $gits_folder/flathub:"
+    git remote -v || true
+
+    # Ensure we have a remote named 'flathub' pointing to the target repo, but do not override 'origin'
+    if git remote get-url flathub >/dev/null 2>&1; then
+      remote_name="flathub"
+    else
+      echo "Adding remote 'flathub' -> https://github.com/${flathub_target_repo}"
+      git remote add flathub "https://github.com/${flathub_target_repo}" || true
+      remote_name="flathub"
+    fi
+
+    echo "Pushing branch '$release_name' to remote '$remote_name' ($(git remote get-url $remote_name))"
+    git push --force "$remote_name" "$release_name"
   else
     # Push the changes to the remote repository, using authentication if in a GitHub workflow
+    echo "Git remotes in $gits_folder/flathub:"
+    git remote -v || true
     if [ -n "${GITHUB_WORKFLOW}" ]; then
       git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}
       git push --force origin "$release_name"
