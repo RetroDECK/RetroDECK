@@ -243,11 +243,11 @@ if [ "${#assets[@]}" -gt 0 ]; then
       fi
     fi
 
-    sources_entries+="        - type: file\n          url: ${url}\n          sha256: ${sha}\n          dest: components\n"
+    sources_entries+="        - type: file\n          url: ${url}.git\n          sha256: ${sha}\n          dest: components\n"
   done
 
   # Ensure a trailing newline after the generated entries so the next manifest section is separated
-  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK\n          commit: ${retrodeck_commit}\n"
+  sources_entries+="        - type: dir\n          path: .\n        - type: git\n          url: https://github.com/RetroDECK/RetroDECK.git\n          commit: ${retrodeck_commit}\n"
 
   # Replace only the sources: sub-block inside install-components (preserve headers and other keys)
   awk -v newentries="$sources_entries" '
@@ -311,7 +311,7 @@ finisher_entries=$(cat <<-YAML
       - type: dir
         path: .
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
+        url: https://github.com/RetroDECK/RetroDECK.git
         commit: ${retrodeck_commit}
 YAML
 )
