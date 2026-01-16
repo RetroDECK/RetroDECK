@@ -1,12 +1,12 @@
 
-name: "Push branch on Flathub"
+name: "Push branch to Flathub"
 
 on:
   workflow_dispatch:
 
 jobs:
 
-  Pushing_branch_into_flathub:
+  Pushing_branch_to_flathub:
     runs-on:
       - ubuntu-latest
     steps:
