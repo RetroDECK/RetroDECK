@@ -1353,9 +1353,15 @@
 						"bindings"
 						{
 							"binding"		"xinput_button SELECT, , "
-							"binding"		"controller_action CHANGE_PRESET 2 0 0, , "
 						}
 					}
+          "Long_Press"
+          {
+            "bingins"
+            {
+							"binding"		"controller_action CHANGE_PRESET 2 0 0, , "
+            }
+          }
 				}
 				"disabled_activators"
 				{
