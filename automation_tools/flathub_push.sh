@@ -489,3 +489,6 @@ if [ "$DRY_RUN" -eq 1 ]; then
   exit 0
 fi
 
+echo "Version file contents:"
+cat "$gits_folder/flathub/version"
+
