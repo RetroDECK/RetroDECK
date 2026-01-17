@@ -483,6 +483,7 @@ if [ "$DRY_RUN" -eq 1 ]; then
   echo "DRY RUN enabled: listing files that WOULD have been pushed from: $gits_folder/flathub (branch: $release_version)"
   if [ -d "$gits_folder/flathub" ]; then
     ls -lah "$gits_folder/flathub" || true
+    git status || true
   else
     echo "No flathub folder found at: $gits_folder/flathub"
   fi
