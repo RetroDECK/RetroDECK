@@ -477,3 +477,15 @@ else
   echo "FLATHUB_BRANCH_URL=https://github.com/${flathub_target_repo}/tree/${release_version}" >> "$out_file" || true
   echo "RETRODECK_COMMIT=${retrodeck_commit:-}" >> "$out_file" || true
 fi
+
+# If dry-run, list the files that would have been pushed
+if [ "$DRY_RUN" -eq 1 ]; then
+  echo "DRY RUN enabled: listing files that WOULD have been pushed from: $gits_folder/flathub (branch: $release_version)"
+  if [ -d "$gits_folder/flathub" ]; then
+    ls -lah "$gits_folder/flathub" || true
+  else
+    echo "No flathub folder found at: $gits_folder/flathub"
+  fi
+  exit 0
+fi
+
