@@ -5,12 +5,12 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Enable dry run: Don't piush to Flathub, just simulate the process"
+        description: "Enable DRY RUN: Don't push to Flathub, just simulate the process"
         type: boolean
         required: false
         default: false
       push_local_branch:
-        description: "Push the target branch instead of the main branch (not recommended)"
+        description: "PUSH the TARGET BRANCH instead of the main branch (not recommended)"
         type: boolean
         required: false
         default: false
