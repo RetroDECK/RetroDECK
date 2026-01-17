@@ -133,17 +133,20 @@ else
 fi
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
-release_name=$(curl -s "https://api.github.com/repos/$components_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
-if [ -z "$release_name" ]; then
-    release_name=$(curl -s https://api.github.com/repos/$components_repo/releases/latest | jq -r .tag_name)
+components_release_name=$(curl -s "https://api.github.com/repos/$components_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
+if [ -z "$components_release_name" ]; then
+    components_release_name=$(curl -s https://api.github.com/repos/$components_repo/releases/latest | jq -r .tag_name)
 fi
-echo "Using release: $release_name"
+echo "Using Components release: $components_release_name"
 
 # Checkout the main branch in the RetroDECK repository
 cd "$gits_folder/RetroDECK" && echo "Moving in $gits_folder/RetroDECK" && git checkout "$rd_branch"
 
+echo "Current directory: $(pwd) (branch: $rd_branch)"
+ls -lah
+
 # Extract release_version from net.retrodeck.retrodeck.metainfo.xml using xmlstarlet
-# Selector: component.releases.release.version
+# Selector: /component/releases/release/@version)[1]
 release_version=""
 if command -v xmlstarlet >/dev/null 2>&1; then
     if [ -f "net.retrodeck.retrodeck.metainfo.xml" ]; then
@@ -159,9 +162,9 @@ if command -v xmlstarlet >/dev/null 2>&1; then
 else
     echo "Warning: xmlstarlet not installed; cannot extract release_version" >&2
 fi
-# Fallback to release_name if we couldn't parse a version
+# Fallback to components_release_name if we couldn't parse a version
 if [ -z "$release_version" ]; then
-    release_version="$release_name"
+    release_version="$components_release_name"
     echo "Using fallback release_version: $release_version"
 fi
 
@@ -172,7 +175,7 @@ echo "Current directory: $(pwd) (branch: $release_version)"
 ls -lah
 
 # Remove all files in the flathub repository and clean the git index
-git rm -rf *
+git rm -rf "$gits_folder/flathub/"*
 git clean -fxd # restoring git index
 
 # Copy all files from the RetroDECK repository to the flathub repository
@@ -189,7 +192,7 @@ manifest='net.retrodeck.retrodeck.yml'
 cp "$gits_folder/RetroDECK/net.retrodeck.retrodeck.yml" "$manifest"
 
 # Fetch the asset list from the RetroDECK Components release (tag), fallback to latest
-release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/tags/$release_name")
+release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/tags/$components_release_name")
 if echo "$release_json" | jq -e '.message == "Not Found"' >/dev/null 2>&1; then
   release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/latest")
 fi
@@ -197,9 +200,9 @@ fi
 # Extract Components release link for logging
 release_html=$(echo "$release_json" | jq -r '.html_url // empty')
 if [ -n "$release_html" ]; then
-  echo "Found components release: $release_name -> $release_html"
+  echo "Found components release: $components_release_name -> $release_html"
 else
-  echo "Found components release tag: $release_name (no html_url found in API response)"
+  echo "Found components release tag: $components_release_name (no html_url found in API response)"
 fi
 
 
@@ -221,7 +224,7 @@ if [ -z "$retrodeck_commit" ]; then
   retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK" "$rd_branch" | awk '{print $1; exit}')
 fi
 
-retrodeck_commit=${retrodeck_commit:-$release_name}
+retrodeck_commit=${retrodeck_commit:-$components_release_name}
 echo "Using RetroDECK commit/ref: $retrodeck_commit"
 
 # Generate install-components sources from release assets
@@ -238,7 +241,7 @@ if [ "${#assets[@]}" -gt 0 ]; then
     # Prefer an explicitly uploaded .sha asset if present
     sha_url=$(echo "$release_json" | jq -r --arg s "${name}.sha" '.assets[]? | select(.name == $s) | .browser_download_url // empty')
     if [ -z "$sha_url" ]; then
-      sha_url="https://github.com/$components_repo/releases/download/$release_name/${name}.sha"
+      sha_url="https://github.com/$components_repo/releases/download/$components_release_name/${name}.sha"
     fi
 
     # Try to fetch a .sha file and validate it is a real SHA256 (64 hex chars). If not present or invalid,
@@ -324,7 +327,7 @@ if [ -z "$retrodeck_commit" ]; then
   retrodeck_commit=$(git ls-remote "https://github.com/RetroDECK/RetroDECK" "$rd_branch" | awk '{print $1; exit}')
 fi
 
-retrodeck_commit=${retrodeck_commit:-$release_name}
+retrodeck_commit=${retrodeck_commit:-$components_release_name}
 echo "Using RetroDECK commit/ref: $retrodeck_commit"
 
 finisher_entries=$(cat <<-YAML
