@@ -176,7 +176,7 @@ git rm -rf *
 git clean -fxd # restoring git index
 
 # Copy all files from the RetroDECK repository to the flathub repository
-cp -rfv "$gits_folder/RetroDECK/"* automation_tools "$gits_folder/flathub/"
+cp -rfv "$gits_folder/RetroDECK/"* "$gits_folder/flathub/"
 
 # Add "version" file to flathub repo folder
 echo "$release_version" >> "$gits_folder/flathub/version"
@@ -188,18 +188,18 @@ ls -lah
 manifest='net.retrodeck.retrodeck.yml'
 cp "$gits_folder/RetroDECK/net.retrodeck.retrodeck.yml" "$manifest"
 
-# Fetch the asset list from the RetroDECK release (tag), fallback to latest
+# Fetch the asset list from the RetroDECK Components release (tag), fallback to latest
 release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/tags/$release_name")
 if echo "$release_json" | jq -e '.message == "Not Found"' >/dev/null 2>&1; then
   release_json=$(curl -s "https://api.github.com/repos/$components_repo/releases/latest")
 fi
 
-# Extract release link for logging
+# Extract Components release link for logging
 release_html=$(echo "$release_json" | jq -r '.html_url // empty')
 if [ -n "$release_html" ]; then
-  echo "Found release: $release_name -> $release_html"
+  echo "Found components release: $release_name -> $release_html"
 else
-  echo "Found release tag: $release_name (no html_url found in API response)"
+  echo "Found components release tag: $release_name (no html_url found in API response)"
 fi
 
 
