@@ -183,7 +183,8 @@ git rm -rf "$gits_folder/flathub/"*
 git clean -fxd # restoring git index
 
 # Copy all files from the RetroDECK repository to the flathub repository
-cp -rfv "$gits_folder/RetroDECK/"* "$gits_folder/flathub/"
+# Use rsync to copy RetroDECK into flathub while applying excludes
+rsync -a --delete "${rsync_exclude_opts[@]}" -v "$gits_folder/RetroDECK/" "$gits_folder/flathub/"
 
 # Add "version" file to flathub repo folder
 echo "$release_version" >> "$gits_folder/flathub/version"
