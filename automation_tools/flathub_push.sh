@@ -106,6 +106,7 @@ fi
 
 # Clone the flathub repository (always). If --local is set, overlay local contents after cloning.
 # Clone flathub
+echo "Cloning flathub repository: \"https://github.com/$flathub_target_repo\" in \"$gits_folder/flathub\""
 git clone --depth=1 --recursive "https://github.com/$flathub_target_repo" "$gits_folder/flathub"
 
 if [ "$LOCAL" -eq 1 ]; then
@@ -125,10 +126,12 @@ if [ "$LOCAL" -eq 1 ]; then
         rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
     else
         echo "Warning: $LOCAL_PATH does not appear to contain a RetroDECK repo, falling back to remote clone"
+        echo "Cloning repository: \"https://github.com/$components_repo\" in \"$gits_folder/RetroDECK\""
         git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
     fi
 else
     # Always get RetroDECK repository fresh
+    echo "Cloning repository: \"https://github.com/$components_repo\" in \"$gits_folder/RetroDECK\""
     git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
 fi
 
