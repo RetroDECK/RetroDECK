@@ -3,6 +3,11 @@ name: "Push branch to Flathub"
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Enable dry run"
+        required: false
+        default: "false"
 
 jobs:
 
@@ -23,7 +28,13 @@ jobs:
           xmlstarlet --version || true
 
       - name: Preparing data to push
-        run: automation_tools/flathub_push.sh
+        run: |
+          DRY_RUN_ARG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_ARG="--dry-run"
+            echo "Dry-run enabled"
+          fi
+          automation_tools/flathub_push.sh $DRY_RUN_ARG
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
