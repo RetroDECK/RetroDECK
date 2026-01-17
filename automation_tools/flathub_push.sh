@@ -116,7 +116,7 @@ if [ "$LOCAL" -eq 1 ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
     # Copy local repo contents on top of the cloned repo
-    rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
+    rsync -a "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
 fi
 
 # Get RetroDECK repository (use local when --local)
