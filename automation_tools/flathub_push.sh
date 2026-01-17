@@ -433,6 +433,7 @@ if [ "$DRY_RUN" -eq 1 ]; then
 else
   cd "$gits_folder/flathub" || exit 1
   git add .
+  git restore --staged flathub.json
   git commit -m "Update RetroDECK to v$release_version from RetroDECK/$rd_branch"
 
   if [ "$LOCAL" -eq 1 ]; then
@@ -482,6 +483,7 @@ fi
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "DRY RUN enabled: listing files that WOULD have been pushed from: $gits_folder/flathub (branch: $release_version)"
   if [ -d "$gits_folder/flathub" ]; then
+    git restore --staged flathub.json
     ls -lah "$gits_folder/flathub" || true
     git status || true
   else
