@@ -23,7 +23,7 @@ jobs:
           xmlstarlet --version || true
 
       - name: Preparing data to push
-        run: automation_tools/flathub_push.sh --local
+        run: automation_tools/flathub_push.sh
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
