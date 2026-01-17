@@ -486,7 +486,6 @@ if [ "$DRY_RUN" -eq 1 ]; then
   else
     echo "No flathub folder found at: $gits_folder/flathub"
   fi
-  exit 0
 fi
 
 echo "Version file contents:"
