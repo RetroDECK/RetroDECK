@@ -1052,7 +1052,7 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{
