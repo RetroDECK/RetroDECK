@@ -76,6 +76,7 @@ flathub_target_repo='flathub/net.retrodeck.retrodeck'
 
 # RetroDECK components repo to take the components from
 components_repo='RetroDECK/components'
+retrodeck_repo='RetroDECK/RetroDECK'
 
 # Release version that will be populated later
 release_version="unknown"
@@ -126,13 +127,13 @@ if [ "$LOCAL" -eq 1 ]; then
         rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/RetroDECK/"
     else
         echo "Warning: $LOCAL_PATH does not appear to contain a RetroDECK repo, falling back to remote clone"
-        echo "Cloning repository: \"https://github.com/$components_repo\" in \"$gits_folder/RetroDECK\""
-        git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
+        echo "Cloning repository: \"https://github.com/$retrodeck_repo\" in \"$gits_folder/RetroDECK\""
+        git clone --depth=1 --recursive "https://github.com/$retrodeck_repo" "$gits_folder/RetroDECK"
     fi
 else
     # Always get RetroDECK repository fresh
-    echo "Cloning repository: \"https://github.com/$components_repo\" in \"$gits_folder/RetroDECK\""
-    git clone --depth=1 --recursive "https://github.com/$components_repo" "$gits_folder/RetroDECK"
+    echo "Cloning repository: \"https://github.com/$retrodeck_repo\" in \"$gits_folder/RetroDECK\""
+    git clone --depth=1 --recursive "https://github.com/$retrodeck_repo" "$gits_folder/RetroDECK"
 fi
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
