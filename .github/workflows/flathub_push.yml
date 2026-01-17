@@ -5,7 +5,12 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Enable dry run"
+        description: "Enable dry run: Don't piush to Flathub, just simulate the process"
+        type: boolean
+        required: false
+        default: false
+      push_local_branch:
+        description: "Push the target branch instead of the main branch (not recommended)"
         type: boolean
         required: false
         default: false
@@ -30,12 +35,18 @@ jobs:
 
       - name: Preparing data to push
         run: |
-          DRY_RUN_ARG=""
+          RUN_ARGS=""
           if [ "${{ github.event.inputs.dry_run }}" = true ]; then
-            DRY_RUN_ARG="--dry-run"
+            RUN_ARGS+="--dry-run "
             echo "Dry-run enabled"
           fi
-          automation_tools/flathub_push.sh $DRY_RUN_ARG
+          if [ "${{ github.event.inputs.push_local_branch }}" = true ]; then
+            RUN_ARGS+="--local "
+            echo "Pushing local branch: ${{ github.ref_name }}"
+          else
+            echo "Pushing main branch from remote"
+          fi
+          automation_tools/flathub_push.sh $RUN_ARGS
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
