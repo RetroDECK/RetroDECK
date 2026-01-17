@@ -116,7 +116,7 @@ if [ "$LOCAL" -eq 1 ]; then
         echo "ERROR: local path '$LOCAL_PATH' does not exist" && exit 1
     fi
     # Copy local repo contents on top of the cloned repo
-    rsync -a "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
+    rsync -a --delete "${rsync_exclude_opts[@]}" "$LOCAL_PATH/" "$gits_folder/flathub/"
 fi
 
 # Get RetroDECK repository (use local when --local)
@@ -184,7 +184,7 @@ git clean -fxd # restoring git index
 
 # Copy all files from the RetroDECK repository to the flathub repository
 # Use rsync to copy RetroDECK into flathub while applying excludes
-rsync -a --delete "${rsync_exclude_opts[@]}" -v "$gits_folder/RetroDECK/" "$gits_folder/flathub/"
+rsync -a "${rsync_exclude_opts[@]}" -v "$gits_folder/RetroDECK/" "$gits_folder/flathub/"
 
 # Add "version" file to flathub repo folder
 echo "$release_version" >> "$gits_folder/flathub/version"
