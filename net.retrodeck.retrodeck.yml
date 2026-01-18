@@ -158,10 +158,16 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
 
         # Create the version file vital for RetroDECK Framework
-        cp version ${FLATPAK_DEST}/retrodeck/version || echo "Version file not found! Terminating build." && exit 1
+        cp version ${FLATPAK_DEST}/retrodeck/version
 
         # Print the version number to the console
         echo "Version is $(cat ${FLATPAK_DEST}/retrodeck/version)"
+
+        # Safelock to quit the build if version file is missing
+        if [ ! -f ${FLATPAK_DEST}/retrodeck/version ]; then
+          echo "Version file is missing! Terminating build."
+          exit 1
+        fi
 
         # Initializing RO retrodeck config folder
         mkdir -p ${FLATPAK_DEST}/retrodeck/graphics
