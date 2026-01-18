@@ -189,6 +189,14 @@ rsync -a "${rsync_exclude_opts[@]}" -v "$gits_folder/RetroDECK/" "$gits_folder/f
 # Add "version" file to flathub repo folder
 echo "$release_version" >> "$gits_folder/flathub/version"
 
+# Ensure 'version' is NOT ignored in the flathub repo's .gitignore (do not modify RetroDECK's .gitignore)
+if [ -f "$gits_folder/flathub/.gitignore" ]; then
+  if grep -Eq '^[[:space:]]*version[[:space:]]*$' "$gits_folder/flathub/.gitignore"; then
+    sed -i '/^[[:space:]]*version[[:space:]]*$/d' "$gits_folder/flathub/.gitignore"
+    echo "Removed 'version' from $gits_folder/flathub/.gitignore"
+  fi
+fi
+
 cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
 ls -lah
 
