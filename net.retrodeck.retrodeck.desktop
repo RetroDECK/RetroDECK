@@ -2,7 +2,7 @@
 Name=RetroDECK
 GenericName=All-in-One Retro Gaming Platform
 Type=Application
-Comment=All-in-one emulation solution for Steam Deck and Linux desktops, making emulation easy and accessible
+Comment=Your all-in-one retro gaming platform, made easy for your device
 Icon=net.retrodeck.retrodeck
 Exec=
 Terminal=false
