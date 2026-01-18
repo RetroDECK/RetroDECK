@@ -763,6 +763,8 @@ finit() {
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
   prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  source_component_functions "internal"
+  source_component_functions "external"
 
   local finit_choices=()
 
