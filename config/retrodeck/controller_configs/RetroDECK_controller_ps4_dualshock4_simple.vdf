@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"81"
-	"title"		"RetroDECK: DualShock 4 v.1b"
-	"description"		"RetroDECK: PS4 - DualShock 4 - v.1b"
+	"title"		"RetroDECK: DualShock 4 v.2b"
+	"description"		"RetroDECK: PS4 - DualShock 4 - v.2b"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -1587,7 +1587,7 @@
 							"binding"		"xinput_button SELECT, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{
@@ -2029,7 +2029,7 @@
 							"binding"		"xinput_button SELECT, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{

@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"84"
-	"title"		"RetroDECK: Xbox 360 v.1b"
-	"description"		"RetroDECK: Xbox 360 - v.1b"
+	"title"		"RetroDECK: Xbox 360 v.2b"
+	"description"		"RetroDECK: Xbox 360 - v.2b"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -1052,7 +1052,7 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{

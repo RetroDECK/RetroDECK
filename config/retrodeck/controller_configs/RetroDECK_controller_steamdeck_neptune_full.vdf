@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"1864"
-	"title"		"RetroDECK: Steam Deck - Neptune v.1.1b FULL"
-	"description"		"RetroDECK: Steam Deck - Neptune v.1.1b FULL"
+	"title"		"RetroDECK: Steam Deck - Neptune v.2.1b FULL"
+	"description"		"RetroDECK: Steam Deck - Neptune v.2.1b FULL"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -9002,7 +9002,7 @@
 							"binding"		"xinput_button SELECT, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{
