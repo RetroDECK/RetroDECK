@@ -163,6 +163,12 @@ modules:
         # Print the version number to the console
         echo "Version is $(cat ${FLATPAK_DEST}/retrodeck/version)"
 
+        # Safelock to quit the build if version file is missing
+        if [ ! -f ${FLATPAK_DEST}/retrodeck/version ]; then
+          echo "Version file is missing! Terminating build."
+          exit 1
+        fi
+
         # Initializing RO retrodeck config folder
         mkdir -p ${FLATPAK_DEST}/retrodeck/graphics
         mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
