@@ -81,6 +81,21 @@ jobs:
           git branch
           git log -1 --oneline
 
+      - name: Lint .sh scripts
+        run: |
+          set -euo pipefail
+          # Find all .sh files excluding archive_*, developer_toolbox and automation-tools directories and .git
+          mapfile -d '' files < <(find . -type f -name '*.sh' -not -path './archive_*/*' -not -path './.git/*' -not -path './automation-tools/*' -not -path './developer_toolbox/*' -print0)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No .sh files found"
+            exit 0
+          fi
+
+          for f in "${files[@]}"; do
+            echo "Checking $f"
+            bash -n "$f"
+          done
+
       # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
       - name: "Build Flatpak"
         id: build-retrodeck
