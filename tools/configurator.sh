@@ -151,7 +151,7 @@ configurator_welcome_dialog() {
 
   "Developer Options" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Developer Options" "<span foreground='$purple'><b>WARNING: These features and options can be EXTREMELY DANGEROUS to your RetroDECK installation!</b></span>\n\nThey represent the bleeding edge of upcoming or experimental RetroDECK functionality and should never be used when you have important saves, states, ROMs, or other content that is not fully backed up.\n\n<b>Affected data may include (but is not limited to):</b>\n\n• BIOS files\n• Borders\n• Media\n• Gamelists\n• Mods\n• ROMs\n• Saves\n• States\n• Screenshots\n• Texture packs\n• Themes\n• And more\n\n<span foreground='$purple'><b>All of this data may be lost, damaged, or completely corrupted if you continue.</b></span>\n\n<span foreground='$purple'><b>YOU HAVE BEEN WARNED</b></span>"
+    configurator_generic_dialog "RetroDECK Configurator - Developer Options" "<span foreground='$purple'><b>WARNING: These features and options can be EXTREMELY DANGEROUS to your RetroDECK installation!</b></span>\n\nThey represent the bleeding edge of upcoming or experimental RetroDECK functionality and should never be used when you have important saves, states, ROMs, or other content that is not fully backed up.\n\n<b>Affected data may include (but is not limited to):</b>\n\nBIOS files\nBorders\nMedia\nGamelists\nMods\nROMs\nSaves\nStates\nScreenshots\nTexture packs\nThemes\nAnd more\n\n<span foreground='$purple'><b>All of this data may be lost, damaged, or completely corrupted if you continue.</b></span>\n\n<span foreground='$purple'><b>YOU HAVE BEEN WARNED</b></span>"
     configurator_developer_dialog
   ;;
 

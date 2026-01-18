@@ -20,7 +20,7 @@
    • Testing Coordinator
    • Wiki Author & Maintainer
    • Component‑Configuration Specialist
-   • Steam Input & Miscellaneous Input Integrations
+   •  Steam Input & Miscellaneous Input Integrations
 
 ▶ JIANNAZZONE
    • Web Development & Site Maintenance
