@@ -492,5 +492,5 @@ if [ "$DRY_RUN" -eq 1 ]; then
 fi
 
 echo "Version file contents:"
-cat "$gits_folder/flathub/version"
+cat "$gits_folder/flathub/version" || { echo "Version file not found! Terminating push." && exit 1; }
 
