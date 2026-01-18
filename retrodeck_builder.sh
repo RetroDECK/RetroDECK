@@ -271,12 +271,6 @@ if [[ "$NO_BUILD" != "true" ]]; then
     echo ""
     eval $command
 
-    # Cleanup before bundle
-    echo ""
-    echo "Cleaning up build and cache to free disk space before bundle..."
-    rm -rf "$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder"
-    df -h
-
     # Create the Flatpak bundle
     echo ""
     echo "Creating the Flatpak bundle..."
@@ -305,7 +299,7 @@ if [[ "$NO_BUILD" != "true" ]]; then
     if [[ "$NO_ARTIFACTS" != "true" ]]; then   
         # Generate final artifact archive
         echo "Generating artifacts archive..."
-        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
+        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$BUILD_FOLDER_NAME" .
         ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
         echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
         echo "Artifacts archive created."
@@ -313,6 +307,11 @@ if [[ "$NO_BUILD" != "true" ]]; then
         echo "Skipping artifact generation as no-artifacts flag is set."
     fi
 
+    # Cleanup
+    echo ""
+    echo "Cleaning up build and cache to free disk space before bundle..."
+    rm -rf "$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder"
+    df -h
     
 else
     echo "Skipping build (NO_BUILD)."

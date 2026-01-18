@@ -3,6 +3,8 @@
 echo "Found the following components in the components directory:"
 ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 )
 
+
+# When CI/CD mode is enabled, delete components after installation to save space
 CICD="false"
 if [[ "$1" == "--cicd" ]]; then
   echo "Running in CI/CD mode (--cicd argument detected)."

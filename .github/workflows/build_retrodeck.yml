@@ -457,7 +457,7 @@ jobs:
             Build artifacts can be found [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts) and they include:
             - RetroDECK Flatpak: `RetroDECK.flatpak`
             - Flatpak file SHA256 checksum: `RetroDECK.flatpak.sha`
-            - Flatpak Artifact Bundle: `RetroDECKArtifact.tar.gz`, not useful for testing or end users
+            - Flatpak Artifact Bundle: `RetroDECK-Artifact.tar.gz`, not useful for testing or end users
 
       # Rewrite Tag (for Main Branch Only)
       - name: Clone RetroDECK repo
