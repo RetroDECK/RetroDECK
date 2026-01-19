@@ -61,10 +61,23 @@ finish-args:
   # Filesystem: host lets users store the RetroDECK folder on external media (NAS / SD card/ HDD), permission recommended by Flathub maintainers.
   - --filesystem=host
 
+  # Filesystem: Discord (For the components that has an option for Discord Rich Presence)
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create
+
+  # Filesystem: GTK‑3 configuration (read‑only)
+  - --filesystem=xdg-config/gtk-3.0:ro
+
+  # Filesystem: Steam ROM Manager / Steam Integration
+  - --filesystem=xdg-data/Steam:rw
+
+  # Filesystem: Udev information (read‑only, for inputs)
+  - --filesystem=/run/udev:ro
+
   # GStreamer integration
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 
   # Gamescope integration
+  - --filesystem=xdg-run/gamescope-0:ro
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
   
   # Multi‑arch support (32‑bit libs on 64‑bit)
@@ -78,6 +91,7 @@ finish-args:
 
   # Sound: PulseAudio, PipeWire
   - --socket=pulseaudio
+  - --filesystem=xdg-run/pipewire-0
 
   # Wayland: Display server access, SDL window‑class, Qt platform selection
   - --socket=wayland
