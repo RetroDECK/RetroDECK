@@ -69,6 +69,7 @@ finish-args:
 
   # Filesystem: Steam ROM Manager / Steam Integration
   - --filesystem=xdg-data/Steam:rw
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
   # Filesystem: Udev information (read‑only, for inputs)
   - --filesystem=/run/udev:ro
