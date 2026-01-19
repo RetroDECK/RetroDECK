@@ -105,10 +105,12 @@
           FIXES:
         </p>
         <ul>
-          <li>Corrected errors in component files for Ryujinx, PCSX2, and Vita3K.</li>
-          <li>Changed controller profiles to use long‑press actions on the “Select” button instead of short.</li>
-          <li>Eliminated line dots that caused issues on multilingual systems lacking configured Flatpak languages.</li>
-          <li>Revised the retrodeck.desktop file to display an accurate description.</li>
+          <li>COMPONENTS: Corrected serveral errors in component files for Ryubing, PCSX2, and Vita3K.</li>
+          <li>COMPONENTS: Corrected Ryubing input issue.</li>
+          <li>COMPONENTS: Corrected MelonDS bios path issue.</li>
+          <li>STEAM INPUT: Changed controller profiles to use long‑press actions on the “Select” button instead of short based on feedback, all profiles got their version increased by 0.1+.</li>
+          <li>FRAMEWORK: Eliminated line dots that caused issues on multilingual systems lacking configured Flatpak languages and locale files.</li>
+          <li>MISC: Revised the retrodeck.desktop file to display an accurate description.</li>
         </ul>
       </description>
     </release>
