@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"73"
-	"title"		"RetroDECK: Steam Controller - Gordon v.1b"
-	"description"		"RetroDECK: Steam Controller - Gordon v.1b"
+	"title"		"RetroDECK: Steam Controller - Gordon v.1.1"
+	"description"		"RetroDECK: Steam Controller - Gordon v.1.1"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -1609,7 +1609,7 @@
 							"binding"		"xinput_button SELECT, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{

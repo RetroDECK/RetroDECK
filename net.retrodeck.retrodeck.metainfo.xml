@@ -98,6 +98,22 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
+    <release version="0.10.1b" date="2026-01-19">
+      <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.1b/0.10.1b/</url>
+      <description>
+        <p>
+          FIXES:
+        </p>
+        <ul>
+          <li>COMPONENTS: Corrected serveral errors in component files for Ryubing, PCSX2, and Vita3K.</li>
+          <li>COMPONENTS: Corrected Ryubing input issue.</li>
+          <li>COMPONENTS: Corrected MelonDS bios path issue.</li>
+          <li>STEAM INPUT: Changed controller profiles to use long‑press actions on the “Select” button instead of short based on feedback, all profiles got their version increased by 0.1+.</li>
+          <li>FRAMEWORK: Eliminated line dots that caused issues on multilingual systems lacking configured Flatpak languages and locale files.</li>
+          <li>MISC: Revised the retrodeck.desktop file to display an accurate description.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.10.0b" date="2026-01-18">
       <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.0b/</url>
       <description>

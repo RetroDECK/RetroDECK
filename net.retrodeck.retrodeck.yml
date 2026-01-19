@@ -58,9 +58,8 @@ finish-args:
   # Devices: Bluetooth access (used for various inputs)
   - --allow=bluetooth
 
-  # Filesystem: host and /mnt let users store the RetroDECK folder on external media (NAS / SD card/ HDD), permission recommended by Flathub maintainers.
+  # Filesystem: host lets users store the RetroDECK folder on external media (NAS / SD card/ HDD), permission recommended by Flathub maintainers.
   - --filesystem=host
-  - --filesystem=/mnt
 
   # Filesystem: Discord (For the components that has an option for Discord Rich Presence)
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
@@ -69,10 +68,7 @@ finish-args:
   - --filesystem=xdg-config/gtk-3.0:ro
 
   # Filesystem: Steam ROM Manager / Steam Integration
-  - --filesystem=~/.steam/steam:rw
   - --filesystem=xdg-data/Steam:rw
-  - --filesystem=~/.steam:rw
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
   # Filesystem: Udev information (read‑only, for inputs)
   - --filesystem=/run/udev:ro

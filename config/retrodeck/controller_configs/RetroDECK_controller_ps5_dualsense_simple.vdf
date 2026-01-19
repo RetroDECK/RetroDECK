@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"114"
-	"title"		"RetroDECK: DualSense v.1b"
-	"description"		"RetroDECK: PS5 - DualSense v.1"
+	"title"		"RetroDECK: DualSense v.1.1"
+	"description"		"RetroDECK: PS5 - DualSense v.1.1"
 	"creator"		""
 	"progenitor"		""
 	"url"		"f"
@@ -1587,7 +1587,7 @@
 							"binding"		"xinput_button SELECT, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{
@@ -2036,7 +2036,7 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
-					"Full_Press"
+					"Long_Press"
 					{
 						"bindings"
 						{

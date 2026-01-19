@@ -2,7 +2,7 @@
 Name=RetroDECK Configurator
 GenericName=RetroDECK Configuration Utility
 Type=Application
-Comment=A handy tool to change common RetroDECK settings
+Comment=A handy multi-tool for managing all of RetroDECK
 Icon=net.retrodeck.retrodeck.configurator
 Exec=/bin/bash /app/tools/configurator.sh
 Terminal=false
