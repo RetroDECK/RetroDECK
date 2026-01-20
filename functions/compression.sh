@@ -14,22 +14,7 @@ compress_game() {
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$format" == "chd" ]]; then
-    case "$system" in # Check platform-specific compression options
-    "psp" )
-      log d "Compressing PSP game $source_file into $dest_file"
-      /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
-    ;;
-    "ps2" )
-      if [[ "$filename_extension" == "cue" ]]; then
-        /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
-      else
-        /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
-      fi
-    ;;
-    * )
-      /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
-    ;;
-    esac
+    compress_chd "$system" "$source_file" "$dest_file"
   elif [[ "$format" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
   elif [[ "$format" == "rvz" ]]; then
