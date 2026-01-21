@@ -14,68 +14,10 @@ post_update() {
 
   # Optional userdata backup prior to update
 
-  local choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to back up some or all RetroDECK userdata?\n\nPlease choose a backup method for your RetroDECK userdata:\n\nCore Backup:\nOnly essential files will be saved, including game saves, save states, and gamelists.\n\nCustom Backup:\nSelect specific folders to include in your backup. Ideal for tailored data preservation.\n\nComplete Backup:\nAll userdata will be backed up, including games and downloaded media.\n\n<span foreground='purple'><b>WARNING:</b> A complete backup may require a very large amount of storage space.</span>")
+  local backup_question_response=$(configurator_generic_question_dialog "RetroDECK Update - Backup Userdata" "Would you like to back up some or all RetroDECK userdata prior to the update?")
 
-  local rc=$?
-  if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
-    log i "User chose to not backup prior to update."
-  else
-    case $choice in
-      "Core Backup" )
-        log i "User chose to backup core userdata prior to update."
-        if ! backup_retrodeck_userdata "core"; then
-          log d "Userdata backup failed, giving option to proceed"
-          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
-            log d "User chose to stop post_update process after backup failure"
-            exit 1
-          fi
-        fi
-      ;;
-      "Custom Backup" )
-        log i "User chose to backup some userdata prior to update."
-        while read -r config_line; do
-          local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-          if [[ ! $current_setting_name =~ (rd_home_path|sdcard|backups_path) ]]; then # Ignore these locations
-          log d "Adding $current_setting_name to compressible paths."
-            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-            compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
-          fi
-        done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-
-        choice=$(rd_zenity \
-        --list --width=1200 --height=720 \
-        --checklist \
-        --separator="^" \
-        --print-column=3 \
-        --text="Please select the folders you wish to compress..." \
-        --column "Backup?" \
-        --column "Folder Name" \
-        --column "Path" \
-        "${compressible_paths[@]}")
-
-        choices=() # Expand choice string into passable array
-        IFS='^' read -ra choices <<< "$choice"
-
-        if ! backup_retrodeck_userdata "custom" "${choices[@]}"; then # Expand array of choices into individual arguments
-          log d "Userdata backup failed, giving option to proceed"
-          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
-            log d "User chose to stop post_update process after backup failure"
-            exit 1
-          fi
-        fi
-      ;;
-      "Complete Backup" )
-        log i "User chose to backup all userdata prior to update."
-        if ! backup_retrodeck_userdata "complete"; then
-          log d "Userdata backup failed, giving option to proceed"
-          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
-            log d "User chose to stop post_update process after backup failure"
-            exit 1
-          fi
-        fi
-      ;;
-    esac
+  if [[ "$backup_question_response" == "true" ]]; then
+    configurator_retrodeck_backup_dialog
   fi
 
   # Start of post_update actions
