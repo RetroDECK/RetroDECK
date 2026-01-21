@@ -115,16 +115,16 @@
         </ul>
         <p>FIXED:</p>
         <ul>
-          <li>FRAMEWORK: CHDMAN and chd compression is working again.</li>
-          <li>COMPONENTS: AZAHAR configuration errors in hotkey mappings and settings fixed via config reset.</li>
-          <li>COMPONENTS: PICO8 now uses the correct path and is working again.</li>
-          <li>COMPONENTS: PORTMASTER updated to include the latest fixes from the PortMaster team.</li>
-          <li>COMPONENTS: PCSX2 backup function corrected for retrodeck mods pcsx2 folder path.</li>
-          <li>COMPONENTS: RetroArch backup function corrected for retrodeck bios mame2003 plus path.</li>
+          <li>COMPRESSION: CHDMAN and chd compression is working again.</li>
+          <li>AZAHAR: Configuration errors in hotkey mappings and settings fixed via config reset.</li>
+          <li>PICO-8: Now uses the correct path and is working again.</li>
+          <li>PORTMASTER: Updated to include the latest fixes from the PortMaster team.</li>
+          <li>PCSX2: Backup function corrected for retrodeck mods pcsx2 folder path.</li>
+          <li>RetroArch: Backup function corrected for retrodeck bios mame2003 plus path.</li>
         </ul>
         <p>CHANGED:</p>
         <ul>
-          <li>COMPONENTS: ES-DE no longer lists PrimeHack as an alternative emulator for GameCube and Wii and now exposes it as its own PrimeHack system linked to roms primehack.</li>
+          <li>ES-DE: No longer lists PrimeHack as an alternative emulator for GameCube and Wii and now exposes it as its own PrimeHack system linked to roms primehack.</li>
         </ul>
       </description>
     </release>
