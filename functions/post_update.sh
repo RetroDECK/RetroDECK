@@ -60,10 +60,6 @@ post_update() {
     # These actions happen at every update
     #######################################
 
-    if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
-      install_retrodeck_controller_profile
-    fi
-
     deploy_helper_files
     build_retrodeck_current_presets
     handle_folder_iconsets "$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")"
