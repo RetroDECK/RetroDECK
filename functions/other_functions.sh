@@ -359,7 +359,7 @@ backup_retrodeck_userdata() {
     local path_value=$(echo "$config_path" | jq -r '.value')
     log d "Adding $path_value to compressible paths."
     config_paths["$path_var"]="$path_value"
-  done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "sdcard")' "$rd_conf")
+  done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "logs_path" and .key != "sdcard")' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -415,7 +415,7 @@ backup_retrodeck_userdata() {
 
   elif [[ "$backup_type" == "core" ]]; then
     for folder_name in "${!config_paths[@]}"; do
-      if [[ $folder_name =~ (saves_path|states_path|logs_path) ]]; then # Only include these paths
+      if [[ $folder_name =~ (saves_path|states_path) ]]; then # Only include these paths
         path_value="${config_paths[$folder_name]}"
         if [[ -e "$path_value" ]]; then
           paths_to_backup+=("$path_value")
