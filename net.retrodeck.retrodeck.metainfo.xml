@@ -16,29 +16,36 @@
   <content_rating type="oars-1.0" />
   <screenshots>
     <screenshot type="default">
+      <caption>RetroDECK Logo</caption>
       <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK Logo on Steam Deck</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK Logo on Steam Deck GUI</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK ES-DE Theme C64</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK on ROG</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK on Laptop</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>RetroDECK on TV</caption>
       <image>
         https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
     </screenshot>
@@ -98,19 +105,53 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
-    <release version="0.10.1b" date="2026-01-19">
-      <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.1b/0.10.1b/</url>
+    <release version="0.10.2b" date="2026-01-22">
+      <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.2b/</url>
       <description>
-        <p>
-          FIXES:
-        </p>
+        <p>ADDED:</p>
         <ul>
-          <li>COMPONENTS: Corrected serveral errors in component files for Ryubing, PCSX2, and Vita3K.</li>
+          <li>BACKUP: Simplified the backup prompt and choices.</li>
+          <li>COMPRESSION: CHDMAN now also checks: arcade, atomiswave, cdimono1, cdtv, fmtowns, megacdjp, mess, naomi, neogeocdjp as valid compression targets.</li>
+          <li>FRAMEWORK: Updated the handling of MelonDS new config format.</li>
+          <li>FRAMEWORK: Updated the backup process to exclude log files, reducing the risk of corruption during writes.</li>
+          <li>FRAMEWORK: Added a verification step to ensure Steam Input controller layout files are always injected during post-update.</li>
+          <li>FRAMEWORK: Migrated PortMaster and SRM data into their dedicated component files.</li>
+          <li>FOLDER ICONS: Added a folder icon for PrimeHack.</li>
+          <li>PRIMEHACK: Separated the PrimeHack component and added its own folder in roms/primehack based on user feedback.</li>
+        </ul>
+        <p>FIXED:</p>
+        <ul>
+          <li>AZAHAR: Azahar's configuration files contained several errors in hot-key mappings and other settings, warranting a configuration reset.</li>
+          <li>COMPRESSION: CHDMAN (.chd compression) is looking at the right paths and is now working again.</li>
+          <li>GENERAL: Fixed spelling errors across several component-ingredient files.</li>
+          <li>PCSX2: Corrected a retrodeck/mods/pcsx2 folder-path issue in the backup function.</li>
+          <li>PICO-8: PICO-8 is now looking in the correct path and is working again.</li>
+          <li>PORTMASTER: RetroDECK now sources the latest fix from the PortMaster team, which should resolve the current issues.</li>
+          <li>PRIMEHACK: PrimeHack's configuration files contained several errors in hot-key mappings and other settings, warranting a configuration reset.</li>
+          <li>RETROARCH: Corrected a retrodeck/bios/mame2003-plus folder-path issue in the backup function.</li>
+          <li>SRM: Fixed an issue where RetroDECK controller layouts were not applied under certain conditions due to versioning errors.</li>
+        </ul>
+        <p>CHANGED:</p>
+        <ul>
+          <li>ES-DE: PrimeHack has been removed as an alternative emulator for GameCube and Wii, and now has its own PrimeHack system, linked to the roms/primehack folder.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.10.1b" date="2026-01-19">
+      <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.1b/</url>
+      <description>
+        <p>FIXED:</p>
+        <ul>
+          <li>FRAMEWORK: Removed decorative bullet point symbol characters that caused menu access issues on hybrid multilingual systems without configured Flatpak languages or locale files.</li>
+          <li>FRAMEWORK: Removed additional unnecessary permissions from net retrodeck retrodeck yml.</li>
+          <li>FRAMEWORK: Fixed path resolution issues where new paths such as retrodeck storage were resolved before being properly set in finit.</li>
+          <li>COMPONENTS: Corrected issues in component ingredient files for Ryubing PCSX2 RetroArch and Vita3K.</li>
           <li>COMPONENTS: Corrected Ryubing input issue.</li>
           <li>COMPONENTS: Corrected MelonDS bios path issue.</li>
-          <li>STEAM INPUT: Changed controller profiles to use long‑press actions on the “Select” button instead of short based on feedback, all profiles got their version increased by 0.1+.</li>
-          <li>FRAMEWORK: Eliminated line dots that caused issues on multilingual systems lacking configured Flatpak languages and locale files.</li>
-          <li>MISC: Revised the retrodeck.desktop file to display an accurate description.</li>
+        </ul>
+        <p>CHANGED:</p>
+        <ul>
+          <li>STEAM INPUT: Updated all controller layouts to use Long Press instead of Full Press for Select button hotkeys reducing accidental triggers and increased all layout versions by plus 0.1.</li>
         </ul>
       </description>
     </release>

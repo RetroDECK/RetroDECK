@@ -934,7 +934,7 @@ configurator_retrodeck_backup_dialog() {
         local path_value=$(echo "$config_path" | jq -r '.value')
         log d "Adding $path_value to compressible paths."
         compressible_paths+=( "false" "$path_var" "$path_value")
-      done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "sdcard")' "$rd_conf")
+      done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "logs_path" and .key != "sdcard")' "$rd_conf")
 
       # Add static paths not defined in retrodeck.cfg
       if [[ -e "$rd_home_path/ES-DE/collections" ]]; then

@@ -359,7 +359,7 @@ backup_retrodeck_userdata() {
     local path_value=$(echo "$config_path" | jq -r '.value')
     log d "Adding $path_value to compressible paths."
     config_paths["$path_var"]="$path_value"
-  done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "sdcard")' "$rd_conf")
+  done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "logs_path" and .key != "sdcard")' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -415,7 +415,7 @@ backup_retrodeck_userdata() {
 
   elif [[ "$backup_type" == "core" ]]; then
     for folder_name in "${!config_paths[@]}"; do
-      if [[ $folder_name =~ (saves_path|states_path|logs_path) ]]; then # Only include these paths
+      if [[ $folder_name =~ (saves_path|states_path) ]]; then # Only include these paths
         path_value="${config_paths[$folder_name]}"
         if [[ -e "$path_value" ]]; then
           paths_to_backup+=("$path_value")
@@ -836,25 +836,6 @@ install_retrodeck_starterpack() {
   fi
   create_dir "$downloaded_media_path/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$downloaded_media_path/doom/"
-}
-
-install_retrodeck_controller_profile() {
-  # This function will install the needed files for the custom RetroDECK controller profile
-  # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
-  # BIGGER NOTE: As part of this process, all emulators will need to have their configs hard-reset to match the controller mappings of the profile
-  # USAGE: install_retrodeck_controller_profile
-  if [[ -d "$HOME/.steam/steam/controller_base/templates/" || -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then
-    if [[ -d "$HOME/.steam/steam/controller_base/templates/" ]]; then # If a normal binary Steam install exists
-      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$rd_core_files/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
-    fi
-    if [[ -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then # If a Flatpak Steam install exists
-      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$rd_core_files/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
-    fi
-  else
-    configurator_generic_dialog "RetroDECK - Install: Steam Controller Templates" "The target directories for the controller profile do not exist.\n\nThis may occur if <span foreground='$purple'><b>Steam is not installed</b></span> or if the location does not have <span foreground='$purple'><b>read permissions</b></span>."
-  fi
 }
 
 create_lock() {
@@ -1647,20 +1628,6 @@ launch_command() {
   "$function_name" "$@"
 }
 
-portmaster_show(){
-  log d "Setting PortMaster visibility in ES-DE"
-  if [ "$1" = "true" ]; then
-    log d "\"$roms_path/portmaster/PortMaster.sh\" is not found, installing it"
-    install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
-    set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
-  elif [ "$1" = "false" ]; then
-    rm -rf "$roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
-    set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
-  else
-    log e "\"$1\" is not a valid choice, quitting"
-  fi
-}
-
 handle_folder_iconsets() {
   local iconset="$1"
 
@@ -1708,21 +1675,6 @@ handle_folder_iconsets() {
       find -L "$path" -maxdepth 2 -type f -iname '.directory' -exec rm {} \;
     done < <(jq -r 'del(.paths.downloaded_media_path, .paths.themes_path, .paths.sdcard) | .paths[]' "$rd_conf")
     set_setting_value "$rd_conf" "iconset" "false" retrodeck "options"
-  fi
-}
-
-install_retrodeck_controller_profile_and_add_to_steam() {
-  install_retrodeck_controller_profile
-  add_retrodeck_to_steam
-  
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Steam Synchronization" --cancel-label="No" --ok-label "Yes" \
-    --text="Enable Steam synchronization?\n\nThis will scan your games for any <span foreground='$purple'><b>Favorited</b></span> games in ES-DE and add them to your Steam library as individual entries.\n\nYou will need to restart Steam for the changes to take effect."
-
-  if [[ $? == 0 ]]; then
-    configurator_enable_steam_sync
-  fi
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") =~ (flatpak) ]]; then # If Flatpak Steam, warn about permission
-    configurator_generic_dialog "RetroDeck Configurator - Steam Flatpak Warning" "You are using the <span foreground='purple'><b>Flatpak Version of Steam</b></span>.\n\nTo allow RetroDECK to launch, Steam must be granted the following permission:\n<span foreground='purple'><b>org.freedesktop.Flatpak</b></span>\n\nPlease read the RetroDECK wiki for instructions"
   fi
 }
 

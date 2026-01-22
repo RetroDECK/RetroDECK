@@ -797,21 +797,24 @@
     },
     {
       "filename": "pico8",
-      "system": "PICO-8",
+      "system": "pico8",
       "description": "PICO-8 executable",
-      "required": "Required"
+      "required": "Required",
+      "paths": "$bios_path/pico-8"
     },
     {
       "filename": "pico8.dat",
-      "system": "PICO-8",
+      "system": "pico8",
       "description": "PICO-8 system data file",
-      "required": "Required"
+      "required": "Required",
+      "paths": "$bios_path/pico-8"
     },
     {
       "filename": "pico8_dyn",
-      "system": "PICO-8",
+      "system": "pico8",
       "description": "Dynamic library for PICO-8",
-      "required": "Required"
+      "required": "Required",
+      "paths": "$bios_path/pico-8"
     },
     {
       "filename": "bios_CD_E.bin",

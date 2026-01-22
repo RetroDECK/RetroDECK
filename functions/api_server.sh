@@ -205,7 +205,7 @@ process_request() {
         "incompatible_presets" )
           local result
           result=$(jq -r '.incompatible_presets' $features)
-          if [[ -n "$result" ]] then
+          if [[ -n "$result" ]]; then
             echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
             echo "{\"status\":\"error\",\"message\":\"conflicting presets information could not be read\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"

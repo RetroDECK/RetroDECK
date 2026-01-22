@@ -50,7 +50,7 @@ set_setting_value() {
       fi
     ;;
 
-    "melonds" | "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom" | "dosbox-x" )
+    "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom" | "dosbox-x" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -66,7 +66,7 @@ set_setting_value() {
       fi
     ;;
 
-    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
+    "dolphin" | "duckstation" | "melonds" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' "$1"
       else
