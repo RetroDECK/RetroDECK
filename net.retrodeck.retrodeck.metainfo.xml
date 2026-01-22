@@ -105,26 +105,30 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
-    <release version="0.10.2b" date="2026-01-XX">
+    <release version="0.10.2b" date="2026-01-22">
       <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.2b/</url>
       <description>
         <p>ADDED:</p>
         <ul>
-          <li>FRAMEWORK: PRIMEHACK component separated and now uses its own roms primehack folder based on user feedback.</li>
-          <li>FRAMEWORK: Added a dedicated folder icon for PrimeHack.</li>
+          <li>BACKUP: Simplified the backup prompt and choices.</li>
+          <li>COMPRESSION: CHDMAN now also checks: arcade, atomiswave, cdimono1, cdtv, fmtowns, megacdjp, mess, naomi, neogeocdjp as valid compression targets.</li>
+          <li>FRAMEWORK: Updated the handling of MelonDS new config format.</li>
+          <li>FOLDER ICONS: Added a folder icon for PrimeHack.</li>
+          <li>PRIMEHACK: Separated the PrimeHack component and added its own folder in roms/primehack based on user feedback.</li>
         </ul>
         <p>FIXED:</p>
         <ul>
-          <li>COMPRESSION: CHDMAN and chd compression is working again.</li>
-          <li>AZAHAR: Configuration errors in hotkey mappings and settings fixed via config reset.</li>
-          <li>PICO-8: Now uses the correct path and is working again.</li>
-          <li>PORTMASTER: Updated to include the latest fixes from the PortMaster team.</li>
-          <li>PCSX2: Backup function corrected for retrodeck mods pcsx2 folder path.</li>
-          <li>RetroArch: Backup function corrected for retrodeck bios mame2003 plus path.</li>
+          <li>AZAHAR: Azahar's configuration files contained several errors in hot-key mappings and other settings, warranting a configuration reset.</li>
+          <li>COMPRESSION: CHDMAN (.chd compression) is looking at the right paths and is now working again.</li>
+          <li>GENERAL: Fixed spelling errors across several component-ingredient files.</li>
+          <li>PCSX2: Corrected a retrodeck/mods/pcsx2 folder-path issue in the backup function.</li>
+          <li>PICO-8: PICO-8 is now looking in the correct path and is working again.</li>
+          <li>PORTMASTER: RetroDECK now sources the latest fix from the PortMaster team, which should resolve the current issues.</li>          
+          <li>RETROARCH: Corrected a retrodeck/bios/mame2003-plus folder-path issue in the backup function.</li>
         </ul>
         <p>CHANGED:</p>
         <ul>
-          <li>ES-DE: No longer lists PrimeHack as an alternative emulator for GameCube and Wii and now exposes it as its own PrimeHack system linked to roms primehack.</li>
+          <li>ES-DE: PrimeHack has been removed as an alternative emulator for GameCube and Wii, and now has its own PrimeHack system, linked to the roms/primehack folder.</li>
         </ul>
       </description>
     </release>
