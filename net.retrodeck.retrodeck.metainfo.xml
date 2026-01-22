@@ -113,9 +113,9 @@
           <li>BACKUP: Simplified the backup prompt and choices.</li>
           <li>COMPRESSION: CHDMAN now also checks: arcade, atomiswave, cdimono1, cdtv, fmtowns, megacdjp, mess, naomi, neogeocdjp as valid compression targets.</li>
           <li>FRAMEWORK: Updated the handling of MelonDS new config format.</li>
-          <li>FRAMEWORK: Updated backup to not include logs to mitigate potential corruption errors in writing files.</li>
-          <li>FRAMEWORK: Added check to make sure Steam Input Controller Layouts are always injected on post-update.</li>
-          <li>FRAMEWORK: Migrated PortMaster and SRM data to the component files.</li>
+          <li>FRAMEWORK: Updated the backup process to exclude log files, reducing the risk of corruption during writes.</li>
+          <li>FRAMEWORK: Added a verification step to ensure Steam Input controller layout files are always injected during post-update.</li>
+          <li>FRAMEWORK: Migrated PortMaster and SRM data into their dedicated component files.</li>
           <li>FOLDER ICONS: Added a folder icon for PrimeHack.</li>
           <li>PRIMEHACK: Separated the PrimeHack component and added its own folder in roms/primehack based on user feedback.</li>
         </ul>
@@ -129,7 +129,7 @@
           <li>PORTMASTER: RetroDECK now sources the latest fix from the PortMaster team, which should resolve the current issues.</li>
           <li>PRIMEHACK: PrimeHack's configuration files contained several errors in hot-key mappings and other settings, warranting a configuration reset.</li>
           <li>RETROARCH: Corrected a retrodeck/bios/mame2003-plus folder-path issue in the backup function.</li>
-          <li>SRM: Corrected that the RetroDECK Controller Layouts where not applied in certain scenarios.</li>
+          <li>SRM: Fixed an issue where RetroDECK controller layouts were not applied under certain conditions due to versioning errors.</li>
         </ul>
         <p>CHANGED:</p>
         <ul>
