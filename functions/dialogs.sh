@@ -567,7 +567,7 @@ configurator_bios_checker_dialog() {
     local bios_required=$(jq -r '.required // "No"' <<< "$bios_obj")
     local bios_paths=$(jq -r '.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$bios_obj")
     local bios_desc=$(jq -r '.description // "No description provided"' <<< "$bios_obj")
-    local bios_md5=$(jq -r '.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$obj")
+    local bios_md5=$(jq -r '.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
 
     # Expand any embedded shell variables (e.g. $saves_path or $bios_path) with their actual values
     bios_paths=$(echo "$bios_paths" | envsubst)
