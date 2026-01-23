@@ -309,14 +309,14 @@ fi
 low_space_warning
 
 # Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
-log i "Check if there is a new version of RetroDECK available"
-if [[ $update_check == "true" ]]; then
-  if [[ $(check_network_connectivity) == "true" ]]; then
-    log d "Running function check_for_version_update"
-    check_for_version_update
-  fi
-  log i "You're running the latest version"
-fi
+# log i "Check if there is a new version of RetroDECK available"
+# if [[ $update_check == "true" ]]; then
+#   if [[ $(check_network_connectivity) == "true" ]]; then
+#     log d "Running function check_for_version_update"
+#     check_for_version_update
+#   fi
+#   log i "You're running the latest version"
+# fi
 
 # Normal Startup
 start_retrodeck
