@@ -552,64 +552,182 @@ configurator_bios_checker_dialog() {
   log d "Starting BIOS checker"
 
   (
-    # Read the BIOS checklist from bios.json using jq
-    total_bios=$(jq '.bios | length' "$bios_checklist")
-    current_bios=0
+    log d "Indexing bios.json entries by filename"
+    echo "1"
+    echo "#Indexing BIOS database..."
 
-    log d "Total BIOS files to check: $total_bios"
+    local -a bios_filenames=()
+    local -a bios_systems=()
+    local -a bios_required=()
+    local -a bios_paths=()
+    local -a bios_paths_expanded=()  # Pre-expanded paths
+    local -a bios_descriptions=()
+    local -a bios_md5s=()
 
-    bios_checked_list=()
+    local -A filename_to_indices
 
-    while read -r bios_obj; do
+    # Get total count first for progress bar
+    local total_entries=$(jq '.bios | length' "$bios_checklist")
 
-    local bios_file=$(jq -r '.filename // "Unknown"' <<< "$bios_obj")
-    local bios_systems=$(jq -r '.system // "Unknown"' <<< "$bios_obj")
-    local bios_required=$(jq -r '.required // "No"' <<< "$bios_obj")
-    local bios_paths=$(jq -r '.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$bios_obj")
-    local bios_desc=$(jq -r '.description // "No description provided"' <<< "$bios_obj")
-    local bios_md5=$(jq -r '.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
+    local idx=0
+    while IFS=$'\t' read -r filename system required paths desc md5; do
+      # Progress: 1% to 35% during indexing
+      echo "$((1 + (idx * 34 / total_entries)))"
+      echo "#Indexing BIOS entry $idx of $total_entries..."
 
-    # Expand any embedded shell variables (e.g. $saves_path or $bios_path) with their actual values
-    bios_paths=$(echo "$bios_paths" | envsubst)
+      bios_filenames+=("$filename")
+      bios_systems+=("$system")
+      bios_required+=("$required")
+      bios_paths+=("$paths")
+      bios_paths_expanded+=("$(echo "$paths" | envsubst)")  # Expand once during indexing
+      bios_descriptions+=("$desc")
+      bios_md5s+=("$md5")
 
-    bios_file_found="No"
-    bios_md5_matched="No"
-
-    IFS=', ' read -r -a paths_array <<< "$bios_paths"
-    for path in "${paths_array[@]}"; do
-      log d "Looking for $path/$bios_file"
-      if [[ ! -f "$path/$bios_file" ]]; then
-        log d "File $path/$bios_file not found"
-        break
+      if [[ -v filename_to_indices["$filename"] ]]; then
+        filename_to_indices["$filename"]+=" $idx"
       else
-        bios_file_found="Yes"
-        computed_md5=$(md5sum "$path/$bios_file" | awk '{print $1}')
-
-        IFS=', ' read -ra expected_md5_array <<< "$bios_md5"
-        for expected in "${expected_md5_array[@]}"; do
-          expected=$(echo "$expected" | xargs)
-          if [ "$computed_md5" == "$expected" ]; then
-            bios_md5_matched="Yes"
-            break
-          fi
-        done
-        log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
-        log d "Expected path: $path/$bios_file"
-        log d "Expected MD5: $bios_md5"
+        filename_to_indices["$filename"]="$idx"
       fi
+      idx=$((idx + 1))
+    # Process bios.json: normalize fields, sort by system, output as TSV
+    done < <(jq -r '
+      .bios |
+
+      # Normalize .system: join arrays with ", " or default to "Unknown"
+      map(.system |= (
+        if type == "array" then join(", ")
+        else . // "Unknown"
+        end
+      )) |
+
+      sort_by(.system) |
+
+      # For each entry, build a 6-field array and output as tab-separated
+      .[] | [
+        .filename // "Unknown",
+        .system // "Unknown",
+        .required // "No",
+
+        # Normalize .paths: join arrays, use value, or default to $bios_path
+        (if .paths then
+          if (.paths | type) == "array" then .paths | join(", ")
+          else .paths
+          end
+        else "$bios_path"
+        end),
+
+        .description // "No description provided",
+
+        # Normalize .md5: join arrays, use value, or default to "Unknown"
+        (if .md5 then
+          if (.md5 | type) == "array" then .md5 | join(", ")
+          else .md5
+          end
+        else "Unknown"
+        end)
+      ] | @tsv
+    ' "$bios_checklist")
+
+    local total_bios=${#bios_filenames[@]}
+    log d "Indexed $total_bios BIOS entries, ${#filename_to_indices[@]} unique filenames"
+
+    log d "Extracting unique directories from indexed paths"
+
+    local -A unique_dirs
+    for expanded_paths in "${bios_paths_expanded[@]}"; do
+      IFS=', ' read -r -a paths_array <<< "$expanded_paths"
+      for path in "${paths_array[@]}"; do
+        [[ -d "$path" ]] && unique_dirs["$path"]=1
+      done
     done
 
-    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_required $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
+    log d "Found ${#unique_dirs[@]} unique directories to scan"
+    log d "Counting files across all directories"
+    echo "36"
+    echo "#Counting files to scan..."
 
-    bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_systems" "$bios_file_found" "$bios_md5_matched" "$bios_required" "$bios_paths" "$bios_desc" "$bios_md5")
+    # Count total files across all directories for smooth progress
+    local total_files=0
+    for dir in "${!unique_dirs[@]}"; do
+      local count
+      count=$(find "$dir" -maxdepth 1 -type f 2>/dev/null | wc -l)
+      total_files=$((total_files + count))
+    done
 
-    current_bios=$((current_bios + 1))
-    echo "$((current_bios * 100 / total_bios))"
-    echo "#Checking ${current_bios} of ${total_bios} BIOS files: ${bios_file}"
+    log d "Found $total_files total files to scan"
+    log d "Scanning directories and computing MD5 hashes for matching files"
 
-    done < <(jq -c '.bios | map(.system |= (if type=="array" then join(", ") else . end // "Unknown")) | sort_by(.system) | .[]' "$bios_checklist")
+    local -A result_found
+    local -A result_md5_matched
 
-    log d "Finished checking BIOS files"
+    local file_count=0
+
+    for dir in "${!unique_dirs[@]}"; do
+      log d "Scanning directory: $dir"
+
+      while IFS= read -r filepath; do
+        file_count=$((file_count + 1))
+        if (( total_files > 0 )); then
+          echo "$((37 + (file_count * 57 / total_files)))"
+        fi
+        echo "#Scanning file $file_count of $total_files: ${filepath##*/}"
+        local filename="${filepath##*/}"
+
+        if [[ -v filename_to_indices["$filename"] ]]; then
+          local computed_md5
+          read -r computed_md5 _ < <(md5sum "$filepath" 2>/dev/null)
+          log d "Found BIOS candidate: $filepath (MD5: $computed_md5)"
+
+          IFS=' ' read -ra indices <<< "${filename_to_indices["$filename"]}"
+          for entry_idx in "${indices[@]}"; do
+            IFS=', ' read -r -a entry_paths_array <<< "${bios_paths_expanded[$entry_idx]}"
+
+            for expected_path in "${entry_paths_array[@]}"; do
+              if [[ "$expected_path" == "$dir" ]]; then
+                result_found["$entry_idx"]="Yes"
+                local expected_md5s="${bios_md5s[$entry_idx]}"
+                IFS=', ' read -ra expected_md5_array <<< "$expected_md5s"
+                for expected in "${expected_md5_array[@]}"; do
+                  expected="${expected#"${expected%%[![:space:]]*}"}"
+                  expected="${expected%"${expected##*[![:space:]]}"}"
+                  if [[ "$computed_md5" == "$expected" ]]; then
+                    result_md5_matched["$entry_idx"]="Yes"
+                    log d "MD5 match for entry $entry_idx: $filename"
+                    break
+                  fi
+                done
+                break
+              fi
+            done
+          done
+        fi
+      done < <(find "$dir" -maxdepth 1 -type f 2>/dev/null)
+    done
+
+    log d "Finished scanning directories"
+    log d "Building UI list"
+    echo "95"
+    echo "#Preparing results..."
+
+    local -a bios_checked_list=()
+    local current_bios=0
+
+    for ((i = 0; i < total_bios; i++)); do
+      current_bios=$((current_bios + 1))
+
+      local found_status="No"
+      local md5_status="No"
+
+      [[ -v result_found["$i"] ]] && found_status="${result_found["$i"]}"
+      [[ -v result_md5_matched["$i"] ]] && md5_status="${result_md5_matched["$i"]}"
+
+      bios_checked_list+=("${bios_filenames[$i]}" "${bios_systems[$i]}" "$found_status" "$md5_status" "${bios_required[$i]}" "${bios_paths_expanded[$i]}" "${bios_descriptions[$i]}" "${bios_md5s[$i]}")
+
+      echo "$((95 + (current_bios * 5 / total_bios)))"
+      echo "#Preparing ${current_bios} of ${total_bios} entries..."
+    done
+
+    log d "Finished building UI list with $total_bios entries"
 
     rd_zenity --list --title="RetroDECK Configurator - BIOS Checker" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
