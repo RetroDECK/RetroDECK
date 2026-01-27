@@ -288,80 +288,117 @@ api_get_current_preset_state() {
 
 api_get_bios_file_status() {
 
-  local bios_files="$(mktemp)"
-  echo '[]' > "$bios_files"
+  local systems_to_check="$1"
 
-  while read -r bios_obj; do
+  if [[ ! -n "$systems_to_check" ]]; then # If no array of systems to check is supplied, default to empty array.
+    systems_to_check="[]"
+  fi
+
+  if [[ -f "$bios_checklist" ]]; then
+    mapfile -t input_files < <(find "$(dirname $bios_checklist)" -name "bios.json" -type f) # Fallback to unified bios.json file
+  else
+    mapfile -t input_files < <(find "$rd_components" -name "component_manifest.json" -type f) # Find all component_manifest files
+  fi
+
+  # Merge BIOS info from all component_manifest files into one big array, if the .bios key exists in each one
+  merged_bios_info=$(jq -s --argjson systems "$systems_to_check" '
+    {bios: (
+      [.[] | .. | objects | select(has("bios")) | .bios] | flatten |
+      if ($systems | length) == 0
+      then .
+      else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
+      end
+    )}
+  ' "${input_files[@]}")
+
+  # Find all files in the base BIOS directory as well as any specified extra paths in the BIOS reference file
+  mapfile -t files_to_check < <( { echo "$merged_bios_info" | jq -r --argjson systems "$systems_to_check" 'if ($systems | length) == 0 then [.bios[] | select(has("paths")) | .paths] else [.bios[] | select(has("paths") and ([.system] | flatten | any(. as $s | $systems | index($s)))) | .paths] end | flatten | unique | .[]'; echo "$bios_path"; } | xargs -I {} sh -c '[ -d "{}" ] && find "{}" -maxdepth 1 -type f -not -iname ".directory" -not -iname "*.txt"')
+
+  # Create a lookup array of all found filenames and their found paths
+  declare -A found_file_lookup
+  for filepath in "${files_to_check[@]}"; do
+    filename=$(basename "$filepath")
+    found_file_lookup["$filename"]="$filepath"
+  done
+
+  # Create an array of objects of all BIOS entries which match a found filename
+  validated_results=$(jq --argjson found "$(printf '%s\n' "${!found_file_lookup[@]}" | jq -R . | jq -s .)" --arg bios_path "$bios_path" '
+    .bios | map(select(.filename as $f | $found | index($f))) | map({
+      file: (.filename // "Unknown"),
+      systems: (.system | if type=="array" then join(", ") else . end // "Unknown"),
+      file_found: "Yes",
+      md5_matched: "Pending",
+      description: (.description // "No description provided"),
+      paths: (.paths // $bios_path | if type=="array" then join(", ") else . end),
+      required: (.required // "No"),
+      known_md5_hashes: (.md5 | if type=="array" then join(", ") else . end // "Unknown")
+    })
+    ' <<< "$merged_bios_info")
+
+  local validated_bios_temp="$(mktemp)"
+  echo '[]' > "$validated_bios_temp"
+
+  # Validate MD5 match if found-file object has MD5 entry
+  while read -r obj; do
     while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
-    # Extract the key (element name) and the fields
-    bios_file=$(jq -r '.filename // "Unknown"' <<< "$bios_obj")
-    bios_md5=$(jq -r '.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
-    bios_systems=$(jq -r '.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$bios_obj")
-    bios_desc=$(jq -r '.description // "No description provided"' <<< "$bios_obj")
-    bios_required=$(jq -r '.required // "No"' <<< "$bios_obj")
-    bios_paths=$(jq -r '.paths // "'"$bios_path"'" | if type=="array" then join(", ") else . end' <<< "$bios_obj")
+    filename=$(jq -r '.file' <<< "$obj")
+    known_md5=$(jq -r '.known_md5_hashes' <<< "$obj")
+    filepath="${found_file_lookup[$filename]}"
 
-    log d "Checking entry $bios_entry"
-
-    # Expand any embedded shell variables (e.g. $saves_path or $bios_path) with their actual values
-    bios_paths=$(echo "$bios_paths" | envsubst)
-
-    # Skip if bios_file is empty
-    if [[ ! -z "$bios_file" ]]; then
-      bios_file_found="Yes"
-      bios_md5_matched="No"
-
-      IFS=', ' read -r -a paths_array <<< "$bios_paths"
-      for path in "${paths_array[@]}"; do
-        if [[ ! -f "$path/$bios_file" ]]; then
-          bios_file_found="No"
-          break
-        fi
-      done
-
-      if [[ $bios_file_found == "Yes" ]]; then
-        IFS=', ' read -r -a md5_array <<< "$bios_md5"
-        for md5 in "${md5_array[@]}"; do
-          if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
-            bios_md5_matched="Yes"
-            break
-          fi
-        done
+    md5_matched="No"
+    if [[ -n "$known_md5" && "$known_md5" != "Unknown" && -f "$filepath" ]]; then
+      actual_md5=$(md5sum "$filepath" | cut -d' ' -f1)
+      log d "actual_md5: $actual_md5"
+      if [[ "$known_md5" == *"$actual_md5"* ]]; then
+        md5_matched="Yes"
+      else
+        md5_matched="No"
       fi
-
-      log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
-      log d "Expected path: $path/$bios_file"
-      log d "Expected MD5: $bios_md5"
     fi
 
-    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_required $bios_md5\" to the bios_checked_list"
-
-    local json_obj=$(jq -n --arg file "$bios_file" --arg systems "$bios_systems" --arg found "$bios_file_found" --arg md5_matched "$bios_md5_matched" \
-                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg required "$bios_required" --arg md5 "$bios_md5" \
-                          '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, required, $required, known_md5_hashes: $md5 }')
+    updated_obj=$(jq --arg md5_matched "$md5_matched" '.md5_matched = $md5_matched' <<< "$obj")
     (
-    flock -x 200
-    jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$bios_files" > "$bios_files.tmp" && mv "$bios_files.tmp" "$bios_files"
+      flock -x 200
+      jq --argjson new_obj "$updated_obj" '. + [$new_obj]' "$validated_bios_temp" > "$validated_bios_temp.tmp" && mv "$validated_bios_temp.tmp" "$validated_bios_temp"
     ) 200>"$rd_file_lock"
   ) &
   wait # wait for background tasks to finish
-  done < <(jq -c '.bios.[]' "$bios_checklist")
+  done < <(echo "$validated_results" | jq -c '.[]')
 
-  # Sort the final list numerically, then alphabetically by system name
-  local final_json=$(cat "$bios_files" | jq 'sort_by([
-                                                            ( .systems
-                                                              | sub(".*/";"")
-                                                              | test("^[0-9]")
-                                                              | not
-                                                            ),
-                                                            ( .systems | sub(".*/";"") )
-                                                          ])')
-  rm "$bios_files"
+  validated_with_md5=$(cat "$validated_bios_temp")
+  rm "$validated_bios_temp"
 
-  echo "$final_json"
+  # Gather all BIOS objects that do not have a matching found filename
+  not_found_results=$(jq --argjson found "$(printf '%s\n' "${!found_file_lookup[@]}" | jq -R . | jq -s .)" --arg bios_path "$bios_path" '
+  .bios | map(select(.filename as $f | $found | index($f) | not)) | map({
+    file: (.filename // "Unknown"),
+    systems: (.system | if type=="array" then join(", ") else . end // "Unknown"),
+    file_found: "No",
+    md5_matched: "N/A",
+    description: (.description // "No description provided"),
+    paths: (.paths // $bios_path | if type=="array" then join(", ") else . end),
+    required: (.required // "No"),
+    known_md5_hashes: (.md5 | if type=="array" then join(", ") else . end // "N/A")
+  })
+  ' <<< "$merged_bios_info")
+
+  # Merge and sort all results
+  local final_json=$({
+  echo "$validated_with_md5"
+  echo "$not_found_results"
+  } | jq -s '.[0] + .[1]'| jq 'sort_by([
+    ( .systems
+      | sub(".*/";"")
+      | test("^[0-9]")
+      | not
+    ),
+    ( .systems | sub(".*/";"") )
+  ])')
+
+  echo "$final_json" | jq .
 }
 
 api_get_multifile_game_structure() {
