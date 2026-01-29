@@ -79,6 +79,13 @@
       "end_time": "2359",
       "filename": "rd-valentines-splash.svg"
     },
+    "carnival": {
+      "start_date": "0217",
+      "end_date": "0217",
+      "start_time": "0001",
+      "end_time": "2359",
+      "filename": "carnival-splash.svg"
+    },
     "retrodeck_birthday_gmday": {
       "start_date": "0304",
       "end_date": "0304",
