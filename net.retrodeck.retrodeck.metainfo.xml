@@ -105,17 +105,6 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
-        <release version="0.11.0" date="2026-12-31">
-            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.11.0/0.11.0/</url>
-            <description>
-                <p>ADDED:</p>
-                <ul>
-                    <li>Removed the b, lemmy user got mad and made us sad.</li>
-                    <li>Oh, blackness shrouded in light, frenzied blaze clad in night… In the name of the crimson developers, let the collapse of thine commits manifest. Summon before me the root of thy power hidden within the lands of the project branches of pure demise! GIT EXPLOSION!</li>
-                    <li>Jag har en plan... BOOM ...Vilken djävla smäll!</li>
-                </ul>
-            </description>
-        </release>
         <release version="0.10.3b" date="2026-01-31">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.3b/</url>
             <description>
