@@ -121,6 +121,7 @@
         <ul>
           <li>AZAHAR: Fixed the switch dual-screen layout hotkey.</li>
           <li>RETROARCH: Resolved an error where the shader folders were not set up correctly in certain scenarios.</li>
+          <li>STEAM INPUT: The PS4 layout had incorrect mappings for the Screenshot and Pause hotkeys. The layout version has been updated to PS4 – DualShock 4 v1.2.</li>
         </ul>
         <p>UPDATED:</p>
         <ul>
