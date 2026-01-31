@@ -110,7 +110,7 @@
       <description>
         <p>ADDED:</p>
         <ul>
-          <li>BIOS CHECKER: Rewrote the BIOS Checker, reducing the check time from 1.05 minutes to about 2-10 seconds (depending on hardware).</li>
+          <li>BIOS CHECKER: Rewrote the BIOS Checker, reducing the check time from about 1.00-1.30 minutes to about 2-10 seconds (depending on hardware).</li>
           <li>RETROARCH: Exposed filters in retrodeck/shaders/retroarch/filters/.</li>
         </ul>
         <p>CHANGED:</p>
