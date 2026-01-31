@@ -110,15 +110,21 @@
       <description>
         <p>ADDED:</p>
         <ul>
-          <li>BIOS CHECKER: Simplified the backup prompt and choices.</li>
-        </ul>
-        <p>FIXED:</p>
-        <ul>
-          <li>AZAHAR: Corrected an issue in the Swap Screen Hotkey that had the wrong keybind.</li>
+          <li>BIOS CHECKER: Rewrote the BIOS Checker, reducing the check time from 1.05 minutes to about 1-2 seconds.</li>
+          <li>RETROARCH: Exposed filters in retrodeck/shaders/retroarch/filters/.</li>
         </ul>
         <p>CHANGED:</p>
         <ul>
-          <li>Some stuff</li>
+          <li>RETROARCH: Relocated the RetroArch shaders directory from retrodeck/shaders/retroarch/ to retrodeck/shaders/retroarch/shaders/ to avoid conflicts with the new filters folder.</li>
+        </ul>
+        <p>FIXED:</p>
+        <ul>
+          <li>AZAHAR: Fixed the switch dual-screen layout hotkey.</li>
+          <li>RETROARCH: Resolved an error where the shader folders were not set up correctly in certain scenarios.</li>
+        </ul>
+        <p>UPDATED:</p>
+        <ul>
+          <li>Azahar, MAME, PCSX2, Ruffle, Solarus, and Vita3K to their latest versions.</li>
         </ul>
       </description>
     </release>
