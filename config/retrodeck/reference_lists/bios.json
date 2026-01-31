@@ -88,9 +88,9 @@
       "description": "Neo Geo BIOS",
       "required": "Required",
       "paths": [
-        "$rd_home_roms_path/neogeo",
-        "$rd_home_roms_path/fbneo",
-        "$rd_home_roms_path/arcade"
+        "$roms_path/neogeo",
+        "$roms_path/fbneo",
+        "$roms_path/arcade"
       ]
     },
     {
@@ -1509,9 +1509,9 @@
       "md5": "561532ad496f644897952d2cef5bb431",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/EU",
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/EU",
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube DVD BIOS (June 2001 release) - universal version"
     },
@@ -1520,9 +1520,9 @@
       "md5": "b953eb1a8fc9922b3f7051c1cdc451f1",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/EU",
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/EU",
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube DVD BIOS (August 2001) - updated checksum"
     },
@@ -1531,9 +1531,9 @@
       "md5": "413154dd0e2c824c9b18b807fd03ec4e",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_paths_path/gc/dolphin/EU",
-        "$rd_home_saves_paths_paths_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_paths_path/gc/dolphin/EU",
+        "$saves_paths_paths_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube DVD BIOS (April 2002) - latest public release"
     },
@@ -1542,9 +1542,9 @@
       "md5": "c03f6bbaf644eb9b3ee261dbe199eb42",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/EU",
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/EU",
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube DVD BIOS (August 2002) - final revision"
     },
@@ -1553,8 +1553,8 @@
       "md5": "fc924a7c879b661abc37cec4f018fdf3",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube NTSC (US/Japan) BIOS - version 10"
     },
@@ -1563,8 +1563,8 @@
       "md5": "019e39822a9ca3029124f74dd4d55ac4",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube NTSC BIOS - version 11 (minor bug-fix)"
     },
@@ -1573,8 +1573,8 @@
       "md5": "b17148254a5799684c7d783206504926",
       "system": "gc",
       "paths": [
-        "$rd_home_saves_path/gc/dolphin/US",
-        "$rd_home_saves_path/gc/dolphin/JP"
+        "$saves_path/gc/dolphin/US",
+        "$saves_path/gc/dolphin/JP"
       ],
       "description": "GameCube NTSC BIOS - version 12 (latest NTSC build)"
     },
@@ -1582,21 +1582,21 @@
       "filename": "gc-pal-10.bin",
       "md5": "0cdda509e2da83c85bfe423dd87346cc",
       "system": "gc",
-      "paths": "$rd_home_saves_path/gc/dolphin/EU",
+      "paths": "$saves_path/gc/dolphin/EU",
       "description": "GameCube PAL (EU) BIOS - version 10"
     },
     {
       "filename": "gc-pal-11.bin",
       "md5": "339848a0b7c2124cf155276c1e79cbd0",
       "system": "gc",
-      "paths": "$rd_home_saves_path/gc/dolphin/EU",
+      "paths": "$saves_path/gc/dolphin/EU",
       "description": "GameCube PAL BIOS - version 11 (bug-fix update)"
     },
     {
       "filename": "gc-pal-12.bin",
       "md5": "db92574caab77a7ec99d4605fd6f2450",
       "system": "gc",
-      "paths": "$rd_home_saves_path/gc/dolphin/EU",
+      "paths": "$saves_path/gc/dolphin/EU",
       "description": "GameCube PAL BIOS - version 12 (current EU release)"
     },
     {

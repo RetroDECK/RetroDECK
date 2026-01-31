@@ -2,8 +2,8 @@
 {
 	"version"		"3"
 	"revision"		"81"
-	"title"		"RetroDECK: DualShock 4 v.1.1"
-	"description"		"RetroDECK: PS4 - DualShock 4 v.1.1"
+	"title"		"RetroDECK: DualShock 4 v.1.2"
+	"description"		"RetroDECK: PS4 - DualShock 4 v.1.2"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -601,7 +601,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_CONTROL, Pause / Resume, , "
-							"binding"		"key_press A, Pause / Resume, , "
+							"binding"		"key_press P, Pause / Resume, , "
 						}
 					}
 				}
@@ -618,7 +618,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_CONTROL, Take Screenshot, , "
-							"binding"		"key_press B, Take Screenshot, , "
+							"binding"		"key_press X, Take Screenshot, , "
 						}
 					}
 				}

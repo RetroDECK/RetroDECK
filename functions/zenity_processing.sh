@@ -302,3 +302,22 @@ build_zenity_find_empty_rom_folders_menu_array() {
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
+
+build_zenity_bios_checker_menu_array() {
+  local dest_array="$1"
+  local system_filter="${2:-}"
+  local -a temp_bash_array=()
+
+  mapfile -t temp_bash_array < <(api_get_bios_file_status "$system_filter" | jq -r --arg bios_path "$bios_path" '.[] |
+    .file // "Unknown",
+    .systems // "Unknown",
+    .file_found // "No",
+    .md5_matched // "No",
+    .required // "No",
+    .paths // $bios_path,
+    .description // "No description provided",
+    .known_md5_hashes // "Unknown"
+  ')
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
