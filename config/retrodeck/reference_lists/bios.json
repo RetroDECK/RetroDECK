@@ -1313,6 +1313,12 @@
       "description": "Kickstart 3.4 ROM for Amiga 500"
     },
     {
+      "filename": "AmigaVision.rom",
+      "md5": "646773759326fbac3b2311fd8c8793ee",
+      "system": "amiga",
+      "description": "Kickstart 4.0 ROM for AmigaVision."
+    },
+    {
       "filename": "kick40063.A600",
       "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
       "system": "amiga",
