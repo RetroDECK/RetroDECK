@@ -117,6 +117,7 @@
                 <p>CHANGED:</p>
                 <ul>
                     <li>RETROARCH: Relocated the RetroArch shaders directory from retrodeck/shaders/retroarch/ to retrodeck/shaders/retroarch/shaders/ to avoid conflicts with the new filters folder.</li>
+                    <li>FOLDER ICONS: Lahrs refined and enhanced 62 folder icons.</li>
                 </ul>
                 <p>FIXED:</p>
                 <ul>
