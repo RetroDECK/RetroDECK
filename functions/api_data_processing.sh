@@ -400,6 +400,7 @@ api_get_bios_file_status() {
     ( .systems | sub(".*/";"") )
   ])')
 
+  echo "$final_json" > "$logs_path/retrodeck_bios_check.log"
   echo "$final_json" | jq .
 }
 
