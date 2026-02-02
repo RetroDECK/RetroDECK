@@ -22,32 +22,32 @@
         <screenshot>
             <caption>RetroDECK Logo on Steam Deck</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK Logo on Steam Deck GUI</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK ES-DE Theme C64</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on ROG</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on Laptop</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on TV</caption>
             <image>
-        https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
+                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
         </screenshot>
     </screenshots>
     <description>
@@ -55,8 +55,8 @@
         <p>Delivered as a fully self-contained Flatpak application, RetroDECK provides a complete retro gaming environment out of the box-no manual configuration, no custom firmware, and no system modifications required. Everything is bundled, organized, and ready to play.</p>
         <p>By seamlessly integrating components: emulators, multi-emulators, native game engines, ports, clients and powerful management tools, RetroDECK brings your entire retro game experince together in one polished, unified package.</p>
         <p>
-      Why Choose RetroDECK?
-    </p>
+            Why Choose RetroDECK?
+        </p>
         <ul>
             <li>True All-in-One Solution: Emulators, multi-emulator frameworks, game engines, ports, tools, clients, and the frontend are all included and preconfigured.</li>
             <li>Zero System Changes: Experience a retro gaming–focused environment without replacing or modifying your existing operating system.</li>
@@ -64,8 +64,8 @@
             <li>Designed for You: Optimized for Linux handhelds, gaming PCs, and living-room setups, with excellent gamepad support and deep Steam Input integration.</li>
         </ul>
         <p>
-      What is Included?
-    </p>
+            What is Included?
+        </p>
         <ul>
             <li>Wide Emulator Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar, and many more. Supporting an extensive range of classic and modern systems.</li>
             <li>Multi-Emulator Platforms: Unified, streamlined emulation powered by robust frameworks including RetroArch and MAME.</li>
@@ -80,12 +80,12 @@
             <li>Steam Library Sync: Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
         </ul>
         <p>
-      Built for Power Users - Friendly for Everyone
-    </p>
+            Built for Power Users - Friendly for Everyone
+        </p>
         <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture packs, mods, screenshots, and more-while keeping the underlying components safely sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided experience.</p>
         <p>
-      Join the RetroDECK Community
-    </p>
+            Join the RetroDECK Community
+        </p>
         <ul>
             <li>Website: https://retrodeck.net</li>
             <li>Wiki and Documentation: https://retrodeck.readthedocs.io/</li>
@@ -111,6 +111,8 @@
                 <p>ADDED:</p>
                 <ul>
                     <li>BIOS CHECKER: Rewrote the BIOS Checker, reducing the check time from about 1.00-1.30 minutes to about 2-10 seconds (depending on hardware).</li>
+                    <li>BIOS CHECKER: Added BIOS Checker result logging to logs/retrodeck_bios_check.log.</li>
+                    <li>CONFIGURATOR: Improved Cheevos login PCSX2 new token handling.</li>
                     <li>RETROARCH: Exposed filters in retrodeck/shaders/retroarch/filters/.</li>
                     <li>RETROARCH: Restored cores that were missing in the previous stable RetroArch release by reintroducing them from the nightly builds (EasyRPG).</li>
                 </ul>
@@ -122,6 +124,8 @@
                 <p>FIXED:</p>
                 <ul>
                     <li>AZAHAR: Fixed the switch dual-screen layout hotkey.</li>
+                    <li>CONFIGURATOR: Fixed an issue where the Configurator could exit unexpectedly when clicking OK with no selection.</li>
+                    <li>CONFIGURATOR: Fixed Clean Empty Folder behavior to remove folders even when .txt or .icon files are present.</li>
                     <li>RETROARCH: Resolved an error where the shader folders were not set up correctly in certain scenarios.</li>
                     <li>STEAM INPUT: The PS4 layout had incorrect mappings for the Screenshot and Pause hotkeys. The layout version has been updated to PS4 – DualShock 4 v1.2.</li>
                 </ul>
@@ -188,14 +192,14 @@
             <description>
                 <p>RetroDECK 0.10.0b is a major milestone release featuring a complete rebuild of the platform. While much of this work happens behind the scenes, it significantly improves maintainability and future expandability.</p>
                 <p>
-          Important:
-        </p>
+                    Important:
+                </p>
                 <ul>
                     <li>Ponzu is not compatible with RetroDECK 0.10.0b due to the new layered Flatpak architecture. Users who rely on Ponzu should remain on an earlier version.</li>
                 </ul>
                 <p>
-          Core Changes:
-        </p>
+                    Core Changes:
+                </p>
                 <ul>
                     <li>RetroDECK has been fully re-engineered with a modular, component-based infrastructure.</li>
                     <li>Each component: emulator, engine, client and system now runs in its own isolated sub-sandbox.</li>
@@ -203,16 +207,16 @@
                     <li>New build and assembly pipeline reduces overall application size by approximately 800 MB.</li>
                 </ul>
                 <p>
-          New Components:
-        </p>
+                    New Components:
+                </p>
                 <ul>
                     <li>New Emulators: XRoar (Tandy/Dragon), Azahar (Nintendo 3DS, new default), Ryubing (Nintendo Switch).</li>
                     <li>New Engine: OpenBOR with a custom RetroDECK launcher supporting .bor and .openbor formats.</li>
                     <li>New System: Flips (IPS/BPS ROM patching tool), available directly in the RetroDECK Configurator.</li>
                 </ul>
                 <p>
-          Framework and Configurator Improvements:
-        </p>
+                    Framework and Configurator Improvements:
+                </p>
                 <ul>
                     <li>Completely rewritten system dialogs and first-run setup flow.</li>
                     <li>New optional Steam Sync prompt during first install.</li>
@@ -222,16 +226,16 @@
                     <li>Added new easter egg splashes. </li>
                 </ul>
                 <p>
-          New Storage and Organization Features:
-        </p>
+                    New Storage and Organization Features:
+                </p>
                 <ul>
                     <li>New retrodeck/storage directory for user-accessible game data, assets, and future expansions.</li>
                     <li>New retrodeck/vidoes directory for saved videos.</li>
                     <li>Introduced folder iconset support, including the new Lahrs iconset.</li>
                 </ul>
                 <p>
-          Component Updates and Fixes:
-        </p>
+                    Component Updates and Fixes:
+                </p>
                 <ul>
                     <li>All components: clients, engines, emulators, multi‑emulators, systems have been updated to newer versions.</li>
                     <li>Expanded and corrected exposed folders for shaders, texture packs, logs, plugins, and captures across many components (Dolphin, PrimeHack, PPSSPP, RPCS3, Vita3K, Cemu, and others).</li>
@@ -958,7 +962,7 @@
             <description>
                 <ul>
                     <li>Fixed a bug where new symlinks were not created correctly and users couldn't scrape
-            their games</li>
+                        their games</li>
                 </ul>
                 <p>Known Issues:</p>
                 <ul>
@@ -966,11 +970,11 @@
                     <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
                 </ul>
                 <p>
-          IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version they may bring new configurations, please back them up if you did some
-          manual configs.
-        </p>
+                    IMPORTANT NOTE:
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version they may bring new configurations, please back them up if you did some
+                    manual configs.
+                </p>
             </description>
         </release>
         <release version="0.4.4b" date="2022-07-18">
@@ -995,49 +999,49 @@
                     <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
                 </ul>
                 <p>
-          IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version they may bring new configurations, please back them up if you did some
-          manual configs.
-        </p>
+                    IMPORTANT NOTE:
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version they may bring new configurations, please back them up if you did some
+                    manual configs.
+                </p>
             </description>
         </release>
         <release version="0.4.3b" date="2022-07-07">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.3b</url>
             <description>
                 <p>
-          Emulators:
-        </p>
+                    Emulators:
+                </p>
                 <ul>
                     <li>Updated all the emulators at the latest available version.</li>
                 </ul>
                 <p>
-          Backend:
-        </p>
+                    Backend:
+                </p>
                 <ul>
                     <li>Manifest code cleanup.</li>
                 </ul>
                 <p>
-          Known Issues:
-        </p>
+                    Known Issues:
+                </p>
                 <ul>
                     <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set thehotkeys, so no save and load state, no quit button. In order to quit press: STEAM; PCSX2 ; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                     <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
                 </ul>
                 <p>
-          IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version they may bring new configurations, please back them up if you did some
-          manual configs.
-        </p>
+                    IMPORTANT NOTE:
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version they may bring new configurations, please back them up if you did some
+                    manual configs.
+                </p>
             </description>
         </release>
         <release version="0.4.2b" date="2022-07-01">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.2b</url>
             <description>
                 <p>
-          Emulators:
-        </p>
+                    Emulators:
+                </p>
                 <ul>
                     <li>Updated all the emulators at the latest available version.</li>
                     <li>DOLPHIN (SA): Fixed a bug where Dolphin couldn't be properly configured. If it's still misconfigured please run `flatpak run net.retrodeck.retrodeck --reset-sa` in order to reset all the standalone emulators, including Dolphin.</li>
@@ -1047,67 +1051,67 @@
                     <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action).</li>
                 </ul>
                 <p>
-          Backend:
-        </p>
+                    Backend:
+                </p>
                 <ul>
                     <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool.</li>
                     <li>Updated ES-DE configs (es_find_rules, es_settings, es_systems).</li>
                     <li>Manifest trimmend and general code cleanup.</li>
                 </ul>
                 <p>
-          Known Issues:
-        </p>
+                    Known Issues:
+                </p>
                 <ul>
                     <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAMPCSX2; (X) CLOSE WINDOW, be aware that the state is not automaticallysaved</li>
                     <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
                 </ul>
                 <p>
-          IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version they may bring new configurations, please back them up if you did some
-          manual configs.
-        </p>
+                    IMPORTANT NOTE:
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version they may bring new configurations, please back them up if you did some
+                    manual configs.
+                </p>
             </description>
         </release>
         <release version="0.4.1b" date="2022-05-11">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.1b</url>
             <description>
                 <p>
-          Emulators:
-        </p>
+                    Emulators:
+                </p>
                 <ul>
                     <li>Tweaked various emulator configs</li>
                     <li>The emulators that was showing a small viewport like N64, Wii, GC, and Dreamcast are now showing a more appropriate viewport</li>
                     <li>Fixed home path in MelonDS (SA)</li>
                 </ul>
                 <p>
-          Frontend:
-        </p>
+                    Frontend:
+                </p>
                 <ul>
                     <li>Updated ES-DE to 1.2.4</li>
                     <li>RetroDECK doesn't open ES-DE anymore during the first setup, almost everything is now automated: HURRAY!</li>
                     <li>Now a custom roms path can be selected if SD Card is selected and the SD Card is not found in the default path</li>
                 </ul>
                 <p>
-          Backend:
-        </p>
+                    Backend:
+                </p>
                 <ul>
                     <li>Fixed a bug where the folders where not symlinked correclty</li>
                 </ul>
                 <p>
-          Known Issues:
-        </p>
+                    Known Issues:
+                </p>
                 <ul>
                     <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM PCSX2 (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                     <li>External controllers and keyboard seems not to be working, expecially in the desktop mode</li>
                     <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
                 </ul>
                 <p>
-          IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version they may bring new configurations, please back them up if you did some
-          manual configs.
-        </p>
+                    IMPORTANT NOTE:
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version they may bring new configurations, please back them up if you did some
+                    manual configs.
+                </p>
             </description>
         </release>
         <release version="0.4.0b" date="2022-05-02">
@@ -1117,7 +1121,7 @@
                 <ul>
                     <li>Yuzu was broken: fixed</li>
                     <li>Dolphin-libretro is now the default emulator as Dolphin (Standalone) seems to be
-            broken</li>
+                        broken</li>
                 </ul>
                 <p>New Standalone emulators:</p>
                 <ul>
@@ -1165,9 +1169,9 @@
                     <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
                 </ul>
                 <p>IMPORTANT NOTE:
-          At the moment the emulator configs are reset during every update, this was made because
-          every version may bring new configurations, please back them up if you did some manual
-          configs.</p>
+                    At the moment the emulator configs are reset during every update, this was made because
+                    every version may bring new configurations, please back them up if you did some manual
+                    configs.</p>
             </description>
         </release>
         <release version="0.3.1b" date="2022-04-26">
