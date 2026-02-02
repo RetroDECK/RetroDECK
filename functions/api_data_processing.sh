@@ -792,6 +792,9 @@ api_set_preset_state() {
             elif [[ ! -f "$target_file" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
               log d "Target file $target_file does not exist, creating..."
               echo "$new_setting_value" > "$target_file"
+            elif [[ "$config_format" == "pcsx2" && "$target_file" == "$pcsx2_secrets_ini" ]]; then # Separate process if this is the PCSX2 secrets.ini file
+              log d "Adding PCSX2 cheevos token line from $pcsx2_secrets_ini"
+              add_setting "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
             else
               log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
               set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
@@ -814,6 +817,9 @@ api_set_preset_state() {
           elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppsspp_retroachievements_dat" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
             log d "Removing PPSSPP cheevos token file ppsspp_retroachievements_dat"
             rm "$target_file"
+          elif [[ "$config_format" == "pcsx2" && "$target_file" == "$pcsx2_secrets_ini" ]]; then # Separate process if this is the PCSX2 secrets.ini file
+            log d "Removing PCSX2 cheevos token line from $pcsx2_secrets_ini"
+            delete_setting "$target_file" "$preset_setting_name" "$config_format" "$section"
           else
             local default_setting_value=$(get_setting_value "$defaults_file" "$preset_setting_name" "$config_format" "$section")
             log d "Changing setting: $preset_setting_name to $default_setting_value in $target_file"
