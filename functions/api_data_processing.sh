@@ -464,7 +464,9 @@ api_get_empty_rom_folders() {
   echo '[]' > "$empty_rom_folders_list"
 
   # Extract helper file names using jq and populate the all_helper_files array
-  local all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+  local all_ignorable_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+
+  all_ignorable_files+=(".directory" "systeminfo.txt")
 
   while IFS= read -r system; do
     while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
@@ -472,25 +474,28 @@ api_get_empty_rom_folders() {
     done
     (
     local dir="$roms_path/$system"
-    local files=$(ls -A1 "$dir")
-    local count=$(ls -A "$dir" | wc -l)
-    local folder_is_empty="false"
+    local all_files=()
 
-    if [[ $count -eq 0 || ($count -eq 1 && "$(basename "${files[0]}")" == "systeminfo.txt") ]]; then
-        folder_is_empty="true"
-    elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
-      contains_helper_file="false"
-      for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
-      do
-        if [[ "$files" =~ "$helper_file" ]]; then
-          contains_helper_file="true" # Helper file was found
+    while IFS= read -r -d '' file; do
+      all_files+=("$(basename "$file")")
+    done < <(find "$dir" -maxdepth 1 -type f -print0)
+
+    local folder_is_empty="true"
+
+    for file in "${all_files[@]}"; do
+      local is_ignorable="false"
+      for ignorable_file in "${all_ignorable_files[@]}"; do
+        if [[ "$file" == "$ignorable_file" ]]; then
+          is_ignorable="true"
           break
         fi
       done
-      if [[ "$contains_helper_file" == "true" ]]; then
-        folder_is_empty="true"
+
+      if [[ "$is_ignorable" == "false" ]]; then
+        folder_is_empty="false"
+        break
       fi
-    fi
+    done
 
     if [[ "$folder_is_empty" == "true" ]]; then
       local json_obj=$(jq -n --arg system "$system" --arg path "$dir" '{ system: $system, path: $path }')
