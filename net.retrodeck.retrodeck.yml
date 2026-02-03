@@ -178,7 +178,7 @@ modules:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   # -------------------------------------------------------------------------
-  # rclone – manage files on cloud storage.
+  # rclone - manage files on cloud storage.
   # -------------------------------------------------------------------------
 
   - name: rclone
@@ -191,7 +191,7 @@ modules:
         sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
 
   # -------------------------------------------------------------------------
-  # rsync – utility for transferring and synchronizing files.
+  # rsync - utility for transferring and synchronizing files.
   # -------------------------------------------------------------------------
 
   # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
@@ -229,7 +229,7 @@ modules:
 
 
   # -------------------------------------------------------------------------
-  # p7zip – 7‑Zip compression utilities.
+  # p7zip - 7‑Zip compression utilities.
   # -------------------------------------------------------------------------
 
   - name: p7zip
@@ -247,7 +247,7 @@ modules:
       - /man
 
   # -------------------------------------------------------------------------
-  # xmlstarlet – XML processor & toolkit.
+  # xmlstarlet - XML processor & toolkit.
   # -------------------------------------------------------------------------
 
   - name: libxml2-compat
@@ -294,7 +294,7 @@ modules:
 
 
   # -------------------------------------------------------------------------
-  # jq – JSON processor.
+  # jq - JSON processor.
   # -------------------------------------------------------------------------
 
   - name: jq
@@ -307,7 +307,7 @@ modules:
         sha256: 5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5
 
   # -------------------------------------------------------------------------
-  # yq – YAML processor.
+  # yq - YAML processor.
   # -------------------------------------------------------------------------
 
   - name: yq
@@ -326,7 +326,7 @@ modules:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   # -------------------------------------------------------------------------
-  # install-components – runs the RetroDECK component installer script retrodeck_builder.sh.
+  # install-components - runs the RetroDECK component installer script retrodeck_builder.sh.
   # -------------------------------------------------------------------------
   
   - name: install-components
@@ -338,7 +338,7 @@ modules:
         path: .
 
   # -------------------------------------------------------------------------
-  # finisher – final tidy‑up steps: move files, create icons, install desktop
+  # finisher - final tidy‑up steps: move files, create icons, install desktop
   #            entries, copy resources, and clean up temporary bits.
   # -------------------------------------------------------------------------
 
