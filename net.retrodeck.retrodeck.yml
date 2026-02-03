@@ -171,11 +171,6 @@ modules:
         mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
         mkdir -p ${FLATPAK_DEST}/retrodeck/components
 
-    sources:
-      - type: dir
-        path: .
-
-
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                     RetroDECK: Generic Modules
