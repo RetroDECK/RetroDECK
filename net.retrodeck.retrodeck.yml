@@ -295,20 +295,6 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/xml"
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet"
 
-
-  # -------------------------------------------------------------------------
-  # jq - JSON processor.
-  # -------------------------------------------------------------------------
-
-  - name: jq
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 jq-linux64 ${FLATPAK_DEST}/bin/jq
-    sources:
-      - type: file
-        url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux64
-        sha256: 5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5
-
   # -------------------------------------------------------------------------
   # yq - YAML processor.
   # -------------------------------------------------------------------------
