@@ -36,8 +36,7 @@ fi
 
 # Default excludes; can be extended with --exclude flags or EXCLUDE_LIST env var (comma-separated)
 # Flathub manifest folder cannot be larger than 25MB, so we need to exclude unnecessary files
-EXCLUDES=(.github .git "res" "automation_tools/archive_later" "automation_tools/codename_wordlist.txt" "automation_tools/fetch_components.sh" \ 
-          "automation_tools/flathub_push.sh" "automation_tools/post_build_check.sh" "automation_tools/search_missing_libs.sh" "config" \ 
+EXCLUDES=(.github .git "res" "automation_tools" "config" \ 
           "developer_toolbox" "functions" "tools" "retrodeck_builder.sh" "net.retrodeck.retrodeck.Configurator.desktop" "net.retrodeck.retrodeck.desktop" \ 
           "net.retrodeck.retrodeck.metainfo.xml" \ 
           )
@@ -505,4 +504,3 @@ fi
 
 echo "Version file contents:"
 cat "$gits_folder/flathub/version" || { echo "Version file not found! Terminating push." && exit 1; }
-
