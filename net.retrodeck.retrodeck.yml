@@ -22,15 +22,12 @@ command: retrodeck
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 add-extensions:
-  # Full FFmpeg libraries - Here we wrote 25.08 but it will just pull codec-extras instead as ffmpeg-full 25.08 doesn't exist
-  # We will need to remove this and make sure we pull codecs-extras in the nxt version of RetroDECK (0.11.0b)
-  # More info: https://github.com/flathub/net.retrodeck.retrodeck/pull/193#issuecomment-3754582526
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg     
-    add-ld-path: . 
-    version: '25.08'
-    cleanup-commands:
-      - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
+  # FFmpeg libraries and extra codecs, replaces org.freedesktop.Platform.ffmpeg-full
+  org.freedesktop.Platform.codecs_extra.i386:
+    directory: lib/i386-linux-gnu/codecs-extra
+    version: '25.08-extra'
+    autodelete: false
+    add-ld-path: lib
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
@@ -170,11 +167,9 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/graphics
         mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
         mkdir -p ${FLATPAK_DEST}/retrodeck/components
-
     sources:
-      - type: dir
-        path: .
-
+      - type: file
+        path: version
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
@@ -183,7 +178,7 @@ modules:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   # -------------------------------------------------------------------------
-  # rclone – manage files on cloud storage.
+  # rclone - manage files on cloud storage.
   # -------------------------------------------------------------------------
 
   - name: rclone
@@ -196,7 +191,7 @@ modules:
         sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
 
   # -------------------------------------------------------------------------
-  # rsync – utility for transferring and synchronizing files.
+  # rsync - utility for transferring and synchronizing files.
   # -------------------------------------------------------------------------
 
   # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
@@ -234,7 +229,7 @@ modules:
 
 
   # -------------------------------------------------------------------------
-  # p7zip – 7‑Zip compression utilities.
+  # p7zip - 7‑Zip compression utilities.
   # -------------------------------------------------------------------------
 
   - name: p7zip
@@ -252,7 +247,7 @@ modules:
       - /man
 
   # -------------------------------------------------------------------------
-  # xmlstarlet – XML processor & toolkit.
+  # xmlstarlet - XML processor & toolkit.
   # -------------------------------------------------------------------------
 
   - name: libxml2-compat
@@ -297,22 +292,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/xml"
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet"
 
-
   # -------------------------------------------------------------------------
-  # jq – JSON processor.
-  # -------------------------------------------------------------------------
-
-  - name: jq
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 jq-linux64 ${FLATPAK_DEST}/bin/jq
-    sources:
-      - type: file
-        url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux64
-        sha256: 5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5
-
-  # -------------------------------------------------------------------------
-  # yq – YAML processor.
+  # yq - YAML processor.
   # -------------------------------------------------------------------------
 
   - name: yq
@@ -331,7 +312,7 @@ modules:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   # -------------------------------------------------------------------------
-  # install-components – runs the RetroDECK component installer script retrodeck_builder.sh.
+  # install-components - runs the RetroDECK component installer script retrodeck_builder.sh.
   # -------------------------------------------------------------------------
   
   - name: install-components
@@ -343,7 +324,7 @@ modules:
         path: .
 
   # -------------------------------------------------------------------------
-  # finisher – final tidy‑up steps: move files, create icons, install desktop
+  # finisher - final tidy‑up steps: move files, create icons, install desktop
   #            entries, copy resources, and clean up temporary bits.
   # -------------------------------------------------------------------------
 
