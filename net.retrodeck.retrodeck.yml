@@ -22,15 +22,12 @@ command: retrodeck
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 add-extensions:
-  # Full FFmpeg libraries - Here we wrote 25.08 but it will just pull codec-extras instead as ffmpeg-full 25.08 doesn't exist
-  # We will need to remove this and make sure we pull codecs-extras in the nxt version of RetroDECK (0.11.0b)
-  # More info: https://github.com/flathub/net.retrodeck.retrodeck/pull/193#issuecomment-3754582526
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg     
-    add-ld-path: . 
-    version: '25.08'
-    cleanup-commands:
-      - mkdir -p "${FLATPAK_DEST}/lib/ffmpeg"
+  # FFmpeg libraries and extra codecs, replaces org.freedesktop.Platform.ffmpeg-full
+  org.freedesktop.Platform.codecs_extra.i386:
+    directory: lib/i386-linux-gnu/codecs-extra
+    version: '25.08-extra'
+    autodelete: false
+    add-ld-path: lib
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
