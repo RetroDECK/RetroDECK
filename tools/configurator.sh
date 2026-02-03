@@ -179,7 +179,7 @@ configurator_global_presets_and_settings_dialog() {
 
     local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
 
     launch_command "$choice"
@@ -232,7 +232,7 @@ configurator_tools_dialog() {
 
   local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log i "Configurator: opening \"$choice\" menu"
     launch_command "$choice"
   else # User hit cancel
@@ -250,7 +250,7 @@ configurator_data_management_dialog() {
 
   local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
 
     launch_command "$choice"
@@ -359,7 +359,7 @@ configurator_about_retrodeck_dialog() {
 
   local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
 
     launch_command "$choice"
@@ -378,7 +378,7 @@ configurator_steam_tools_dialog() {
 
   local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
 
     launch_command "$choice"
@@ -397,7 +397,7 @@ configurator_developer_dialog() {
 
   local rc="$?"
 
-  if [[ "$rc" -eq 0 ]]; then # User made a selection
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
 
     launch_command "$choice"

@@ -400,6 +400,7 @@ api_get_bios_file_status() {
     ( .systems | sub(".*/";"") )
   ])')
 
+  echo "$final_json" > "$logs_path/retrodeck_bios_check.log"
   echo "$final_json" | jq .
 }
 
@@ -464,7 +465,9 @@ api_get_empty_rom_folders() {
   echo '[]' > "$empty_rom_folders_list"
 
   # Extract helper file names using jq and populate the all_helper_files array
-  local all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+  local all_ignorable_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+
+  all_ignorable_files+=(".directory" "systeminfo.txt")
 
   while IFS= read -r system; do
     while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
@@ -472,25 +475,28 @@ api_get_empty_rom_folders() {
     done
     (
     local dir="$roms_path/$system"
-    local files=$(ls -A1 "$dir")
-    local count=$(ls -A "$dir" | wc -l)
-    local folder_is_empty="false"
+    local all_files=()
 
-    if [[ $count -eq 0 || ($count -eq 1 && "$(basename "${files[0]}")" == "systeminfo.txt") ]]; then
-        folder_is_empty="true"
-    elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
-      contains_helper_file="false"
-      for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
-      do
-        if [[ "$files" =~ "$helper_file" ]]; then
-          contains_helper_file="true" # Helper file was found
+    while IFS= read -r -d '' file; do
+      all_files+=("$(basename "$file")")
+    done < <(find "$dir" -maxdepth 1 -type f -print0)
+
+    local folder_is_empty="true"
+
+    for file in "${all_files[@]}"; do
+      local is_ignorable="false"
+      for ignorable_file in "${all_ignorable_files[@]}"; do
+        if [[ "$file" == "$ignorable_file" ]]; then
+          is_ignorable="true"
           break
         fi
       done
-      if [[ "$contains_helper_file" == "true" ]]; then
-        folder_is_empty="true"
+
+      if [[ "$is_ignorable" == "false" ]]; then
+        folder_is_empty="false"
+        break
       fi
-    fi
+    done
 
     if [[ "$folder_is_empty" == "true" ]]; then
       local json_obj=$(jq -n --arg system "$system" --arg path "$dir" '{ system: $system, path: $path }')
@@ -786,6 +792,9 @@ api_set_preset_state() {
             elif [[ ! -f "$target_file" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
               log d "Target file $target_file does not exist, creating..."
               echo "$new_setting_value" > "$target_file"
+            elif [[ "$config_format" == "pcsx2" && "$target_file" == "$pcsx2_secrets_ini" ]]; then # Separate process if this is the PCSX2 secrets.ini file
+              log d "Adding PCSX2 cheevos token line from $pcsx2_secrets_ini"
+              add_setting "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
             else
               log d "Changing setting: $preset_setting_name to $new_setting_value in $target_file"
               set_setting_value "$target_file" "$preset_setting_name" "$new_setting_value" "$config_format" "$section"
@@ -808,6 +817,9 @@ api_set_preset_state() {
           elif [[ "$config_format" == "ppsspp" && "$target_file" == "$ppsspp_retroachievements_dat" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
             log d "Removing PPSSPP cheevos token file ppsspp_retroachievements_dat"
             rm "$target_file"
+          elif [[ "$config_format" == "pcsx2" && "$target_file" == "$pcsx2_secrets_ini" ]]; then # Separate process if this is the PCSX2 secrets.ini file
+            log d "Removing PCSX2 cheevos token line from $pcsx2_secrets_ini"
+            delete_setting "$target_file" "$preset_setting_name" "$config_format" "$section"
           else
             local default_setting_value=$(get_setting_value "$defaults_file" "$preset_setting_name" "$config_format" "$section")
             log d "Changing setting: $preset_setting_name to $default_setting_value in $target_file"
