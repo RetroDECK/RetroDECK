@@ -375,6 +375,9 @@ modules:
       # Installing metainfo
       - install -Dm 644 net.retrodeck.retrodeck.metainfo.xml ${FLATPAK_DEST}/share/metainfo/net.retrodeck.retrodeck.metainfo.xml
 
+      # Prepare codecs-extra location
+      - mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/codecs-extra
+
       # Removing the retrodeck_function_wrapper.sh in non-cooker versions (aka main)
       - |
         if ! grep -q "cooker" "${FLATPAK_DEST}/retrodeck/version"; then
