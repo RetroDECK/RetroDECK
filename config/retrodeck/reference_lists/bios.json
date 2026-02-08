@@ -14790,6 +14790,48 @@
       "system": "mame",
       "description": "ZXBUS NeoGS module.",
       "required": "No"
+    },
+    {
+      "filename": "ROM01.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM01",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM01 - KEGS Name (recommended)",
+      "required": "Yes for KEGS"
+    },
+    {
+      "filename": "APPLE2GS.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM01 - Alt Name",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM03.ROM",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM03",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM.ROM",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM03 - KEGS Name",
+      "required": "Yes for KEGS"
+    },
+    {
+      "filename": "APPLE2GS.ROM2",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "appleIIgs",
+      "description": "AppleIIGS ROM03 - Alt Name",
+      "required": "At least one"
     }
   ]
 }
