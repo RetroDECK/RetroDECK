@@ -753,13 +753,6 @@
       "required": "Required"
     },
     {
-      "filename": "ps2-0200a-20040614.bin",
-      "md5": "d333558cc14561c1fdc334c75d5f37b7",
-      "system": "ps2",
-      "description": "PlayStation 2 US BIOS",
-      "required": "Required"
-    },
-    {
       "filename": "dsifirmware.bin",
       "sha256": "11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99",
       "system": "nds",
@@ -1222,20 +1215,6 @@
       "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
       "system": "psx",
       "description": "Generic PlayStation BIOS from the Playstation 3 (universal copy for emulator compatibility, region-independent)",
-      "required": "At least one BIOS file required"
-    },
-    {
-      "filename": "ps2-0200e-20040614.bin",
-      "md5": "dc752f160044f2ed5fc1f4964db2a095",
-      "system": "ps2",
-      "description": "PlayStation 2 EU BIOS",
-      "required": "At least one BIOS file required"
-    },
-    {
-      "filename": "ps2-0200j-20040614.bin",
-      "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
-      "system": "ps2",
-      "description": "Japanese PlayStation 2 BIOS (SCPH-10000 series, released 14 Jun 2004)",
       "required": "At least one BIOS file required"
     },
     {
@@ -2479,6 +2458,237 @@
       "md5": "1ad977bb539fc9448a08ab276a836bbc",
       "system": "ps2",
       "description": "PlayStation 2 BIOS - Japan",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0110a-20000727.bin",
+      "md5": "a20c97c02210f16678ca3010127caf36",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0120a-20000902.bin",
+      "md5": "8db2fbbac7413bf3e7154c1e0715e565",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0150a-20001228.bin",
+      "md5": "8accc3c49ac45f5ae2c5db0adc854633",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160a-20010427.bin",
+      "md5": "b107b5710042abe887c0f6175f6e94bb",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160a-20011004.bin",
+      "md5": "7200a03d51cacc4c14fcdfdbc4898431",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160a-20020207.bin",
+      "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0170a-20030325.bin",
+      "md5": "8aa12ce243210128c5074552d3b86251",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0190a-20030623.bin",
+      "md5": "35461cecaa51712b300b2d6798825048",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0200a-20040614.bin",
+      "md5": "d333558cc14561c1fdc334c75d5f37b7",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220a-20050620.bin",
+      "md5": "929a14baca1776b00869f983aa6e14d2",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220a-20060210.bin",
+      "md5": "cb801b7920a7d536ba07b6534d2433ca",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220a-20060905.bin",
+      "md5": "40c11c063b3b9409aa5e4058e984e30c",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0230a-20080220.bin",
+      "md5": "21038400dc633070a78ad53090c53017",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - USA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0120e-20000902.bin",
+      "md5": "b7fa11e87d51752a98b38e3e691cbf17",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0150e-20001228.bin",
+      "md5": "838544f12de9b0abc90811279ee223c8",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160e-20010704.bin",
+      "md5": "491209dd815ceee9de02dbbc408c06d6",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160e-20011004.bin",
+      "md5": "8359638e857c8bc18c3c18ac17d9cc3c",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160e-20020319.bin",
+      "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0170e-20030227.bin",
+      "md5": "6e69920fa6eef8522a1d688a11e41bc6",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0190e-20030623.bin",
+      "md5": "bd6415094e1ce9e05daabe85de807666",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0200e-20040614.bin",
+      "md5": "dc752f160044f2ed5fc1f4964db2a095",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220e-20050620.bin",
+      "md5": "573f7d4a430c32b3cc0fd0c41e104bbd",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220e-20060210.bin",
+      "md5": "af60e6d1a939019d55e5b330d24b1c25",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220e-20060905.bin",
+      "md5": "80bbb237a6af9c611df43b16b930b683",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0230e-20080220.bin",
+      "md5": "dc69f0643a3030aaa4797501b483d6c4",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - EUROPE",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160h-20010730.bin",
+      "md5": "352d2ff9b3f68be7e6fa7e6dd8389346",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0160h-20020426.bin",
+      "md5": "315a4003535dfda689752cb25f24785c",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0190h-20030623.bin",
+      "md5": "07b562a3f0c4b9a55834df9bbc9bd0c3",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0200h-20040614.bin",
+      "md5": "3e3e030c0f600442fa05b94f87a1e238",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220h-20060905.bin",
+      "md5": "c37bce95d32b2be480f87dd32704e664",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0220h-20060210.bin",
+      "md5": "549a66d0c698635ca9fa3ab012da7129",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - HONG KONG",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0190c-20030623.bin",
+      "md5": "1b6e631b536247756287b916f9396872",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - CHINA",
+      "required": "At least one BIOS file required"
+    },
+    {
+      "filename": "ps2-0190r-20030623.bin",
+      "md5": "0c13357c01a25a886db2356bbe73d9f0",
+      "system": "ps2",
+      "description": "PlayStation 2 BIOS - RUSSIA",
       "required": "At least one BIOS file required"
     },
     {
