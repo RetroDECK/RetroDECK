@@ -14802,8 +14802,8 @@
       "filename": "ROM.ROM",
       "md5": "20a0334c447cb069a040ae5be1d938df",
       "system": "appleIIgs",
-      "description": "AppleIIGS ROM01 - KEGS Name (recommended)",
-      "required": "Yes for KEGS"
+      "description": "AppleIIGS ROM01 - KEGS",
+      "required": "Yes for KEGS (recommended)"
     },
     {
       "filename": "APPLE2GS.ROM",
@@ -14823,7 +14823,7 @@
       "filename": "ROM.ROM",
       "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
       "system": "appleIIgs",
-      "description": "AppleIIGS ROM03 - KEGS Name",
+      "description": "AppleIIGS ROM03 - KEGS",
       "required": "Yes for KEGS"
     },
     {
@@ -14832,6 +14832,54 @@
       "system": "appleIIgs",
       "description": "AppleIIGS ROM03 - Alt Name",
       "required": "At least one"
+    },
+    {
+      "filename": "level1.rom",
+      "md5": "1136f64e2c249848f956343862742e1e",
+      "system": "trs-80",
+      "description": "TRS-80 Level I BASIC ROM",
+      "paths": "$roms_path/trs-80",
+      "required": "Optional"
+    },
+    {
+      "filename": "level2.rom",
+      "md5": "ca74822ebc2803c6635a55116ecd9539",
+      "system": "trs-80",
+      "description": "TRS-80 Level II BASIC ROM",
+      "paths": "$roms_path/trs-80",
+      "required": "Yes"
+    },
+    {
+      "filename": "level3.rom",
+      "md5": "ecd0a5a83fca19ea860fe565fad4b061",
+      "system": "trs-80",
+      "description": "TRS-80 Model III ROM",
+      "paths": "$roms_path/trs-80",
+      "required": "Optional"
+    },
+    {
+      "filename": "level4.rom",
+      "md5": "0e4c4b1638a23fd26796816cf2f83961",
+      "system": "trs-80",
+      "description": "TRS-80 Model 4 ROM",
+      "paths": "$roms_path/trs-80",
+      "required": "Optional"
+    },
+    {
+      "filename": "level4p.rom",
+      "md5": "9bc4cc42958a2a120670e5bc0bfc1d5e",
+      "system": "trs-80",
+      "description": "TRS-80 Model 4P ROM",
+      "paths": "$roms_path/trs-80",
+      "required": "Optional"
+    },
+    {
+      "filename": "boot.dsk",
+      "md5": "6f624bdbf4b410cfbe8603fa3bef44fa",
+      "system": "trs-80",
+      "description": "TRS-80 Boot Disk - NewDos/80 V 2.0",
+      "paths": "$roms_path/trs-80",
+      "required": "Yes"
     }
   ]
 }
