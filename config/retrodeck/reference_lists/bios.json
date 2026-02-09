@@ -82,6 +82,228 @@
       "required": "Required for some Japanese games."
     },
     {
+      "filename": "ROM_OS_A_NTSC",
+      "md5": "a3c1585b5d19719f8acfa2b093bea75f",
+      "system": "atari800",
+      "description": "Early NTSC Atari 400/800 OS."
+    },
+    {
+      "filename": "ROM_OS_A_PAL",
+      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
+      "system": "atari800",
+      "description": "PAL Atari 400/800 OS."
+    },
+    {
+      "filename": "ROM_OS_B_NTSC",
+      "md5": [
+        "4177f386a3bac989a981d3fe3388cb6c",
+        "f5b246fa5237b44c41c6c831ccf18a2d"
+      ],
+      "system": "atari800",
+      "description": "Late NTSC Atari 400/800 OS (LINBUG, two revisions)."
+    },
+    {
+      "filename": "ROM_OS_AA00R10",
+      "md5": "e3e8c74bfe1dcd6b56af50bd9a82dc15",
+      "system": "atari800",
+      "description": "Atari 1200XL OS R10."
+    },
+    {
+      "filename": "ROM_OS_AA00R11",
+      "md5": "eacb8069c45e2ec4e0a19978bf2fc334",
+      "system": "atari800",
+      "description": "Atari 1200XL OS R11."
+    },
+    {
+      "filename": "ROM_OS_BB00R1",
+      "md5": "9aea45e724d2588fbbeda658c7dc53ee",
+      "system": "atari800",
+      "description": "Atari 600XL OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R2",
+      "md5": "06daac977823773a3eea3422fd26a703",
+      "system": "atari800",
+      "description": "Atari 800XL / 65XE / 130XE OS."
+    },
+    {
+      "filename": "ROM_OS_BB02R3",
+      "md5": "2dbc73da0d34994d1e2e62e22eb49224",
+      "system": "atari800",
+      "description": "Atari 1450XLD prototype OS (R3V2)."
+    },
+    {
+      "filename": "ROM_OS_BB02R3V4",
+      "md5": "9f5449c881475a5cca40849c743205f8",
+      "system": "atari800",
+      "description": "Atari 1450XLD prototype OS (R3V4)."
+    },
+    {
+      "filename": "ROM_OS_CC01R4",
+      "md5": "65020266380e33cce50ebf8b9d91122a",
+      "system": "atari800",
+      "description": "Reconstructed OS build (2014)."
+    },
+    {
+      "filename": "ROM_OS_BB01R3",
+      "md5": "54e704558a6aedfc45cebf8f8ac9c312",
+      "system": "atari800",
+      "description": "Late Atari 65XE/130XE OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R4",
+      "md5": "b7a2a04677d34f069eeb643d5238bf86",
+      "system": "atari800",
+      "description": "Atari XEGS OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R59",
+      "md5": "d467f55fb7643553b69b34bf7e805b7d",
+      "system": "atari800",
+      "description": "Arabic Atari XEGS OS."
+    },
+    {
+      "filename": "ROM_OS_BB01R59A",
+      "md5": "69396860e53f58d798421d06d766c3ba",
+      "system": "atari800",
+      "description": "Arabic Atari 65XE OS."
+    },
+    {
+      "filename": "ROM_XEGAME",
+      "md5": "d7eb37aec6960cba36bc500e0e5d00bc",
+      "system": "atari800",
+      "description": "Atari XEGS built-in game ROM."
+    },
+    {
+      "filename": "ROM_400/800_CUSTOM",
+      "md5": [
+        "a3e8d617c95d08031fe1b20d541434b2",
+        "7e5e4ce9508edef684ebe2c5a0e6f0d3"
+      ],
+      "system": "atari800",
+      "description": "NTSC PCXFormer hack BIOS (LINBUG base, corrected checksum version)."
+    },
+    {
+      "filename": "ROM_BASIC_A",
+      "md5": "a4dc52536d526ecc51ea857b9fa2b90f",
+      "system": "atari800",
+      "description": "Atari BASIC for 400/800 (Rev. A)."
+    },
+    {
+      "filename": "ROM_BASIC_B",
+      "md5": "04ea6a4e386601445ca5bfc8e37fb620",
+      "system": "atari800",
+      "description": "Atari BASIC for 600XL/early 800XL (Rev. B)."
+    },
+    {
+      "filename": "ROM_BASIC_C",
+      "md5": "(Alternative Name) 0bac0c6a50104045d902df4503a4c30b",
+      "system": "atari5200",
+      "description": "Atari BASIC for 800XL/XE/XEGS"
+    },
+    {
+      "filename": "ROM_5200",
+      "md5": "281f20ea4320404ec820fb7ec0693b38",
+      "system": "atari5200",
+      "description": "(Alternative Name) BIOS Atari 5200."
+    },
+    {
+      "filename": "ROM_5200_A",
+      "md5": "ee7b85f5ca384dcb1f284946f3c12ac4",
+      "system": "atari5200",
+      "description": "BIOS for late 2-port Atari 5200."
+    },
+    {
+      "filename": "ROM01.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "apple2gs",
+      "description": "Apple2gs ROM01",
+      "required": "At least one"
+    },
+    {
+      "filename": "APPLE2GS.ROM2",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "apple2gs",
+      "description": "apple2gs ROM03 - Alternative name",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "apple2gs",
+      "description": "Apple2gs ROM01 - KEGS",
+      "required": "Yes for KEGS (recommended)"
+    },
+    {
+      "filename": "APPLE2GS.ROM",
+      "md5": "20a0334c447cb069a040ae5be1d938df",
+      "system": "apple2gs",
+      "description": "Apple2gs ROM01 - Alternative name",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM03.ROM",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "apple2gs",
+      "description": "Apple2gs ROM03",
+      "required": "At least one"
+    },
+    {
+      "filename": "ROM.ROM",
+      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
+      "system": "apple2gs",
+      "description": "Apple2gs ROM03 - KEGS",
+      "required": "Yes for KEGS"
+    },
+    {
+      "filename": "a2diskiing.zip",
+      "system": "apple2",
+      "description": "Apple II Disk II ROM"
+    },
+    {
+      "filename": "apple2e.zip",
+      "system": "apple2",
+      "description": "Apple IIe BIOS ROM"
+    },
+    {
+      "filename": "d2fdc.zip",
+      "system": "apple2",
+      "description": "Apple II Floppy-disk controller ROM"
+    },
+    {
+      "filename": "votrsc01.zip",
+      "system": "apple2",
+      "description": " Apple II Votrax SC-01 ROM"
+    },
+    {
+      "filename": "votrsc01a.zip",
+      "system": "apple2",
+      "description": "Apple II Alternate Votrax SC-01"
+    },
+    {
+      "filename": "apple2gs.zip",
+      "system": "apple2",
+      "description": "Apple IIGS system BIOS ROM"
+    },
+    {
+      "filename": "tvc22_ext.rom",
+      "md5": "5ce95a26ceed5bec73995d83568da9cf",
+      "system": "enterprise",
+      "description": "Extension ROM Enterprise TVC-22"
+    },
+    {
+      "filename": "tvc22_sys.rom",
+      "md5": "8c54285f541930cde766069942bad0f2",
+      "system": "enterprise",
+      "description": "System ROM Enterprise TVC-22"
+    },
+    {
+      "filename": "tvc_dos12d.rom",
+      "md5": "88dc7876d584f90e4106f91444ab23b7",
+      "system": "enterprise",
+      "description": "DOS 12D ROM Enterprise"
+    },
+    {
       "filename": "neogeo.zip",
       "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
       "system": "fbneo",
@@ -1730,7 +1952,7 @@
       "filename": "st011.program.rom",
       "md5": "95222ebf1c0c2990bcf25db43743f032",
       "system": "snes",
-      "description": "SNES ST-011 program ROM (processing code)",
+      "description": "SNES ST-011 program ROM",
       "required": "Optional, depends on emulator / core"
     },
     {
@@ -1904,26 +2126,6 @@
         "saturnjp"
       ],
       "description": "Sega Saturn BIOS"
-    },
-    {
-      "filename": "iplrom.x1",
-      "md5": "eeeea1cd29c6e0e8b094790ae969bfa7",
-      "system": "x1",
-      "description": "Sharp X1 IPL ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "iplrom.x1t",
-      "md5": "851e4a5936f17d13f8c39a980cf00d77",
-      "system": "x1",
-      "description": "Sharp X1T IPL ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "128-0.rom",
-      "md5": "b4d2692115a9f2924df92a3cbfb358fb",
-      "system": "zxspectrum",
-      "description": "ZX Spectrum 48 KB BASIC ROM - UK"
     },
     {
       "filename": "128-spanish-0.rom",
@@ -2667,55 +2869,7 @@
       "filename": "tvcfileio.rom",
       "md5": "a2cf86ba8e7fc58b242137fe59036832",
       "system": "enterprise",
-      "description": "File-I/O extension ROM for Enterprise"
-    },
-    {
-      "filename": "tvc22_ext.rom",
-      "md5": "5ce95a26ceed5bec73995d83568da9cf",
-      "system": "enterprise",
-      "description": "Extension ROM for Enterprise TVC-22 hardware, adds extra firmware features"
-    },
-    {
-      "filename": "tvc22_sys.rom",
-      "md5": "8c54285f541930cde766069942bad0f2",
-      "system": "enterprise",
-      "description": "System ROM for Enterprise TVC-22, provides core OS routines"
-    },
-    {
-      "filename": "tvc_dos12d.rom",
-      "md5": "88dc7876d584f90e4106f91444ab23b7",
-      "system": "enterprise",
-      "description": "DOS 12D ROM for Enterprise, supplies disk-operating system firmware"
-    },
-    {
-      "filename": "a2diskiing.zip",
-      "system": "apple2",
-      "description": "Disk II interface ROMs for Apple II floppy controller"
-    },
-    {
-      "filename": "apple2e.zip",
-      "system": "apple2",
-      "description": "Apple IIe BIOS ROM containing monitor and BASIC interpreter"
-    },
-    {
-      "filename": "d2fdc.zip",
-      "system": "apple2",
-      "description": "Floppy-disk controller ROM for Apple II drives"
-    },
-    {
-      "filename": "votrsc01.zip",
-      "system": "apple2",
-      "description": "Votrax SC-01 speech-synthesizer ROM for Apple II"
-    },
-    {
-      "filename": "votrsc01a.zip",
-      "system": "apple2",
-      "description": "Alternate Votrax SC-01 speech-synthesizer ROM for Apple II"
-    },
-    {
-      "filename": "apple2gs.zip",
-      "system": "apple2",
-      "description": "Apple IIGS system BIOS ROM"
+      "description": "File-I/O extension ROM Enterprise"
     },
     {
       "filename": "d32.rom",
@@ -2724,7 +2878,7 @@
         "3420b96031078a4ef408cad7bf21a33f"
       ],
       "system": "tanodragon",
-      "description": "Tano Dragon BASIC OS firmware (dual-checksum version)",
+      "description": "Tano Dragon BASIC OS firmware",
       "required": "Required"
     },
     {
@@ -2734,7 +2888,7 @@
         "6ab639e65c6e8fd832cb0d8ad4da1b60"
       ],
       "system": "tanodragon",
-      "description": "Tano Dragon BASIC OS firmware (dual-checksum version)",
+      "description": "Tano Dragon BASIC OS firmware",
       "required": "Required"
     },
     {
@@ -2747,19 +2901,19 @@
       "filename": "d64tano2.rom",
       "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
       "system": "tanodragon",
-      "description": "Tano Dragon BASIC OS firmware (alternate version)"
+      "description": "Tano Dragon BASIC OS firmware"
     },
     {
       "filename": "d200rom1.rom",
       "md5": "be9bc86ee5eb401d0a40d0377f65fefa",
       "system": "tanodragon",
-      "description": "Tano Dragon BASIC OS firmware (variant for 200-series)"
+      "description": "Tano Dragon BASIC OS firmware"
     },
     {
       "filename": "d200rom2.rom",
       "md5": "fd91edce7be5e7c2d88e46b76956a8aa",
       "system": "tanodragon",
-      "description": "Tano Dragon BASIC OS firmware (alternate 200-series variant)"
+      "description": "Tano Dragon BASIC OS firmware"
     },
     {
       "filename": "ddos10.rom",
@@ -2850,123 +3004,123 @@
       "filename": "color64extbas.rom",
       "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
       "system": "coco",
-      "description": "Extended Color BASIC ROM for CoCo 64 - adds disk-handling commands"
+      "description": "CoCo 64 Extended Color BASIC ROM"
     },
     {
       "filename": "xroarbios.rom",
       "md5": "28dc97df470fb8660ef61b81dfd34f4a",
       "system": "coco",
-      "description": "XRoar emulator BIOS for the CoCo series - core system initialization"
+      "description": "XRoar emulator BIOS"
     },
     {
       "filename": "bas10.rom",
       "md5": "a74f3d95b395dad7cdca19d560eeea74",
       "system": "coco",
-      "description": "Color BASIC 1.0 ROM (4 KB) - original BASIC interpreter for CoCo 1"
+      "description": "Color BASIC 1.0 ROM"
     },
     {
       "filename": "bas11.rom",
       "md5": "c73fb4bff9621c5ab17f6220b20db82f",
       "system": "coco",
-      "description": "Color BASIC 1.1 ROM - minor bug-fix update for CoCo 1/2"
+      "description": "Color BASIC 1.1 ROM"
     },
     {
       "filename": "bas12.rom",
       "md5": "c933316c7d939532a13648850c1c2aa6",
       "system": "coco",
-      "description": "Color BASIC 1.2 ROM - adds support for additional I/O devices"
+      "description": "Color BASIC 1.2 ROM"
     },
     {
       "filename": "bas13.rom",
       "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
       "system": "coco",
-      "description": "Color BASIC 1.3 ROM - includes extended string handling",
+      "description": "Color BASIC 1.3 ROM",
       "required": "Required"
     },
     {
       "filename": "bas14.rom",
       "md5": "ac33e16f677b4db52548d426174b1aaa",
       "system": "coco",
-      "description": "Color BASIC 1.4 ROM - final revision before CoCo 3 transition"
+      "description": "Color BASIC 1.4 ROM"
     },
     {
       "filename": "coco3.rom",
       "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
       "system": "coco",
-      "description": "CoCo 3 system ROM - provides 6809 CPU support and enhanced graphics"
+      "description": "CoCo 3 system ROM 6809 CPU"
     },
     {
       "filename": "extbas10.rom",
       "md5": "fda72f415afe99b36f953bb9bc1253da",
       "system": "coco",
-      "description": "Extended BASIC 1.0 ROM - adds disk commands to Color BASIC"
+      "description": "Extended BASIC 1.0 ROM"
     },
     {
       "filename": "extbas11.rom",
       "md5": "21070aa0496142b886c562bf76d7c113",
       "system": "coco",
-      "description": "Extended BASIC 1.1 ROM - refined disk I/O and error handling"
+      "description": "Extended BASIC 1.1 ROM"
     },
     {
       "filename": "disk10.rom",
       "md5": "a64b3ef9efcc066b18d35b134068d1cc",
       "system": "coco",
-      "description": "Disk Operating System (DOS) ROM for CoCo 1/2 - basic file management"
+      "description": "Disk Operating System (DOS) ROM for CoCo 1/2"
     },
     {
       "filename": "disk11.rom",
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "DOS 1.1 ROM - adds directory listings and larger file support",
+      "description": "DOS 1.1 ROM",
       "required": "Required"
     },
     {
       "filename": "fd502.rom",
       "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
       "system": "coco",
-      "description": "Single-sided RSDOS ROM - early CoCo disk OS (FD-502 format)"
+      "description": "Single-sided RSDOS ROM CoCo "
     },
     {
       "filename": "fd502ds.rom",
       "md5": "b2d43757dc6851d866021ff6c4f59205",
       "system": "coco",
-      "description": "Double-sided RSDOS ROM - supports 2-side floppy media"
+      "description": "Double-sided RSDOS ROM"
     },
     {
       "filename": "coco3p.rom",
       "md5": "4ae57e5a8e7494e5485446fefedb580b",
       "system": "coco",
-      "description": "Plus-style ROM providing the enhanced system firmware used by upgraded CoCo 3 configurations."
+      "description": "Plus-style CoCo 3 ROM"
     },
     {
       "filename": "CCNPATCH.cas",
       "md5": "2c395ad58a842711931679b554483a90",
       "system": "coco",
-      "description": "Cassette patch - improves BASIC directory display (CAS format)"
+      "description": "Cassette patch (CAS format)"
     },
     {
       "filename": "CCNPATCH.wav",
       "md5": "a17397fb5408647a11d23bab959d1f97",
       "system": "coco",
-      "description": "Audio version of the CCN directory-display patch (WAV format)"
+      "description": "Audio"
     },
     {
       "filename": "DBPATCH.cas",
       "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
       "system": "coco",
-      "description": "Cassette patch - adds DB-style directory enhancements"
+      "description": "Cassette patch"
     },
     {
       "filename": "DBPATCH.wav",
       "md5": "6a07aeee664d81047672e6ff3541a12a",
       "system": "coco",
-      "description": "Audio version of the DB directory-enhancement patch (WAV format)"
+      "description": "Audio"
     },
     {
       "filename": "disk.rom",
       "md5": "793f86784e5608352a5d7f03f03e0858",
       "system": "pc88",
-      "description": "PC-88 disk controller BIOS - needed for disk images"
+      "description": "PC-88 disk controller BIOS"
     },
     {
       "filename": "disk.rom",
@@ -3026,7 +3180,7 @@
       "filename": "kick40060.CD32.ext",
       "md5": "bb72565701b1b6faece07d68ea5da639",
       "system": "amiga",
-      "description": "Kickstart 40060 Amiga CD32 ROM"
+      "description": "Kickstart 40060Amiga CD32 ROM"
     },
     {
       "filename": "kick40060.CD32.full",
@@ -3722,180 +3876,6 @@
       "md5": "e9fc3890963b12cf15d0a2eea5815b72",
       "system": "pc9800",
       "description": "Interface ROM for PC-9800"
-    },
-    {
-      "filename": "ROM_OS_A_NTSC",
-      "md5": "a3c1585b5d19719f8acfa2b093bea75f",
-      "system": "atari800",
-      "description": "Early NTSC Atari 400/800 OS."
-    },
-    {
-      "filename": "ROM_OS_A_PAL",
-      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
-      "system": "atari800",
-      "description": "PAL Atari 400/800 OS."
-    },
-    {
-      "filename": "ROM_OS_B_NTSC",
-      "md5": [
-        "4177f386a3bac989a981d3fe3388cb6c",
-        "f5b246fa5237b44c41c6c831ccf18a2d"
-      ],
-      "system": "atari800",
-      "description": "Late NTSC Atari 400/800 OS (LINBUG, two revisions)."
-    },
-    {
-      "filename": "ROM_OS_AA00R10",
-      "md5": "e3e8c74bfe1dcd6b56af50bd9a82dc15",
-      "system": "atari800",
-      "description": "Atari 1200XL OS R10."
-    },
-    {
-      "filename": "ROM_OS_AA00R11",
-      "md5": "eacb8069c45e2ec4e0a19978bf2fc334",
-      "system": "atari800",
-      "description": "Atari 1200XL OS R11."
-    },
-    {
-      "filename": "ROM_OS_BB00R1",
-      "md5": "9aea45e724d2588fbbeda658c7dc53ee",
-      "system": "atari800",
-      "description": "Atari 600XL OS."
-    },
-    {
-      "filename": "ROM_OS_BB01R2",
-      "md5": "06daac977823773a3eea3422fd26a703",
-      "system": "atari800",
-      "description": "Atari 800XL / 65XE / 130XE OS."
-    },
-    {
-      "filename": "ROM_OS_BB02R3",
-      "md5": "2dbc73da0d34994d1e2e62e22eb49224",
-      "system": "atari800",
-      "description": "Atari 1450XLD prototype OS (R3V2)."
-    },
-    {
-      "filename": "ROM_OS_BB02R3V4",
-      "md5": "9f5449c881475a5cca40849c743205f8",
-      "system": "atari800",
-      "description": "Atari 1450XLD prototype OS (R3V4)."
-    },
-    {
-      "filename": "ROM_OS_CC01R4",
-      "md5": "65020266380e33cce50ebf8b9d91122a",
-      "system": "atari800",
-      "description": "Reconstructed OS build (2014)."
-    },
-    {
-      "filename": "ROM_OS_BB01R3",
-      "md5": "54e704558a6aedfc45cebf8f8ac9c312",
-      "system": "atari800",
-      "description": "Late Atari 65XE/130XE OS."
-    },
-    {
-      "filename": "ROM_OS_BB01R4",
-      "md5": "b7a2a04677d34f069eeb643d5238bf86",
-      "system": "atari800",
-      "description": "Atari XEGS OS."
-    },
-    {
-      "filename": "ROM_OS_BB01R59",
-      "md5": "d467f55fb7643553b69b34bf7e805b7d",
-      "system": "atari800",
-      "description": "Arabic Atari XEGS OS."
-    },
-    {
-      "filename": "ROM_OS_BB01R59A",
-      "md5": "69396860e53f58d798421d06d766c3ba",
-      "system": "atari800",
-      "description": "Arabic Atari 65XE OS."
-    },
-    {
-      "filename": "ROM_XEGAME",
-      "md5": "d7eb37aec6960cba36bc500e0e5d00bc",
-      "system": "atari800",
-      "description": "Atari XEGS built-in game ROM."
-    },
-    {
-      "filename": "ROM_400/800_CUSTOM",
-      "md5": [
-        "a3e8d617c95d08031fe1b20d541434b2",
-        "7e5e4ce9508edef684ebe2c5a0e6f0d3"
-      ],
-      "system": "atari800",
-      "description": "NTSC PCXFormer hack BIOS (LINBUG base, corrected checksum version)."
-    },
-    {
-      "filename": "ROM_BASIC_A",
-      "md5": "a4dc52536d526ecc51ea857b9fa2b90f",
-      "system": "atari800",
-      "description": "Atari BASIC for 400/800 (Rev. A)."
-    },
-    {
-      "filename": "ROM_BASIC_B",
-      "md5": "04ea6a4e386601445ca5bfc8e37fb620",
-      "system": "atari800",
-      "description": "Atari BASIC for 600XL/early 800XL (Rev. B)."
-    },
-    {
-      "filename": "ROM_BASIC_C",
-      "md5": "(Alternative Name) 0bac0c6a50104045d902df4503a4c30b",
-      "system": "atari5200",
-      "description": "Atari BASIC for 800XL/XE/XEGS (Rev. C)."
-    },
-    {
-      "filename": "ROM_5200",
-      "md5": "281f20ea4320404ec820fb7ec0693b38",
-      "system": "atari5200",
-      "description": "(Alternative Name) BIOS for 4-port and early 2-port Atari 5200."
-    },
-    {
-      "filename": "ROM_5200_A",
-      "md5": "ee7b85f5ca384dcb1f284946f3c12ac4",
-      "system": "atari5200",
-      "description": "BIOS for late 2-port Atari 5200."
-    },
-    {
-      "filename": "ROM01.ROM",
-      "md5": "20a0334c447cb069a040ae5be1d938df",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM01",
-      "required": "At least one"
-    },
-    {
-      "filename": "ROM.ROM",
-      "md5": "20a0334c447cb069a040ae5be1d938df",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM01 - KEGS",
-      "required": "Yes for KEGS (recommended)"
-    },
-    {
-      "filename": "APPLE2GS.ROM",
-      "md5": "20a0334c447cb069a040ae5be1d938df",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM01 - Alternative name",
-      "required": "At least one"
-    },
-    {
-      "filename": "ROM03.ROM",
-      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM03",
-      "required": "At least one"
-    },
-    {
-      "filename": "ROM.ROM",
-      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM03 - KEGS",
-      "required": "Yes for KEGS"
-    },
-    {
-      "filename": "APPLE2GS.ROM2",
-      "md5": "ba89edf2729a28a17cd9e0f7a0ac9a39",
-      "system": "appleIIgs",
-      "description": "AppleIIGS ROM03 - Alternative name",
-      "required": "At least one"
     },
     {
       "filename": "level1.rom",
