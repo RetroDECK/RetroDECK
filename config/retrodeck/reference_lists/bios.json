@@ -3625,13 +3625,13 @@
       "filename": "N88_3.ROM",
       "md5": "efce0b51cab9f0da6cf68507757f1245",
       "system": "pc8800",
-      "description": "Alternate name for N88EXT3.ROM, same advanced routines"
+      "description": "Alternate name for N88EXT3.ROM"
     },
     {
       "filename": "N88KNJ1.ROM",
       "md5": "82e11a177af6a5091dd67f50a2f4bafd",
       "system": "pc8800",
-      "description": "PC-8800 Kanji font ROM 1, enables display of Japanese Kanji characters in menus and applications"
+      "description": "PC-8800 Kanji font ROM 1- Japanese"
     },
     {
       "filename": "KANJI1.ROM",
@@ -3661,61 +3661,61 @@
       "filename": "2608_BD.WAV",
       "md5": "29aad51cd243c8e449d311d14613f0b1",
       "system": "pc9800",
-      "description": "Bass drum waveform for PC-9800 sound system, used in music and sound effects"
+      "description": "Bass drum waveform for PC-9800"
     },
     {
       "filename": "2608_HH.WAV",
       "md5": "59a009ee444318bd57d99a19068731e4",
       "system": "pc9800",
-      "description": "Hi-hat waveform for PC-9800 sound system, provides percussion sounds in music playback"
+      "description": "Hi-hat waveform for PC-9800"
     },
     {
       "filename": "2608_RIM.WAV",
       "md5": "943290d1c5c6ae6295bd02be4411c7c0",
       "system": "pc9800",
-      "description": "Rimshot waveform for PC-9800 sound system, adds snare rim percussion effects"
+      "description": "Rimshot waveform for PC-9800"
     },
     {
       "filename": "2608_SD.WAV",
       "md5": "c99156118789b6cba662c864ebadc62e",
       "system": "pc9800",
-      "description": "Snare drum waveform for PC-9800 sound system, used in rhythm and music sequences"
+      "description": "Snare drum waveform for PC-9800 "
     },
     {
       "filename": "2608_TOM.WAV",
       "md5": "c321a6835b26ad125b2eb78be56394a4",
       "system": "pc9800",
-      "description": "Tom-tom drum waveform for PC-9800 sound system, provides melodic percussion tones"
+      "description": "Tom-tom drum waveform for PC-9800"
     },
     {
       "filename": "2608_TOP.WAV",
       "md5": "9e73ff2345236ebe72f7a937e477f0bd",
       "system": "pc9800",
-      "description": "Top cymbal waveform for PC-9800 sound system, used for high-frequency percussion sounds"
+      "description": "Top cymbal waveform for PC-9800"
     },
     {
       "filename": "BIOS.ROM",
       "md5": "e246140dec5124c5e404869a84caefce",
       "system": "pc9800",
-      "description": "Main BIOS for PC-9800 system, required for hardware initialization and system startup"
+      "description": "Main BIOS for PC-9800"
     },
     {
       "filename": "FONT.ROM",
       "md5": "2af6179d7de4893ea0b705c00e9a98d6",
       "system": "pc9800",
-      "description": "Font ROM for PC-9800, contains standard character set used in text display and system menus"
+      "description": "Font ROM for PC-9800"
     },
     {
       "filename": "SOUND.ROM",
       "md5": "caf90f22197aed6f14c471c21e64658d",
       "system": "pc9800",
-      "description": "Sound ROM for PC-9800, provides default instrument and waveform data for the audio system"
+      "description": "Sound ROM for PC-9800"
     },
     {
       "filename": "ITF.ROM",
       "md5": "e9fc3890963b12cf15d0a2eea5815b72",
       "system": "pc9800",
-      "description": "Interface ROM for PC-9800, provides routines and drivers for peripheral connectivity"
+      "description": "Interface ROM for PC-9800"
     },
     {
       "filename": "ROM_OS_A_NTSC",
