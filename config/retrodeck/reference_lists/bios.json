@@ -4042,7 +4042,7 @@
       "md5": "3841ffa7a77349f650e6a9c78409a7a2",
       "system": "mame",
       "description": "3DO system BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "a2000kbd_ch.zip",
@@ -4896,7 +4896,7 @@
       "md5": "e9a71da243d6d48f122e5764430a5324",
       "system": "mame",
       "description": "Coleco Adam Keyboard ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "adam_prn.zip",
@@ -5008,7 +5008,7 @@
       "md5": "6a0ac75d702f8f7c1ca6c72aa2b0b7d8",
       "system": "mame",
       "description": "Airline BIOS ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "aha1740.zip",
@@ -5022,21 +5022,21 @@
       "md5": "de240f38f9f6f0e99a011a1f9b677b2c",
       "system": "mame",
       "description": "Aleck 64 system ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "3dobios.zip",
       "md5": "3841ffa7a77349f650e6a9c78409a7a2",
       "system": "mame",
       "description": "3DO console BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "alg3do.zip",
       "md5": "1df07f71539b77a7d7b635a970cfc741",
       "system": "mame",
       "description": "Alg 3DO system BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "allied.zip",
@@ -5050,14 +5050,14 @@
       "md5": "9edf49fe1c548a6b7159879a8747d6ab",
       "system": "mame",
       "description": "Alg system BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "alto2_cpu.zip",
       "md5": "d8315a8f7ccf2b6969fc98f75cfa19a5",
       "system": "mame",
       "description": "Alto II CPU ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "altos2_kbd.zip",
@@ -5141,7 +5141,7 @@
       "md5": "e67371b3b1e0759a032fb91e5724eebb",
       "system": "mame",
       "description": "AP2000 system ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "ampex230_kbd.zip",
@@ -5162,7 +5162,7 @@
       "md5": "83de643817f2c64c8af469f69c0ab7dd",
       "system": "mame",
       "description": "APRISSI system ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "aquarius_c1541.zip",
@@ -5176,7 +5176,7 @@
       "md5": "37e9746f4491aa2df9a83729d1a93620",
       "system": "mame",
       "description": "AR system BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "arc_a448.zip",
@@ -5400,14 +5400,14 @@
       "md5": "5350d1c34f0fd2902331a54fcf46d1f0",
       "system": "mame",
       "description": "ARC ROM AKA05",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "arc_rom_r225.zip",
       "md5": "3fde3de0d6613ba22b873f5b02c26bd8",
       "system": "mame",
       "description": "ARC ROM R225",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "arc_rs423.zip",
@@ -5610,7 +5610,7 @@
       "md5": "63536a7d7cf28d179bd7163e834486e9",
       "system": "mame",
       "description": "AT Motherboard BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "atari810.zip",
@@ -5687,7 +5687,7 @@
       "md5": "85254fbe320ca82a768ec2c26bb08def",
       "system": "mame",
       "description": "AW BIOS",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "ax208.zip",
@@ -9530,7 +9530,7 @@
       "md5": "74a0ed6ae5a559eeaf2069cfda2c73c4",
       "system": "mame",
       "description": "Lind system BIOS.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "lux10828.zip",
@@ -9754,14 +9754,14 @@
       "md5": "feb8b81bc22a77f3222d4208dd2c41ea",
       "system": "mame",
       "description": "MC1502 system ROM for emulation.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "macsbios.zip",
       "md5": "2d8bb01c90040684b5ff7c2636ec7574",
       "system": "mame",
       "description": "BIOS for Macintosh emulation.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "maxaflex.zip",
@@ -9789,7 +9789,7 @@
       "md5": "7471a14fed6d53d771698bb17770fdb0",
       "system": "mame",
       "description": "SVP ROM for enhanced Mega Drive graphics.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "md_kbd.zip",
@@ -10440,7 +10440,7 @@
       "md5": "56ab7546fbb0707a1d6214cfbdefb0d9",
       "system": "mame",
       "description": "MVME121 - VMEbus SBC from Motorola.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mulcd.zip",
@@ -10454,14 +10454,14 @@
       "md5": "56ab7546fbb0707a1d6214cfbdefb0d9",
       "system": "mame",
       "description": "MVME122 - Compact VME-based SBC.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mvme123.zip",
       "md5": "56ab7546fbb0707a1d6214cfbdefb0d9",
       "system": "mame",
       "description": "MVME123 - VMEbus SBC with high performance.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mvme147.zip",
@@ -10482,7 +10482,7 @@
       "md5": "90b9485035d007c1daa0d269241efc2d",
       "system": "mame",
       "description": "MVME328 - SBC for industrial control.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mvme350.zip",
@@ -10496,7 +10496,7 @@
       "md5": "d4c5caa1e9cb341985e6e6d3e5c85875",
       "system": "mame",
       "description": "MVME187 - VME processor for embedded use.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mvme327a.zip",
@@ -10531,7 +10531,7 @@
       "md5": "fd287071c251fa5bfa3c382da7d0e1d6",
       "system": "mame",
       "description": "NABUPC Keyboard interface for NABUPC systems.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "mz1p16.zip",
@@ -10559,70 +10559,70 @@
       "md5": "7fe7e6dde605d05045e8bafc5052a3f1",
       "system": "mame",
       "description": "Namco 51 - Arcade board with custom chips.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco50.zip",
       "md5": "bff02877b3e56117fc250c2a47fee7ea",
       "system": "mame",
       "description": "Namco 50 - Arcade board with custom graphics.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco53.zip",
       "md5": "0bcfb883e27939391f0d7e0acf179ba1",
       "system": "mame",
       "description": "Namco 53 - Arcade hardware with sound and video.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco52.zip",
       "md5": "41f3b85edc40ef1b5843e62db3c37eff",
       "system": "mame",
       "description": "Namco 52 - Arcade board with custom hardware.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco54.zip",
       "md5": "705edf0e055cd27264ce2a5828b354f2",
       "system": "mame",
       "description": "Namco 54 - Arcade board with custom sound and graphics.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_amc.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco AMC - Arcade Music Controller.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco62.zip",
       "md5": "b5616b573d54f2c1d7ef9d56f91ad1d8",
       "system": "mame",
       "description": "Namco 62 - Arcade board with advanced sound features.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_asca1.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco ASCA1 - Arcade system controller.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_asca3.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco ASCA3 - Advanced arcade system controller.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_asca5.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco ASCA5 - Arcade system controller for games.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_csz1.zip",
@@ -10643,21 +10643,21 @@
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco Cyberlead - Arcade system with visual effects.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_asca3a.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco ASCA3A - Enhanced arcade system controller.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_cyberleada.zip",
       "md5": "0eeea2edd2379a4347afb77503819358",
       "system": "mame",
       "description": "Namco Cyberleada - Arcade system with integrated hardware.",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "namco_de_pcb.zip",
