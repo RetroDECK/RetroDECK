@@ -82,6 +82,66 @@
       "required": "Required for some Japanese games."
     },
     {
+      "filename": "kick33180.A500",
+      "md5": "85ad74194e87c08904327de1a9443b7a",
+      "system": "amiga",
+      "description": "Kickstart 33180 for the Amiga 500"
+    },
+    {
+      "filename": "kick34005.A500",
+      "md5": "82a21c1890cae844b3df741f2762d48d",
+      "system": "amiga",
+      "description": "Kickstart 34005 for the Amiga 500"
+    },
+    {
+      "filename": "kick37175.A500",
+      "md5": "dc10d7bdd1b6f450773dfb558477c230",
+      "system": "amiga",
+      "description": "Kickstart 37175 Amiga 500+"
+    },
+    {
+      "filename": "kick40063.A600",
+      "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
+      "system": "amiga",
+      "description": "Kickstart 40063 Amiga 600"
+    },
+    {
+      "filename": "kick40068.A1200",
+      "md5": "646773759326fbac3b2311fd8c8793ee",
+      "system": "amiga",
+      "description": "Kickstart 40068 Amiga 1200."
+    },
+    {
+      "filename": "kick40068.A4000",
+      "md5": "9bdedde6a4f33555b4a270c8ca53297d",
+      "system": "amiga",
+      "description": "Kickstart 40068 Amiga 4000."
+    },
+    {
+      "filename": "kick34005.CDTV",
+      "md5": "89da1838a24460e4b93f4f0c5d92d48d",
+      "system": "amiga",
+      "description": "Kickstart 34005 CDTV ROM"
+    },
+    {
+      "filename": "kick40060.CD32",
+      "md5": "5f8924d013dd57a89cf349f4cdedc6b1",
+      "system": "amiga",
+      "description": "Kickstart 40060 Amiga CD32"
+    },
+    {
+      "filename": "kick40060.CD32.ext",
+      "md5": "bb72565701b1b6faece07d68ea5da639",
+      "system": "amiga",
+      "description": "Kickstart 40060Amiga CD32 ROM"
+    },
+    {
+      "filename": "kick40060.CD32.full",
+      "md5": "f2f241bf094168cfb9e7805dc2856433",
+      "system": "amiga",
+      "description": "Kickstart 40060 Combined Amiga CD32 ROM"
+    },
+    {
       "filename": "ROM_OS_A_NTSC",
       "md5": "a3c1585b5d19719f8acfa2b093bea75f",
       "system": "atari800",
@@ -235,6 +295,58 @@
       "required": "Yes for KEGS (recommended)"
     },
     {
+      "filename": "5200.rom",
+      "md5": "281f20ea4320404ec820fb7ec0693b38",
+      "system": "atari5200",
+      "description": "Atari 5200 console BIOS",
+      "required": "Required"
+    },
+    {
+      "filename": "ATARIXL.ROM",
+      "md5": "06daac977823773a3eea3422fd26a703",
+      "system": "atari5200",
+      "description": "Atari XL/XE operating system ROM",
+      "required": "Required"
+    },
+    {
+      "filename": "ATARIBAS.ROM",
+      "md5": "0bac0c6a50104045d902df4503a4c30b",
+      "system": "atari5200",
+      "description": "Atari BASIC interpreter ROM",
+      "required": "Required"
+    },
+    {
+      "filename": "ATARIOSA.ROM",
+      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
+      "system": "atari5200",
+      "description": "Atari OS ROM",
+      "required": "Required"
+    },
+    {
+      "filename": "ATARIOSB.ROM",
+      "md5": [
+        "4177f386a3bac989a981d3fe3388cb6c",
+        "a3e8d617c95d08031fe1b20d541434b2"
+      ],
+      "system": "atari5200",
+      "description": "Atari 400/800 NTSC BIOS",
+      "required": "Required"
+    },
+    {
+      "filename": "tos.img",
+      "md5": "c1c57ce48e8ee4135885cee9e63a68a2",
+      "system": "atarist",
+      "description": "Atari ST TOS boot image",
+      "required": "Required"
+    },
+    {
+      "filename": "lynxboot.img",
+      "md5": "fcd403db69f54290b51035d82f835e7b",
+      "system": "atarilynx",
+      "description": "Atari Lynx boot ROM",
+      "required": "Required"
+    },
+    {
       "filename": "APPLE2GS.ROM",
       "md5": "20a0334c447cb069a040ae5be1d938df",
       "system": "apple2gs",
@@ -284,6 +396,164 @@
       "filename": "apple2gs.zip",
       "system": "apple2",
       "description": "Apple IIGS system BIOS ROM"
+    },
+    {
+      "filename": "cp400extbas.rom",
+      "md5": "091581001577b4a83ccfd511829de0f1",
+      "system": "coco",
+      "description": "Prológica CP-400 extended BASIC firmware"
+    },
+    {
+      "filename": "cp400dsk.rom",
+      "md5": "16d3ab9bc935f0d5651ca3f0e3030846",
+      "system": "coco",
+      "description": "Prológica CP-400 DOS firmware"
+    },
+    {
+      "filename": "color64extbas.rom",
+      "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
+      "system": "coco",
+      "description": "CoCo 64 Extended Color BASIC ROM"
+    },
+    {
+      "filename": "xroarbios.rom",
+      "md5": "28dc97df470fb8660ef61b81dfd34f4a",
+      "system": "coco",
+      "description": "XRoar emulator BIOS"
+    },
+    {
+      "filename": "bas10.rom",
+      "md5": "a74f3d95b395dad7cdca19d560eeea74",
+      "system": "coco",
+      "description": "Color BASIC 1.0 ROM"
+    },
+    {
+      "filename": "bas11.rom",
+      "md5": "c73fb4bff9621c5ab17f6220b20db82f",
+      "system": "coco",
+      "description": "Color BASIC 1.1 ROM"
+    },
+    {
+      "filename": "bas12.rom",
+      "md5": "c933316c7d939532a13648850c1c2aa6",
+      "system": "coco",
+      "description": "Color BASIC 1.2 ROM"
+    },
+    {
+      "filename": "bas13.rom",
+      "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
+      "system": "coco",
+      "description": "Color BASIC 1.3 ROM",
+      "required": "Required"
+    },
+    {
+      "filename": "bas14.rom",
+      "md5": "ac33e16f677b4db52548d426174b1aaa",
+      "system": "coco",
+      "description": "Color BASIC 1.4 ROM"
+    },
+    {
+      "filename": "coco3.rom",
+      "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
+      "system": "coco",
+      "description": "CoCo 3 system ROM 6809 CPU"
+    },
+    {
+      "filename": "extbas10.rom",
+      "md5": "fda72f415afe99b36f953bb9bc1253da",
+      "system": "coco",
+      "description": "Extended BASIC 1.0 ROM"
+    },
+    {
+      "filename": "extbas11.rom",
+      "md5": "21070aa0496142b886c562bf76d7c113",
+      "system": "coco",
+      "description": "Extended BASIC 1.1 ROM"
+    },
+    {
+      "filename": "disk10.rom",
+      "md5": "a64b3ef9efcc066b18d35b134068d1cc",
+      "system": "coco",
+      "description": "Disk Operating System (DOS) ROM for CoCo 1/2"
+    },
+    {
+      "filename": "disk11.rom",
+      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
+      "system": "coco",
+      "description": "DOS 1.1 ROM",
+      "required": "Required"
+    },
+    {
+      "filename": "fd502.rom",
+      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
+      "system": "coco",
+      "description": "Single-sided RSDOS ROM CoCo "
+    },
+    {
+      "filename": "fd502ds.rom",
+      "md5": "b2d43757dc6851d866021ff6c4f59205",
+      "system": "coco",
+      "description": "Double-sided RSDOS ROM"
+    },
+    {
+      "filename": "coco3p.rom",
+      "md5": "4ae57e5a8e7494e5485446fefedb580b",
+      "system": "coco",
+      "description": "Plus-style CoCo 3 ROM"
+    },
+    {
+      "filename": "CCNPATCH.cas",
+      "md5": "2c395ad58a842711931679b554483a90",
+      "system": "coco",
+      "description": "Cassette patch (CAS format)"
+    },
+    {
+      "filename": "CCNPATCH.wav",
+      "md5": "a17397fb5408647a11d23bab959d1f97",
+      "system": "coco",
+      "description": "Audio"
+    },
+    {
+      "filename": "DBPATCH.cas",
+      "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
+      "system": "coco",
+      "description": "Cassette patch"
+    },
+    {
+      "filename": "DBPATCH.wav",
+      "md5": "6a07aeee664d81047672e6ff3541a12a",
+      "system": "coco",
+      "description": "Audio"
+    },
+    {
+      "filename": "disk.rom",
+      "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
+      "system": "coco",
+      "description": "Generic disk ROM"
+    },
+    {
+      "filename": "JiffyDOS_C64.bin",
+      "md5": "be09394f0576cf81fa8bacf634daf9a2",
+      "system": "c64",
+      "description": "JiffyDOS Kernal replacement for the Commodore 64"
+    },
+    {
+      "filename": "JiffyDOS_1541-II.bin",
+      "md5": "1b1e985ea5325a1f46eb7fd9681707bf",
+      "system": "c64",
+      "description": "JiffyDOS firmware for the Commodore 1541-II disk drive"
+    },
+    {
+      "filename": "JiffyDOS_1571_repl310654.bin",
+      "md5": "41c6cc528e9515ffd0ed9b180f8467c0",
+      "system": "c64",
+      "description": "JiffyDOS enhanced BIOS"
+    },
+    {
+      "filename": "JiffyDOS_1581.bin",
+      "md5": "20b6885c6dc2d42c38754a365b043d71",
+      "system": "c64",
+      "description": "JiffyDOS custom BIOS"
     },
     {
       "filename": "tvc22_ext.rom",
@@ -453,56 +723,18 @@
       "required": "Required"
     },
     {
-      "filename": "5200.rom",
-      "md5": "281f20ea4320404ec820fb7ec0693b38",
-      "system": "atari5200",
-      "description": "Atari 5200 console BIOS",
-      "required": "Required"
+      "filename": "exec.bin",
+      "md5": "62e761035cb657903761800f4437b8af",
+      "system": "intellivision",
+      "description": "Intellivision Executive ROM",
+      "required": "Optional"
     },
     {
-      "filename": "ATARIXL.ROM",
-      "md5": "06daac977823773a3eea3422fd26a703",
-      "system": "atari5200",
-      "description": "Atari XL/XE operating system ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "ATARIBAS.ROM",
-      "md5": "0bac0c6a50104045d902df4503a4c30b",
-      "system": "atari5200",
-      "description": "Atari BASIC interpreter ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "ATARIOSA.ROM",
-      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
-      "system": "atari5200",
-      "description": "Atari OS ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "ATARIOSB.ROM",
-      "md5": [
-        "4177f386a3bac989a981d3fe3388cb6c",
-        "a3e8d617c95d08031fe1b20d541434b2"
-      ],
-      "system": "atari5200",
-      "description": "Atari 400/800 NTSC BIOS",
-      "required": "Required"
-    },
-    {
-      "filename": "tos.img",
-      "md5": "c1c57ce48e8ee4135885cee9e63a68a2",
-      "system": "atarist",
-      "description": "Atari ST TOS boot image",
-      "required": "Required"
-    },
-    {
-      "filename": "lynxboot.img",
-      "md5": "fcd403db69f54290b51035d82f835e7b",
-      "system": "atarilynx",
-      "description": "Atari Lynx boot ROM",
-      "required": "Required"
+      "filename": "grom.bin",
+      "md5": "0cd5946c6473e42e8e4c2137785e427f",
+      "system": "intellivision",
+      "description": "Intellivision Graphics ROM",
+      "required": "Optional"
     },
     {
       "filename": "o2rom.bin",
@@ -532,7 +764,7 @@
         "videopac"
       ],
       "description": "Videopac+ European BIOS (G7400 model)",
-      "required": "Required"
+      "required": "Optional"
     },
     {
       "filename": "jopac.bin",
@@ -542,21 +774,7 @@
         "videopac"
       ],
       "description": "Videopac+ French BIOS (G7400 model)",
-      "required": "Required"
-    },
-    {
-      "filename": "exec.bin",
-      "md5": "62e761035cb657903761800f4437b8af",
-      "system": "intellivision",
-      "description": "Intellivision Executive ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "grom.bin",
-      "md5": "0cd5946c6473e42e8e4c2137785e427f",
-      "system": "intellivision",
-      "description": "Intellivision Graphics ROM",
-      "required": "Required"
+      "required": "Optional"
     },
     {
       "filename": "MSX.ROM",
@@ -625,14 +843,14 @@
       "md5": "403cdea1cbd2bb24fae506941f8f655e",
       "system": "msx",
       "description": "MSX Yamaha Painter ROM",
-      "required": "Only for that software"
+      "required": "Optional"
     },
     {
       "filename": "KANJI.ROM",
       "md5": "febe8782b466d7c3b16de6d104826b34",
       "system": "msx",
       "description": "MSX Kanji font ROM",
-      "required": "Only for Japanese games"
+      "required": "Required for some Japanese games."
     },
     {
       "filename": "mcpx_1.0.bin",
@@ -672,7 +890,7 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "PC Engine CD-ROM System V2.xx BIOS"
+      "description": "PC Engine CD-ROM System BIOS"
     },
     {
       "filename": "syscard1.pce",
@@ -681,7 +899,7 @@
         "pcengine",
         "pcenginecd"
       ],
-      "description": "PC Engine CD-ROM System V1.xx BIOS"
+      "description": "PC Engine CD-ROM System BIOS"
     },
     {
       "filename": "gexpress.pce",
@@ -780,6 +998,12 @@
       "system": "pc88",
       "description": "PC-88 core BIOS",
       "required": "Required"
+    },
+    {
+      "filename": "disk.rom",
+      "md5": "793f86784e5608352a5d7f03f03e0858",
+      "system": "pc88",
+      "description": "PC-88 disk controller BIOS"
     },
     {
       "filename": "n88n.rom",
@@ -2987,230 +3211,6 @@
       "md5": "f73da4d73d6db5cdb8b3cb6a50415e38",
       "system": "tanodragon",
       "description": "Prológica CP-400 BASIC OS firmware"
-    },
-    {
-      "filename": "cp400extbas.rom",
-      "md5": "091581001577b4a83ccfd511829de0f1",
-      "system": "coco",
-      "description": "Prológica CP-400 extended BASIC firmware"
-    },
-    {
-      "filename": "cp400dsk.rom",
-      "md5": "16d3ab9bc935f0d5651ca3f0e3030846",
-      "system": "coco",
-      "description": "Prológica CP-400 DOS firmware"
-    },
-    {
-      "filename": "color64extbas.rom",
-      "md5": "0d9264ffa95ba493f2b5b0d488a49e13",
-      "system": "coco",
-      "description": "CoCo 64 Extended Color BASIC ROM"
-    },
-    {
-      "filename": "xroarbios.rom",
-      "md5": "28dc97df470fb8660ef61b81dfd34f4a",
-      "system": "coco",
-      "description": "XRoar emulator BIOS"
-    },
-    {
-      "filename": "bas10.rom",
-      "md5": "a74f3d95b395dad7cdca19d560eeea74",
-      "system": "coco",
-      "description": "Color BASIC 1.0 ROM"
-    },
-    {
-      "filename": "bas11.rom",
-      "md5": "c73fb4bff9621c5ab17f6220b20db82f",
-      "system": "coco",
-      "description": "Color BASIC 1.1 ROM"
-    },
-    {
-      "filename": "bas12.rom",
-      "md5": "c933316c7d939532a13648850c1c2aa6",
-      "system": "coco",
-      "description": "Color BASIC 1.2 ROM"
-    },
-    {
-      "filename": "bas13.rom",
-      "md5": "c2fc43556eb6b7b25bdf5955bd9df825",
-      "system": "coco",
-      "description": "Color BASIC 1.3 ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "bas14.rom",
-      "md5": "ac33e16f677b4db52548d426174b1aaa",
-      "system": "coco",
-      "description": "Color BASIC 1.4 ROM"
-    },
-    {
-      "filename": "coco3.rom",
-      "md5": "7233c6c429f3ce1c7392f28a933e0b6f",
-      "system": "coco",
-      "description": "CoCo 3 system ROM 6809 CPU"
-    },
-    {
-      "filename": "extbas10.rom",
-      "md5": "fda72f415afe99b36f953bb9bc1253da",
-      "system": "coco",
-      "description": "Extended BASIC 1.0 ROM"
-    },
-    {
-      "filename": "extbas11.rom",
-      "md5": "21070aa0496142b886c562bf76d7c113",
-      "system": "coco",
-      "description": "Extended BASIC 1.1 ROM"
-    },
-    {
-      "filename": "disk10.rom",
-      "md5": "a64b3ef9efcc066b18d35b134068d1cc",
-      "system": "coco",
-      "description": "Disk Operating System (DOS) ROM for CoCo 1/2"
-    },
-    {
-      "filename": "disk11.rom",
-      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
-      "system": "coco",
-      "description": "DOS 1.1 ROM",
-      "required": "Required"
-    },
-    {
-      "filename": "fd502.rom",
-      "md5": "8cab28f4b7311b8df63c07bb3b59bfd5",
-      "system": "coco",
-      "description": "Single-sided RSDOS ROM CoCo "
-    },
-    {
-      "filename": "fd502ds.rom",
-      "md5": "b2d43757dc6851d866021ff6c4f59205",
-      "system": "coco",
-      "description": "Double-sided RSDOS ROM"
-    },
-    {
-      "filename": "coco3p.rom",
-      "md5": "4ae57e5a8e7494e5485446fefedb580b",
-      "system": "coco",
-      "description": "Plus-style CoCo 3 ROM"
-    },
-    {
-      "filename": "CCNPATCH.cas",
-      "md5": "2c395ad58a842711931679b554483a90",
-      "system": "coco",
-      "description": "Cassette patch (CAS format)"
-    },
-    {
-      "filename": "CCNPATCH.wav",
-      "md5": "a17397fb5408647a11d23bab959d1f97",
-      "system": "coco",
-      "description": "Audio"
-    },
-    {
-      "filename": "DBPATCH.cas",
-      "md5": "65e1aab5fc5cba1b7374d9dddec25d62",
-      "system": "coco",
-      "description": "Cassette patch"
-    },
-    {
-      "filename": "DBPATCH.wav",
-      "md5": "6a07aeee664d81047672e6ff3541a12a",
-      "system": "coco",
-      "description": "Audio"
-    },
-    {
-      "filename": "disk.rom",
-      "md5": "793f86784e5608352a5d7f03f03e0858",
-      "system": "pc88",
-      "description": "PC-88 disk controller BIOS"
-    },
-    {
-      "filename": "disk.rom",
-      "md5": "5bfcb1ae090159c8dea542b5a7c0840f",
-      "system": "coco",
-      "description": "Generic disk ROM"
-    },
-    {
-      "filename": "kick33180.A500",
-      "md5": "85ad74194e87c08904327de1a9443b7a",
-      "system": "amiga",
-      "description": "Kickstart 33180 for the Amiga 500"
-    },
-    {
-      "filename": "kick34005.A500",
-      "md5": "82a21c1890cae844b3df741f2762d48d",
-      "system": "amiga",
-      "description": "Kickstart 34005 for the Amiga 500"
-    },
-    {
-      "filename": "kick37175.A500",
-      "md5": "dc10d7bdd1b6f450773dfb558477c230",
-      "system": "amiga",
-      "description": "Kickstart 37175 Amiga 500+"
-    },
-    {
-      "filename": "kick40063.A600",
-      "md5": "e40a5dfb3d017ba8779faba30cbd1c8e",
-      "system": "amiga",
-      "description": "Kickstart 40063 Amiga 600"
-    },
-    {
-      "filename": "kick40068.A1200",
-      "md5": "646773759326fbac3b2311fd8c8793ee",
-      "system": "amiga",
-      "description": "Kickstart 40068 Amiga 1200."
-    },
-    {
-      "filename": "kick40068.A4000",
-      "md5": "9bdedde6a4f33555b4a270c8ca53297d",
-      "system": "amiga",
-      "description": "Kickstart 40068 Amiga 4000."
-    },
-    {
-      "filename": "kick34005.CDTV",
-      "md5": "89da1838a24460e4b93f4f0c5d92d48d",
-      "system": "amiga",
-      "description": "Kickstart 34005 CDTV ROM"
-    },
-    {
-      "filename": "kick40060.CD32",
-      "md5": "5f8924d013dd57a89cf349f4cdedc6b1",
-      "system": "amiga",
-      "description": "Kickstart 40060 Amiga CD32"
-    },
-    {
-      "filename": "kick40060.CD32.ext",
-      "md5": "bb72565701b1b6faece07d68ea5da639",
-      "system": "amiga",
-      "description": "Kickstart 40060Amiga CD32 ROM"
-    },
-    {
-      "filename": "kick40060.CD32.full",
-      "md5": "f2f241bf094168cfb9e7805dc2856433",
-      "system": "amiga",
-      "description": "Kickstart 40060 Combined Amiga CD32 ROM"
-    },
-    {
-      "filename": "JiffyDOS_C64.bin",
-      "md5": "be09394f0576cf81fa8bacf634daf9a2",
-      "system": "c64",
-      "description": "JiffyDOS Kernal replacement for the Commodore 64"
-    },
-    {
-      "filename": "JiffyDOS_1541-II.bin",
-      "md5": "1b1e985ea5325a1f46eb7fd9681707bf",
-      "system": "c64",
-      "description": "JiffyDOS firmware for the Commodore 1541-II disk drive"
-    },
-    {
-      "filename": "JiffyDOS_1571_repl310654.bin",
-      "md5": "41c6cc528e9515ffd0ed9b180f8467c0",
-      "system": "c64",
-      "description": "JiffyDOS enhanced BIOS"
-    },
-    {
-      "filename": "JiffyDOS_1581.bin",
-      "md5": "20b6885c6dc2d42c38754a365b043d71",
-      "system": "c64",
-      "description": "JiffyDOS custom BIOS"
     },
     {
       "filename": "mac.rom",
