@@ -4609,7 +4609,7 @@
       "md5": "1e965d87fcbabea155352fe8f55822ca",
       "system": "mame",
       "description": "ABC 1600 Machine ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc1600mover.zip",
@@ -4623,14 +4623,14 @@
       "md5": "8da6f56e6f40370fa9e03c8f16ea0176",
       "system": "mame",
       "description": "ABC 77 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc55.zip",
       "md5": "8da6f56e6f40370fa9e03c8f16ea0176",
       "system": "mame",
       "description": "ABC 55 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "a7ports.zip",
@@ -4658,35 +4658,35 @@
       "md5": "4e49099910a17a49baedfa96f1cff572",
       "system": "mame",
       "description": "ABC 832 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc830.zip",
       "md5": "4e49099910a17a49baedfa96f1cff572",
       "system": "mame",
       "description": "ABC 830 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc834.zip",
       "md5": "4e49099910a17a49baedfa96f1cff572",
       "system": "mame",
       "description": "ABC 834 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc838.zip",
       "md5": "4e49099910a17a49baedfa96f1cff572",
       "system": "mame",
       "description": "ABC 838 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc850.zip",
       "md5": "35b5e5cb67d4dd35b14dcd7689884ef9",
       "system": "mame",
       "description": "ABC 850 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc850flop.zip",
@@ -4700,35 +4700,35 @@
       "md5": "35b5e5cb67d4dd35b14dcd7689884ef9",
       "system": "mame",
       "description": "ABC 856 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc890.zip",
       "md5": "35b5e5cb67d4dd35b14dcd7689884ef9",
       "system": "mame",
       "description": "ABC 890 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc894.zip",
       "md5": "35b5e5cb67d4dd35b14dcd7689884ef9",
       "system": "mame",
       "description": "ABC 894 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc852.zip",
       "md5": "35b5e5cb67d4dd35b14dcd7689884ef9",
       "system": "mame",
       "description": "ABC 852 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc99.zip",
       "md5": "92bb23d2b47a5d2c46d8fdc6c1bc5bfa",
       "system": "mame",
       "description": "ABC 99 ROM",
-      "required": "Required"
+      "required": "Required, for certain Arcade Boards and Games"
     },
     {
       "filename": "abc_db4106.zip",
