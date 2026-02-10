@@ -65,13 +65,6 @@
       "end_time": "2359",
       "filename": "rd-setsubun-splash.svg"
     },
-    "chinese_new_year": {
-      "start_date": "0217",
-      "end_date": "0219",
-      "start_time": "0000",
-      "end_time": "2359",
-      "filename": "rd-lunar-horse-splash.svg"
-    },
     "valentines_day": {
       "start_date": "0214",
       "end_date": "0214",
@@ -79,12 +72,26 @@
       "end_time": "2359",
       "filename": "rd-valentines-splash.svg"
     },
+    "chinese_new_year": {
+      "start_date": "0216",
+      "end_date": "0216",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-lunar-horse-splash.svg"
+    },
     "carnival": {
       "start_date": "0217",
       "end_date": "0217",
       "start_time": "0001",
       "end_time": "2359",
       "filename": "carnival-splash.svg"
+    },
+    "chinese_new_year_2": {
+      "start_date": "0218",
+      "end_date": "0219",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-lunar-horse-splash.svg"
     },
     "retrodeck_birthday_gmday": {
       "start_date": "0304",
