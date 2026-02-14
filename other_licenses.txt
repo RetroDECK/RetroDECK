@@ -26395,7 +26395,7 @@ Specific notable trademarks include, but are not limited to:
 - Microsoft Xbox trademarks and logos, including Xbox consoles and
   controllers, are the property of Microsoft Corporation.
 
-- Other handheld consoles, devices, and associated trademarks referenced
+- Other consoles, devices, computers and more associated trademarks referenced
   in this project remain the property of their respective owners.
 
 All company, product, and service names used in this project are
