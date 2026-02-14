@@ -1416,33 +1416,11 @@ consider it more useful to permit linking proprietary applications with the
 library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 
+===============================================================================
 
 
 ===============================================================================
-
-===============================================================================
-                            ECWolf
-===============================================================================
-
-The code in ECWolf is licensed under a variety of licenses. The zlib code uses it's own license and a few dependencies are LGPL. If not compiling for the GPL, the MAME license also applies.
-
-All new code, be it from ZDoom or ECWolf itself, falls under a 3-point BSD.
-
-Wolfenstein 3D License
-
-ECWolf is dual licensed under both the original non-commercial license or the GNU GPL. The GPL but can be switched off with -DGPL=OFF in cmake. The two versions are identical except the OPL emulator is changed to MAME's from the one from Dosbox.
-
-It is important to note that id Software has not done any packaged re-releases of the Wolf3D source under the GPL, but Doom has not been officially re-released either. The following quote from John Carmack dated March 20th, 2009 seems to indicate that use of the GPL has been allowed since Doom was re-licensed.
-
-    I released the original source for Wolfenstein 3D many years ago, originally under a not-for-commercial purposes license, then later under the GPL.
-
-The Wolf4SDL debian packages also confirms the GPL re-release of Wolfenstein 3D.
-
-
-===============================================================================
-
-===============================================================================
-                            KEGS - Kent's Emulated GS
+                        KEGS - Kent's Emulated GS
 ===============================================================================
 
 
@@ -2442,33 +2420,7 @@ sd_card.png                        | CC BY-ND 3.0  | https://icons8.com
 star.png                           | CC BY-ND 3.0  | https://icons8.com
 
 
-===============================================================================
 
-===============================================================================
-                              OpenGOAL
-===============================================================================
-
-
-ISC License
-
-Copyright (c) 2020-2025 OpenGOAL Team
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-
-
-
-===============================================================================
 
 ===============================================================================
                               Freedoom
@@ -14200,6 +14152,25 @@ docs
 
 
 ===============================================================================
+
+===============================================================================
+                            ECWolf
+===============================================================================
+
+The code in ECWolf is licensed under a variety of licenses. The zlib code uses it's own license and a few dependencies are LGPL. If not compiling for the GPL, the MAME license also applies.
+
+All new code, be it from ZDoom or ECWolf itself, falls under a 3-point BSD.
+
+Wolfenstein 3D License
+
+ECWolf is dual licensed under both the original non-commercial license or the GNU GPL. The GPL but can be switched off with -DGPL=OFF in cmake. The two versions are identical except the OPL emulator is changed to MAME's from the one from Dosbox.
+
+It is important to note that id Software has not done any packaged re-releases of the Wolf3D source under the GPL, but Doom has not been officially re-released either. The following quote from John Carmack dated March 20th, 2009 seems to indicate that use of the GPL has been allowed since Doom was re-licensed.
+
+    I released the original source for Wolfenstein 3D many years ago, originally under a not-for-commercial purposes license, then later under the GPL.
+
+The Wolf4SDL debian packages also confirms the GPL re-release of Wolfenstein 3D.
+
 
 ===============================================================================
                            OpenBOR
@@ -27786,6 +27757,40 @@ to implement Satellaview+ into RetroDECK.
 
 Approval Date:
     2025-02-13
+
+===============================================================================
+
+################################################################################
+################################################################################
+##############################                        ##########################
+##############################                        ##########################
+##############################           PORTS        ##########################
+##############################                        ##########################
+##############################                        ##########################
+################################################################################
+################################################################################
+
+===============================================================================
+                              OpenGOAL
+===============================================================================
+
+
+ISC License
+
+Copyright (c) 2020-2025 OpenGOAL Team
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 
 ===============================================================================
 
