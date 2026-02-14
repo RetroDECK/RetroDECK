@@ -26365,19 +26365,43 @@ Lunar Horse: https://www.vecteezy.com/free-vector/horse
 
 
 ===============================================================================
-                   Steam Deck & Steam Deck Logo
+              Other Trademarks in Documentation & Wiki
 ===============================================================================
 
-The Steam Deck logo and Steam Deck device is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.
+All trademarks, logos, controller images, and brand names are the
+property of their respective owners.
+
+Specific notable trademarks include, but are not limited to:
+
+- The Steam Deck logo and Steam Deck device are registered trademarks
+  of Valve Corporation. This project is in no way officially affiliated
+  with, endorsed by, or sponsored by Valve.
+
+- ASUS ROG (Republic of Gamers) handheld devices, logos, and branding
+  are trademarks of ASUSTeK Computer Inc.
+
+- Sony trademarks and logos, including PlayStation devices and
+  controllers, are the property of Sony Interactive Entertainment Inc.
+
+- Nintendo trademarks and logos, including Game Boy, NES and
+  related devices, are the property of Nintendo Co., Ltd.
+
+- Sega trademarks and logos, including Genesis, Game Gear, and
+  related devices, are the property of Sega Corporation.
+
+- Commodore trademarks and logos, including Commodore 64 and related
+  devices, are the property of Commodore International licence holders.
+
+- Microsoft Xbox trademarks and logos, including Xbox consoles and
+  controllers, are the property of Microsoft Corporation.
+
+- Other handheld consoles, devices, and associated trademarks referenced
+  in this project remain the property of their respective owners.
+
+All company, product, and service names used in this project are
+for identification purposes only.
+
+Use of these names, trademarks, logos, or brands does not imply
+endorsement, affiliation, or sponsorship by their respective owners.
 
 ===============================================================================
-
-===============================================================================
-              Other Trademarks in Documentation and Wiki
-===============================================================================
-
-All trademarks, logos, controller images and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
-
-===============================================================================
-
-
