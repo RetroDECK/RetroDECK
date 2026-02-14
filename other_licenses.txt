@@ -9,21 +9,59 @@
 ################################################################################
 ################################################################################
 
+
 ===============================================================================
-                 RetroDECK 3rd Party Licence
+                         RetroDECK - 3rd Party Licenses
 ===============================================================================
 
-All Licenses of the projects we are using are listed on the wiki as well for ease of reading:
+RetroDECK makes use of various third-party projects and components.
+
+For ease of reading, a complete and up-to-date list of the licenses for
+these projects is available on our wiki:
 https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/
 
-If we have made some linkage errors or your license needs to be included in the projects github page please contact the RetroDECK Team on Discord or Matrix.
+If we have made any licensing errors, omissions, or if your license
+needs to be included or corrected on the projectäs GitHub page, please
+contact the RetroDECK Team via socials so we can address it
+promptly.
 
-RetroDECK generally only modifies the default configurations to the systems to fit into our folder structure (saves, bios etc..) , work with Steam Input and sometime tweaks the settings with the help of the RetroDECK community to find the "best settings" for the hardware and the community likes to use.
+All game execution functionality is provided by separate, modular
+components ("components"). These components operate independently and
+are responsible for handling emulation, runtime environments, or other
+game-related processing.
 
-Note that not all of the software listed here have been added to RetroDECK proper yet, we hope to get to them in the future.
+Not all software listed in our documentation is currently included in
+RetroDECK releases. Some entries may represent planned or future
+integration targets.
 
-For a more detailed instructions on each components tiny modification check the https://github.com/RetroDECK/components/ repo.
+For more detailed information regarding per-component configuration
+changes and integration notes, please refer to:
+https://github.com/RetroDECK/components/
 
+-------------------------------------------------------------------------------
+MODIFICATIONS POLICY
+-------------------------------------------------------------------------------
+
+RetroDECK does not substantially alter the original functionality of
+third-party projects beyond integration and configuration purposes.
+
+RetroDECK generally limits its modifications to:
+
+- Adjusting default configurations to match the RetroDECK folder
+  structure (e.g., saves, BIOS, system directories).
+
+- Ensuring compatibility with Steam Input Templates.
+
+- Applying community-tested configuration tweaks intended to provide
+  optimal performance and usability on supported hardware.
+
+- Decoupling or separating libraries where necessary to reduce
+  redundancy, save space, and maintain consistency across components inside the flatpak.
+
+- Integrating components into the general modular architecture.
+  This means launching the component via a custom script that
+  allows it to locate required libraries, dependencies, and file paths
+  within the RetroDECK environment.
 
 ===============================================================================
 
@@ -10998,6 +11036,29 @@ Fabrice Bellard and the QEMU team
 
 ===============================================================================
 
+
+===============================================================================
+                             Pico-8
+===============================================================================
+
+
+Product:       PICO-8 “Fantasy Console”
+Developer:     Joseph White (Lexaloffle Games)
+Website:       https://www.lexaloffle.com
+Purchase:      https://www.lexaloffle.com/pico-8
+Alternate:     Also available on itch.io
+
+A valid license must be purchased from the official website or authorized
+storefront before use.
+
+RetroDECK provides integration support only.
+
+RetroDECK does NOT include the PICO-8 binary.
+
+Users must legally purchase PICO-8 from Lexaloffle Games and supply their
+own licensed PICO-8 files for use with RetroDECK.
+
+===============================================================================
 
 ################################################################################
 ################################################################################
