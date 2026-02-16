@@ -12,6 +12,8 @@ MANIFEST_FILE="net.retrodeck.retrodeck.yml"
 CODENAME_WORDLIST="automation_tools/codename_wordlist.txt"
 COMPONENTS_REPO="RetroDECK/components"
 COMPONENT_SOURCES_FILE="component-sources.json"
+APPLICATION_SOURCES_FILE="application-sources.json"
+APPLICATION_REPO="RetroDECK/RetroDECK"
 VERSION_FILE="version"
 OUT_FOLDER="output"
 
@@ -264,7 +266,29 @@ download_components() {
 }
 
 # =============================================================================
-# Component Filtering (Countertop)
+# Application Source Generation (for local builds)
+# =============================================================================
+
+generate_application_sources() {
+  local dest="$1"
+  local commit
+  commit=$(git rev-parse HEAD)
+
+  echo "Generating $APPLICATION_SOURCES_FILE for commit $commit"
+
+  jq -n --arg url "https://github.com/${APPLICATION_REPO}.git" --arg commit "$commit" '
+    [
+      {
+        "type": "git",
+        "url": $url,
+        "commit": $commit
+      }
+    ]
+  ' > "$dest"
+}
+
+# =============================================================================
+# Component Filtering (for countertop builds)
 # =============================================================================
 
 filter_components() {
@@ -401,6 +425,16 @@ main() {
   echo "=== Writing version file ==="
   echo "$VERSION_STRING" > "$ROOT_FOLDER/$VERSION_FILE"
   echo "Version written to $VERSION_FILE"
+
+  echo "=== Checking application sources ==="
+  local app_sources_path="$ROOT_FOLDER/$APPLICATION_SOURCES_FILE"
+
+  if [[ ! -f "$app_sources_path" ]]; then
+    echo "$APPLICATION_SOURCES_FILE not found, generating from local Git state"
+    generate_application_sources "$app_sources_path"
+  else
+    echo "$APPLICATION_SOURCES_FILE already exists, using existing file"
+  fi
 
   echo "=== Checking component sources ==="
   local components_path="$ROOT_FOLDER/$COMPONENT_SOURCES_FILE"
