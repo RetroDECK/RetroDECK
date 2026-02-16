@@ -1,359 +1,448 @@
 #!/bin/bash
+# Builds Flatpak bundles with variant-specific customizations
 
-echo "Welcome to RetroDECK Builder"
-echo ""
+set -euo pipefail
 
-## ENVIRONMENT SETUP
+# =============================================================================
+# Constants
+# =============================================================================
 
-git config protocol.file.allow always
+METAINFO_FILE="net.retrodeck.retrodeck.metainfo.xml"
+MANIFEST_FILE="net.retrodeck.retrodeck.yml"
+CODENAME_WORDLIST="automation_tools/codename_wordlist.txt"
+COMPONENTS_REPO="RetroDECK/components"
+COMPONENT_SOURCES_FILE="component-sources.json"
+VERSION_FILE="version"
+OUT_FOLDER="output"
 
-if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-    echo "This branch is not main, enabling cooker mode"
-    IS_COOKER="true"
-fi
+COUNTERTOP_CORE_COMPONENTS=(
+  "framework"
+  "es-de"
+)
 
-# Parse arguments
-for arg in "$@"; do
-    case $arg in
-        --cicd)
-            echo "Running in CI/CD mode"
-            CICD="true"
-            ROOT_FOLDER=${GITHUB_WORKSPACE}
-            ;;
-        --no-artifacts)
-            echo "Skipping artifact generation"
-            NO_ARTIFACTS="true"
-            ;;
-        --no-bundle)
-            echo "Skipping bundle creation"
-            NO_BUNDLE="true"
-            ;;
-        --no-build)
-            echo "No build mode enabled: no build will be actually made"
-            NO_BUILD="true"
-            ;;
-        --force-main)
-            echo "Forcing main mode"
-            unset IS_COOKER
-            ;;
-        --force-cooker)
-            echo "Forcing cooker mode"
-            IS_COOKER="true"
-            ;;
-        --ccache)
-            echo "Enabling CCACHE mode"
-            FLATPAK_BUILDER_CCACHE="--ccache"
-            ;;
-        --flatpak-builder-args=*)
-            FLATPAK_BUILD_EXTRA_ARGS="${arg#*=}"
-            echo "Additional Flatpak Builder arguments: $FLATPAK_BUILD_EXTRA_ARGS"
-            ;;
-        --help|-h)
-            echo "RetroDECK Builder"
-            echo ""
-            echo "This script builds the RetroDECK Flatpak package locally or via CI/CD."
-            echo ""
-            echo "Usage: $0 [options]"
-            echo ""
-            echo "Options:"
-            echo "  --cicd                      Run in CI/CD mode"
-            echo "  --no-artifacts              Skip Flatpak's artifact generation"
-            echo "  --no-bundle                 Skip Flatpak's bundle creation (.flatpak file)"
-            echo "  --no-build                  Enable no build mode, useful for debugging"
-            echo "  --force-main                Force main mode, overriding branch detection"
-            echo "  --force-cooker              Force cooker mode, overriding branch detection"
-            echo "  --ccache                    Enable CCACHE mode for Flatpak Builder"
-            echo "  --flatpak-builder-args=\"\"   Pass additional arguments to Flatpak Builder"
-            echo "  --help, -h                  Display this help message"
-            exit 0
-            ;;
-        *)
-            echo "Unknown argument: $arg"
-            ;;
+# =============================================================================
+# Argument Parsing
+# =============================================================================
+
+parse_args() {
+  local build_type=""
+  local use_ccache=false
+  local no_bundle=false
+  local dry_run=false
+  local extra_builder_args=""
+  local download_components_tag=""
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --build-flatpak)
+        build_type="$2"
+        shift 2
+        ;;
+      --ccache)
+        use_ccache=true
+        shift
+        ;;
+      --no-bundle)
+        no_bundle=true
+        shift
+        ;;
+      --dry-run)
+        dry_run=true
+        shift
+        ;;
+      --flatpak-builder-args)
+        extra_builder_args="$2"
+        shift 2
+        ;;
+      --download-components)
+        download_components_tag="$2"
+        shift 2
+        ;;
+      *)
+        echo "Error: Unknown argument '$1'"
+        exit 1
+        ;;
     esac
-done
+  done
 
-manifest_filename="net.retrodeck.retrodeck.yml"
+  # Validate required arguments
+  if [[ -z "$build_type" ]]; then
+    echo "Error: --build-flatpak <type> is required"
+    exit 1
+  fi
 
-# Determine the root folder
-if [[ -z "$ROOT_FOLDER" ]]; then
-    manifest_path=$(find . -maxdepth 1 -name "$manifest_filename" -print -quit)
-    if [[ -z "$manifest_path" ]]; then
-        # Try searching recursively if not found in current directory
-        manifest_path=$(find . -name "$manifest_filename" -print -quit)
-        if [[ -z "$manifest_path" ]]; then
-            echo "Error: $manifest_filename not found."
-            exit 1
+  # Validate build type
+  if [[ ! "$build_type" =~ ^(full|epicure|countertop)$ ]]; then
+    echo "Error: Invalid build type '$build_type'. Must be one of: full, epicure, countertop"
+    exit 1
+  fi
+
+  # Enforce mutual exclusivity
+  if [[ "$no_bundle" == true && "$dry_run" == true ]]; then
+    echo "Error: --no-bundle and --dry-run cannot be used together"
+    exit 1
+  fi
+
+  BUILD_TYPE="$build_type"
+  USE_CCACHE="$use_ccache"
+  NO_BUNDLE="$no_bundle"
+  DRY_RUN="$dry_run"
+  EXTRA_BUILDER_ARGS="$extra_builder_args"
+  DOWNLOAD_COMPONENTS_TAG="$download_components_tag"
+}
+
+# =============================================================================
+# Dependency Installation
+# =============================================================================
+
+install_dependencies() {
+  local pkg_mgr=""
+
+  # rpm-ostree must be checked before dnf because dnf wrapper exists on rpm-ostree distros
+  for potential_pkg_mgr in apt pacman rpm-ostree dnf; do
+    command -v "$potential_pkg_mgr" &> /dev/null && pkg_mgr="$potential_pkg_mgr" && break
+  done
+
+  case "$pkg_mgr" in
+    apt)
+      sudo add-apt-repository -y ppa:flatpak/stable
+      sudo apt update
+      sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq unzip
+      ;;
+    pacman)
+      sudo pacman -S --noconfirm flatpak flatpak-builder p7zip xmlstarlet bzip2 curl jq unzip
+      ;;
+    rpm-ostree)
+      echo "Error: rpm-ostree distros are not supported for direct builds. Try using a distrobox."
+      exit 1
+      ;;
+    dnf)
+      sudo dnf install -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl jq unzip
+      ;;
+    *)
+      echo "Error: No supported package manager found. Please open an issue."
+      exit 1
+      ;;
+  esac
+
+  flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  flatpak remote-add --user --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+}
+
+# =============================================================================
+# Environment Detection
+# =============================================================================
+
+get_root_folder() {
+  git rev-parse --show-toplevel
+}
+
+get_branch() {
+  git rev-parse --abbrev-ref HEAD
+}
+
+sanitize_branch() {
+  echo "${1//\//-}"
+}
+
+is_ci() {
+    [[ "$CI" == "true" ]]
+}
+
+# =============================================================================
+# Metainfo Extraction
+# =============================================================================
+
+extract_metainfo() {
+  local metainfo_file="$1"
+
+  if [[ ! -f "$metainfo_file" ]]; then
+    echo "Error: Metainfo file not found at $metainfo_file"
+    exit 1
+  fi
+
+  APP_ID=$(xmlstarlet sel -t -v "/component/id" "$metainfo_file")
+  APP_NAME=$(xmlstarlet sel -t -v "/component/name" "$metainfo_file")
+  APP_VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" "$metainfo_file")
+
+  if [[ -z "$APP_ID" ]]; then
+    echo "Error: Could not extract application ID from $metainfo_file"
+    exit 1
+  fi
+
+  if [[ -z "$APP_NAME" ]]; then
+    echo "Error: Could not extract application name from $metainfo_file"
+    exit 1
+  fi
+
+  if [[ -z "$APP_VERSION" ]]; then
+    echo "Error: Could not extract version from $metainfo_file"
+    exit 1
+  fi
+}
+
+# =============================================================================
+# Codename Generation
+# =============================================================================
+
+generate_codename() {
+  local wordlist="$1"
+  local words
+
+  if [[ ! -f "$wordlist" ]]; then
+    echo "Error: Codename wordlist not found at $wordlist"
+    exit 1
+  fi
+
+  mapfile -t words < <(shuf -n 2 "$wordlist")
+  echo "${words[0]^}${words[1]^}"
+}
+
+# =============================================================================
+# Version String Construction
+# =============================================================================
+
+construct_version_string() {
+  local branch="$1"
+  local build_type="$2"
+  local version="$3"
+  local codename="$4"
+  local date
+  date=$(date +%Y-%m-%d)
+
+  case "$branch" in
+    main)
+      echo "$version"
+      ;;
+    cooker)
+      case "$build_type" in
+        epicure)
+          echo "epicure-${version}-${date}"
+          ;;
+        *)
+          echo "cooker-${version}-${codename}-${date}"
+          ;;
+      esac
+      ;;
+    *)
+      local sanitized_branch
+      sanitized_branch=$(sanitize_branch "$branch")
+      echo "${sanitized_branch}-${version}-${date}"
+      ;;
+  esac
+}
+
+# =============================================================================
+# Component Source Download (for local builds)
+# =============================================================================
+
+download_components() {
+  local tag="$1"
+  local dest="$2"
+  local download_url
+
+  # Resolve "latest" tag via GitHub API
+  if [[ "$tag" == "latest" ]]; then
+    echo "Resolving latest release tag from $COMPONENTS_REPO..."
+    tag=$(curl -s "https://api.github.com/repos/${COMPONENTS_REPO}/releases/latest" | jq -r '.tag_name')
+    if [[ -z "$tag" || "$tag" == "null" ]]; then
+      echo "Error: Could not resolve latest release tag from $COMPONENTS_REPO"
+      exit 1
+    fi
+    echo "Resolved latest release tag: $tag"
+  fi
+
+  download_url="https://github.com/${COMPONENTS_REPO}/releases/download/${tag}/${COMPONENT_SOURCES_FILE}"
+
+  echo "Downloading $COMPONENT_SOURCES_FILE from release $tag..."
+  if ! curl -fSL -o "$dest" "$download_url"; then
+    echo "Error: Failed to download $COMPONENT_SOURCES_FILE from $download_url"
+    exit 1
+  fi
+
+  echo "Downloaded $COMPONENT_SOURCES_FILE from release $tag"
+}
+
+# =============================================================================
+# Component Filtering (Countertop)
+# =============================================================================
+
+filter_components() {
+  local sources_file="$1"
+  local core_list
+
+  if [[ ! -f "$sources_file" ]]; then
+    echo "Error: Component sources file not found at $sources_file"
+    exit 1
+  fi
+
+  # Build a jq filter array from the core components list
+  core_list=$(printf '%s\n' "${COUNTERTOP_CORE_COMPONENTS[@]}" | jq -R . | jq -s .)
+
+  # Filter: keep only objects whose URL filename (without extension) is in the core list
+  jq --argjson core "$core_list" '
+    [ .[] | select(
+      (.url | split("/") | last | split(".") | first) as $name |
+      $core | index($name)
+    )]
+  ' "$sources_file" > "${sources_file}.tmp" && mv "${sources_file}.tmp" "$sources_file"
+
+  echo "Filtered component-sources.json to $(jq length "$sources_file") core components"
+}
+
+# =============================================================================
+# Flatpak Build
+# =============================================================================
+
+build_flatpak() {
+  local version_string="$1"
+  local build_dir="build"
+  local repo_dir="repo"
+  local out_folder="$OUT_FOLDER"
+  local bundle_name="${APP_NAME// /-}-${version_string}.flatpak"
+  local builder_cmd="flatpak-builder --user --force-clean"
+
+  builder_cmd+=" --install-deps-from=flathub"
+  builder_cmd+=" --install-deps-from=flathub-beta"
+  builder_cmd+=" --repo=\"${repo_dir}\""
+
+  if [[ "$USE_CCACHE" == true ]]; then
+    builder_cmd+=" --ccache"
+  fi
+
+  if [[ -n "$EXTRA_BUILDER_ARGS" ]]; then
+    builder_cmd+=" $EXTRA_BUILDER_ARGS"
+  fi
+
+  builder_cmd+=" \"${build_dir}\""
+  builder_cmd+=" \"${MANIFEST_FILE}\""
+
+  echo "Building Flatpak with command:"
+  echo "$builder_cmd"
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo "Dry run: skipping flatpak-builder"
+    return 0
+  fi
+
+  eval "$builder_cmd"
+
+  if [[ "$NO_BUNDLE" == true ]]; then
+    echo "No-bundle mode: skipping bundle creation"
+    return 0
+  fi
+
+  mkdir -p "$out_folder"
+
+  echo "Creating bundle: $bundle_name"
+  flatpak build-bundle "$repo_dir" "${out_folder}/${bundle_name}" "$APP_ID"
+
+  # Validate bundle was created
+  if [[ ! -f "${out_folder}/${bundle_name}" ]]; then
+    echo "Error: Bundle file was not created at ${out_folder}/${bundle_name}"
+    exit 1
+  fi
+
+  echo "Bundle created: ${out_folder}/${bundle_name} ($(du -h "${out_folder}/${bundle_name}" | cut -f1))"
+
+  # Generate SHA hash in CI only
+  if is_ci; then
+    sha256sum "${out_folder}/${bundle_name}" > "${out_folder}/${bundle_name}.sha"
+    echo "SHA256 hash written to ${out_folder}/${bundle_name}.sha"
+  fi
+}
+
+# =============================================================================
+# CI Variable Export
+# =============================================================================
+
+export_ci_variables() {
+  if is_ci; then
+    echo "version=$VERSION_STRING" >> "$GITHUB_OUTPUT"
+  fi
+}
+
+# =============================================================================
+# Main
+# =============================================================================
+
+main() {
+  parse_args "$@"
+
+  echo "=== Installing dependencies ==="
+  install_dependencies
+
+  echo "=== Detecting environment ==="
+  ROOT_FOLDER=$(get_root_folder)
+  cd "$ROOT_FOLDER" || exit 1
+  BRANCH=$(get_branch)
+  echo "Root folder: $ROOT_FOLDER"
+  echo "Branch: $BRANCH"
+
+  echo "=== Configuring Git ==="
+  git config protocol.file.allow always
+
+  echo "=== Extracting metainfo ==="
+  extract_metainfo "$ROOT_FOLDER/$METAINFO_FILE"
+  echo "App ID: $APP_ID"
+  echo "App name: $APP_NAME"
+  echo "App version: $APP_VERSION"
+
+  echo "=== Constructing version string ==="
+  local codename=""
+  if [[ "$BRANCH" == "cooker" && "$BUILD_TYPE" != "epicure" ]]; then
+    codename=$(generate_codename "$ROOT_FOLDER/$CODENAME_WORDLIST")
+    echo "Generated codename: $codename"
+  fi
+
+  VERSION_STRING=$(construct_version_string "$BRANCH" "$BUILD_TYPE" "$APP_VERSION" "$codename")
+  echo "Version string: $VERSION_STRING"
+
+  echo "=== Writing version file ==="
+  echo "$VERSION_STRING" > "$ROOT_FOLDER/$VERSION_FILE"
+  echo "Version written to $VERSION_FILE"
+
+  echo "=== Checking component sources ==="
+  local components_path="$ROOT_FOLDER/$COMPONENT_SOURCES_FILE"
+
+  if [[ -n "$DOWNLOAD_COMPONENTS_TAG" ]]; then
+    if [[ -f "$components_path" ]]; then # If a component-sources file already exists
+      if is_ci; then # If CI, default to overwriting local file with specified tag file
+        echo "CI environment: overwriting existing $COMPONENT_SOURCES_FILE"
+        download_components "$DOWNLOAD_COMPONENTS_TAG" "$components_path"
+      else # Prompt local user for choice of file to use
+        read -r -p "$COMPONENT_SOURCES_FILE already exists. Overwrite with downloaded version? [y/N] " response
+        if [[ "$response" =~ ^[Yy]$ ]]; then
+          download_components "$DOWNLOAD_COMPONENTS_TAG" "$components_path"
+        else
+          echo "Keeping existing $COMPONENT_SOURCES_FILE"
         fi
-    fi
-    ROOT_FOLDER=$(realpath "$(dirname "$manifest_path")")
-    echo "ROOT_FOLDER is set to $ROOT_FOLDER"
-fi
-
-MANIFEST="$ROOT_FOLDER/$manifest_filename"
-
-# Determine cooker postfix
-if [[ "$IS_COOKER" == "true" ]]; then
-    POSTFIX="-cooker"
-else
-    POSTFIX=""
-fi
-
-FLATPAK_BUNDLE_NAME="RetroDECK$POSTFIX.flatpak"
-BUNDLE_SHA_NAME="RetroDECK.flatpak$POSTFIX.sha"
-FLATPAK_ARTIFACTS_NAME="RetroDECK-Artifact$POSTFIX"
-OUT_FOLDER="$ROOT_FOLDER/out"
-
-if [[ "$CICD" == "true" ]]; then
-    echo "OUT_FOLDER=$OUT_FOLDER" >> "$GITHUB_ENV"
-fi
-
-## Use mktemp in CI/CD to store build and repo in /tmp
-if [[ "$CICD" == "true" ]]; then
-    echo "CI/CD mode detected: using temporary build and repo folders in /tmp."
-
-    ROOT_FOLDER_TMP=$(mktemp -d -p /tmp retrodeck-build-XXXXXX)
-    echo "Temporary build root: $ROOT_FOLDER_TMP"
-
-    BUILD_FOLDER_NAME="$ROOT_FOLDER_TMP/retrodeck-flatpak$POSTFIX"
-    REPO_FOLDER_NAME="$ROOT_FOLDER_TMP/retrodeck-repo"
-
-    echo "Temporary build folder: $BUILD_FOLDER_NAME"
-    echo "Temporary repo folder: $REPO_FOLDER_NAME"
-else
-    BUILD_FOLDER_NAME="$ROOT_FOLDER/retrodeck-flatpak$POSTFIX"
-    REPO_FOLDER_NAME="$ROOT_FOLDER/retrodeck-repo"
-fi
-
-## INSTALLING DEPENDENCIES
-if [[ "$NO_BUILD" != "true" ]]; then
-    echo ""
-    echo "Installing dependencies..."
-    curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
-    echo ""
-else
-    echo "Skipping dependency installation (NO_BUILD mode)."
-    curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | cat
-fi
-
-## BUILD ID GENERATION
-
-# Generate a combination of words to create a build ID eg: "PizzaSushi"
-if [[ "$IS_COOKER" == "true" ]]; then
-    echo "Cooker mode: generating build ID."
-    word1=$(shuf -n 1 $ROOT_FOLDER/automation_tools/codename_wordlist.txt)
-    capitalized1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
-    word2=$(shuf -n 1 $ROOT_FOLDER/automation_tools/codename_wordlist.txt)
-    capitalized2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
-    # Exporting build ID as a variable
-    export BUILD_ID="$capitalized1$capitalized2"
-
-    # creating the ./buildid file
-    echo "$BUILD_ID" > "$ROOT_FOLDER/buildid"
-
-    # Adding the buildid to the GitHub environment variables
-    if [[ "$CICD" == "true" ]]; then
-        echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
-    fi
-    echo "Build ID: \"$BUILD_ID\""
-fi
-
-## VERSION EXTRACTION
-
-# Extract the version number from the METAINFO XML file
-VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" net.retrodeck.retrodeck.metainfo.xml)
-
-# Extracting verision from METAINFO file
-if [[ "$IS_COOKER" == "true" ]]; then
-    VERSION="cooker-$VERSION-$BUILD_ID"
-fi # Otherwise, if we're on main, use the version number as is
-
-# Writing version in the GitHub environment
-if [[ "$CICD" == "true" ]]; then
-    echo "VERSION=$VERSION" >> $GITHUB_ENV
-    echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-fi
-
-# Creating a version file for RetroDECK Framework to be included in the build
-echo "$VERSION" > $ROOT_FOLDER/version
-
-echo "Now building: RetroDECK $VERSION"
-echo ""
-
-MANIFEST_REWORKED="${MANIFEST%.*}.reworked.yml"
-cp -f "$MANIFEST" "$MANIFEST_REWORKED"
-
-# Checking how the user wants to manage the caches
-# this exports a variable named use_cache that is used by manifest_placeholder_replacer script
-if [[ "$CICD" != "true" ]]; then
-    echo "Do you want to clear the build cache?"
-    read -rp "[y/N] " clear_cache
-    clear_cache=${clear_cache:-N}
-    if [[ "$clear_cache" =~ ^[Yy]$ ]]; then
-        rm -rf "$ROOT_FOLDER/$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder" "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$ROOT_FOLDER/buildid" "$ROOT_FOLDER/version"
-        echo "Build cache cleared."
-    fi
-else
-    export use_cache="false"
-fi
-
-# Add portal permission in cooker mode
-if [[ "$IS_COOKER" == "true" ]]; then
-    sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' "$MANIFEST_REWORKED"
-    echo "Added update portal permission (cooker)."
-fi
-
-## BUILD TIME: ccache config
-
-# Checking if the user wants to use ccache, disabled in CI/CD mode
-if [[ "$CICD" != "true" && "$FLATPAK_BUILDER_CCACHE" == "--ccache" ]]; then
-    if command -v ccache &>/dev/null; then
-        export CC="ccache gcc"
-        export CXX="ccache g++"
-        echo "ccache mode enabled."
+      fi
     else
-        echo "ccache not installed, skipping."
+      download_components "$DOWNLOAD_COMPONENTS_TAG" "$components_path"
     fi
-else
-    echo "Skipping ccache setup."
-fi
+  fi
 
-if [[ "$NO_BUILD" != "true" ]]; then
-    mkdir -vp "$REPO_FOLDER_NAME" "$BUILD_FOLDER_NAME"
-else
-    echo "Skipping folder creation (NO_BUILD)."
-    echo "\"$REPO_FOLDER_NAME\""
-    echo "\"$BUILD_FOLDER_NAME\""
-fi
+  if [[ ! -f "$components_path" ]]; then
+    echo "Error: $COMPONENT_SOURCES_FILE not found at $components_path"
+    echo "Provide the file manually or use --download-components <tag|latest> to download it"
+    exit 1
+  fi
 
-if [[ "$NO_BUILD" == "true" ]]; then
-    echo "Skipping component download (NO_BUILD)."
-    return
-else
-    if [[ "$CICD" == "true" ]]; then
-        "$ROOT_FOLDER/automation_tools/fetch_components.sh" --cicd "$ROOT_FOLDER/components"
-    else
-        "$ROOT_FOLDER/automation_tools/fetch_components.sh" "$ROOT_FOLDER/components"
-    fi
-fi
+  echo "=== Filtering components ==="
+  if [[ "$BUILD_TYPE" == "countertop" ]]; then
+    filter_components "$ROOT_FOLDER/$COMPONENT_SOURCES_FILE"
+  else
+    echo "No filtering needed for build type: $BUILD_TYPE"
+  fi
 
-mkdir -vp "$OUT_FOLDER"
+  echo "=== Building Flatpak ==="
+  build_flatpak "$VERSION_STRING"
 
-# Flatpak builder command
-# Pass the args to Flatpak Builder
-if [[ -n "$FLATPAK_BUILD_EXTRA_ARGS" ]]; then
-    echo "Passing additional args to flatpak builder: $FLATPAK_BUILD_EXTRA_ARGS"
-    echo ""
-fi
+  echo "=== Exporting CI variables ==="
+  export_ci_variables
 
-if [[ -f "$MANIFEST_REWORKED" ]]; then
-    echo "Using reworked manifest: $MANIFEST_REWORKED"
-else
-    echo "WARNING: Reworked manifest not found, using original manifest: $MANIFEST"
-    sleep 10
-    MANIFEST_REWORKED="$MANIFEST"
-fi
+  echo "=== Build complete ==="
+}
 
-command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
-    --install-deps-from=flathub \
-    --install-deps-from=flathub-beta \
-    --repo=\"$REPO_FOLDER_NAME\" $FLATPAK_BUILDER_CCACHE \
-    \"$BUILD_FOLDER_NAME\" \
-    \"$MANIFEST_REWORKED\""
-
-# Execute the build command
-if [[ "$NO_BUILD" != "true" ]]; then
-    echo ""
-    echo "---------------------------------------"
-    echo "  Starting manifest build process..."
-    echo "---------------------------------------"
-    echo -e "Building manifest file $MANIFEST_REWORKED with command:\n$command"
-    echo ""
-    eval $command
-
-    # Create the Flatpak bundle
-    echo ""
-    echo "Creating the Flatpak bundle..."
-    if ! flatpak build-bundle "$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck; then
-        echo "Error: Failed to create Flatpak bundle ($OUT_FOLDER/$FLATPAK_BUNDLE_NAME)" >&2
-        echo "Listing output folder for debugging:"
-        ls -la "$OUT_FOLDER" || true
-        echo "Disk usage info:"
-        df -h
-        exit 1
-    fi
-
-    # Verify bundle exists and is not empty
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" || ! -s "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then
-        echo "Error: Flatpak bundle was not created or is empty: $OUT_FOLDER/$FLATPAK_BUNDLE_NAME" >&2
-        echo "Listing output folder for debugging:"
-        ls -la "$OUT_FOLDER" || true
-        echo "Disk usage info:"
-        df -h
-        exit 1
-    fi
-
-    sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
-
-    echo ""
-    if [[ "$NO_ARTIFACTS" != "true" ]]; then   
-        # Generate final artifact archive
-        echo "Generating artifacts archive..."
-        tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$BUILD_FOLDER_NAME" .
-        ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
-        echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
-        echo "Artifacts archive created."
-    else
-        echo "Skipping artifact generation as no-artifacts flag is set."
-    fi
-
-    # Cleanup
-    echo ""
-    echo "Cleaning up build and cache to free disk space before bundle..."
-    rm -rf "$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder"
-    df -h
-    
-else
-    echo "Skipping build (NO_BUILD)."
-    # Create fake bundle, artifacts and sha if they don't exist
-    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then echo "fake bundle sha" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"; fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"; fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" ]]; then echo "fake artifact" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"; fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha" ]]; then echo "fake artifacts sha" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"; fi
-fi
-
-# Final cleanup in CI/CD
-if [[ "$CICD" == "true" && "$NO_BUILD" != "true" ]]; then
-    echo ""
-    echo "---------------------------------------"
-    echo "  Cleanup for CI/CD to free disk space"
-    echo "---------------------------------------"
-
-    rm -rf "$BUILD_FOLDER_NAME" "$REPO_FOLDER_NAME" "$ROOT_FOLDER_TMP" "/tmp/retrodeck-build-"*
-    rm -rf "$ROOT_FOLDER/.flatpak-builder"
-    df -h
-fi
-
-echo ""
-echo "RetroDECK $VERSION's build completed successfully!"
-echo "Generated files are in $OUT_FOLDER"
-ls "$OUT_FOLDER"
-
-# Optional install prompt
-read -rp "Do you want to install RetroDECK Flatpak? [y/N] " install_input
-install_input=${install_input:-N}
-if [[ "$install_input" =~ ^[Yy]$ ]]; then
-    if flatpak list --app | grep -q "net.retrodeck.retrodeck"; then
-        echo "Updating existing installation..."
-    fi
-    read -rp "Install as user or system? [u/s] " install_type
-    install_type=${install_type:-u}
-    INSTALL_SCOPE="--user"
-    [[ "$install_type" =~ ^[Ss]$ ]] && INSTALL_SCOPE="--system"
-
-    flatpak install -y $INSTALL_SCOPE "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-    echo "RetroDECK Flatpak installed successfully!"
-fi
-
-echo ""
-echo "Build process completed."
+main "$@"
