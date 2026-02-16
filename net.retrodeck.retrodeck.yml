@@ -210,23 +210,6 @@ modules:
           project-id: 4217
           stable-only: true
           url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
-    modules:
-      - name: xxhash
-        no-autogen: true
-        make-install-args:
-          - PREFIX=${FLATPAK_DEST}
-          - DISPATCH=1
-        sources:
-          - type: git
-            url: https://github.com/Cyan4973/xxHash/
-            tag: v0.8.3
-            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
-            x-checker-data:
-              type: anitya
-              project-id: 17583
-              stable-only: true
-              tag-template: v$version
-
 
   # -------------------------------------------------------------------------
   # p7zip - 7‑Zip compression utilities.
