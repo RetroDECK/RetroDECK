@@ -278,8 +278,6 @@ modules:
           - cp -p /usr/share/automake-*/config.{sub,guess} .
           - autoreconf -vfi
     post-install:
-      # Include xmllint
-      - mv "${FLATPAK_DEST}/compat/xmlstarlet/bin/xmllint" "${FLATPAK_DEST}/bin/xmllint"
       # Rename the actual binary
       - mv "${FLATPAK_DEST}/bin/xml" "${FLATPAK_DEST}/bin/xml.bin"
       # Create wrapper script
