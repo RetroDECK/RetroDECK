@@ -3,15 +3,7 @@
 echo "Found the following components in the components directory:"
 ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 )
 
-
-# When CI/CD mode is enabled, delete components after installation to save space
-CICD="false"
-if [[ "$1" == "--cicd" ]]; then
-  echo "Running in CI/CD mode (--cicd argument detected)."
-  CICD="true"
-fi
-
-if [ -z "$FLATPAK_DEST" ]; then
+if [[ -z "$FLATPAK_DEST" ]]; then
   echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
   exit 1
 fi
@@ -32,8 +24,8 @@ for archive in "${archives[@]}"; do
   echo "-------------------------------------"
 
   # Skip if archive does not exist
-  if [ ! -e "$archive" ]; then
-      continue
+  if [[ ! -e "$archive" ]]; then
+    continue
   fi
 
   echo "Extracting $archive..."
@@ -51,18 +43,7 @@ for archive in "${archives[@]}"; do
         mkdir -p "${FLATPAK_DEST}/retrodeck/components/shared-libs"
       fi
 
-      while read -r source_file; do
-        relative_filepath="${source_file##$component_path/shared-libs/}"
-        if [[ ! -e "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath" ]]; then
-            echo "$relative_filepath not found in core shared-libs, copying..."
-            if [[ ! -d "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath")" ]]; then
-              mkdir -p "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath")"
-            fi
-            cp -a "$source_file" "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath"
-        else
-            echo "${FLATPAK_DEST}/retrodeck/components/shared-libs/$relative_filepath already exists in core shared-libs, skipping..."
-        fi
-      done < <(find "$component_path/shared-libs" -not -type d)
+      cp -a --no-clobber --verbose "$component_path/shared-libs/." "${FLATPAK_DEST}/retrodeck/components/shared-libs/"
 
       rm -rf "$component_path/shared-libs" # Cleanup leftover shared-libs folder in component folder
     else
@@ -76,32 +57,15 @@ for archive in "${archives[@]}"; do
         mkdir -p "${FLATPAK_DEST}/retrodeck/components/shared-data"
       fi
 
-      while read -r source_file; do
-        relative_filepath="${source_file##$component_path/shared-data/}"
-        if [[ ! -e "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath" ]]; then
-            echo "$relative_filepath not found in core shared-data, copying..."
-            if [[ ! -d "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath")" ]]; then
-              mkdir -p "$(dirname "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath")"
-            fi
-            cp -a "$source_file" "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath"
-        else
-            echo "${FLATPAK_DEST}/retrodeck/components/shared-data/$relative_filepath already exists in core shared-data, skipping..."
-        fi
-      done < <(find "$component_path/shared-data" -not -type d)
+      cp -a --no-clobber --verbose "$component_path/shared-data/." "${FLATPAK_DEST}/retrodeck/components/shared-data/"
 
       rm -rf "$component_path/shared-data" # Cleanup leftover shared-data folder in component folder
     else
       echo "Component $component_path does not contain any shared-data, no merge needed."
     fi
 
-    # If running in CI/CD, delete the components folder to reclaim space
-    # This solves an issue where the  runner runs out of space and some components are not installed
-
-    if [ "$CICD" == "true" ]; then
-      echo "Running in CI/CD mode, deleting components folder to reclaim space."
-      rm -rf "$archive"
-      echo "Deleted $archive to reclaim space."
-    fi
+    rm -rf "$archive"
+    echo "Deleted $archive to reclaim space."
   else
     echo "Failed to extract $archive."
   fi
@@ -115,17 +79,12 @@ echo ""
 echo "Listing installed components in ${FLATPAK_DEST}/retrodeck/components:"
 ls -1 "${FLATPAK_DEST}/retrodeck/components" || echo "No components installed."
 
-# Check if components_version_list.md file exists and copy or warn
-if [ -f components_version_list.md ]; then
-  found_file=$(find . -name components_version_list.md | head -n 1)
-  if [ -n "$found_file" ]; then
-      cp "$found_file" "${FLATPAK_DEST}/retrodeck/components_version_list.md"
-  else
-      echo "Warning: components_version_list.md file not found by find, skipping."
-  fi
+# Check if components_metadata.json file exists and copy or warn
+if [[ -f "components_metadata.json" ]]; then
+  cp "components_metadata.json" "${FLATPAK_DEST}/retrodeck/components_metadata.json"
   echo "Component version file copied successfully."
   echo "Component version:"
-  cat "${FLATPAK_DEST}/retrodeck/components_version_list.md"
+  cat "${FLATPAK_DEST}/retrodeck/components_metadata.json"
 else
-  echo "Warning: components_version_list.md file not found, skipping."
+  echo "Warning: components_metadata.json file not found, skipping."
 fi
