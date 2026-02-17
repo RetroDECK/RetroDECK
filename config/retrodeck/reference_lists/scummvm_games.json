@@ -1,0 +1,2842 @@
+{
+  "scummvm_games": [
+    {
+      "game": "007: James Bond - The Stealth Affair",
+      "rd_game_name": "007: James Bond - The Stealth Affair.scummvm",
+      "scummvm_id": "cine:os",
+      "scummvm_id_key": "os"
+    },
+    {
+      "game": "1½ Ritter: Auf der Suche nach der hinreißenden Herzelinde",
+      "rd_game_name": "1½ Ritter: Auf der Suche nach der hinreißenden Herzelinde.scummvm",
+      "scummvm_id": "wintermute:ritter",
+      "scummvm_id_key": "ritter"
+    },
+    {
+      "game": "3 Skulls of the Toltecs",
+      "rd_game_name": "3 Skulls of the Toltecs.scummvm",
+      "scummvm_id": "toltecs:toltecs",
+      "scummvm_id_key": "toltecs"
+    },
+    {
+      "game": "A Golden Wake",
+      "rd_game_name": "A Golden Wake.scummvm",
+      "scummvm_id": "ags:goldenwake",
+      "scummvm_id_key": "goldenwake"
+    },
+    {
+      "game": "Above The Waves",
+      "rd_game_name": "Above The Waves.scummvm",
+      "scummvm_id": "sludge:atw",
+      "scummvm_id_key": "atw"
+    },
+    {
+      "game": "Adibou 1",
+      "rd_game_name": "Adibou 1.scummvm",
+      "scummvm_id": "gob:adibou1",
+      "scummvm_id_key": "adibou1"
+    },
+    {
+      "game": "Adibou 2",
+      "rd_game_name": "Adibou 2.scummvm",
+      "scummvm_id": "gob:adibou2",
+      "scummvm_id_key": "adibou2"
+    },
+    {
+      "game": "ADRIFT Interactive Fiction games",
+      "rd_game_name": "ADRIFT Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:adrift",
+      "scummvm_id_key": "adrift"
+    },
+    {
+      "game": "Adventure Game Studio games",
+      "rd_game_name": "Adventure Game Studio games.scummvm",
+      "scummvm_id": "ags:ags",
+      "scummvm_id_key": "ags"
+    },
+    {
+      "game": "AdvSys Interactive Fiction games",
+      "rd_game_name": "AdvSys Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:advsys",
+      "scummvm_id_key": "advsys"
+    },
+    {
+      "game": "Aesops Fables: The Tortoise and the Hare",
+      "rd_game_name": "Aesops Fables: The Tortoise and the Hare.scummvm",
+      "scummvm_id": "mohawk:tortoise",
+      "scummvm_id_key": "tortoise"
+    },
+    {
+      "game": "AGT Interactive Fiction games",
+      "rd_game_name": "AGT Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:agt",
+      "scummvm_id_key": "agt"
+    },
+    {
+      "game": "Alan 2 & 3 Interactive Fiction games",
+      "rd_game_name": "Alan 2 & 3 Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:alan",
+      "scummvm_id_key": "alan"
+    },
+    {
+      "game": "Alice: An Interactive Museum",
+      "rd_game_name": "Alice: An Interactive Museum.scummvm",
+      "scummvm_id": "director:alice",
+      "scummvm_id_key": "alice"
+    },
+    {
+      "game": "Amazon: Guardians of Eden",
+      "rd_game_name": "Amazon: Guardians of Eden.scummvm",
+      "scummvm_id": "access:amazon",
+      "scummvm_id_key": "amazon"
+    },
+    {
+      "game": "Ape Odyssey 2001",
+      "rd_game_name": "Ape Odyssey 2001.scummvm",
+      "scummvm_id": "director:apeodyssey",
+      "scummvm_id_key": "apeodyssey"
+    },
+    {
+      "game": "Archetype Interactive Fiction games",
+      "rd_game_name": "Archetype Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:archetype",
+      "scummvm_id_key": "archetype"
+    },
+    {
+      "game": "Arthurs Birthday",
+      "rd_game_name": "Arthurs Birthday.scummvm",
+      "scummvm_id": "mohawk:arthurbday",
+      "scummvm_id_key": "arthurbday"
+    },
+    {
+      "game": "Ashina: The Red Witch",
+      "rd_game_name": "Ashina: The Red Witch.scummvm",
+      "scummvm_id": "ags:ashinaredwitch",
+      "scummvm_id_key": "ashinaredwitch"
+    },
+    {
+      "game": "Astro Chicken",
+      "rd_game_name": "Astro Chicken.scummvm",
+      "scummvm_id": "sci:astrochicken",
+      "scummvm_id_key": "astrochicken"
+    },
+    {
+      "game": "Backyard Baseball",
+      "rd_game_name": "Backyard Baseball.scummvm",
+      "scummvm_id": "scumm:baseball",
+      "scummvm_id_key": "baseball"
+    },
+    {
+      "game": "Backyard Baseball 2001",
+      "rd_game_name": "Backyard Baseball 2001.scummvm",
+      "scummvm_id": "scumm:baseball2001",
+      "scummvm_id_key": "baseball2001"
+    },
+    {
+      "game": "Backyard Baseball 2003",
+      "rd_game_name": "Backyard Baseball 2003.scummvm",
+      "scummvm_id": "scumm:baseball2003",
+      "scummvm_id_key": "baseball2003"
+    },
+    {
+      "game": "Backyard Basketball",
+      "rd_game_name": "Backyard Basketball.scummvm",
+      "scummvm_id": "scumm:basketball",
+      "scummvm_id_key": "basketball"
+    },
+    {
+      "game": "Backyard Football",
+      "rd_game_name": "Backyard Football.scummvm",
+      "scummvm_id": "scumm:football",
+      "scummvm_id_key": "football"
+    },
+    {
+      "game": "Backyard Football 2002",
+      "rd_game_name": "Backyard Football 2002.scummvm",
+      "scummvm_id": "scumm:football2002",
+      "scummvm_id_key": "football2002"
+    },
+    {
+      "game": "Backyard Soccer",
+      "rd_game_name": "Backyard Soccer.scummvm",
+      "scummvm_id": "scumm:soccer",
+      "scummvm_id_key": "soccer"
+    },
+    {
+      "game": "Backyard Soccer 2004",
+      "rd_game_name": "Backyard Soccer 2004.scummvm",
+      "scummvm_id": "scumm:soccer2004",
+      "scummvm_id_key": "soccer2004"
+    },
+    {
+      "game": "Backyard Soccer MLS Edition",
+      "rd_game_name": "Backyard Soccer MLS Edition.scummvm",
+      "scummvm_id": "scumm:soccermls",
+      "scummvm_id_key": "soccermls"
+    },
+    {
+      "game": "Bargon Attack",
+      "rd_game_name": "Bargon Attack.scummvm",
+      "scummvm_id": "gob:bargon",
+      "scummvm_id_key": "bargon"
+    },
+    {
+      "game": "Bear Stormin",
+      "rd_game_name": "Bear Stormin.scummvm",
+      "scummvm_id": "scumm:brstorm",
+      "scummvm_id_key": "brstorm"
+    },
+    {
+      "game": "Beneath a Steel Sky",
+      "rd_game_name": "Beneath a Steel Sky.scummvm",
+      "scummvm_id": "sky:sky",
+      "scummvm_id_key": "sky"
+    },
+    {
+      "game": "Bickadoodle",
+      "rd_game_name": "Bickadoodle.scummvm",
+      "scummvm_id": "wintermute:bickadoodle",
+      "scummvm_id_key": "bickadoodle"
+    },
+    {
+      "game": "Big Thinkers! 1st Grade",
+      "rd_game_name": "Big Thinkers! 1st Grade.scummvm",
+      "scummvm_id": "scumm:thinker1",
+      "scummvm_id_key": "thinker1"
+    },
+    {
+      "game": "Big Thinkers! Kindergarten",
+      "rd_game_name": "Big Thinkers! Kindergarten.scummvm",
+      "scummvm_id": "scumm:thinkerk",
+      "scummvm_id_key": "thinkerk"
+    },
+    {
+      "game": "Blackwell Unbound",
+      "rd_game_name": "Blackwell Unbound.scummvm",
+      "scummvm_id": "ags:blackwell2",
+      "scummvm_id_key": "blackwell2"
+    },
+    {
+      "game": "Blade Runner",
+      "rd_game_name": "Blade Runner.scummvm",
+      "scummvm_id": "bladerunner:bladerunner",
+      "scummvm_id_key": "bladerunner"
+    },
+    {
+      "game": "Blazing Dragons",
+      "rd_game_name": "Blazing Dragons.scummvm",
+      "scummvm_id": "dragons:dragons",
+      "scummvm_id_key": "dragons"
+    },
+    {
+      "game": "Blue Force",
+      "rd_game_name": "Blue Force.scummvm",
+      "scummvm_id": "tsage:blueforce",
+      "scummvm_id_key": "blueforce"
+    },
+    {
+      "game": "Blues 123 Time Activities",
+      "rd_game_name": "Blues 123 Time Activities.scummvm",
+      "scummvm_id": "scumm:blues123time",
+      "scummvm_id_key": "blues123time"
+    },
+    {
+      "game": "Blues ABC Time Activities",
+      "rd_game_name": "Blues ABC Time Activities.scummvm",
+      "scummvm_id": "scumm:bluesabctime",
+      "scummvm_id_key": "bluesabctime"
+    },
+    {
+      "game": "Blues Clues: Blues Art Time Activities",
+      "rd_game_name": "Blues Clues: Blues Art Time Activities.scummvm",
+      "scummvm_id": "scumm:arttime",
+      "scummvm_id_key": "arttime"
+    },
+    {
+      "game": "Blues Clues: Blues Birthday Adventure",
+      "rd_game_name": "Blues Clues: Blues Birthday Adventure.scummvm",
+      "scummvm_id": "scumm:bluesbirthday",
+      "scummvm_id_key": "bluesbirthday"
+    },
+    {
+      "game": "Blues Reading Time Activities",
+      "rd_game_name": "Blues Reading Time Activities.scummvm",
+      "scummvm_id": "scumm:readtime",
+      "scummvm_id_key": "readtime"
+    },
+    {
+      "game": "Blues Treasure Hunt",
+      "rd_game_name": "Blues Treasure Hunt.scummvm",
+      "scummvm_id": "scumm:bluestreasurehunt",
+      "scummvm_id_key": "bluestreasurehunt"
+    },
+    {
+      "game": "Broken Sword 2.5: The Return of the Templars",
+      "rd_game_name": "Broken Sword 2.5: The Return of the Templars.scummvm",
+      "scummvm_id": "sword25:sword25",
+      "scummvm_id_key": "sword25"
+    },
+    {
+      "game": "Broken Sword II: The Smoking Mirror",
+      "rd_game_name": "Broken Sword II: The Smoking Mirror.scummvm",
+      "scummvm_id": "sword2:sword2",
+      "scummvm_id_key": "sword2"
+    },
+    {
+      "game": "Broken Sword: The Shadow of the Templars",
+      "rd_game_name": "Broken Sword: The Shadow of the Templars.scummvm",
+      "scummvm_id": "sword1:sword1",
+      "scummvm_id_key": "sword1"
+    },
+    {
+      "game": "Bud Tucker in Double Trouble",
+      "rd_game_name": "Bud Tucker in Double Trouble.scummvm",
+      "scummvm_id": "tucker:tucker",
+      "scummvm_id_key": "tucker"
+    },
+    {
+      "game": "Castle Master",
+      "rd_game_name": "Castle Master.scummvm",
+      "scummvm_id": "freescape:castlemaster",
+      "scummvm_id_key": "castlemaster"
+    },
+    {
+      "game": "Castle of Dr. Brain",
+      "rd_game_name": "Castle of Dr. Brain.scummvm",
+      "scummvm_id": "sci:castlebrain",
+      "scummvm_id_key": "castlebrain"
+    },
+    {
+      "game": "Chewy: Esc from F5",
+      "rd_game_name": "Chewy: Esc from F5.scummvm",
+      "scummvm_id": "chewy:chewy",
+      "scummvm_id_key": "chewy"
+    },
+    {
+      "game": "Chivalry is Not Dead",
+      "rd_game_name": "Chivalry is Not Dead.scummvm",
+      "scummvm_id": "wintermute:chivalry",
+      "scummvm_id_key": "chivalry"
+    },
+    {
+      "game": "Chop Suey",
+      "rd_game_name": "Chop Suey.scummvm",
+      "scummvm_id": "director:chopsuey",
+      "scummvm_id_key": "chopsuey"
+    },
+    {
+      "game": "Clandestiny",
+      "rd_game_name": "Clandestiny.scummvm",
+      "scummvm_id": "groovie:clandestiny",
+      "scummvm_id_key": "clandestiny"
+    },
+    {
+      "game": "Classical Cats",
+      "rd_game_name": "Classical Cats.scummvm",
+      "scummvm_id": "director:classicalcats",
+      "scummvm_id_key": "classicalcats"
+    },
+    {
+      "game": "Clever & Smart - A Movie Adventure",
+      "rd_game_name": "Clever & Smart - A Movie Adventure.scummvm",
+      "scummvm_id": "alcachofa:aventuradecine",
+      "scummvm_id_key": "aventuradecine"
+    },
+    {
+      "game": "Code-Name: Iceman",
+      "rd_game_name": "Code-Name: Iceman.scummvm",
+      "scummvm_id": "sci:iceman",
+      "scummvm_id_key": "iceman"
+    },
+    {
+      "game": "Conquests of Camelot: The Search for the Grail",
+      "rd_game_name": "Conquests of Camelot: The Search for the Grail.scummvm",
+      "scummvm_id": "sci:camelot",
+      "scummvm_id_key": "camelot"
+    },
+    {
+      "game": "Conquests of the Longbow: The Legend of Robin Hood",
+      "rd_game_name": "Conquests of the Longbow: The Legend of Robin Hood.scummvm",
+      "scummvm_id": "sci:longbow",
+      "scummvm_id_key": "longbow"
+    },
+    {
+      "game": "Corruption",
+      "rd_game_name": "Corruption.scummvm",
+      "scummvm_id": "glk:corruption",
+      "scummvm_id_key": "corruption"
+    },
+    {
+      "game": "Croustibat",
+      "rd_game_name": "Croustibat.scummvm",
+      "scummvm_id": "gob:crousti",
+      "scummvm_id_key": "crousti"
+    },
+    {
+      "game": "Cruise for a Corpse",
+      "rd_game_name": "Cruise for a Corpse.scummvm",
+      "scummvm_id": "cruise:cruise",
+      "scummvm_id_key": "cruise"
+    },
+    {
+      "game": "Crusader: No Remorse",
+      "rd_game_name": "Crusader: No Remorse.scummvm",
+      "scummvm_id": "ultima:remorse",
+      "scummvm_id_key": "remorse"
+    },
+    {
+      "game": "Cubert Badbone, P.I.",
+      "rd_game_name": "Cubert Badbone, P.I..scummvm",
+      "scummvm_id": "sludge:cubert",
+      "scummvm_id_key": "cubert"
+    },
+    {
+      "game": "Da New Guys: Day of the Jackass",
+      "rd_game_name": "Da New Guys: Day of the Jackass.scummvm",
+      "scummvm_id": "ags:danewguys2",
+      "scummvm_id_key": "danewguys2"
+    },
+    {
+      "game": "Daniel in the Lions Den",
+      "rd_game_name": "Daniel in the Lions Den.scummvm",
+      "scummvm_id": "mohawk:daniel",
+      "scummvm_id_key": "daniel"
+    },
+    {
+      "game": "Darby the Dragon",
+      "rd_game_name": "Darby the Dragon.scummvm",
+      "scummvm_id": "composer:darby",
+      "scummvm_id_key": "darby"
+    },
+    {
+      "game": "Dark Seed",
+      "rd_game_name": "Dark Seed.scummvm",
+      "scummvm_id": "darkseed:darkseed",
+      "scummvm_id_key": "darkseed"
+    },
+    {
+      "game": "Dark Side",
+      "rd_game_name": "Dark Side.scummvm",
+      "scummvm_id": "freescape:darkside",
+      "scummvm_id_key": "darkside"
+    },
+    {
+      "game": "Dead City",
+      "rd_game_name": "Dead City.scummvm",
+      "scummvm_id": "wintermute:deadcity",
+      "scummvm_id_key": "deadcity"
+    },
+    {
+      "game": "Dirty Split",
+      "rd_game_name": "Dirty Split.scummvm",
+      "scummvm_id": "wintermute:dirtysplit",
+      "scummvm_id_key": "dirtysplit"
+    },
+    {
+      "game": "Discworld",
+      "rd_game_name": "Discworld.scummvm",
+      "scummvm_id": "tinsel:dw",
+      "scummvm_id_key": "dw"
+    },
+    {
+      "game": "Discworld II: Missing Presumed...!?",
+      "rd_game_name": "Discworld II: Missing Presumed...!?.scummvm",
+      "scummvm_id": "tinsel:dw2",
+      "scummvm_id_key": "dw2"
+    },
+    {
+      "game": "Dog-n-cat: In the footsteps of unprecedented beasts",
+      "rd_game_name": "Dog-n-cat: In the footsteps of unprecedented beasts.scummvm",
+      "scummvm_id": "qdengine:dogncat",
+      "scummvm_id_key": "dogncat"
+    },
+    {
+      "game": "Dog-n-cat: Island of Dr Rattardy",
+      "rd_game_name": "Dog-n-cat: Island of Dr Rattardy.scummvm",
+      "scummvm_id": "qdengine:dogncat2",
+      "scummvm_id_key": "dogncat2"
+    },
+    {
+      "game": "Donald Ducks Playground",
+      "rd_game_name": "Donald Ducks Playground.scummvm",
+      "scummvm_id": "agi:ddp",
+      "scummvm_id_key": "ddp"
+    },
+    {
+      "game": "Dr. Seusss ABC",
+      "rd_game_name": "Dr. Seusss ABC.scummvm",
+      "scummvm_id": "mohawk:seussabc",
+      "scummvm_id_key": "seussabc"
+    },
+    {
+      "game": "Dragon History",
+      "rd_game_name": "Dragon History.scummvm",
+      "scummvm_id": "draci:draci",
+      "scummvm_id_key": "draci"
+    },
+    {
+      "game": "Dráscula: The Vampire Strikes Back",
+      "rd_game_name": "Dráscula: The Vampire Strikes Back.scummvm",
+      "scummvm_id": "drascula:drascula",
+      "scummvm_id_key": "drascula"
+    },
+    {
+      "game": "Dreams in the Witch House",
+      "rd_game_name": "Dreams in the Witch House.scummvm",
+      "scummvm_id": "ags:dreamswitchhouse",
+      "scummvm_id_key": "dreamswitchhouse"
+    },
+    {
+      "game": "DreamWeb",
+      "rd_game_name": "DreamWeb.scummvm",
+      "scummvm_id": "dreamweb:dreamweb",
+      "scummvm_id_key": "dreamweb"
+    },
+    {
+      "game": "Driller",
+      "rd_game_name": "Driller.scummvm",
+      "scummvm_id": "freescape:driller",
+      "scummvm_id_key": "driller"
+    },
+    {
+      "game": "Duckman: The Graphic Adventures of a Private Dick",
+      "rd_game_name": "Duckman: The Graphic Adventures of a Private Dick.scummvm",
+      "scummvm_id": "illusions:duckman",
+      "scummvm_id_key": "duckman"
+    },
+    {
+      "game": "Eastern Mind",
+      "rd_game_name": "Eastern Mind.scummvm",
+      "scummvm_id": "director:easternmind",
+      "scummvm_id_key": "easternmind"
+    },
+    {
+      "game": "EcoQuest II: Lost Secret of the Rainforest",
+      "rd_game_name": "EcoQuest II: Lost Secret of the Rainforest.scummvm",
+      "scummvm_id": "sci:ecoquest2",
+      "scummvm_id_key": "ecoquest2"
+    },
+    {
+      "game": "EcoQuest: The Search for Cetus",
+      "rd_game_name": "EcoQuest: The Search for Cetus.scummvm",
+      "scummvm_id": "sci:ecoquest",
+      "scummvm_id_key": "ecoquest"
+    },
+    {
+      "game": "Elvira II: The Jaws of Cerberus",
+      "rd_game_name": "Elvira II: The Jaws of Cerberus.scummvm",
+      "scummvm_id": "agos:elvira2",
+      "scummvm_id_key": "elvira2"
+    },
+    {
+      "game": "Elvira: Mistress of the Dark",
+      "rd_game_name": "Elvira: Mistress of the Dark.scummvm",
+      "scummvm_id": "agos:elvira1",
+      "scummvm_id_key": "elvira1"
+    },
+    {
+      "game": "Escape From Hell",
+      "rd_game_name": "Escape From Hell.scummvm",
+      "scummvm_id": "efh:efh",
+      "scummvm_id_key": "efh"
+    },
+    {
+      "game": "Escape From Monkey Island",
+      "rd_game_name": "Escape From Monkey Island.scummvm",
+      "scummvm_id": "grim:monkey4",
+      "scummvm_id_key": "monkey4"
+    },
+    {
+      "game": "Escape from the Mansion",
+      "rd_game_name": "Escape from the Mansion.scummvm",
+      "scummvm_id": "wintermute:escapemansion",
+      "scummvm_id_key": "escapemansion"
+    },
+    {
+      "game": "Eye of the Beholder",
+      "rd_game_name": "Eye of the Beholder.scummvm",
+      "scummvm_id": "kyra:eob",
+      "scummvm_id_key": "eob"
+    },
+    {
+      "game": "Eye of the Beholder II: The Legend of Darkmoon",
+      "rd_game_name": "Eye of the Beholder II: The Legend of Darkmoon.scummvm",
+      "scummvm_id": "kyra:eob2",
+      "scummvm_id_key": "eob2"
+    },
+    {
+      "game": "Fascination",
+      "rd_game_name": "Fascination.scummvm",
+      "scummvm_id": "gob:fascination",
+      "scummvm_id_key": "fascination"
+    },
+    {
+      "game": "Fatty Bears Birthday Surprise",
+      "rd_game_name": "Fatty Bears Birthday Surprise.scummvm",
+      "scummvm_id": "scumm:fbear",
+      "scummvm_id_key": "fbear"
+    },
+    {
+      "game": "Fatty Bears FunPack",
+      "rd_game_name": "Fatty Bears FunPack.scummvm",
+      "scummvm_id": "scumm:fbpack",
+      "scummvm_id_key": "fbpack"
+    },
+    {
+      "game": "Features of national fishing",
+      "rd_game_name": "Features of national fishing.scummvm",
+      "scummvm_id": "qdengine:rybalka",
+      "scummvm_id_key": "rybalka"
+    },
+    {
+      "game": "Fish!",
+      "rd_game_name": "Fish!.scummvm",
+      "scummvm_id": "glk:fish",
+      "scummvm_id_key": "fish"
+    },
+    {
+      "game": "Five Lethal Demons",
+      "rd_game_name": "Five Lethal Demons.scummvm",
+      "scummvm_id": "wintermute:5ld",
+      "scummvm_id_key": "5ld"
+    },
+    {
+      "game": "Five Magical Amulets",
+      "rd_game_name": "Five Magical Amulets.scummvm",
+      "scummvm_id": "wintermute:5ma",
+      "scummvm_id_key": "5ma"
+    },
+    {
+      "game": "Flight of the Amazon Queen",
+      "rd_game_name": "Flight of the Amazon Queen.scummvm",
+      "scummvm_id": "queen:queen",
+      "scummvm_id_key": "queen"
+    },
+    {
+      "game": "Football Game",
+      "rd_game_name": "Football Game.scummvm",
+      "scummvm_id": "ags:footballgame",
+      "scummvm_id_key": "footballgame"
+    },
+    {
+      "game": "Frasse and the Peas of Kejick",
+      "rd_game_name": "Frasse and the Peas of Kejick.scummvm",
+      "scummvm_id": "sludge:frasse",
+      "scummvm_id_key": "frasse"
+    },
+    {
+      "game": "Freddi Fish 2: The Case of the Haunted Schoolhouse",
+      "rd_game_name": "Freddi Fish 2: The Case of the Haunted Schoolhouse.scummvm",
+      "scummvm_id": "scumm:freddi2",
+      "scummvm_id_key": "freddi2"
+    },
+    {
+      "game": "Freddi Fish 3: The Case of the Stolen Conch Shell",
+      "rd_game_name": "Freddi Fish 3: The Case of the Stolen Conch Shell.scummvm",
+      "scummvm_id": "scumm:freddi3",
+      "scummvm_id_key": "freddi3"
+    },
+    {
+      "game": "Freddi Fish 4: The Case of the Hogfish Rustlers of Briny Gulch",
+      "rd_game_name": "Freddi Fish 4: The Case of the Hogfish Rustlers of Briny Gulch.scummvm",
+      "scummvm_id": "scumm:freddi4",
+      "scummvm_id_key": "freddi4"
+    },
+    {
+      "game": "Freddi Fish 5: The Case of the Creature of Coral Cove",
+      "rd_game_name": "Freddi Fish 5: The Case of the Creature of Coral Cove.scummvm",
+      "scummvm_id": "scumm:freddicove",
+      "scummvm_id_key": "freddicove"
+    },
+    {
+      "game": "Freddi Fish and Luthers Maze Madness",
+      "rd_game_name": "Freddi Fish and Luthers Maze Madness.scummvm",
+      "scummvm_id": "scumm:maze",
+      "scummvm_id_key": "maze"
+    },
+    {
+      "game": "Freddi Fish and Luthers Water Worries",
+      "rd_game_name": "Freddi Fish and Luthers Water Worries.scummvm",
+      "scummvm_id": "scumm:water",
+      "scummvm_id_key": "water"
+    },
+    {
+      "game": "Freddi Fish and the Case of the Missing Kelp Seeds",
+      "rd_game_name": "Freddi Fish and the Case of the Missing Kelp Seeds.scummvm",
+      "scummvm_id": "scumm:freddi",
+      "scummvm_id_key": "freddi"
+    },
+    {
+      "game": "Freddi Fishs One-Stop Fun Shop",
+      "rd_game_name": "Freddi Fishs One-Stop Fun Shop.scummvm",
+      "scummvm_id": "scumm:freddisfunshop",
+      "scummvm_id_key": "freddisfunshop"
+    },
+    {
+      "game": "Freddy Pharkas: Frontier Pharmacist",
+      "rd_game_name": "Freddy Pharkas: Frontier Pharmacist.scummvm",
+      "scummvm_id": "sci:freddypharkas",
+      "scummvm_id_key": "freddypharkas"
+    },
+    {
+      "game": "Fukuoka Go-Round",
+      "rd_game_name": "Fukuoka Go-Round.scummvm",
+      "scummvm_id": "director:fukuokagoround",
+      "scummvm_id_key": "fukuokagoround"
+    },
+    {
+      "game": "Full Pipe",
+      "rd_game_name": "Full Pipe.scummvm",
+      "scummvm_id": "ngi:fullpipe",
+      "scummvm_id_key": "fullpipe"
+    },
+    {
+      "game": "Full Throttle",
+      "rd_game_name": "Full Throttle.scummvm",
+      "scummvm_id": "scumm:ft",
+      "scummvm_id_key": "ft"
+    },
+    {
+      "game": "Future Wars: Adventures in Time",
+      "rd_game_name": "Future Wars: Adventures in Time.scummvm",
+      "scummvm_id": "cine:fw",
+      "scummvm_id_key": "fw"
+    },
+    {
+      "game": "Gabriel Knight: Sins of the Fathers",
+      "rd_game_name": "Gabriel Knight: Sins of the Fathers.scummvm",
+      "scummvm_id": "sci:gk1",
+      "scummvm_id_key": "gk1"
+    },
+    {
+      "game": "Gadget: Invention, Travel and Adventure",
+      "rd_game_name": "Gadget: Invention, Travel and Adventure.scummvm",
+      "scummvm_id": "director:gadget",
+      "scummvm_id_key": "gadget"
+    },
+    {
+      "game": "Games, Games, Games: Maniac Mansion + Zak McKracken + Indiana Jones and the last Crusade",
+      "rd_game_name": "Games, Games, Games: Maniac Mansion + Zak McKracken + Indiana Jones and the last Crusade.scummvm",
+      "scummvm_id": "scumm:indyzak",
+      "scummvm_id_key": "indyzak"
+    },
+    {
+      "game": "Ganbare! Inuchan: Rockn Roll Edition",
+      "rd_game_name": "Ganbare! Inuchan: Rockn Roll Edition.scummvm",
+      "scummvm_id": "director:ganbareinuchan",
+      "scummvm_id_key": "ganbareinuchan"
+    },
+    {
+      "game": "Ganbare! Inuchan: Trip Around the World",
+      "rd_game_name": "Ganbare! Inuchan: Trip Around the World.scummvm",
+      "scummvm_id": "director:ganbareinuchan2",
+      "scummvm_id_key": "ganbareinuchan2"
+    },
+    {
+      "game": "Geisha",
+      "rd_game_name": "Geisha.scummvm",
+      "scummvm_id": "gob:geisha",
+      "scummvm_id_key": "geisha"
+    },
+    {
+      "game": "Gemini Rue",
+      "rd_game_name": "Gemini Rue.scummvm",
+      "scummvm_id": "ags:geminirue",
+      "scummvm_id_key": "geminirue"
+    },
+    {
+      "game": "Glulx Interactive Fiction games",
+      "rd_game_name": "Glulx Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:glulx",
+      "scummvm_id_key": "glulx"
+    },
+    {
+      "game": "Gobliiins",
+      "rd_game_name": "Gobliiins.scummvm",
+      "scummvm_id": "gob:gob1",
+      "scummvm_id_key": "gob1"
+    },
+    {
+      "game": "Gobliiins5 - LInvasion des Morglotons Part1",
+      "rd_game_name": "Gobliiins5 - LInvasion des Morglotons Part1.scummvm",
+      "scummvm_id": "ags:gobliiins5-1",
+      "scummvm_id_key": "gobliiins5-1"
+    },
+    {
+      "game": "Gobliiins5 - LInvasion des Morglotons Part2",
+      "rd_game_name": "Gobliiins5 - LInvasion des Morglotons Part2.scummvm",
+      "scummvm_id": "ags:gobliiins5-2",
+      "scummvm_id_key": "gobliiins5-2"
+    },
+    {
+      "game": "Gobliiins5 - LInvasion des Morglotons Part3",
+      "rd_game_name": "Gobliiins5 - LInvasion des Morglotons Part3.scummvm",
+      "scummvm_id": "ags:gobliiins5-3",
+      "scummvm_id_key": "gobliiins5-3"
+    },
+    {
+      "game": "Gobliiins5 - LInvasion des Morglotons Part4",
+      "rd_game_name": "Gobliiins5 - LInvasion des Morglotons Part4.scummvm",
+      "scummvm_id": "ags:gobliiins5-4",
+      "scummvm_id_key": "gobliiins5-4"
+    },
+    {
+      "game": "Gobliins 2: The Prince Buffoon",
+      "rd_game_name": "Gobliins 2: The Prince Buffoon.scummvm",
+      "scummvm_id": "gob:gob2",
+      "scummvm_id_key": "gob2"
+    },
+    {
+      "game": "Goblins Quest 3",
+      "rd_game_name": "Goblins Quest 3.scummvm",
+      "scummvm_id": "gob:gob3",
+      "scummvm_id_key": "gob3"
+    },
+    {
+      "game": "God of Thunder",
+      "rd_game_name": "God of Thunder.scummvm",
+      "scummvm_id": "got:got",
+      "scummvm_id_key": "got"
+    },
+    {
+      "game": "Gold Rush!",
+      "rd_game_name": "Gold Rush!.scummvm",
+      "scummvm_id": "agi:goldrush",
+      "scummvm_id_key": "goldrush"
+    },
+    {
+      "game": "Green Eggs and Ham",
+      "rd_game_name": "Green Eggs and Ham.scummvm",
+      "scummvm_id": "mohawk:greeneggs",
+      "scummvm_id_key": "greeneggs"
+    },
+    {
+      "game": "Gregory and the Hot Air Balloon",
+      "rd_game_name": "Gregory and the Hot Air Balloon.scummvm",
+      "scummvm_id": "composer:gregory",
+      "scummvm_id_key": "gregory"
+    },
+    {
+      "game": "Grim Fandango",
+      "rd_game_name": "Grim Fandango.scummvm",
+      "scummvm_id": "grim:grim",
+      "scummvm_id_key": "grim"
+    },
+    {
+      "game": "Hades Challenge",
+      "rd_game_name": "Hades Challenge.scummvm",
+      "scummvm_id": "hadesch:hadesch",
+      "scummvm_id_key": "hadesch"
+    },
+    {
+      "game": "Halls of the Dead: Faery Tale Adventure II",
+      "rd_game_name": "Halls of the Dead: Faery Tale Adventure II.scummvm",
+      "scummvm_id": "saga2:fta2",
+      "scummvm_id_key": "fta2"
+    },
+    {
+      "game": "Harlan Ellison: I Have No Mouth, and I Must Scream",
+      "rd_game_name": "Harlan Ellison: I Have No Mouth, and I Must Scream.scummvm",
+      "scummvm_id": "saga:ihnm",
+      "scummvm_id_key": "ihnm"
+    },
+    {
+      "game": "Harry and the Haunted House",
+      "rd_game_name": "Harry and the Haunted House.scummvm",
+      "scummvm_id": "mohawk:harryhh",
+      "scummvm_id_key": "harryhh"
+    },
+    {
+      "game": "Heart of China",
+      "rd_game_name": "Heart of China.scummvm",
+      "scummvm_id": "dgds:china",
+      "scummvm_id_key": "china"
+    },
+    {
+      "game": "Helga Deep In Trouble",
+      "rd_game_name": "Helga Deep In Trouble.scummvm",
+      "scummvm_id": "wintermute:helga",
+      "scummvm_id_key": "helga"
+    },
+    {
+      "game": "Henachoco #1",
+      "rd_game_name": "Henachoco #1.scummvm",
+      "scummvm_id": "director:henachoco01",
+      "scummvm_id_key": "henachoco01"
+    },
+    {
+      "game": "Henachoco #2",
+      "rd_game_name": "Henachoco #2.scummvm",
+      "scummvm_id": "director:henachoco02",
+      "scummvm_id_key": "henachoco02"
+    },
+    {
+      "game": "Henachoco #3",
+      "rd_game_name": "Henachoco #3.scummvm",
+      "scummvm_id": "director:henachoco03",
+      "scummvm_id_key": "henachoco03"
+    },
+    {
+      "game": "Henachoco #4",
+      "rd_game_name": "Henachoco #4.scummvm",
+      "scummvm_id": "director:henachoco04",
+      "scummvm_id_key": "henachoco04"
+    },
+    {
+      "game": "Hi-Res Adventure #0: Mission Asteroid",
+      "rd_game_name": "Hi-Res Adventure #0: Mission Asteroid.scummvm",
+      "scummvm_id": "adl:hires0",
+      "scummvm_id_key": "hires0"
+    },
+    {
+      "game": "Hi-Res Adventure #1: Mystery House",
+      "rd_game_name": "Hi-Res Adventure #1: Mystery House.scummvm",
+      "scummvm_id": "adl:hires1",
+      "scummvm_id_key": "hires1"
+    },
+    {
+      "game": "Hi-Res Adventure #2: The Wizard and the Princess",
+      "rd_game_name": "Hi-Res Adventure #2: The Wizard and the Princess.scummvm",
+      "scummvm_id": "adl:hires2",
+      "scummvm_id_key": "hires2"
+    },
+    {
+      "game": "Hi-Res Adventure #3: Cranston Manor",
+      "rd_game_name": "Hi-Res Adventure #3: Cranston Manor.scummvm",
+      "scummvm_id": "adl:hires3",
+      "scummvm_id_key": "hires3"
+    },
+    {
+      "game": "Hi-Res Adventure #4: Ulysses and the Golden Fleece",
+      "rd_game_name": "Hi-Res Adventure #4: Ulysses and the Golden Fleece.scummvm",
+      "scummvm_id": "adl:hires4",
+      "scummvm_id_key": "hires4"
+    },
+    {
+      "game": "Hi-Res Adventure #5: Time Zone",
+      "rd_game_name": "Hi-Res Adventure #5: Time Zone.scummvm",
+      "scummvm_id": "adl:hires5",
+      "scummvm_id_key": "hires5"
+    },
+    {
+      "game": "Hi-Res Adventure #6: The Dark Crystal",
+      "rd_game_name": "Hi-Res Adventure #6: The Dark Crystal.scummvm",
+      "scummvm_id": "adl:hires6",
+      "scummvm_id_key": "hires6"
+    },
+    {
+      "game": "Hodj n Podj",
+      "rd_game_name": "Hodj n Podj.scummvm",
+      "scummvm_id": "bagel:hodjnpodj",
+      "scummvm_id_key": "hodjnpodj"
+    },
+    {
+      "game": "Hopkins FBI",
+      "rd_game_name": "Hopkins FBI.scummvm",
+      "scummvm_id": "hopkins:hopkins",
+      "scummvm_id_key": "hopkins"
+    },
+    {
+      "game": "Hoyle Classic Card Games",
+      "rd_game_name": "Hoyle Classic Card Games.scummvm",
+      "scummvm_id": "sci:hoyle4",
+      "scummvm_id_key": "hoyle4"
+    },
+    {
+      "game": "Hoyle Classic Games",
+      "rd_game_name": "Hoyle Classic Games.scummvm",
+      "scummvm_id": "sci:hoyle5",
+      "scummvm_id_key": "hoyle5"
+    },
+    {
+      "game": "Hoyle Solitaire",
+      "rd_game_name": "Hoyle Solitaire.scummvm",
+      "scummvm_id": "sci:hoyle5solitaire",
+      "scummvm_id_key": "hoyle5solitaire"
+    },
+    {
+      "game": "Hoyles Official Book of Games: Volume 1",
+      "rd_game_name": "Hoyles Official Book of Games: Volume 1.scummvm",
+      "scummvm_id": "sci:hoyle1",
+      "scummvm_id_key": "hoyle1"
+    },
+    {
+      "game": "Hoyles Official Book of Games: Volume 2",
+      "rd_game_name": "Hoyles Official Book of Games: Volume 2.scummvm",
+      "scummvm_id": "sci:hoyle2",
+      "scummvm_id_key": "hoyle2"
+    },
+    {
+      "game": "Hoyles Official Book of Games: Volume 3",
+      "rd_game_name": "Hoyles Official Book of Games: Volume 3.scummvm",
+      "scummvm_id": "sci:hoyle3",
+      "scummvm_id_key": "hoyle3"
+    },
+    {
+      "game": "Hugo II: Whodunit?",
+      "rd_game_name": "Hugo II: Whodunit?.scummvm",
+      "scummvm_id": "hugo:hugo2",
+      "scummvm_id_key": "hugo2"
+    },
+    {
+      "game": "Hugo III: Jungle of Doom",
+      "rd_game_name": "Hugo III: Jungle of Doom.scummvm",
+      "scummvm_id": "hugo:hugo3",
+      "scummvm_id_key": "hugo3"
+    },
+    {
+      "game": "Hugo Interactive Fiction games",
+      "rd_game_name": "Hugo Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:hugo",
+      "scummvm_id_key": "hugo"
+    },
+    {
+      "game": "Hugos House of Horrors",
+      "rd_game_name": "Hugos House of Horrors.scummvm",
+      "scummvm_id": "hugo:hugo1",
+      "scummvm_id_key": "hugo1"
+    },
+    {
+      "game": "Humongous Interactive Catalog",
+      "rd_game_name": "Humongous Interactive Catalog.scummvm",
+      "scummvm_id": "scumm:catalog",
+      "scummvm_id_key": "catalog"
+    },
+    {
+      "game": "Hyperspace Delivery Boy!",
+      "rd_game_name": "Hyperspace Delivery Boy!.scummvm",
+      "scummvm_id": "hdb:hdb",
+      "scummvm_id_key": "hdb"
+    },
+    {
+      "game": "Indiana Jones and the Fate of Atlantis",
+      "rd_game_name": "Indiana Jones and the Fate of Atlantis.scummvm",
+      "scummvm_id": "scumm:atlantis",
+      "scummvm_id_key": "atlantis"
+    },
+    {
+      "game": "Indiana Jones and the Last Crusade & Loom",
+      "rd_game_name": "Indiana Jones and the Last Crusade & Loom.scummvm",
+      "scummvm_id": "scumm:indyloom",
+      "scummvm_id_key": "indyloom"
+    },
+    {
+      "game": "Indiana Jones and the Last Crusade: The Graphic Adventure",
+      "rd_game_name": "Indiana Jones and the Last Crusade: The Graphic Adventure.scummvm",
+      "scummvm_id": "scumm:indy3",
+      "scummvm_id_key": "indy3"
+    },
+    {
+      "game": "Inherit the Earth: Quest for the Orb",
+      "rd_game_name": "Inherit the Earth: Quest for the Orb.scummvm",
+      "scummvm_id": "saga:ite",
+      "scummvm_id_key": "ite"
+    },
+    {
+      "game": "Inside the Chest",
+      "rd_game_name": "Inside the Chest.scummvm",
+      "scummvm_id": "sci:chest",
+      "scummvm_id_key": "chest"
+    },
+    {
+      "game": "JACL Interactive Fiction games",
+      "rd_game_name": "JACL Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:jacl",
+      "scummvm_id_key": "jacl"
+    },
+    {
+      "game": "Japan Art Today 07: Takashi Murakami - A Romantic Evening",
+      "rd_game_name": "Japan Art Today 07: Takashi Murakami - A Romantic Evening.scummvm",
+      "scummvm_id": "director:japanart07",
+      "scummvm_id_key": "japanart07"
+    },
+    {
+      "game": "Jinxter",
+      "rd_game_name": "Jinxter.scummvm",
+      "scummvm_id": "glk:jinxter",
+      "scummvm_id_key": "jinxter"
+    },
+    {
+      "game": "Jones in the Fast Lane",
+      "rd_game_name": "Jones in the Fast Lane.scummvm",
+      "scummvm_id": "sci:jones",
+      "scummvm_id_key": "jones"
+    },
+    {
+      "game": "Just Grandma and Me",
+      "rd_game_name": "Just Grandma and Me.scummvm",
+      "scummvm_id": "mohawk:grandma",
+      "scummvm_id_key": "grandma"
+    },
+    {
+      "game": "Just Ignore Them",
+      "rd_game_name": "Just Ignore Them.scummvm",
+      "scummvm_id": "ags:justignorethem",
+      "scummvm_id_key": "justignorethem"
+    },
+    {
+      "game": "Kathy Rain",
+      "rd_game_name": "Kathy Rain.scummvm",
+      "scummvm_id": "ags:kathyrain",
+      "scummvm_id_key": "kathyrain"
+    },
+    {
+      "game": "Kingdom: The Far Reaches",
+      "rd_game_name": "Kingdom: The Far Reaches.scummvm",
+      "scummvm_id": "kingdom:kingdom",
+      "scummvm_id_key": "kingdom"
+    },
+    {
+      "game": "Kings Quest I: Quest for the Crown",
+      "rd_game_name": "Kings Quest I: Quest for the Crown.scummvm",
+      "scummvm_id": "agi:kq1",
+      "scummvm_id_key": "kq1"
+    },
+    {
+      "game": "Kings Quest II: Romancing the Throne",
+      "rd_game_name": "Kings Quest II: Romancing the Throne.scummvm",
+      "scummvm_id": "agi:kq2",
+      "scummvm_id_key": "kq2"
+    },
+    {
+      "game": "Kings Quest III: To Heir Is Human",
+      "rd_game_name": "Kings Quest III: To Heir Is Human.scummvm",
+      "scummvm_id": "agi:kq3",
+      "scummvm_id_key": "kq3"
+    },
+    {
+      "game": "Kings Quest IV: The Perils of Rosella",
+      "rd_game_name": "Kings Quest IV: The Perils of Rosella.scummvm",
+      "scummvm_id": "agi:kq4",
+      "scummvm_id_key": "kq4"
+    },
+    {
+      "game": "Kings Quest IV: The Perils of Rosella",
+      "rd_game_name": "Kings Quest IV: The Perils of Rosella.scummvm",
+      "scummvm_id": "sci:kq4sci",
+      "scummvm_id_key": "kq4sci"
+    },
+    {
+      "game": "Kings Quest V: Absence Makes the Heart Go Yonder!",
+      "rd_game_name": "Kings Quest V: Absence Makes the Heart Go Yonder!.scummvm",
+      "scummvm_id": "sci:kq5",
+      "scummvm_id_key": "kq5"
+    },
+    {
+      "game": "Kings Quest VI: Heir Today, Gone Tomorrow",
+      "rd_game_name": "Kings Quest VI: Heir Today, Gone Tomorrow.scummvm",
+      "scummvm_id": "sci:kq6",
+      "scummvm_id_key": "kq6"
+    },
+    {
+      "game": "Kings Quest VII: The Princeless Bride",
+      "rd_game_name": "Kings Quest VII: The Princeless Bride.scummvm",
+      "scummvm_id": "sci:kq7",
+      "scummvm_id_key": "kq7"
+    },
+    {
+      "game": "Kings Quest: Quest for the Crown",
+      "rd_game_name": "Kings Quest: Quest for the Crown.scummvm",
+      "scummvm_id": "sci:kq1sci",
+      "scummvm_id_key": "kq1sci"
+    },
+    {
+      "game": "Kings Questions",
+      "rd_game_name": "Kings Questions.scummvm",
+      "scummvm_id": "sci:kquestions",
+      "scummvm_id_key": "kquestions"
+    },
+    {
+      "game": "Lands of Lore: The Throne of Chaos",
+      "rd_game_name": "Lands of Lore: The Throne of Chaos.scummvm",
+      "scummvm_id": "kyra:lol",
+      "scummvm_id_key": "lol"
+    },
+    {
+      "game": "Laura Bow 2: The Dagger of Amon Ra",
+      "rd_game_name": "Laura Bow 2: The Dagger of Amon Ra.scummvm",
+      "scummvm_id": "sci:laurabow2",
+      "scummvm_id_key": "laurabow2"
+    },
+    {
+      "game": "Laura Bow: The Colonels Bequest",
+      "rd_game_name": "Laura Bow: The Colonels Bequest.scummvm",
+      "scummvm_id": "sci:laurabow",
+      "scummvm_id_key": "laurabow"
+    },
+    {
+      "game": "Leather Goddesses of Phobos! 2: Gas Pump Girls Meet the Pulsating Inconvenience from Planet X",
+      "rd_game_name": "Leather Goddesses of Phobos! 2: Gas Pump Girls Meet the Pulsating Inconvenience from Planet X.scummvm",
+      "scummvm_id": "made:lgop2",
+      "scummvm_id_key": "lgop2"
+    },
+    {
+      "game": "Leisure Suit Larry 2: Goes Looking for Love (in Several Wrong Places)",
+      "rd_game_name": "Leisure Suit Larry 2: Goes Looking for Love (in Several Wrong Places).scummvm",
+      "scummvm_id": "sci:lsl2",
+      "scummvm_id_key": "lsl2"
+    },
+    {
+      "game": "Leisure Suit Larry 3: Passionate Patti in Pursuit of the Pulsating Pectorals",
+      "rd_game_name": "Leisure Suit Larry 3: Passionate Patti in Pursuit of the Pulsating Pectorals.scummvm",
+      "scummvm_id": "sci:lsl3",
+      "scummvm_id_key": "lsl3"
+    },
+    {
+      "game": "Leisure Suit Larry 5: Passionate Patti Does a Little Undercover Work",
+      "rd_game_name": "Leisure Suit Larry 5: Passionate Patti Does a Little Undercover Work.scummvm",
+      "scummvm_id": "sci:lsl5",
+      "scummvm_id_key": "lsl5"
+    },
+    {
+      "game": "Leisure Suit Larry 6: Shape Up or Slip Out!",
+      "rd_game_name": "Leisure Suit Larry 6: Shape Up or Slip Out!.scummvm",
+      "scummvm_id": "sci:lsl6",
+      "scummvm_id_key": "lsl6"
+    },
+    {
+      "game": "Leisure Suit Larry 6: Shape Up or Slip Out!",
+      "rd_game_name": "Leisure Suit Larry 6: Shape Up or Slip Out!.scummvm",
+      "scummvm_id": "sci:lsl6hires",
+      "scummvm_id_key": "lsl6hires"
+    },
+    {
+      "game": "Leisure Suit Larry 7: Love for Sail!",
+      "rd_game_name": "Leisure Suit Larry 7: Love for Sail!.scummvm",
+      "scummvm_id": "sci:lsl7",
+      "scummvm_id_key": "lsl7"
+    },
+    {
+      "game": "Leisure Suit Larry in the Land of the Lounge Lizards",
+      "rd_game_name": "Leisure Suit Larry in the Land of the Lounge Lizards.scummvm",
+      "scummvm_id": "agi:lsl1",
+      "scummvm_id_key": "lsl1"
+    },
+    {
+      "game": "Leisure Suit Larry in the Land of the Lounge Lizards",
+      "rd_game_name": "Leisure Suit Larry in the Land of the Lounge Lizards.scummvm",
+      "scummvm_id": "sci:lsl1sci",
+      "scummvm_id_key": "lsl1sci"
+    },
+    {
+      "game": "Leptons Quest",
+      "rd_game_name": "Leptons Quest.scummvm",
+      "scummvm_id": "sludge:leptonsquest",
+      "scummvm_id_key": "leptonsquest"
+    },
+    {
+      "game": "Lets Explore the Airport",
+      "rd_game_name": "Lets Explore the Airport.scummvm",
+      "scummvm_id": "scumm:airport",
+      "scummvm_id_key": "airport"
+    },
+    {
+      "game": "Lets Explore the Farm",
+      "rd_game_name": "Lets Explore the Farm.scummvm",
+      "scummvm_id": "scumm:farm",
+      "scummvm_id_key": "farm"
+    },
+    {
+      "game": "Lets Explore the Jungle",
+      "rd_game_name": "Lets Explore the Jungle.scummvm",
+      "scummvm_id": "scumm:jungle",
+      "scummvm_id_key": "jungle"
+    },
+    {
+      "game": "Level 9 Interactive Fiction games",
+      "rd_game_name": "Level 9 Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:level9",
+      "scummvm_id_key": "level9"
+    },
+    {
+      "game": "Life Flashes By",
+      "rd_game_name": "Life Flashes By.scummvm",
+      "scummvm_id": "sludge:life",
+      "scummvm_id_key": "life"
+    },
+    {
+      "game": "Lighthouse: The Dark Being",
+      "rd_game_name": "Lighthouse: The Dark Being.scummvm",
+      "scummvm_id": "sci:lighthouse",
+      "scummvm_id_key": "lighthouse"
+    },
+    {
+      "game": "Little Big Adventure",
+      "rd_game_name": "Little Big Adventure.scummvm",
+      "scummvm_id": "twine:lba",
+      "scummvm_id_key": "lba"
+    },
+    {
+      "game": "Little Longnose",
+      "rd_game_name": "Little Longnose.scummvm",
+      "scummvm_id": "qdengine:karliknos",
+      "scummvm_id_key": "karliknos"
+    },
+    {
+      "game": "Little Monster at School",
+      "rd_game_name": "Little Monster at School.scummvm",
+      "scummvm_id": "mohawk:lilmonster",
+      "scummvm_id_key": "lilmonster"
+    },
+    {
+      "game": "Loom",
+      "rd_game_name": "Loom.scummvm",
+      "scummvm_id": "scumm:loom",
+      "scummvm_id_key": "loom"
+    },
+    {
+      "game": "Lost in Time",
+      "rd_game_name": "Lost in Time.scummvm",
+      "scummvm_id": "gob:lit",
+      "scummvm_id_key": "lit"
+    },
+    {
+      "game": "Lure of the Temptress",
+      "rd_game_name": "Lure of the Temptress.scummvm",
+      "scummvm_id": "lure:lure",
+      "scummvm_id_key": "lure"
+    },
+    {
+      "game": "L-ZONE",
+      "rd_game_name": "L-ZONE.scummvm",
+      "scummvm_id": "director:lzone",
+      "scummvm_id_key": "lzone"
+    },
+    {
+      "game": "Magic Tales: Baba Yaga and the Magic Geese",
+      "rd_game_name": "Magic Tales: Baba Yaga and the Magic Geese.scummvm",
+      "scummvm_id": "composer:babayaga",
+      "scummvm_id_key": "babayaga"
+    },
+    {
+      "game": "Magic Tales: Imo & the King",
+      "rd_game_name": "Magic Tales: Imo & the King.scummvm",
+      "scummvm_id": "composer:imoking",
+      "scummvm_id_key": "imoking"
+    },
+    {
+      "game": "Magic Tales: Liam Finds a Story",
+      "rd_game_name": "Magic Tales: Liam Finds a Story.scummvm",
+      "scummvm_id": "composer:liam",
+      "scummvm_id_key": "liam"
+    },
+    {
+      "game": "Magic Tales: Sleeping Cubs Test of Courage",
+      "rd_game_name": "Magic Tales: Sleeping Cubs Test of Courage.scummvm",
+      "scummvm_id": "composer:sleepingcub",
+      "scummvm_id_key": "sleepingcub"
+    },
+    {
+      "game": "Magic Tales: The Little Samurai",
+      "rd_game_name": "Magic Tales: The Little Samurai.scummvm",
+      "scummvm_id": "composer:littlesamurai",
+      "scummvm_id_key": "littlesamurai"
+    },
+    {
+      "game": "Magic Tales: The Princess and the Crab",
+      "rd_game_name": "Magic Tales: The Princess and the Crab.scummvm",
+      "scummvm_id": "composer:princess",
+      "scummvm_id_key": "princess"
+    },
+    {
+      "game": "Majestic Part 1: Alien Encounter",
+      "rd_game_name": "Majestic Part 1: Alien Encounter.scummvm",
+      "scummvm_id": "director:majestic",
+      "scummvm_id_key": "majestic"
+    },
+    {
+      "game": "Mandy Christmas Adventure",
+      "rd_game_name": "Mandy Christmas Adventure.scummvm",
+      "scummvm_id": "sludge:mandy",
+      "scummvm_id_key": "mandy"
+    },
+    {
+      "game": "Manhunter 2: San Francisco",
+      "rd_game_name": "Manhunter 2: San Francisco.scummvm",
+      "scummvm_id": "agi:mh2",
+      "scummvm_id_key": "mh2"
+    },
+    {
+      "game": "Manhunter: New York",
+      "rd_game_name": "Manhunter: New York.scummvm",
+      "scummvm_id": "agi:mh1",
+      "scummvm_id_key": "mh1"
+    },
+    {
+      "game": "Maniac Mansion",
+      "rd_game_name": "Maniac Mansion.scummvm",
+      "scummvm_id": "scumm:maniac",
+      "scummvm_id_key": "maniac"
+    },
+    {
+      "game": "Maniac Mansion Deluxe",
+      "rd_game_name": "Maniac Mansion Deluxe.scummvm",
+      "scummvm_id": "ags:maniacmansiondeluxe",
+      "scummvm_id_key": "maniacmansiondeluxe"
+    },
+    {
+      "game": "Maniac Mansion: Day of the Tentacle",
+      "rd_game_name": "Maniac Mansion: Day of the Tentacle.scummvm",
+      "scummvm_id": "scumm:tentacle",
+      "scummvm_id_key": "tentacle"
+    },
+    {
+      "game": "Marc Browns Arthurs Teacher Trouble",
+      "rd_game_name": "Marc Browns Arthurs Teacher Trouble.scummvm",
+      "scummvm_id": "mohawk:arthur",
+      "scummvm_id_key": "arthur"
+    },
+    {
+      "game": "Martian Memorandum",
+      "rd_game_name": "Martian Memorandum.scummvm",
+      "scummvm_id": "access:martian",
+      "scummvm_id_key": "martian"
+    },
+    {
+      "game": "Marvel Comics Spider-Man: The Sinister Six",
+      "rd_game_name": "Marvel Comics Spider-Man: The Sinister Six.scummvm",
+      "scummvm_id": "hypno:sinistersix",
+      "scummvm_id_key": "sinistersix"
+    },
+    {
+      "game": "Marvellous Mice Adventures: Meeting Sea Rat",
+      "rd_game_name": "Marvellous Mice Adventures: Meeting Sea Rat.scummvm",
+      "scummvm_id": "qdengine:3mice1",
+      "scummvm_id_key": "3mice1"
+    },
+    {
+      "game": "Marvellous Mice Adventures: Sea Rats Birthday",
+      "rd_game_name": "Marvellous Mice Adventures: Sea Rats Birthday.scummvm",
+      "scummvm_id": "qdengine:3mice2",
+      "scummvm_id_key": "3mice2"
+    },
+    {
+      "game": "Mask show",
+      "rd_game_name": "Mask show.scummvm",
+      "scummvm_id": "qdengine:maski",
+      "scummvm_id_key": "maski"
+    },
+    {
+      "game": "Mickeys Space Adventure",
+      "rd_game_name": "Mickeys Space Adventure.scummvm",
+      "scummvm_id": "agi:mickey",
+      "scummvm_id_key": "mickey"
+    },
+    {
+      "game": "Might and Magic: Book One - Secret of the Inner Sanctum",
+      "rd_game_name": "Might and Magic: Book One - Secret of the Inner Sanctum.scummvm",
+      "scummvm_id": "mm:mm1",
+      "scummvm_id_key": "mm1"
+    },
+    {
+      "game": "Might and Magic: Clouds of Xeen",
+      "rd_game_name": "Might and Magic: Clouds of Xeen.scummvm",
+      "scummvm_id": "mm:cloudsofxeen",
+      "scummvm_id_key": "cloudsofxeen"
+    },
+    {
+      "game": "Might and Magic: Darkside of Xeen",
+      "rd_game_name": "Might and Magic: Darkside of Xeen.scummvm",
+      "scummvm_id": "mm:darksideofxeen",
+      "scummvm_id_key": "darksideofxeen"
+    },
+    {
+      "game": "Might and Magic: Swords of Xeen",
+      "rd_game_name": "Might and Magic: Swords of Xeen.scummvm",
+      "scummvm_id": "mm:swordsofxeen",
+      "scummvm_id_key": "swordsofxeen"
+    },
+    {
+      "game": "Might and Magic: World of Xeen",
+      "rd_game_name": "Might and Magic: World of Xeen.scummvm",
+      "scummvm_id": "mm:worldofxeen",
+      "scummvm_id_key": "worldofxeen"
+    },
+    {
+      "game": "Mission Supernova 1",
+      "rd_game_name": "Mission Supernova 1.scummvm",
+      "scummvm_id": "supernova:msn1",
+      "scummvm_id_key": "msn1"
+    },
+    {
+      "game": "Mission Supernova 2",
+      "rd_game_name": "Mission Supernova 2.scummvm",
+      "scummvm_id": "supernova:msn2",
+      "scummvm_id_key": "msn2"
+    },
+    {
+      "game": "Mixed Up Fairy Tales",
+      "rd_game_name": "Mixed Up Fairy Tales.scummvm",
+      "scummvm_id": "sci:fairytales",
+      "scummvm_id_key": "fairytales"
+    },
+    {
+      "game": "Mixed-Up Mother Goose",
+      "rd_game_name": "Mixed-Up Mother Goose.scummvm",
+      "scummvm_id": "agi:mixedup",
+      "scummvm_id_key": "mixedup"
+    },
+    {
+      "game": "Mixed-Up Mother Goose",
+      "rd_game_name": "Mixed-Up Mother Goose.scummvm",
+      "scummvm_id": "sci:mothergoose",
+      "scummvm_id_key": "mothergoose"
+    },
+    {
+      "game": "Mixed-Up Mother Goose",
+      "rd_game_name": "Mixed-Up Mother Goose.scummvm",
+      "scummvm_id": "sci:mothergoose256",
+      "scummvm_id_key": "mothergoose256"
+    },
+    {
+      "game": "Mixed-Up Mother Goose Deluxe",
+      "rd_game_name": "Mixed-Up Mother Goose Deluxe.scummvm",
+      "scummvm_id": "sci:mothergoosehires",
+      "scummvm_id_key": "mothergoosehires"
+    },
+    {
+      "game": "Mom dont worry",
+      "rd_game_name": "Mom dont worry.scummvm",
+      "scummvm_id": "qdengine:mng",
+      "scummvm_id_key": "mng"
+    },
+    {
+      "game": "Monkey Island 2: LeChucks Revenge",
+      "rd_game_name": "Monkey Island 2: LeChucks Revenge.scummvm",
+      "scummvm_id": "scumm:monkey2",
+      "scummvm_id_key": "monkey2"
+    },
+    {
+      "game": "Moonbase Commander",
+      "rd_game_name": "Moonbase Commander.scummvm",
+      "scummvm_id": "scumm:moonbase",
+      "scummvm_id_key": "moonbase"
+    },
+    {
+      "game": "Mortville Manor",
+      "rd_game_name": "Mortville Manor.scummvm",
+      "scummvm_id": "mortevielle:mortevielle",
+      "scummvm_id_key": "mortevielle"
+    },
+    {
+      "game": "MTVs Beavis and Butt-Head in Virtual Stupidity",
+      "rd_game_name": "MTVs Beavis and Butt-Head in Virtual Stupidity.scummvm",
+      "scummvm_id": "bbvs:bbvs",
+      "scummvm_id_key": "bbvs"
+    },
+    {
+      "game": "Muppet Treasure Island ",
+      "rd_game_name": "Muppet Treasure Island .scummvm",
+      "scummvm_id": "mtropolis:mti",
+      "scummvm_id_key": "mti"
+    },
+    {
+      "game": "My Big Sister",
+      "rd_game_name": "My Big Sister.scummvm",
+      "scummvm_id": "ags:mybigsister",
+      "scummvm_id_key": "mybigsister"
+    },
+    {
+      "game": "My Big Sister Remastered",
+      "rd_game_name": "My Big Sister Remastered.scummvm",
+      "scummvm_id": "ags:mybigsisterrm",
+      "scummvm_id_key": "mybigsisterrm"
+    },
+    {
+      "game": "Myst",
+      "rd_game_name": "Myst.scummvm",
+      "scummvm_id": "mohawk:myst",
+      "scummvm_id_key": "myst"
+    },
+    {
+      "game": "Myst III: Exile",
+      "rd_game_name": "Myst III: Exile.scummvm",
+      "scummvm_id": "myst3:myst3",
+      "scummvm_id_key": "myst3"
+    },
+    {
+      "game": "Myth",
+      "rd_game_name": "Myth.scummvm",
+      "scummvm_id": "glk:myth",
+      "scummvm_id_key": "myth"
+    },
+    {
+      "game": "Nancy Drew: Ghost Dogs of Moon Lake",
+      "rd_game_name": "Nancy Drew: Ghost Dogs of Moon Lake.scummvm",
+      "scummvm_id": "nancy:nancy7",
+      "scummvm_id_key": "nancy7"
+    },
+    {
+      "game": "Nancy Drew: Message in a Haunted Mansion",
+      "rd_game_name": "Nancy Drew: Message in a Haunted Mansion.scummvm",
+      "scummvm_id": "nancy:nancy3",
+      "scummvm_id_key": "nancy3"
+    },
+    {
+      "game": "Nancy Drew: Secret of the Scarlet Hand",
+      "rd_game_name": "Nancy Drew: Secret of the Scarlet Hand.scummvm",
+      "scummvm_id": "nancy:nancy6",
+      "scummvm_id_key": "nancy6"
+    },
+    {
+      "game": "Nancy Drew: Secrets Can Kill",
+      "rd_game_name": "Nancy Drew: Secrets Can Kill.scummvm",
+      "scummvm_id": "nancy:nancy1",
+      "scummvm_id_key": "nancy1"
+    },
+    {
+      "game": "Nancy Drew: Stay Tuned for Danger",
+      "rd_game_name": "Nancy Drew: Stay Tuned for Danger.scummvm",
+      "scummvm_id": "nancy:nancy2",
+      "scummvm_id_key": "nancy2"
+    },
+    {
+      "game": "Nancy Drew: The Final Scene",
+      "rd_game_name": "Nancy Drew: The Final Scene.scummvm",
+      "scummvm_id": "nancy:nancy5",
+      "scummvm_id_key": "nancy5"
+    },
+    {
+      "game": "Nancy Drew: Treasure in the Royal Tower",
+      "rd_game_name": "Nancy Drew: Treasure in the Royal Tower.scummvm",
+      "scummvm_id": "nancy:nancy4",
+      "scummvm_id_key": "nancy4"
+    },
+    {
+      "game": "Nathans Second Chance",
+      "rd_game_name": "Nathans Second Chance.scummvm",
+      "scummvm_id": "sludge:nsc",
+      "scummvm_id_key": "nsc"
+    },
+    {
+      "game": "Nemurenu Yoru no Chiisana O-Hanashi",
+      "rd_game_name": "Nemurenu Yoru no Chiisana O-Hanashi.scummvm",
+      "scummvm_id": "director:nemurenu",
+      "scummvm_id_key": "nemurenu"
+    },
+    {
+      "game": "Nightlong: Union City Conspiracy",
+      "rd_game_name": "Nightlong: Union City Conspiracy.scummvm",
+      "scummvm_id": "trecision:nl",
+      "scummvm_id_key": "nl"
+    },
+    {
+      "game": "Nippon Safes, Inc.",
+      "rd_game_name": "Nippon Safes, Inc..scummvm",
+      "scummvm_id": "parallaction:nippon",
+      "scummvm_id_key": "nippon"
+    },
+    {
+      "game": "Noahs Ark",
+      "rd_game_name": "Noahs Ark.scummvm",
+      "scummvm_id": "mohawk:noah",
+      "scummvm_id_key": "noah"
+    },
+    {
+      "game": "Obsidian",
+      "rd_game_name": "Obsidian.scummvm",
+      "scummvm_id": "mtropolis:obsidian",
+      "scummvm_id_key": "obsidian"
+    },
+    {
+      "game": "Old Skies",
+      "rd_game_name": "Old Skies.scummvm",
+      "scummvm_id": "ags:oldskies",
+      "scummvm_id_key": "oldskies"
+    },
+    {
+      "game": "Once Upon A Time: Little Red Riding Hood",
+      "rd_game_name": "Once Upon A Time: Little Red Riding Hood.scummvm",
+      "scummvm_id": "gob:littlered",
+      "scummvm_id_key": "littlered"
+    },
+    {
+      "game": "OO-Topos",
+      "rd_game_name": "OO-Topos.scummvm",
+      "scummvm_id": "glk:ootopos",
+      "scummvm_id_key": "ootopos"
+    },
+    {
+      "game": "Orion Burger",
+      "rd_game_name": "Orion Burger.scummvm",
+      "scummvm_id": "m4:burger",
+      "scummvm_id_key": "burger"
+    },
+    {
+      "game": "Out Of Order",
+      "rd_game_name": "Out Of Order.scummvm",
+      "scummvm_id": "sludge:outoforder",
+      "scummvm_id_key": "outoforder"
+    },
+    {
+      "game": "Out of This World (Another World)",
+      "rd_game_name": "Out of This World (Another World).scummvm",
+      "scummvm_id": "awe:anotherworld",
+      "scummvm_id_key": "anotherworld"
+    },
+    {
+      "game": "Over-Ring-Under",
+      "rd_game_name": "Over-Ring-Under.scummvm",
+      "scummvm_id": "director:overringunder",
+      "scummvm_id_key": "overringunder"
+    },
+    {
+      "game": "Pajama Sam 2: Thunder and Lightning Arent so Frightening",
+      "rd_game_name": "Pajama Sam 2: Thunder and Lightning Arent so Frightening.scummvm",
+      "scummvm_id": "scumm:pajama2",
+      "scummvm_id_key": "pajama2"
+    },
+    {
+      "game": "Pajama Sam 3: You Are What You Eat From Your Head To Your Feet",
+      "rd_game_name": "Pajama Sam 3: You Are What You Eat From Your Head To Your Feet.scummvm",
+      "scummvm_id": "scumm:pajama3",
+      "scummvm_id_key": "pajama3"
+    },
+    {
+      "game": "Pajama Sam: Games to Play on Any Day",
+      "rd_game_name": "Pajama Sam: Games to Play on Any Day.scummvm",
+      "scummvm_id": "scumm:pjgames",
+      "scummvm_id_key": "pjgames"
+    },
+    {
+      "game": "Pajama Sam: No Need to Hide When Its Dark Outside",
+      "rd_game_name": "Pajama Sam: No Need to Hide When Its Dark Outside.scummvm",
+      "scummvm_id": "scumm:pajama",
+      "scummvm_id_key": "pajama"
+    },
+    {
+      "game": "Pajama Sams Lost & Found",
+      "rd_game_name": "Pajama Sams Lost & Found.scummvm",
+      "scummvm_id": "scumm:lost",
+      "scummvm_id_key": "lost"
+    },
+    {
+      "game": "Pajama Sams One Stop Fun Shop",
+      "rd_game_name": "Pajama Sams One Stop Fun Shop.scummvm",
+      "scummvm_id": "scumm:samsfunshop",
+      "scummvm_id_key": "samsfunshop"
+    },
+    {
+      "game": "Pajama Sams Sock Works",
+      "rd_game_name": "Pajama Sams Sock Works.scummvm",
+      "scummvm_id": "scumm:socks",
+      "scummvm_id_key": "socks"
+    },
+    {
+      "game": "Passport to Adventure (Indiana Jones and the Last Crusade, The Secret of Monkey Island, Loom)",
+      "rd_game_name": "Passport to Adventure (Indiana Jones and the Last Crusade, The Secret of Monkey Island, Loom).scummvm",
+      "scummvm_id": "scumm:pass",
+      "scummvm_id_key": "pass"
+    },
+    {
+      "game": "Penumbra: Overture",
+      "rd_game_name": "Penumbra: Overture.scummvm",
+      "scummvm_id": "hpl1:penumbraoverture",
+      "scummvm_id_key": "penumbraoverture"
+    },
+    {
+      "game": "Peppers Adventures in Time",
+      "rd_game_name": "Peppers Adventures in Time.scummvm",
+      "scummvm_id": "sci:pepper",
+      "scummvm_id_key": "pepper"
+    },
+    {
+      "game": "Personal Nightmare",
+      "rd_game_name": "Personal Nightmare.scummvm",
+      "scummvm_id": "agos:pn",
+      "scummvm_id_key": "pn"
+    },
+    {
+      "game": "Phantasmagoria",
+      "rd_game_name": "Phantasmagoria.scummvm",
+      "scummvm_id": "sci:phantasmagoria",
+      "scummvm_id_key": "phantasmagoria"
+    },
+    {
+      "game": "Phantasmagoria 2: A Puzzle of Flesh",
+      "rd_game_name": "Phantasmagoria 2: A Puzzle of Flesh.scummvm",
+      "scummvm_id": "sci:phantasmagoria2",
+      "scummvm_id_key": "phantasmagoria2"
+    },
+    {
+      "game": "Pilot Brothers 3: Back Side of the Earth",
+      "rd_game_name": "Pilot Brothers 3: Back Side of the Earth.scummvm",
+      "scummvm_id": "qdengine:pilots3",
+      "scummvm_id_key": "pilots3"
+    },
+    {
+      "game": "Pilot Brothers 3D. The Case of Garden Pests",
+      "rd_game_name": "Pilot Brothers 3D. The Case of Garden Pests.scummvm",
+      "scummvm_id": "qdengine:pilots3d",
+      "scummvm_id_key": "pilots3d"
+    },
+    {
+      "game": "Pilot Brothers 3D-2. Kennel Club Secrets",
+      "rd_game_name": "Pilot Brothers 3D-2. Kennel Club Secrets.scummvm",
+      "scummvm_id": "qdengine:pilots3d-2",
+      "scummvm_id_key": "pilots3d-2"
+    },
+    {
+      "game": "Playtoons Limited Edition - Bambou le sauveur de la jungle",
+      "rd_game_name": "Playtoons Limited Edition - Bambou le sauveur de la jungle.scummvm",
+      "scummvm_id": "gob:bambou",
+      "scummvm_id_key": "bambou"
+    },
+    {
+      "game": "Plumbers Dont Wear Ties",
+      "rd_game_name": "Plumbers Dont Wear Ties.scummvm",
+      "scummvm_id": "plumbers:plumbers",
+      "scummvm_id_key": "plumbers"
+    },
+    {
+      "game": "Police Quest 2: The Vengeance",
+      "rd_game_name": "Police Quest 2: The Vengeance.scummvm",
+      "scummvm_id": "sci:pq2",
+      "scummvm_id_key": "pq2"
+    },
+    {
+      "game": "Police Quest 3: The Kindred",
+      "rd_game_name": "Police Quest 3: The Kindred.scummvm",
+      "scummvm_id": "sci:pq3",
+      "scummvm_id_key": "pq3"
+    },
+    {
+      "game": "Police Quest IV: Open Season",
+      "rd_game_name": "Police Quest IV: Open Season.scummvm",
+      "scummvm_id": "sci:pq4",
+      "scummvm_id_key": "pq4"
+    },
+    {
+      "game": "Police Quest: In Pursuit of the Death Angel",
+      "rd_game_name": "Police Quest: In Pursuit of the Death Angel.scummvm",
+      "scummvm_id": "agi:pq1",
+      "scummvm_id_key": "pq1"
+    },
+    {
+      "game": "Police Quest: In Pursuit of the Death Angel",
+      "rd_game_name": "Police Quest: In Pursuit of the Death Angel.scummvm",
+      "scummvm_id": "sci:pq1sci",
+      "scummvm_id_key": "pq1sci"
+    },
+    {
+      "game": "Police Quest: SWAT",
+      "rd_game_name": "Police Quest: SWAT.scummvm",
+      "scummvm_id": "sci:pqswat",
+      "scummvm_id_key": "pqswat"
+    },
+    {
+      "game": "Primordia",
+      "rd_game_name": "Primordia.scummvm",
+      "scummvm_id": "ags:primordia",
+      "scummvm_id_key": "primordia"
+    },
+    {
+      "game": "Private Eye",
+      "rd_game_name": "Private Eye.scummvm",
+      "scummvm_id": "private:private-eye",
+      "scummvm_id_key": "private-eye"
+    },
+    {
+      "game": "Putt-Putt and Fatty Bears Activity Pack",
+      "rd_game_name": "Putt-Putt and Fatty Bears Activity Pack.scummvm",
+      "scummvm_id": "scumm:activity",
+      "scummvm_id_key": "activity"
+    },
+    {
+      "game": "Putt-Putt and Peps Balloon-O-Rama",
+      "rd_game_name": "Putt-Putt and Peps Balloon-O-Rama.scummvm",
+      "scummvm_id": "scumm:balloon",
+      "scummvm_id_key": "balloon"
+    },
+    {
+      "game": "Putt-Putt and Peps Dog on a Stick",
+      "rd_game_name": "Putt-Putt and Peps Dog on a Stick.scummvm",
+      "scummvm_id": "scumm:dog",
+      "scummvm_id_key": "dog"
+    },
+    {
+      "game": "Putt-Putt Enters the Race",
+      "rd_game_name": "Putt-Putt Enters the Race.scummvm",
+      "scummvm_id": "scumm:puttrace",
+      "scummvm_id_key": "puttrace"
+    },
+    {
+      "game": "Putt-Putt Goes to the Moon",
+      "rd_game_name": "Putt-Putt Goes to the Moon.scummvm",
+      "scummvm_id": "scumm:puttmoon",
+      "scummvm_id_key": "puttmoon"
+    },
+    {
+      "game": "Putt-Putt Joins the Circus",
+      "rd_game_name": "Putt-Putt Joins the Circus.scummvm",
+      "scummvm_id": "scumm:puttcircus",
+      "scummvm_id_key": "puttcircus"
+    },
+    {
+      "game": "Putt-Putt Joins the Parade",
+      "rd_game_name": "Putt-Putt Joins the Parade.scummvm",
+      "scummvm_id": "scumm:puttputt",
+      "scummvm_id_key": "puttputt"
+    },
+    {
+      "game": "Putt-Putt Saves the Zoo",
+      "rd_game_name": "Putt-Putt Saves the Zoo.scummvm",
+      "scummvm_id": "scumm:puttzoo",
+      "scummvm_id_key": "puttzoo"
+    },
+    {
+      "game": "Putt-Putt Travels Through Time",
+      "rd_game_name": "Putt-Putt Travels Through Time.scummvm",
+      "scummvm_id": "scumm:putttime",
+      "scummvm_id_key": "putttime"
+    },
+    {
+      "game": "Putt-Putts Fun Pack",
+      "rd_game_name": "Putt-Putts Fun Pack.scummvm",
+      "scummvm_id": "scumm:funpack",
+      "scummvm_id_key": "funpack"
+    },
+    {
+      "game": "Putt-Putts One-Stop Fun Shop",
+      "rd_game_name": "Putt-Putts One-Stop Fun Shop.scummvm",
+      "scummvm_id": "scumm:puttsfunshop",
+      "scummvm_id_key": "puttsfunshop"
+    },
+    {
+      "game": "Quest for Glory I: So You Want To Be A Hero",
+      "rd_game_name": "Quest for Glory I: So You Want To Be A Hero.scummvm",
+      "scummvm_id": "sci:qfg1",
+      "scummvm_id_key": "qfg1"
+    },
+    {
+      "game": "Quest for Glory I: So You Want To Be A Hero",
+      "rd_game_name": "Quest for Glory I: So You Want To Be A Hero.scummvm",
+      "scummvm_id": "sci:qfg1vga",
+      "scummvm_id_key": "qfg1vga"
+    },
+    {
+      "game": "Quest for Glory II: Trial by Fire",
+      "rd_game_name": "Quest for Glory II: Trial by Fire.scummvm",
+      "scummvm_id": "sci:qfg2",
+      "scummvm_id_key": "qfg2"
+    },
+    {
+      "game": "Quest for Glory III: Wages of War",
+      "rd_game_name": "Quest for Glory III: Wages of War.scummvm",
+      "scummvm_id": "sci:qfg3",
+      "scummvm_id_key": "qfg3"
+    },
+    {
+      "game": "Quest for Glory IV: Shadows of Darkness",
+      "rd_game_name": "Quest for Glory IV: Shadows of Darkness.scummvm",
+      "scummvm_id": "sci:qfg4",
+      "scummvm_id_key": "qfg4"
+    },
+    {
+      "game": "Quest Interactive Fiction games",
+      "rd_game_name": "Quest Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:quest",
+      "scummvm_id_key": "quest"
+    },
+    {
+      "game": "RAMA",
+      "rd_game_name": "RAMA.scummvm",
+      "scummvm_id": "sci:rama",
+      "scummvm_id_key": "rama"
+    },
+    {
+      "game": "Reah: Face the Unknown",
+      "rd_game_name": "Reah: Face the Unknown.scummvm",
+      "scummvm_id": "vcruise:reah",
+      "scummvm_id_key": "reah"
+    },
+    {
+      "game": "Red Bow",
+      "rd_game_name": "Red Bow.scummvm",
+      "scummvm_id": "ags:redbow",
+      "scummvm_id_key": "redbow"
+    },
+    {
+      "game": "Red Comrades 1: Save the Galaxy",
+      "rd_game_name": "Red Comrades 1: Save the Galaxy.scummvm",
+      "scummvm_id": "petka:petka1",
+      "scummvm_id_key": "petka1"
+    },
+    {
+      "game": "Red Comrades 2: For the Great Justice",
+      "rd_game_name": "Red Comrades 2: For the Great Justice.scummvm",
+      "scummvm_id": "petka:petka2",
+      "scummvm_id_key": "petka2"
+    },
+    {
+      "game": "Resonance",
+      "rd_game_name": "Resonance.scummvm",
+      "scummvm_id": "ags:resonance",
+      "scummvm_id_key": "resonance"
+    },
+    {
+      "game": "Return to Ringworld",
+      "rd_game_name": "Return to Ringworld.scummvm",
+      "scummvm_id": "tsage:ringworld2",
+      "scummvm_id_key": "ringworld2"
+    },
+    {
+      "game": "Return to Zork",
+      "rd_game_name": "Return to Zork.scummvm",
+      "scummvm_id": "made:rtz",
+      "scummvm_id_key": "rtz"
+    },
+    {
+      "game": "Rex Nebular and the Cosmic Gender Bender",
+      "rd_game_name": "Rex Nebular and the Cosmic Gender Bender.scummvm",
+      "scummvm_id": "mads:nebular",
+      "scummvm_id_key": "nebular"
+    },
+    {
+      "game": "Ringworld: Revenge of the Patriarch",
+      "rd_game_name": "Ringworld: Revenge of the Patriarch.scummvm",
+      "scummvm_id": "tsage:ringworld",
+      "scummvm_id_key": "ringworld"
+    },
+    {
+      "game": "Ripleys Believe It or Not!: The Riddle of Master Lu",
+      "rd_game_name": "Ripleys Believe It or Not!: The Riddle of Master Lu.scummvm",
+      "scummvm_id": "m4:riddle",
+      "scummvm_id_key": "riddle"
+    },
+    {
+      "game": "Rise of the Dragon",
+      "rd_game_name": "Rise of the Dragon.scummvm",
+      "scummvm_id": "dgds:rise",
+      "scummvm_id_key": "rise"
+    },
+    {
+      "game": "Riven: The Sequel to Myst",
+      "rd_game_name": "Riven: The Sequel to Myst.scummvm",
+      "scummvm_id": "mohawk:riven",
+      "scummvm_id_key": "riven"
+    },
+    {
+      "game": "Robins Rescue",
+      "rd_game_name": "Robins Rescue.scummvm",
+      "scummvm_id": "sludge:robinsrescue",
+      "scummvm_id_key": "robinsrescue"
+    },
+    {
+      "game": "Rodneys Funscreen",
+      "rd_game_name": "Rodneys Funscreen.scummvm",
+      "scummvm_id": "made:rodney",
+      "scummvm_id_key": "rodney"
+    },
+    {
+      "game": "Rosemary",
+      "rd_game_name": "Rosemary.scummvm",
+      "scummvm_id": "wintermute:rosemary",
+      "scummvm_id_key": "rosemary"
+    },
+    {
+      "game": "Rosewater",
+      "rd_game_name": "Rosewater.scummvm",
+      "scummvm_id": "ags:rosewater",
+      "scummvm_id_key": "rosewater"
+    },
+    {
+      "game": "Ruffs Bone",
+      "rd_game_name": "Ruffs Bone.scummvm",
+      "scummvm_id": "mohawk:ruff",
+      "scummvm_id_key": "ruff"
+    },
+    {
+      "game": "Sam & Max: Hit the Road",
+      "rd_game_name": "Sam & Max: Hit the Road.scummvm",
+      "scummvm_id": "scumm:samnmax",
+      "scummvm_id_key": "samnmax"
+    },
+    {
+      "game": "Sanitarium",
+      "rd_game_name": "Sanitarium.scummvm",
+      "scummvm_id": "asylum:asylum",
+      "scummvm_id_key": "asylum"
+    },
+    {
+      "game": "Schizm: Mysterious Journey",
+      "rd_game_name": "Schizm: Mysterious Journey.scummvm",
+      "scummvm_id": "vcruise:schizm",
+      "scummvm_id_key": "schizm"
+    },
+    {
+      "game": "Scott Adams Interactive Fiction games",
+      "rd_game_name": "Scott Adams Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:scottadams",
+      "scummvm_id_key": "scottadams"
+    },
+    {
+      "game": "Sfinx",
+      "rd_game_name": "Sfinx.scummvm",
+      "scummvm_id": "cge2:sfinx",
+      "scummvm_id_key": "sfinx"
+    },
+    {
+      "game": "Shardlight",
+      "rd_game_name": "Shardlight.scummvm",
+      "scummvm_id": "ags:shardlight",
+      "scummvm_id_key": "shardlight"
+    },
+    {
+      "game": "Sheila Rae, the Brave",
+      "rd_game_name": "Sheila Rae, the Brave.scummvm",
+      "scummvm_id": "mohawk:sheila",
+      "scummvm_id_key": "sheila"
+    },
+    {
+      "game": "Shivers",
+      "rd_game_name": "Shivers.scummvm",
+      "scummvm_id": "sci:shivers",
+      "scummvm_id_key": "shivers"
+    },
+    {
+      "game": "Simon the Sorcerer",
+      "rd_game_name": "Simon the Sorcerer.scummvm",
+      "scummvm_id": "agos:simon1",
+      "scummvm_id_key": "simon1"
+    },
+    {
+      "game": "Simon the Sorcerer II: The Lion, the Wizard and the Wardrobe",
+      "rd_game_name": "Simon the Sorcerer II: The Lion, the Wizard and the Wardrobe.scummvm",
+      "scummvm_id": "agos:simon2",
+      "scummvm_id_key": "simon2"
+    },
+    {
+      "game": "Simon the Sorcerers Puzzle Pack: Demon in my Pocket",
+      "rd_game_name": "Simon the Sorcerers Puzzle Pack: Demon in my Pocket.scummvm",
+      "scummvm_id": "agos:dimp",
+      "scummvm_id_key": "dimp"
+    },
+    {
+      "game": "Simon the Sorcerers Puzzle Pack: Jumble",
+      "rd_game_name": "Simon the Sorcerers Puzzle Pack: Jumble.scummvm",
+      "scummvm_id": "agos:jumble",
+      "scummvm_id_key": "jumble"
+    },
+    {
+      "game": "Simon the Sorcerers Puzzle Pack: NoPatience",
+      "rd_game_name": "Simon the Sorcerers Puzzle Pack: NoPatience.scummvm",
+      "scummvm_id": "agos:puzzle",
+      "scummvm_id_key": "puzzle"
+    },
+    {
+      "game": "Simon the Sorcerers Puzzle Pack: Swampy Adventures",
+      "rd_game_name": "Simon the Sorcerers Puzzle Pack: Swampy Adventures.scummvm",
+      "scummvm_id": "agos:swampy",
+      "scummvm_id_key": "swampy"
+    },
+    {
+      "game": "Slater & Charlie Go Camping",
+      "rd_game_name": "Slater & Charlie Go Camping.scummvm",
+      "scummvm_id": "sci:slater",
+      "scummvm_id_key": "slater"
+    },
+    {
+      "game": "Soldier Boyz",
+      "rd_game_name": "Soldier Boyz.scummvm",
+      "scummvm_id": "hypno:soldierboyz",
+      "scummvm_id_key": "soldierboyz"
+    },
+    {
+      "game": "Sołtys",
+      "rd_game_name": "Sołtys.scummvm",
+      "scummvm_id": "cge:soltys",
+      "scummvm_id_key": "soltys"
+    },
+    {
+      "game": "Space Quest 6: Roger Wilco in the Spinal Frontier",
+      "rd_game_name": "Space Quest 6: Roger Wilco in the Spinal Frontier.scummvm",
+      "scummvm_id": "sci:sq6",
+      "scummvm_id_key": "sq6"
+    },
+    {
+      "game": "Space Quest I: Roger Wilco in the Sarien Encounter",
+      "rd_game_name": "Space Quest I: Roger Wilco in the Sarien Encounter.scummvm",
+      "scummvm_id": "sci:sq1sci",
+      "scummvm_id_key": "sq1sci"
+    },
+    {
+      "game": "Space Quest II: Chapter II - Vohauls Revenge",
+      "rd_game_name": "Space Quest II: Chapter II - Vohauls Revenge.scummvm",
+      "scummvm_id": "agi:sq2",
+      "scummvm_id_key": "sq2"
+    },
+    {
+      "game": "Space Quest III: The Pirates of Pestulon",
+      "rd_game_name": "Space Quest III: The Pirates of Pestulon.scummvm",
+      "scummvm_id": "sci:sq3",
+      "scummvm_id_key": "sq3"
+    },
+    {
+      "game": "Space Quest IV.5 - Roger Wilco and the Voyage Home",
+      "rd_game_name": "Space Quest IV.5 - Roger Wilco and the Voyage Home.scummvm",
+      "scummvm_id": "ags:sq45",
+      "scummvm_id_key": "sq45"
+    },
+    {
+      "game": "Space Quest IV: Roger Wilco and the Time Rippers",
+      "rd_game_name": "Space Quest IV: Roger Wilco and the Time Rippers.scummvm",
+      "scummvm_id": "sci:sq4",
+      "scummvm_id_key": "sq4"
+    },
+    {
+      "game": "Space Quest Minus 1: Decisions of the Elders",
+      "rd_game_name": "Space Quest Minus 1: Decisions of the Elders.scummvm",
+      "scummvm_id": "ags:sqdote",
+      "scummvm_id_key": "sqdote"
+    },
+    {
+      "game": "Space Quest V: The Next Mutation",
+      "rd_game_name": "Space Quest V: The Next Mutation.scummvm",
+      "scummvm_id": "sci:sq5",
+      "scummvm_id_key": "sq5"
+    },
+    {
+      "game": "Space Quest: Chapter I - The Sarien Encounter",
+      "rd_game_name": "Space Quest: Chapter I - The Sarien Encounter.scummvm",
+      "scummvm_id": "agi:sq1",
+      "scummvm_id_key": "sq1"
+    },
+    {
+      "game": "Space Quest: Incinerations",
+      "rd_game_name": "Space Quest: Incinerations.scummvm",
+      "scummvm_id": "ags:sqinc",
+      "scummvm_id_key": "sqinc"
+    },
+    {
+      "game": "Space Quest: Vohaul Strikes Back",
+      "rd_game_name": "Space Quest: Vohaul Strikes Back.scummvm",
+      "scummvm_id": "ags:sqvsb",
+      "scummvm_id_key": "sqvsb"
+    },
+    {
+      "game": "Spaceship Warlock",
+      "rd_game_name": "Spaceship Warlock.scummvm",
+      "scummvm_id": "director:warlock",
+      "scummvm_id_key": "warlock"
+    },
+    {
+      "game": "Spy Fox 2: Some Assembly Required",
+      "rd_game_name": "Spy Fox 2: Some Assembly Required.scummvm",
+      "scummvm_id": "scumm:spyfox2",
+      "scummvm_id_key": "spyfox2"
+    },
+    {
+      "game": "SPY Fox in Cheese Chase",
+      "rd_game_name": "SPY Fox in Cheese Chase.scummvm",
+      "scummvm_id": "scumm:chase",
+      "scummvm_id_key": "chase"
+    },
+    {
+      "game": "Spy Fox in Dry Cereal",
+      "rd_game_name": "Spy Fox in Dry Cereal.scummvm",
+      "scummvm_id": "scumm:spyfox",
+      "scummvm_id_key": "spyfox"
+    },
+    {
+      "game": "Spy Fox in Hold the Mustard",
+      "rd_game_name": "Spy Fox in Hold the Mustard.scummvm",
+      "scummvm_id": "scumm:mustard",
+      "scummvm_id_key": "mustard"
+    },
+    {
+      "game": "Spy Fox: Operation Ozone",
+      "rd_game_name": "Spy Fox: Operation Ozone.scummvm",
+      "scummvm_id": "scumm:spyozon",
+      "scummvm_id_key": "spyozon"
+    },
+    {
+      "game": "Starship Titanic",
+      "rd_game_name": "Starship Titanic.scummvm",
+      "scummvm_id": "titanic:titanic",
+      "scummvm_id_key": "titanic"
+    },
+    {
+      "game": "Stellaluna",
+      "rd_game_name": "Stellaluna.scummvm",
+      "scummvm_id": "mohawk:stellaluna",
+      "scummvm_id_key": "stellaluna"
+    },
+    {
+      "game": "Strangeland",
+      "rd_game_name": "Strangeland.scummvm",
+      "scummvm_id": "ags:strangeland",
+      "scummvm_id_key": "strangeland"
+    },
+    {
+      "game": "Sumatra: Fate of Yandi",
+      "rd_game_name": "Sumatra: Fate of Yandi.scummvm",
+      "scummvm_id": "ags:sumatra",
+      "scummvm_id_key": "sumatra"
+    },
+    {
+      "game": "Syberia",
+      "rd_game_name": "Syberia.scummvm",
+      "scummvm_id": "tetraedge:syberia",
+      "scummvm_id_key": "syberia"
+    },
+    {
+      "game": "Syberia II",
+      "rd_game_name": "Syberia II.scummvm",
+      "scummvm_id": "tetraedge:syberia2",
+      "scummvm_id_key": "syberia2"
+    },
+    {
+      "game": "Technobabylon",
+      "rd_game_name": "Technobabylon.scummvm",
+      "scummvm_id": "ags:technobabylon",
+      "scummvm_id_key": "technobabylon"
+    },
+    {
+      "game": "Teen Agent",
+      "rd_game_name": "Teen Agent.scummvm",
+      "scummvm_id": "teenagent:teenagent",
+      "scummvm_id_key": "teenagent"
+    },
+    {
+      "game": "Tender Loving Care",
+      "rd_game_name": "Tender Loving Care.scummvm",
+      "scummvm_id": "groovie:tlc",
+      "scummvm_id_key": "tlc"
+    },
+    {
+      "game": "The 11th Hour: The Sequel to The 7th Guest",
+      "rd_game_name": "The 11th Hour: The Sequel to The 7th Guest.scummvm",
+      "scummvm_id": "groovie:11h",
+      "scummvm_id_key": "11h"
+    },
+    {
+      "game": "The 7th Guest",
+      "rd_game_name": "The 7th Guest.scummvm",
+      "scummvm_id": "groovie:t7g",
+      "scummvm_id_key": "t7g"
+    },
+    {
+      "game": "The Adventures of the Good Soldier Schweik",
+      "rd_game_name": "The Adventures of the Good Soldier Schweik.scummvm",
+      "scummvm_id": "qdengine:shveik",
+      "scummvm_id_key": "shveik"
+    },
+    {
+      "game": "The Adventures of Willy Beamish",
+      "rd_game_name": "The Adventures of Willy Beamish.scummvm",
+      "scummvm_id": "dgds:beamish",
+      "scummvm_id_key": "beamish"
+    },
+    {
+      "game": "The Beast Within: A Gabriel Knight Mystery",
+      "rd_game_name": "The Beast Within: A Gabriel Knight Mystery.scummvm",
+      "scummvm_id": "sci:gk2",
+      "scummvm_id_key": "gk2"
+    },
+    {
+      "game": "The Berenstain Bears Get in a Fight",
+      "rd_game_name": "The Berenstain Bears Get in a Fight.scummvm",
+      "scummvm_id": "mohawk:bearfight",
+      "scummvm_id_key": "bearfight"
+    },
+    {
+      "game": "The Berenstain Bears In The Dark",
+      "rd_game_name": "The Berenstain Bears In The Dark.scummvm",
+      "scummvm_id": "mohawk:beardark",
+      "scummvm_id_key": "beardark"
+    },
+    {
+      "game": "The Better Dead Ratification",
+      "rd_game_name": "The Better Dead Ratification.scummvm",
+      "scummvm_id": "director:betterd",
+      "scummvm_id_key": "betterd"
+    },
+    {
+      "game": "The Bizarre Adventures of Woodruff and the Schnibble",
+      "rd_game_name": "The Bizarre Adventures of Woodruff and the Schnibble.scummvm",
+      "scummvm_id": "gob:woodruff",
+      "scummvm_id_key": "woodruff"
+    },
+    {
+      "game": "The Black Cauldron",
+      "rd_game_name": "The Black Cauldron.scummvm",
+      "scummvm_id": "agi:bc",
+      "scummvm_id_key": "bc"
+    },
+    {
+      "game": "The Blackwell Convergence",
+      "rd_game_name": "The Blackwell Convergence.scummvm",
+      "scummvm_id": "ags:blackwell3",
+      "scummvm_id_key": "blackwell3"
+    },
+    {
+      "game": "The Blackwell Deception",
+      "rd_game_name": "The Blackwell Deception.scummvm",
+      "scummvm_id": "ags:blackwell4",
+      "scummvm_id_key": "blackwell4"
+    },
+    {
+      "game": "The Blackwell Epiphany",
+      "rd_game_name": "The Blackwell Epiphany.scummvm",
+      "scummvm_id": "ags:blackwell5",
+      "scummvm_id_key": "blackwell5"
+    },
+    {
+      "game": "The Blackwell Legacy",
+      "rd_game_name": "The Blackwell Legacy.scummvm",
+      "scummvm_id": "ags:blackwell1",
+      "scummvm_id_key": "blackwell1"
+    },
+    {
+      "game": "The Crimson Crown: Further Adventures in Transylvania",
+      "rd_game_name": "The Crimson Crown: Further Adventures in Transylvania.scummvm",
+      "scummvm_id": "glk:crimsoncrown",
+      "scummvm_id_key": "crimsoncrown"
+    },
+    {
+      "game": "The Curse of Monkey Island",
+      "rd_game_name": "The Curse of Monkey Island.scummvm",
+      "scummvm_id": "scumm:comi",
+      "scummvm_id_key": "comi"
+    },
+    {
+      "game": "The Cute Machine",
+      "rd_game_name": "The Cute Machine.scummvm",
+      "scummvm_id": "director:cutemachine",
+      "scummvm_id_key": "cutemachine"
+    },
+    {
+      "game": "The Dark Eye",
+      "rd_game_name": "The Dark Eye.scummvm",
+      "scummvm_id": "director:darkeye",
+      "scummvm_id_key": "darkeye"
+    },
+    {
+      "game": "The Dig",
+      "rd_game_name": "The Dig.scummvm",
+      "scummvm_id": "scumm:dig",
+      "scummvm_id_key": "dig"
+    },
+    {
+      "game": "The Excavation of Hobs Barrow",
+      "rd_game_name": "The Excavation of Hobs Barrow.scummvm",
+      "scummvm_id": "ags:excavationhb",
+      "scummvm_id_key": "excavationhb"
+    },
+    {
+      "game": "The Feeble Files",
+      "rd_game_name": "The Feeble Files.scummvm",
+      "scummvm_id": "agos:feeble",
+      "scummvm_id_key": "feeble"
+    },
+    {
+      "game": "The Game That Takes Place on a Cruise Ship",
+      "rd_game_name": "The Game That Takes Place on a Cruise Ship.scummvm",
+      "scummvm_id": "sludge:tgttpoacs",
+      "scummvm_id_key": "tgttpoacs"
+    },
+    {
+      "game": "The Griffon Legend",
+      "rd_game_name": "The Griffon Legend.scummvm",
+      "scummvm_id": "griffon:griffon",
+      "scummvm_id_key": "griffon"
+    },
+    {
+      "game": "The Guild of Thieves",
+      "rd_game_name": "The Guild of Thieves.scummvm",
+      "scummvm_id": "glk:guild",
+      "scummvm_id_key": "guild"
+    },
+    {
+      "game": "The Interview",
+      "rd_game_name": "The Interview.scummvm",
+      "scummvm_id": "sludge:interview",
+      "scummvm_id_key": "interview"
+    },
+    {
+      "game": "The Island of Dr. Brain",
+      "rd_game_name": "The Island of Dr. Brain.scummvm",
+      "scummvm_id": "sci:islandbrain",
+      "scummvm_id_key": "islandbrain"
+    },
+    {
+      "game": "The Journeyman Project 2: Buried in Time",
+      "rd_game_name": "The Journeyman Project 2: Buried in Time.scummvm",
+      "scummvm_id": "buried:buried",
+      "scummvm_id_key": "buried"
+    },
+    {
+      "game": "The Journeyman Project: Pegasus Prime",
+      "rd_game_name": "The Journeyman Project: Pegasus Prime.scummvm",
+      "scummvm_id": "pegasus:pegasus",
+      "scummvm_id_key": "pegasus"
+    },
+    {
+      "game": "The Labyrinth of Time",
+      "rd_game_name": "The Labyrinth of Time.scummvm",
+      "scummvm_id": "lab:lab",
+      "scummvm_id_key": "lab"
+    },
+    {
+      "game": "The Last Express",
+      "rd_game_name": "The Last Express.scummvm",
+      "scummvm_id": "lastexpress:lastexpress",
+      "scummvm_id_key": "lastexpress"
+    },
+    {
+      "game": "The Legend of Kyrandia",
+      "rd_game_name": "The Legend of Kyrandia.scummvm",
+      "scummvm_id": "kyra:kyra1",
+      "scummvm_id_key": "kyra1"
+    },
+    {
+      "game": "The Legend of Kyrandia: Book 3 - Malcolms Revenge",
+      "rd_game_name": "The Legend of Kyrandia: Book 3 - Malcolms Revenge.scummvm",
+      "scummvm_id": "kyra:kyra3",
+      "scummvm_id_key": "kyra3"
+    },
+    {
+      "game": "The Legend of Kyrandia: Hand of Fate",
+      "rd_game_name": "The Legend of Kyrandia: Hand of Fate.scummvm",
+      "scummvm_id": "kyra:kyra2",
+      "scummvm_id_key": "kyra2"
+    },
+    {
+      "game": "The Longest Journey",
+      "rd_game_name": "The Longest Journey.scummvm",
+      "scummvm_id": "stark:tlj",
+      "scummvm_id_key": "tlj"
+    },
+    {
+      "game": "The Lost Files of Sherlock Holmes: Case of the Rose Tattoo",
+      "rd_game_name": "The Lost Files of Sherlock Holmes: Case of the Rose Tattoo.scummvm",
+      "scummvm_id": "sherlock:rosetattoo",
+      "scummvm_id_key": "rosetattoo"
+    },
+    {
+      "game": "The Lost Files of Sherlock Holmes: The Case of the Serrated Scalpel",
+      "rd_game_name": "The Lost Files of Sherlock Holmes: The Case of the Serrated Scalpel.scummvm",
+      "scummvm_id": "sherlock:scalpel",
+      "scummvm_id_key": "scalpel"
+    },
+    {
+      "game": "The Manhole",
+      "rd_game_name": "The Manhole.scummvm",
+      "scummvm_id": "made:manhole",
+      "scummvm_id_key": "manhole"
+    },
+    {
+      "game": "The Neverhood",
+      "rd_game_name": "The Neverhood.scummvm",
+      "scummvm_id": "neverhood:neverhood",
+      "scummvm_id_key": "neverhood"
+    },
+    {
+      "game": "The New Kid on the Block",
+      "rd_game_name": "The New Kid on the Block.scummvm",
+      "scummvm_id": "mohawk:newkid",
+      "scummvm_id_key": "newkid"
+    },
+    {
+      "game": "The Pawn",
+      "rd_game_name": "The Pawn.scummvm",
+      "scummvm_id": "glk:pawn",
+      "scummvm_id_key": "pawn"
+    },
+    {
+      "game": "The Pink Panther: Hokus Pokus Pink",
+      "rd_game_name": "The Pink Panther: Hokus Pokus Pink.scummvm",
+      "scummvm_id": "pink:pokus",
+      "scummvm_id_key": "pokus"
+    },
+    {
+      "game": "The Pink Panther: Passport to Peril",
+      "rd_game_name": "The Pink Panther: Passport to Peril.scummvm",
+      "scummvm_id": "pink:peril",
+      "scummvm_id_key": "peril"
+    },
+    {
+      "game": "The Prince and the Coward",
+      "rd_game_name": "The Prince and the Coward.scummvm",
+      "scummvm_id": "prince:prince",
+      "scummvm_id_key": "prince"
+    },
+    {
+      "game": "The Secret of Monkey Island",
+      "rd_game_name": "The Secret of Monkey Island.scummvm",
+      "scummvm_id": "scumm:monkey",
+      "scummvm_id_key": "monkey"
+    },
+    {
+      "game": "The Secret of Tremendous Corporation",
+      "rd_game_name": "The Secret of Tremendous Corporation.scummvm",
+      "scummvm_id": "sludge:tsotc",
+      "scummvm_id_key": "tsotc"
+    },
+    {
+      "game": "The Seven Colors: Legend of PSYS City",
+      "rd_game_name": "The Seven Colors: Legend of PSYS City.scummvm",
+      "scummvm_id": "director:the7colors",
+      "scummvm_id_key": "the7colors"
+    },
+    {
+      "game": "The Shivah",
+      "rd_game_name": "The Shivah.scummvm",
+      "scummvm_id": "ags:shivah",
+      "scummvm_id_key": "shivah"
+    },
+    {
+      "game": "The Shivah: Kosher Edition",
+      "rd_game_name": "The Shivah: Kosher Edition.scummvm",
+      "scummvm_id": "ags:shivahkosher",
+      "scummvm_id_key": "shivahkosher"
+    },
+    {
+      "game": "The Space Bar",
+      "rd_game_name": "The Space Bar.scummvm",
+      "scummvm_id": "bagel:spacebar",
+      "scummvm_id_key": "spacebar"
+    },
+    {
+      "game": "The Story of Creation",
+      "rd_game_name": "The Story of Creation.scummvm",
+      "scummvm_id": "mohawk:create",
+      "scummvm_id_key": "create"
+    },
+    {
+      "game": "The Vampire Diaries",
+      "rd_game_name": "The Vampire Diaries.scummvm",
+      "scummvm_id": "nancy:vampirediaries",
+      "scummvm_id_key": "vampirediaries"
+    },
+    {
+      "game": "The White Chamber",
+      "rd_game_name": "The White Chamber.scummvm",
+      "scummvm_id": "wintermute:twc",
+      "scummvm_id_key": "twc"
+    },
+    {
+      "game": "Thimbleweed Park",
+      "rd_game_name": "Thimbleweed Park.scummvm",
+      "scummvm_id": "twp:twp",
+      "scummvm_id_key": "twp"
+    },
+    {
+      "game": "Time Gal",
+      "rd_game_name": "Time Gal.scummvm",
+      "scummvm_id": "director:timegal",
+      "scummvm_id_key": "timegal"
+    },
+    {
+      "game": "Tony Tough and the Night of Roasted Moths",
+      "rd_game_name": "Tony Tough and the Night of Roasted Moths.scummvm",
+      "scummvm_id": "tony:tony",
+      "scummvm_id_key": "tony"
+    },
+    {
+      "game": "Toonstruck",
+      "rd_game_name": "Toonstruck.scummvm",
+      "scummvm_id": "toon:toon",
+      "scummvm_id_key": "toon"
+    },
+    {
+      "game": "Torins Passage",
+      "rd_game_name": "Torins Passage.scummvm",
+      "scummvm_id": "sci:torin",
+      "scummvm_id_key": "torin"
+    },
+    {
+      "game": "Total Eclipse",
+      "rd_game_name": "Total Eclipse.scummvm",
+      "scummvm_id": "freescape:totaleclipse",
+      "scummvm_id_key": "totaleclipse"
+    },
+    {
+      "game": "Total Eclipse 2",
+      "rd_game_name": "Total Eclipse 2.scummvm",
+      "scummvm_id": "freescape:totaleclipse2",
+      "scummvm_id_key": "totaleclipse2"
+    },
+    {
+      "game": "Touché: The Adventures of the Fifth Musketeer",
+      "rd_game_name": "Touché: The Adventures of the Fifth Musketeer.scummvm",
+      "scummvm_id": "touche:touche",
+      "scummvm_id_key": "touche"
+    },
+    {
+      "game": "Transylvania",
+      "rd_game_name": "Transylvania.scummvm",
+      "scummvm_id": "glk:transylvania",
+      "scummvm_id_key": "transylvania"
+    },
+    {
+      "game": "Trick or Treat",
+      "rd_game_name": "Trick or Treat.scummvm",
+      "scummvm_id": "tot:tot",
+      "scummvm_id_key": "tot"
+    },
+    {
+      "game": "Trolls Tale",
+      "rd_game_name": "Trolls Tale.scummvm",
+      "scummvm_id": "agi:troll",
+      "scummvm_id_key": "troll"
+    },
+    {
+      "game": "U.F.O.s",
+      "rd_game_name": "U.F.O.s.scummvm",
+      "scummvm_id": "gnap:gnap",
+      "scummvm_id_key": "gnap"
+    },
+    {
+      "game": "Ultima IV: Quest of the Avatar",
+      "rd_game_name": "Ultima IV: Quest of the Avatar.scummvm",
+      "scummvm_id": "ultima:ultima4",
+      "scummvm_id_key": "ultima4"
+    },
+    {
+      "game": "Ultima VI: The False Prophet",
+      "rd_game_name": "Ultima VI: The False Prophet.scummvm",
+      "scummvm_id": "ultima:ultima6",
+      "scummvm_id_key": "ultima6"
+    },
+    {
+      "game": "Ultima VIII - Pagan",
+      "rd_game_name": "Ultima VIII - Pagan.scummvm",
+      "scummvm_id": "ultima:ultima8",
+      "scummvm_id_key": "ultima8"
+    },
+    {
+      "game": "Unavowed",
+      "rd_game_name": "Unavowed.scummvm",
+      "scummvm_id": "ags:unavowed",
+      "scummvm_id_key": "unavowed"
+    },
+    {
+      "game": "Uncle Henrys Playhouse",
+      "rd_game_name": "Uncle Henrys Playhouse.scummvm",
+      "scummvm_id": "groovie:unclehenry",
+      "scummvm_id_key": "unclehenry"
+    },
+    {
+      "game": "Unrest",
+      "rd_game_name": "Unrest.scummvm",
+      "scummvm_id": "crab:unrest",
+      "scummvm_id_key": "unrest"
+    },
+    {
+      "game": "Urban Runner",
+      "rd_game_name": "Urban Runner.scummvm",
+      "scummvm_id": "gob:urban",
+      "scummvm_id_key": "urban"
+    },
+    {
+      "game": "Valmaison au fil des saisons / Pepperon",
+      "rd_game_name": "Valmaison au fil des saisons / Pepperon.scummvm",
+      "scummvm_id": "director:pepperon",
+      "scummvm_id_key": "pepperon"
+    },
+    {
+      "game": "Versailles 1685",
+      "rd_game_name": "Versailles 1685.scummvm",
+      "scummvm_id": "cryomni3d:versailles",
+      "scummvm_id_key": "versailles"
+    },
+    {
+      "game": "Voyeur",
+      "rd_game_name": "Voyeur.scummvm",
+      "scummvm_id": "voyeur:voyeur",
+      "scummvm_id_key": "voyeur"
+    },
+    {
+      "game": "WAGE",
+      "rd_game_name": "WAGE.scummvm",
+      "scummvm_id": "wage:wage",
+      "scummvm_id_key": "wage"
+    },
+    {
+      "game": "Wait for it! Issue 3. Song for a hare",
+      "rd_game_name": "Wait for it! Issue 3. Song for a hare.scummvm",
+      "scummvm_id": "qdengine:nupogodi3",
+      "scummvm_id_key": "nupogodi3"
+    },
+    {
+      "game": "Waxworks",
+      "rd_game_name": "Waxworks.scummvm",
+      "scummvm_id": "agos:waxworks",
+      "scummvm_id_key": "waxworks"
+    },
+    {
+      "game": "Ween: The Prophecy",
+      "rd_game_name": "Ween: The Prophecy.scummvm",
+      "scummvm_id": "gob:ween",
+      "scummvm_id_key": "ween"
+    },
+    {
+      "game": "Wetlands",
+      "rd_game_name": "Wetlands.scummvm",
+      "scummvm_id": "hypno:wetlands",
+      "scummvm_id_key": "wetlands"
+    },
+    {
+      "game": "Whispers of a Machine",
+      "rd_game_name": "Whispers of a Machine.scummvm",
+      "scummvm_id": "ags:whispersofamachine",
+      "scummvm_id_key": "whispersofamachine"
+    },
+    {
+      "game": "Winnie the Pooh in the Hundred Acre Wood",
+      "rd_game_name": "Winnie the Pooh in the Hundred Acre Wood.scummvm",
+      "scummvm_id": "agi:winnie",
+      "scummvm_id_key": "winnie"
+    },
+    {
+      "game": "Wonderland",
+      "rd_game_name": "Wonderland.scummvm",
+      "scummvm_id": "glk:wonderland",
+      "scummvm_id_key": "wonderland"
+    },
+    {
+      "game": "Wrath of the Gods",
+      "rd_game_name": "Wrath of the Gods.scummvm",
+      "scummvm_id": "director:wrath",
+      "scummvm_id_key": "wrath"
+    },
+    {
+      "game": "Yaken Rodem",
+      "rd_game_name": "Yaken Rodem.scummvm",
+      "scummvm_id": "director:henachoco05",
+      "scummvm_id_key": "henachoco05"
+    },
+    {
+      "game": "Zak McKracken & Loom",
+      "rd_game_name": "Zak McKracken & Loom.scummvm",
+      "scummvm_id": "scumm:zakloom",
+      "scummvm_id_key": "zakloom"
+    },
+    {
+      "game": "Zak McKracken and the Alien Mindbenders",
+      "rd_game_name": "Zak McKracken and the Alien Mindbenders.scummvm",
+      "scummvm_id": "scumm:zak",
+      "scummvm_id_key": "zak"
+    },
+    {
+      "game": "ZCode (Infocom and Inform) Interactive Fiction games",
+      "rd_game_name": "ZCode (Infocom and Inform) Interactive Fiction games.scummvm",
+      "scummvm_id": "glk:zcode",
+      "scummvm_id_key": "zcode"
+    },
+    {
+      "game": "Zork Nemesis: The Forbidden Lands",
+      "rd_game_name": "Zork Nemesis: The Forbidden Lands.scummvm",
+      "scummvm_id": "zvision:znemesis",
+      "scummvm_id_key": "znemesis"
+    },
+    {
+      "game": "Zork: Grand Inquisitor",
+      "rd_game_name": "Zork: Grand Inquisitor.scummvm",
+      "scummvm_id": "zvision:zgi",
+      "scummvm_id_key": "zgi"
+    }
+  ]
+}
