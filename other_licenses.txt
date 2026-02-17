@@ -17252,7 +17252,7 @@ https://mbmicrovision.blogspot.com/
  please keep attributions however."
 
 -------------------------------------------------------------------------------
-Additional Development
+Additional Development and Art Overlays
 -------------------------------------------------------------------------------
 
 Raph Koster (2017)
@@ -17268,6 +17268,8 @@ https://www.raphkoster.com/
  reconstruct it. Paths to things like SDL are sure to need changed, and in 
  zipping it up I actually rearranged the directories a bit, so it probably 
  doesn't open out of the box."
+
+
 
 ===============================================================================
 
