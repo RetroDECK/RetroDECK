@@ -32,8 +32,8 @@ jobs:
 
   # Build RetroDECK Job
   Build_RetroDECK:
-    runs-on: retrodeck
-    #runs-on: ubuntu-latest
+    #runs-on: retrodeck
+    runs-on: ubuntu-latest
     outputs:
       VERSION: ${{ steps.build-retrodeck.outputs.VERSION }}
 
