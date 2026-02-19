@@ -110,8 +110,8 @@
             <description>
                 <p>ADDED:</p>
                 <ul>
-                    <li>BIOS CHECKER: Cleaned up the BIOS Lists. Removed the bios.json and broke out each entry to component specific manifest.</li>
-                    <li>EASTER EGG: Added some extra holidays.</li>
+                    <li>BIOS CHECKER: Refactored and streamlined the BIOS lists. Deprecated the centralized bios.json file and migrated each entry to its respective component-specific manifest.</li>
+                    <li>EASTER EGG: Introduced additional holiday entries.</li>
                 </ul>
                 <p>CHANGED:</p>
                 <ul>
@@ -119,7 +119,8 @@
                 </ul>
                 <p>FIXED:</p>
                 <ul>
-                    <li>EASTER EGG: Tweaked several holidays.</li>
+                    <li>BIOS CHECKER: Resolved inconsistencies within the BIOS lists.</li>
+                    <li>EASTER EGG: Adjusted and refined several holiday entries.</li>
                 </ul>
             </description>
         </release>
