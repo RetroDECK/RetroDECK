@@ -49,6 +49,7 @@
       "end_date": "0101",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "placeholder.svg"
     },
     "up_helly_aa": {
@@ -56,13 +57,15 @@
       "end_date": "0127",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-up-helly-aa-splash.svg"
     },
     "setsubun": {
-      "start_date": "0203",
+      "start_date": "0202",
       "end_date": "0203",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-setsubun-splash.svg"
     },
     "valentines_day": {
@@ -70,34 +73,31 @@
       "end_date": "0214",
       "start_time": "0001",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-valentines-splash.svg"
     },
     "chinese_new_year": {
-      "start_date": "0216",
-      "end_date": "0216",
+      "start_date": "0205",
+      "end_date": "0207",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-lunar-horse-splash.svg"
+      "holiday_type": "dynamic",
+      "filename": "rd-lunar-goat-splash.svg"
     },
     "carnival": {
-      "start_date": "0217",
-      "end_date": "0217",
+      "start_date": "0209",
+      "end_date": "0209",
       "start_time": "0001",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-carnival-splash.svg"
-    },
-    "chinese_new_year_2": {
-      "start_date": "0218",
-      "end_date": "0219",
-      "start_time": "0000",
-      "end_time": "2359",
-      "filename": "rd-lunar-horse-splash.svg"
     },
     "retrodeck_birthday_gmday": {
       "start_date": "0304",
       "end_date": "0304",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-gm-bday-splash.svg"
     },
     "womens_day": {
@@ -105,6 +105,7 @@
       "end_date": "0308",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-womans-day-splash.svg"
     },
     "st_patricks_day": {
@@ -112,6 +113,7 @@
       "end_date": "0317",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-stpatricks-splash.svg"
     },
     "eid_al_fitr": {
@@ -119,6 +121,7 @@
       "end_date": "0320",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-eid-al-fitr-splash.svg"
     },
     "fruhlingsfest": {
@@ -126,6 +129,7 @@
       "end_date": "0428",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "placeholder.svg"
     },
     "walpurgis": {
@@ -133,6 +137,7 @@
       "end_date": "0430",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-walpurgis-splash.svg"
     },
     "mayday": {
@@ -140,13 +145,15 @@
       "end_date": "0501",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "placeholder.svg"
+      "holiday_type": "stable",
+      "filename": "rd-mayday.svg"
     },
     "kodomo_golden_week": {
       "start_date": "0502",
       "end_date": "0505",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-kodomo-golden-splash.svg"
     },
     "cheese_wake": {
@@ -154,6 +161,7 @@
       "end_date": "0525",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-cheese-wake-splash.svg"
     },
     "midsommarafton": {
@@ -161,6 +169,7 @@
       "end_date": "0619",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-midsummer-splash.svg"
     },
     "dragon_boat": {
@@ -168,6 +177,7 @@
       "end_date": "0621",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-dragon-boat-festival-splash.svg"
     },
     "running_bulls": {
@@ -175,6 +185,7 @@
       "end_date": "0706",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-running-bulls-splash.svg"
     },
     "tanabata": {
@@ -182,13 +193,15 @@
       "end_date": "0707",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-tanabata-splash.svg"
     },
     "mountain_day": {
       "start_date": "0811",
-      "end_date": "0811",
+      "end_date": "0812",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "placeholder.svg"
     },
     "obon": {
@@ -196,6 +209,7 @@
       "end_date": "0816",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "placeholder.svg"
     },
     "la_tomatina": {
@@ -203,13 +217,15 @@
       "end_date": "0826",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-la-tomatina-splash.svg"
     },
     "oktoberfest": {
       "start_date": "0919",
-      "end_date": "0919",
+      "end_date": "0920",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "placeholder.svg"
     },
     "tsukimi_mid_autumn": {
@@ -217,20 +233,23 @@
       "end_date": "0926",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "placeholder.svg"
     },
     "halloween": {
-      "start_date": "1031",
+      "start_date": "1028",
       "end_date": "1031",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-halloween-splash.svg"
     },
     "dia_de_los_muertos": {
       "start_date": "1101",
-      "end_date": "1101",
+      "end_date": "1102",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-dia-de-los-muertos-splash.svg"
     },
     "diwali": {
@@ -238,6 +257,7 @@
       "end_date": "1108",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "dynamic",
       "filename": "rd-diwali-splash.svg"
     },
     "mens_day": {
@@ -245,6 +265,7 @@
       "end_date": "1119",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-mens-day-splash.svg"
     },
     "lucia": {
@@ -252,6 +273,7 @@
       "end_date": "1213",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-lucia-splash.svg"
     },
     "xmas": {
@@ -259,6 +281,7 @@
       "end_date": "1226",
       "start_time": "0000",
       "end_time": "2359",
+      "holiday_type": "stable",
       "filename": "rd-xmas-splash.svg"
     }
   },
