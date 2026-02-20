@@ -105,6 +105,25 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.10.4" date="2026-02-21">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.4b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Refactored and streamlined the BIOS lists. Deprecated the centralized bios.json file and migrated each entry to its respective component-specific manifest.</li>
+                    <li>EASTER EGG: Introduced additional holiday entries.</li>
+                </ul>
+                <p>CHANGED:</p>
+                <ul>
+                    <li>Removed Ryubing as a native component. Read more here: https://retrodeck.readthedocs.io/en/latest/blog/2026/02/19/february-2026---extra-switch-emulation-support---will-be-removed/</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Resolved inconsistencies within the BIOS lists.</li>
+                    <li>EASTER EGG: Adjusted and refined several holiday entries.</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.3b" date="2026-02-03">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.3b/</url>
             <description>
