@@ -1,0 +1,8 @@
+[
+  "finish-args-login1-talk-name",
+  "finish-args-flatpak-appdata-folder-access",
+  "finish-args-host-filesystem-access",
+  "finish-args-unnecessary-xdg-data-Steam-rw-access",
+  "finish-args-contains-both-x11-and-wayland",
+  "finish-args-unnecessary-xdg-config-gtk-3.0-ro-access"
+]
