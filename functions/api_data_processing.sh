@@ -315,7 +315,7 @@ api_get_bios_file_status() {
   merged_bios_info=$(echo "$merged_bios_info" | envsubst)
 
   # Find all files in the base BIOS directory as well as any specified extra paths in the BIOS reference file
-  mapfile -t files_to_check < <( { echo "$merged_bios_info" | jq -r --argjson systems "$systems_to_check" 'if ($systems | length) == 0 then [.bios[] | select(has("paths")) | .paths] else [.bios[] | select(has("paths") and ([.system] | flatten | any(. as $s | $systems | index($s)))) | .paths] end | flatten | unique | .[]'; echo "$bios_path"; } | xargs -I {} sh -c '[ -d "{}" ] && find "{}" -maxdepth 1 -type f -not -iname ".directory" -not -iname "*.txt"')
+  mapfile -t files_to_check < <( { echo "$merged_bios_info" | jq -r --argjson systems "$systems_to_check" 'if ($systems | length) == 0 then [.bios[] | select(has("paths")) | .paths] else [.bios[] | select(has("paths") and ([.system] | flatten | any(. as $s | $systems | index($s)))) | .paths] end | flatten | unique | .[]'; echo "$bios_path"; } | xargs -I {} sh -c '[ -d "{}" ] && find -L "{}" -maxdepth 1 -type f -not -iname ".directory" -not -iname "*.txt"')
 
   # Create a lookup array of all found filenames and their found paths
   declare -A found_file_lookup
