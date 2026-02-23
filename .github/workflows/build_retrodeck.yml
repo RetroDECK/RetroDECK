@@ -1,566 +1,1038 @@
-name: "Build RetroDECK"
+name: Build Flatpak
 
 on:
+  workflow_dispatch:
+    inputs:
+      branch_override:
+        description: 'Branch to build (leave empty to use current branch)'
+        required: false
+        type: string
+
+      epicure_mode:
+        description: 'Build as Epicure (uses main code + epicure components)'
+        required: false
+        type: boolean
+        default: false
+
+      components_release_override:
+        description: 'Components release tag override (leave empty for auto-detect)'
+        required: false
+        type: string
+
+      publish_to_flathub:
+        description: 'Publish to Flathub (main/epicure only, after validation)'
+        required: false
+        type: boolean
+        default: false
+
+      dry_run:
+        description: 'Dry run - build and validate but do not create releases or push to Flathub'
+        required: false
+        type: boolean
+        default: true
+
+      # Internal - set by cross-repo triggers from components repo
+      triggered_by_components:
+        description: 'Internal - set when triggered by components repo'
+        required: false
+        type: boolean
+        default: false
+
+      components_branch:
+        description: 'Internal - branch that was built in components repo'
+        required: false
+        type: string
+
+      components_release_tag:
+        description: 'Internal - components release tag from trigger'
+        required: false
+        type: string
+
   push:
     branches:
-      - cooker*
-    paths:
-      - '.github/workflows/**'
-      - 'automation_tools/**'
-      - 'config/**'
-      - 'functions/**'
-      - '*.sh'
-      - 'net.retrodeck.retrodeck.yml'
-      - 'net.retrodeck.retrodeck.metainfo.xml'
-      - 'tools/**'
-  # Disabled because is dangerous to execute outside code unsupervised
-  # pull_request_target:
-  #   types: [opened, synchronize, reopened]
-  #   branches:
-  #     - cooker*
-  #     - feat/*
-  pull_request:
-    types: [opened, synchronize, reopened]
-
-  workflow_dispatch:
+      - main
+      - cooker
 
 permissions:
   contents: write
-  pull-requests: write
+
+env:
+  COMPONENTS_REPO: ${{ github.repository_owner }}/components
+  COOKER_REPO: ${{ github.repository_owner }}/Cooker
+  APP_ID: net.retrodeck.retrodeck
 
 jobs:
-
-  # Build RetroDECK Job
-  Build_RetroDECK:
-    runs-on: retrodeck
-    #runs-on: ubuntu-latest
+  # ===========================================================================
+  # Check whether this push event should trigger a build
+  # ===========================================================================
+  check-trigger:
+    name: Check Build Trigger
+    runs-on: ubuntu-latest
     outputs:
-      VERSION: ${{ steps.build-retrodeck.outputs.VERSION }}
-
+      should_build: ${{ steps.check.outputs.should_build }}
+      trigger_type: ${{ steps.check.outputs.trigger_type }}
+      publish_flathub: ${{ steps.check.outputs.publish_flathub }}
+      is_dry_run: ${{ steps.check.outputs.is_dry_run }}
     steps:
-      # Remove Stuck Mounts
-      - name: Remove stuck mounts
+      - name: Checkout code
+        if: github.event_name == 'push'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Evaluate trigger
+        id: check
         run: |
-          # Remove stuck mounts if the directory exists and is mounted
-          ROFILES_DIR=$(find "$HOME" -type d -path "*/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" 2>/dev/null | head -n 1)
-          if [ -n "$ROFILES_DIR" ]; then
-            # Check if any subdirectory is a mount point and unmount it
-            for subdir in "$ROFILES_DIR"/*; do
-              if [ -d "$subdir" ] && mountpoint -q "$subdir"; then
-                sudo umount -f "$subdir"
+          # Trigger words for commit message detection
+          BUILD_TRIGGER="build"
+          RELEASE_TRIGGER="release"
+          DRY_RUN_TRIGGER="dry-run"
+
+          # Manual or components-repo-triggered dispatch
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ inputs.triggered_by_components }}" == "true" ]]; then
+              # Cross-repo trigger from components workflow
+              echo "trigger_type=cross-repo" >> $GITHUB_OUTPUT
+              echo "should_build=true" >> $GITHUB_OUTPUT
+              echo "is_dry_run=false" >> $GITHUB_OUTPUT
+
+              # Epicure cross-repo triggers auto-publish to Flathub beta
+              if [[ "${{ inputs.components_branch }}" == "epicure" ]]; then
+                echo "publish_flathub=true" >> $GITHUB_OUTPUT
+                echo "Cross-repo trigger from epicure - will publish to Flathub beta"
+              else
+                echo "publish_flathub=false" >> $GITHUB_OUTPUT
+                echo "Cross-repo trigger from components"
               fi
-            done
-          fi
+              exit 0
+            fi
 
-      # Clone Repository
-      - name: Clone RetroDECK repo
-        if: github.event_name != 'pull_request_target'
-        uses: actions/checkout@v4
-        with:
-          submodules: true
+            # Standard manual trigger
+            echo "trigger_type=manual" >> $GITHUB_OUTPUT
+            echo "should_build=true" >> $GITHUB_OUTPUT
 
-      # Clone the target branch (eg. cooker)
-      - name: Clone Target Branch
-        if: github.event_name == 'pull_request_target'
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}  # Branch target
-          submodules: true
+            if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+              echo "is_dry_run=true" >> $GITHUB_OUTPUT
+            else
+              echo "is_dry_run=false" >> $GITHUB_OUTPUT
+            fi
 
-      # Because we're using pull_request_target, we need to merge the PR code
-      - name: Merge and Validate PR Code
-        if: github.event_name == 'pull_request_target'
-        run: |
-          echo "Fetching PR..."
-          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr
-          git merge --no-ff pr || {
-            echo "Merge conflict detected.";
-            exit 1;
-          }
-          echo "Validation:"
-          git branch
-          git log -1 --oneline
-
-      - name: Lint .sh scripts
-        run: |
-          set -euo pipefail
-          # Find all .sh files excluding archive_*, developer_toolbox and automation-tools directories and .git
-          mapfile -d '' files < <(find . -type f -name '*.sh' -not -path './archive_*/*' -not -path './.git/*' -not -path './automation-tools/*' -not -path './developer_toolbox/*' -print0)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No .sh files found"
+            if [[ "${{ inputs.publish_to_flathub }}" == "true" ]]; then
+              echo "publish_flathub=true" >> $GITHUB_OUTPUT
+            else
+              echo "publish_flathub=false" >> $GITHUB_OUTPUT
+            fi
             exit 0
           fi
 
-          for f in "${files[@]}"; do
-            echo "Checking $f"
-            bash -n "$f"
-          done
+          # Push event: check commit messages for trigger words
+          echo "trigger_type=push" >> $GITHUB_OUTPUT
 
-      # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
-      - name: "Build Flatpak"
-        id: build-retrodeck
-        run: |
-          # git config --global credential.helper store
-          # echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            /bin/bash ./retrodeck_builder.sh --cicd
-          else # if cooker/feat branch
-            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
+          COMMITS=$(git log --format=%B ${{ github.event.before }}..${{ github.event.after }})
+
+          # PR merge commits always trigger a build (no trigger word needed)
+          if echo "$COMMITS" | grep -qiE "^Merge pull request #"; then
+            echo "PR merge detected - auto-building"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "publish_flathub=false" >> $GITHUB_OUTPUT
+            echo "is_dry_run=false" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
-      # - name: Generate a token for Rekku
-      #   id: generate-rekku-token
-      #   uses: actions/create-github-app-token@v1
-      #   with:
-      #     app-id: ${{ vars.REKKU_APP_ID }}
-      #     private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-      #     repositories: "RetroDECK,Cooker"
-      #     owner: "RetroDECK"
+          # [dry-run] -> build only, no release
+          if echo "$COMMITS" | grep -qiE "\[${DRY_RUN_TRIGGER}\]"; then
+            echo "Found [dry-run] trigger in commit messages"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "publish_flathub=false" >> $GITHUB_OUTPUT
+            echo "is_dry_run=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
-      - name: Split artifacts
-        run: |
-          for file in "${OUT_FOLDER}"/*; do
-            if [ -f "$file" ]; then
-              size_bytes=$(stat -c%s "$file")
-              if [ "$size_bytes" -ge $((2 * 1024 * 1024 * 1024)) ]; then
-                echo "Compressing and splitting $file (size: $size_bytes bytes) with 7z..."
-
-                # 7z automatically creates .001, .002, ... when using -v option
-                7z a -t7z -v1900m "${file}.7z" "$file"
-
-                # Remove original file if desired
-                rm -f "$file"
-              fi
+          # [release] -> build + publish to Flathub (main branch only)
+          if echo "$COMMITS" | grep -qiE "\[${RELEASE_TRIGGER}\]"; then
+            if [[ "${{ github.ref_name }}" == "main" ]]; then
+              echo "Found [release] trigger on main branch"
+              echo "should_build=true" >> $GITHUB_OUTPUT
+              echo "publish_flathub=true" >> $GITHUB_OUTPUT
+              echo "is_dry_run=false" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "Found [release] trigger but ignoring - only allowed on main branch"
+              echo "Treating as [build] trigger instead"
             fi
-          done
-
-      # Upload artifacts for other jobs
-      # OUT_FOLDER is initialized in the retrodeck_builder.sh script
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: retrodeck-artifacts
-          include-hidden-files: true
-          path: |
-            ${{ env.OUT_FOLDER }}/*
-            components/components_version_list.md
-
-  GitHub-publish:
-    runs-on: ubuntu-latest
-    needs: [Build_RetroDECK]
-    outputs:
-      TAG: ${{ steps.version-tag.outputs.TAG }}
-      MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
-      RELEASE_BODY: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-      IS_DRAFT: ${{ steps.set-repo.outputs.IS_DRAFT }}
-    env:
-      VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
-    steps:
-
-      - name: Install xmlstarlet
-        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
-
-      # Clone Repository
-      - name: Clone RetroDECK repo
-        uses: actions/checkout@v4
-
-      - name: Generate a token for Rekku
-        id: generate-rekku-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.REKKU_APP_ID }}
-          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-          repositories: "RetroDECK,Cooker,Artifacts"
-          owner: "RetroDECK"
-
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
-
-      # Getting branch name, this needs as PR should be managed in a different way
-      - name: Get Branch Name
-        run: |
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
-            branch_name="$GITHUB_HEAD_REF"
-          else
-            branch_name="$GITHUB_REF_NAME"
           fi
-          echo "Branch name: $branch_name"
-          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV      
-      
-      # Generates a version tag based on the event type (main branch, PR, or cooker) and sets it as output.
-      - name: Generate Version Tag
-        id: version-tag
-        run: |
 
-          # Ensure the actual version was successfully passed from the previous job
-          if [[ -z "$VERSION" ]]; then
-            echo "[ERROR] Failed to read the VERSION from GitHub environmental variables."
+          # [build] -> build only
+          if echo "$COMMITS" | grep -qiE "\[${BUILD_TRIGGER}\]"; then
+            echo "Found [build] trigger in commit messages"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "publish_flathub=false" >> $GITHUB_OUTPUT
+            echo "is_dry_run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # No trigger found
+          echo "No build trigger found in commit messages - skipping"
+          echo "should_build=false" >> $GITHUB_OUTPUT
+          echo "publish_flathub=false" >> $GITHUB_OUTPUT
+          echo "is_dry_run=false" >> $GITHUB_OUTPUT
+
+  # ===========================================================================
+  # Validate inputs and determine all build parameters
+  # ===========================================================================
+  configure:
+    name: Configure Build
+    needs: check-trigger
+    if: needs.check-trigger.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.config.outputs.branch }}
+      is_epicure: ${{ steps.config.outputs.is_epicure }}
+      components_release: ${{ steps.components.outputs.release_tag }}
+      build_variants: ${{ steps.config.outputs.build_variants }}
+      release_repo: ${{ steps.config.outputs.release_repo }}
+      publish_flathub: ${{ steps.flathub.outputs.publish_flathub }}
+      is_dry_run: ${{ needs.check-trigger.outputs.is_dry_run }}
+    steps:
+      - name: Determine build parameters
+        id: config
+        run: |
+          TRIGGER_TYPE="${{ needs.check-trigger.outputs.trigger_type }}"
+          IS_EPICURE="false"
+
+          # Determine branch and epicure status
+          if [[ "$TRIGGER_TYPE" == "cross-repo" ]]; then
+            COMPONENTS_BRANCH="${{ inputs.components_branch }}"
+
+            if [[ "$COMPONENTS_BRANCH" == "epicure" ]]; then
+              BRANCH="main"
+              IS_EPICURE="true"
+            else
+              BRANCH="$COMPONENTS_BRANCH"
+            fi
+          elif [[ "$TRIGGER_TYPE" == "manual" ]]; then
+            if [[ "${{ inputs.epicure_mode }}" == "true" ]]; then
+              BRANCH="main"
+              IS_EPICURE="true"
+            elif [[ -n "${{ inputs.branch_override }}" ]]; then
+              BRANCH="${{ inputs.branch_override }}"
+            else
+              BRANCH="${{ github.ref_name }}"
+            fi
+          else
+            # Push trigger
+            BRANCH="${{ github.ref_name }}"
+          fi
+
+          # Determine release destination repo
+          # main and epicure -> RetroDECK repo
+          # cooker and feature branches -> cooker repo
+          if [[ "$BRANCH" == "main" || "$IS_EPICURE" == "true" ]]; then
+            RELEASE_REPO="${{ github.repository }}"
+          else
+            RELEASE_REPO="$COOKER_REPO"
+          fi
+
+          # Determine build variants
+          # Only cooker builds both full and countertop
+          if [[ "$BRANCH" == "cooker" && "$IS_EPICURE" == "false" ]]; then
+            BUILD_VARIANTS='["full", "countertop"]'
+          else
+            BUILD_VARIANTS='["full"]'
+          fi
+
+          # Write outputs
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          echo "is_epicure=$IS_EPICURE" >> $GITHUB_OUTPUT
+          echo "release_repo=$RELEASE_REPO" >> $GITHUB_OUTPUT
+          echo "build_variants=$BUILD_VARIANTS" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "=========================================="
+          echo "Build Configuration"
+          echo "=========================================="
+          echo "  Trigger type:       $TRIGGER_TYPE"
+          echo "  Branch:             $BRANCH"
+          echo "  Is epicure:         $IS_EPICURE"
+          echo "  Release repo:       $RELEASE_REPO"
+          echo "  Build variants:     $BUILD_VARIANTS"
+          echo "  Dry run:            ${{ needs.check-trigger.outputs.is_dry_run }}"
+          echo "=========================================="
+
+      - name: Determine components release
+        id: components
+        run: |
+          TRIGGER_TYPE="${{ needs.check-trigger.outputs.trigger_type }}"
+          IS_EPICURE="${{ steps.config.outputs.is_epicure }}"
+          BRANCH="${{ steps.config.outputs.branch }}"
+
+          # Priority: cross-repo tag > manual override > auto-detect
+          if [[ "$TRIGGER_TYPE" == "cross-repo" && -n "${{ inputs.components_release_tag }}" ]]; then
+            COMPONENTS_TAG="${{ inputs.components_release_tag }}"
+            echo "Using components release from cross-repo trigger: $COMPONENTS_TAG"
+          elif [[ -n "${{ inputs.components_release_override }}" ]]; then
+            COMPONENTS_TAG="${{ inputs.components_release_override }}"
+            echo "Using components release from manual override: $COMPONENTS_TAG"
+          else
+            # Auto-detect most recent components release for matching branch
+            if [[ "$IS_EPICURE" == "true" ]]; then
+              SEARCH_PREFIX="epicure"
+            else
+              SEARCH_PREFIX="$BRANCH"
+            fi
+
+            echo "Auto-detecting components release for prefix: $SEARCH_PREFIX"
+
+            COMPONENTS_TAG=$(gh release list \
+              --repo "$COMPONENTS_REPO" \
+              --limit 100 \
+              --json tagName \
+              -q "[.[] | select(.tagName | startswith(\"${SEARCH_PREFIX}-\"))] | .[0].tagName")
+
+            if [[ -z "$COMPONENTS_TAG" || "$COMPONENTS_TAG" == "null" ]]; then
+              echo "ERROR: No components release found for prefix: $SEARCH_PREFIX"
+              exit 1
+            fi
+            echo "Auto-detected components release: $COMPONENTS_TAG"
+          fi
+
+          echo "release_tag=$COMPONENTS_TAG" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Validate Flathub publication
+        id: flathub
+        run: |
+          REQUESTED="${{ needs.check-trigger.outputs.publish_flathub }}"
+          BRANCH="${{ steps.config.outputs.branch }}"
+          IS_EPICURE="${{ steps.config.outputs.is_epicure }}"
+
+          # Flathub publication is only allowed for main and epicure
+          if [[ "$REQUESTED" == "true" ]]; then
+            if [[ "$BRANCH" == "main" || "$IS_EPICURE" == "true" ]]; then
+              echo "publish_flathub=true" >> $GITHUB_OUTPUT
+              echo "Flathub publication enabled"
+            else
+              echo "publish_flathub=false" >> $GITHUB_OUTPUT
+              echo "Flathub publication not allowed for branch: $BRANCH (main/epicure only)"
+            fi
+          else
+            echo "publish_flathub=false" >> $GITHUB_OUTPUT
+            echo "Flathub publication not requested"
+          fi
+
+  # ===========================================================================
+  # Validate source files
+  # ===========================================================================
+  validate:
+    name: Validate Sources
+    needs: configure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.configure.outputs.branch }}
+
+      - name: Validate Bash scripts
+        run: |
+          echo "Validating Bash scripts..."
+
+          ERRORS=0
+          while IFS= read -r script; do
+            if ! bash -n "$script" 2>/dev/null; then
+              echo "FAILED: $script"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done < <(find . -type f -name "*.sh")
+
+          if [[ "$ERRORS" -gt 0 ]]; then
+            echo "ERROR: $ERRORS script(s) failed syntax validation"
             exit 1
           fi
 
-          # Determine the tag based on the GitHub event context
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
-            # Pull request tag, sanitize the source branch
-            source_branch="${GITHUB_HEAD_REF//\//-}"
-            TAG="PR-$source_branch-${{ github.run_id }}"
-            MAKE_LATEST=false
-          else
-            # Other branches (cooker, main branches)
-            TAG="$VERSION"
-            MAKE_LATEST=true
-          fi
+          echo "All Bash scripts passed syntax validation"
 
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_ENV
-
-          echo "TAG=$TAG" >> $GITHUB_OUTPUT
-          echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_OUTPUT
-
-      # Temporary disabled as the script is broken
-      # - name: "Updating release notes in metainfo"
-      #   run: "automation_tools/metainfo_management.sh"
-
-      # Get Commits Since Last Published Release (Cooker only)
-      - name: Get commits since last published release
-        id: get-commits
-        if: github.ref != 'refs/heads/main'
+      - name: Validate JSON files
         run: |
-          # If this is a Pull Request
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-            echo "[INFO] Pull Request detected."
+          echo "Validating JSON files..."
 
-            BASE_REF=${GITHUB_BASE_REF}
-            echo "[INFO] Base ref: $BASE_REF"
-
-            git fetch origin $BASE_REF
-            git log origin/$BASE_REF..HEAD --pretty=format:"- %s" > commits_list.txt
-            cp commits_list.txt commits_since_main.txt
-          else
-            # Get the latest published release tag
-            LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
-          
-            if [ -z "$LATEST_TAG" ]; then
-              echo "[INFO] No previous tag found."
-              echo "- No previous release." > commits_list.txt
-            else
-              echo "[INFO] Latest tag: $LATEST_TAG"
-              git log ${LATEST_TAG}..HEAD --pretty=format:"- %s" > commits_list.txt
+          ERRORS=0
+          while IFS= read -r json; do
+            if ! jq empty "$json" 2>/dev/null; then
+              echo "FAILED: $json"
+              ERRORS=$((ERRORS + 1))
             fi
+          done < <(find . -type f -name "*.json")
 
-            # Get the latest tag on the main branch
-            LATEST_MAIN_REF=$(git tag --merged origin/main --sort=-creatordate | head -n 1 || echo "")
-          
-            if [ -z "$LATEST_MAIN_REF" ]; then
-              echo "[INFO] No tag found on main branch."
-              echo "- No main release found." > commits_since_main.txt
-            else
-              echo "[INFO] Latest tag on main: $LATEST_MAIN_REF"
-              git log ${LATEST_MAIN_REF}..HEAD --pretty=format:"- %s" > commits_since_main.txt
-            fi
+          if [[ "$ERRORS" -gt 0 ]]; then
+            echo "ERROR: $ERRORS JSON file(s) failed validation"
+            exit 1
           fi
 
-          echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
-          echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV
+          echo "All JSON files passed validation"
 
-      # Generate Release Body
-      - name: Generate release body text
-        id: generate-body
-        run: |
-          RELEASE_BODY_FILE="release_body.md"
-          echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/feat/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
-          echo "" >> $RELEASE_BODY_FILE
-
-          # Add components version information at the top
-          if [ -f retrodeck-artifacts/components/components-version ]; then
-            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
-            if [ -f retrodeck-artifacts/components/components-release-url ]; then
-              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
-            else
-              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
-            fi
-            echo "## Components Information" >> $RELEASE_BODY_FILE
-            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
-
-
-
-          elif [ -f components/components-version ]; then
-            COMPONENTS_VERSION=$(cat components/components-version)
-            if [ -f components/components-release-url ]; then
-              COMPONENTS_URL=$(cat components/components-release-url)
-            else
-              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
-            fi
-            echo "## Components Information" >> $RELEASE_BODY_FILE
-            echo "**Components Version:** [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL)" >> $RELEASE_BODY_FILE
-
-
-          fi
-
-          echo "**Cooker Builds** are for testers only – see [How‑to: Start Testing](https://retrodeck.readthedocs.io/en/latest/wiki_development/testing/retrodeck-testing/)." >> $RELEASE_BODY_FILE
-          echo "Do not file GitHub issues for Cooker builds. These nightly releases contain **unstable features** and may destabilize or corrupt your RetroDECK setup. The RetroDECK team is **not liable** for any data loss." >> $RELEASE_BODY_FILE
-          echo "" >> $RELEASE_BODY_FILE
-
-          # Append changelog from metainfo
-          echo "## Changelog" >> $RELEASE_BODY_FILE
-          xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml \
-            | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
-            | awk 'NF' \
-            | sed -E '
-              s/^[[:space:]]*(.*[^[:space:]]):$/### \1/;
-              t title
-              s/^/- / 
-              :title
-            ' >> $RELEASE_BODY_FILE
-
-          # Fetch latest main to compare against
-          git fetch origin main
-
-          # Build comparison link
-          COMPARE_URL="https://github.com/${{ github.repository }}/compare/main...${{ github.sha }}"
-
-          # Append comparison link to release body
-          echo "" >> $RELEASE_BODY_FILE
-          echo "---" >> $RELEASE_BODY_FILE
-          echo "" >> $RELEASE_BODY_FILE
-          echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
-          echo "" >> $RELEASE_BODY_FILE
-
-          # Append components version list (detailed)
-          if [ -f retrodeck-artifacts/components/components_version_list.md ]; then
-            cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
-          else
-            echo "WARNING: components_version_list.md not found." >> $RELEASE_BODY_FILE
-          fi
-          echo "" >> $RELEASE_BODY_FILE
-
-          # Output the final body
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
-          cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-    
-      # Determine if Target Repository is Main or not, in that case is a Cooker build
-      - name: Determine target repository and draft status
-        id: set-repo
-        run: |
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            REPO_NAME="RetroDECK"
-            IS_DRAFT="true"
-          else
-            REPO_NAME="Cooker"
-            IS_DRAFT="false"
-          fi
-          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
-          echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_ENV
-          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
-          echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_OUTPUT
-
-      - name: "[DEBUG] Listing produced artifacts"
-        run: |
-          echo "Produced artifacts:"
-          ls -lah retrodeck-artifacts/out
-
-      # Publish Release
-      - name: Publish release
-        id: publish-release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ env.TAG }}
-          name: "RetroDECK ${{ env.TAG }}"
-          body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/out/*"
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          makeLatest: ${{ env.MAKE_LATEST }}
-          repo: ${{ env.REPO_NAME }}
-          token: ${{ steps.generate-rekku-token.outputs.token }}
-          draft: ${{ env.IS_DRAFT }}
-
-      # Display Job Summary
-      - name: Display Job Summary
-        run: |
-          RELEASE_URL="https://github.com/RetroDECK/${{ env.REPO_NAME }}/releases/tag/${{ env.TAG }}"
-          
-          # Read components version if available
-          COMPONENTS_VERSION=""
-          COMPONENTS_URL=""
-          REQUESTED_TAG=""
-          if [ -f "retrodeck-artifacts/components/components-version" ]; then
-            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
-            if [ -f "retrodeck-artifacts/components/components-release-url" ]; then
-              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
-            else
-              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
-            fi
-          elif [ -f "components/components-version" ]; then
-            COMPONENTS_VERSION=$(cat components/components-version)
-            if [ -f "components/components-release-url" ]; then
-              COMPONENTS_URL=$(cat components/components-release-url)
-            else
-              COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
-            fi
-
-          fi
-          
-          # Create job summary
-          echo "# Release Published Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Release URL** | [${{ env.TAG }}]($RELEASE_URL) |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Tag** | \`${{ env.TAG }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Repository** | \`${{ env.REPO_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Branch** | \`${{ env.BRANCH_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
-          if [ -n "$COMPONENTS_VERSION" ]; then
-            if [ -n "$COMPONENTS_URL" ]; then
-              echo "| **Components Version** | [\`$COMPONENTS_VERSION\`]($COMPONENTS_URL) |" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "| **Components Version** | \`$COMPONENTS_VERSION\` |" >> $GITHUB_STEP_SUMMARY
-            fi
-
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Direct Link:** $RELEASE_URL" >> $GITHUB_STEP_SUMMARY
-          
-          # Add Library Hunter status if available
-          if [ -n "${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## 🔍 Library Hunter Status" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Status:** ${{ needs.Library_Hunter.outputs.HUNT_STATUS }}" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "${{ needs.Library_Hunter.outputs.HUNT_MESSAGE }}" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Add components information if available
-          if [ -f "retrodeck-artifacts/components/components_version_list.md" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            cat retrodeck-artifacts/components/components_version_list.md >> $GITHUB_STEP_SUMMARY
-          elif [ -f "components/components_version_list.md" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## Components Used" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            cat components/components_version_list.md >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Also log to console
-          echo "Release published successfully!"
-          echo "Release URL: $RELEASE_URL"
-          echo "Tag: ${{ env.TAG }}"
-          echo "Repository: ${{ env.REPO_NAME }}"
-          echo "Branch: ${{ env.BRANCH_NAME }}"
-          if [ -n "$COMPONENTS_VERSION" ]; then
-            echo "🔧 Components Version: $COMPONENTS_VERSION"
-          fi
-          
-          # Create notice
-          echo "::notice title=Release Published::Release ${{ env.TAG }} has been published to $RELEASE_URL"
-
-      - name: Post PR comment with artifacts link
-        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
-          header: "RetroDECK Build Artifacts"
-          message: |
-            A build for this `pull request` has been produced.
-            Codename: **${{ env.TAG }}**
-
-            Build artifacts can be found [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts) and they include:
-            - RetroDECK Flatpak: `RetroDECK.flatpak`
-            - Flatpak file SHA256 checksum: `RetroDECK.flatpak.sha`
-            - Flatpak Artifact Bundle: `RetroDECK-Artifact.tar.gz`, not useful for testing or end users
-
-      # Rewrite Tag (for Main Branch Only)
-      - name: Clone RetroDECK repo
-        if: github.ref == 'refs/heads/main'
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          
-      - name: Rewrite Tag
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git submodule deinit -f --all
-          git fetch --tags
-          if git rev-parse --verify "${{ env.TAG }}" >/dev/null 2>&1; then
-              git tag -d "${{ env.TAG }}"
-              git push --delete origin "${{ env.TAG }}"
-          fi
-          git tag "${{ env.TAG }}"
-          git push origin "${{ env.TAG }}"
-        env:
-          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
-
-  # As backup we're even publishing the build on our own selfhosted Forgejo instance (kept commented until instance available)
-  # Forgejo Publish Job (main branch only)
-  # Forgejo-publish:
-  #   runs-on: ubuntu-latest
-  #   needs: GitHub-publish
-  #   env:
-  #     TAG: ${{ needs.GitHub-publish.outputs.TAG }}
-  #     RELEASE_BODY: "${{ needs.GitHub-publish.outputs.RELEASE_BODY }} || No release body found"
-  #     MAKE_LATEST: ${{ needs.GitHub-publish.outputs.MAKE_LATEST }}
-  #     IS_DRAFT: "${{ needs.GitHub-publish.outputs.IS_DRAFT }}"
-  #   steps:
-  #     - name: Download all workflow run artifacts
-  #       uses: actions/download-artifact@v4.1.8
-  #
-  #     - name: Forgejo-publish
-  #       if: github.ref == 'refs/heads/main'
-  #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
-  #       with:
-  #         release_body: "${{ needs.GitHub-publish.outputs.RELEASE_BODY }} || No release body found"
-  #         artifacts: "retrodeck-artifacts/out/*"
-  #         tag: ${{ env.TAG }}
-  #         make_latest: ${{ env.MAKE_LATEST }}
-  #         draft: ${{ env.IS_DRAFT }}
-
-  # Automated Tests
-  Automated_Tests:
+  # ===========================================================================
+  # Build the Flatpak bundle(s)
+  # ===========================================================================
+  build:
+    name: Build Flatpak (${{ matrix.variant }})
+    needs: [configure, validate]
     runs-on: ubuntu-latest
-    needs: Build_RetroDECK
-    continue-on-error: true
-      
+    outputs:
+      version: ${{ steps.build.outputs.version }}
+    strategy:
+      matrix:
+        variant: ${{ fromJSON(needs.configure.outputs.build_variants) }}
+      fail-fast: true
     steps:
-
-      # Clone Repository
-      - name: Clone RetroDECK repo
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: true
+          ref: ${{ needs.configure.outputs.branch }}
 
-      # Download RetroDECK Artifacts
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
-
-      # Install Dependencies
-      - name: Install dependencies
-        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
-
-      # Install RetroDECK Flatpak
-      - name: Install RetroDECK Flatpak
-        continue-on-error: true
+      - name: Install build dependencies
         run: |
-          ls -lah retrodeck-artifacts
-          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak"
+          echo "Installing build dependencies..."
 
-      # Run Post Build Checks
-      - name: Run Post Build Checks
-        continue-on-error: true
-        run: /bin/bash ./automation_tools/post_build_check.sh
+          unset pkg_mgr
+          for candidate in apt pacman dnf; do
+            command -v "$candidate" &> /dev/null && pkg_mgr="$candidate" && break
+          done
 
-      # Search for Missing Libraries
-      - name: Search for Missing Libraries
-        continue-on-error: true
-        run: /bin/bash ./automation_tools/search_missing_libs.sh
-   
-      # Uninstall RetroDECK Flatpak (only needed on non-ubuntu-latest / self-hosted runners)
-      - name: Uninstall RetroDECK Flatpak
-        if: ${{ github.runner_environment == 'self-hosted' }}
+          case "${pkg_mgr:-}" in
+            apt)
+              sudo add-apt-repository -y ppa:flatpak/stable
+              sudo apt update
+              sudo apt install -y flatpak flatpak-builder xmlstarlet jq
+              ;;
+            pacman)
+              sudo pacman -Syu --noconfirm flatpak flatpak-builder libxml2 jq
+              ;;
+            dnf)
+              sudo dnf install -y flatpak flatpak-builder xmlstarlet jq
+              ;;
+            *)
+              echo "ERROR: No supported package manager found (apt, pacman, dnf)"
+              exit 1
+              ;;
+          esac
+
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak remote-add --user --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+
+          echo "Build dependencies installed"
+
+      - name: Generate application sources
         run: |
-          flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
+          REPO_URL="https://github.com/${{ github.repository }}.git"
+          COMMIT="${{ github.sha }}"
 
+          echo "Generating application-sources.json"
+          echo "  Repository: $REPO_URL"
+          echo "  Commit:     $COMMIT"
+
+          cat > application-sources.json <<EOF
+          [
+            {
+              "type": "git",
+              "url": "$REPO_URL",
+              "commit": "$COMMIT"
+            }
+          ]
+          EOF
+
+      - name: Download components sources
+        run: |
+          COMPONENTS_TAG="${{ needs.configure.outputs.components_release }}"
+
+          echo "Downloading components-sources.json from release: $COMPONENTS_TAG"
+
+          gh release download "$COMPONENTS_TAG" \
+            --repo "$COMPONENTS_REPO" \
+            -p "components-sources.json" \
+            -D .
+
+          COMPONENT_COUNT=$(jq 'length' components-sources.json)
+          echo "Components in sources file: $COMPONENT_COUNT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Update metainfo release date
+        if: needs.configure.outputs.publish_flathub == 'true'
+        run: |
+          METAINFO_FILE="${APP_ID}.metainfo.xml"
+          TODAY=$(date -u +"%Y-%m-%d")
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+
+          echo "Updating metainfo release date to $TODAY"
+
+          xmlstarlet ed --inplace \
+            -u '//releases/release[1]/@date' \
+            -v "$TODAY" \
+            "$METAINFO_FILE"
+
+          # Commit to main branch only (epicure leaves it ephemeral)
+          if [[ "$BRANCH" == "main" && "$IS_EPICURE" == "false" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add "$METAINFO_FILE"
+
+            if ! git diff --staged --quiet; then
+              git commit -m "Update release date in metainfo [skip ci]"
+              git push
+              echo "Committed and pushed metainfo update"
+            else
+              echo "No changes needed (date already current)"
+            fi
+          else
+            echo "Metainfo updated ephemerally (not committed)"
+          fi
+
+      - name: Build flatpak bundle
+        id: build
+        run: |
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          VARIANT="${{ matrix.variant }}"
+
+          if [[ "$IS_EPICURE" == "true" ]]; then
+            BUILD_TYPE="epicure"
+          else
+            BUILD_TYPE="$VARIANT"
+          fi
+
+          echo "Building flatpak bundle..."
+          echo "  Variant:    $VARIANT"
+          echo "  Build type: $BUILD_TYPE"
+
+          ./automation-tools/build/builder.sh --build-flatpak "$BUILD_TYPE"
+
+          echo "Build complete"
+
+      - name: Verify build output
+        run: |
+          if [[ ! -d "output" ]]; then
+            echo "ERROR: output directory not created by builder"
+            exit 1
+          fi
+
+          echo "Build artifacts:"
+          ls -lh output/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flatpak-artifacts-${{ matrix.variant }}
+          path: |
+            output/
+            components-sources.json
+            application-sources.json
+          retention-days: 1
+          if-no-files-found: error
+
+  # ===========================================================================
+  # Create a GitHub release
+  # ===========================================================================
+  create-release:
+    name: Create Release
+    needs: [check-trigger, configure, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.configure.outputs.branch }}
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded-artifacts/
+          pattern: 'flatpak-artifacts-*'
+
+      - name: Collect release assets
+        id: collect
+        run: |
+          mkdir -p release-assets
+
+          find downloaded-artifacts/ -type f | while read -r file; do
+            cp "$file" release-assets/
+          done
+
+          echo "Release assets:"
+          ls -lh release-assets/
+
+          ASSET_COUNT=$(ls release-assets/ | wc -l)
+          echo "asset_count=$ASSET_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Determine release parameters
+        id: release
+        run: |
+          VERSION="${{ needs.build.outputs.version }}"
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          PUBLISH_FLATHUB="${{ needs.configure.outputs.publish_flathub }}"
+          RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
+
+          # Tag is always the version string (prefixed by builder.sh per branch type)
+          RELEASE_TAG="$VERSION"
+          TITLE="${{ github.repository_owner }} ${{ github.event.repository.name }} ${RELEASE_TAG}"
+
+          # Determine release flags based on branch type and trigger
+          #   main + [release]  -> latest (production)
+          #   main + [build]    -> draft
+          #   epicure           -> pre-release
+          #   cooker            -> pre-release
+          #   feature branches  -> draft
+
+          IS_LATEST="false"
+          IS_PRERELEASE="false"
+          IS_DRAFT="false"
+          RELEASE_TYPE=""
+
+          if [[ "$IS_EPICURE" == "true" ]]; then
+            IS_PRERELEASE="true"
+            RELEASE_TYPE="Pre-release (Epicure)"
+          elif [[ "$BRANCH" == "main" ]]; then
+            if [[ "$PUBLISH_FLATHUB" == "true" ]]; then
+              IS_LATEST="true"
+              RELEASE_TYPE="Latest"
+            else
+              IS_DRAFT="true"
+              RELEASE_TYPE="Draft"
+            fi
+          elif [[ "$BRANCH" == "cooker" ]]; then
+            IS_PRERELEASE="true"
+            RELEASE_TYPE="Pre-release (Cooker)"
+          else
+            IS_DRAFT="true"
+            RELEASE_TYPE="Draft (${BRANCH})"
+          fi
+
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "is_latest=$IS_LATEST" >> $GITHUB_OUTPUT
+          echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+          echo "is_draft=$IS_DRAFT" >> $GITHUB_OUTPUT
+          echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "=========================================="
+          echo "Release Parameters"
+          echo "=========================================="
+          echo "  Tag:        $RELEASE_TAG"
+          echo "  Title:      $TITLE"
+          echo "  Type:       $RELEASE_TYPE"
+          echo "  Repository: $RELEASE_REPO"
+          echo "  Branch:     $BRANCH"
+          echo "=========================================="
+
+      - name: Generate release notes
+        run: |
+          RELEASE_TAG="${{ steps.release.outputs.tag }}"
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          cat > release_notes.md <<EOF
+          ## Flatpak Release - ${RELEASE_TAG}
+
+          **Built On:** ${TIMESTAMP}
+          **Branch:** \`${BRANCH}\`
+          EOF
+
+          if [[ "$IS_EPICURE" == "true" ]]; then
+            echo "**Type:** Epicure" >> release_notes.md
+          fi
+
+          cat >> release_notes.md <<EOF
+          **Commit:** \`${{ github.sha }}\`
+          **Components Release:** ${COMPONENTS_RELEASE}
+
+          ---
+
+          EOF
+
+          # Cooker variant info
+          if [[ "$BRANCH" == "cooker" ]]; then
+            cat >> release_notes.md <<EOF
+          ### Variants
+
+          This release includes two flatpak variants:
+
+          - **Full**: Complete installation with all components
+          - **Countertop**: Lightweight installation with only core components
+
+          EOF
+          fi
+
+          # Flathub info
+          if [[ "${{ needs.configure.outputs.publish_flathub }}" == "true" ]]; then
+            if [[ "$IS_EPICURE" == "true" ]]; then
+              echo "### Flathub" >> release_notes.md
+              echo "" >> release_notes.md
+              echo "This release will be published to **Flathub Beta** channel." >> release_notes.md
+            else
+              echo "### Flathub" >> release_notes.md
+              echo "" >> release_notes.md
+              echo "This release will be published to **Flathub** main channel." >> release_notes.md
+            fi
+            echo "" >> release_notes.md
+          fi
+
+          # Asset list
+          echo "### Assets" >> release_notes.md
+          echo "" >> release_notes.md
+
+          for asset in release-assets/*; do
+            ASSET_NAME=$(basename "$asset")
+            ASSET_SIZE=$(du -h "$asset" | cut -f1)
+            if [[ "$ASSET_NAME" == *.flatpak ]]; then
+              echo "- **${ASSET_NAME}** (${ASSET_SIZE}) - Flatpak bundle" >> release_notes.md
+            elif [[ "$ASSET_NAME" == *.sha ]]; then
+              echo "- **${ASSET_NAME}** - SHA256 checksum" >> release_notes.md
+            fi
+          done
+
+          echo "Release notes generated"
+
+      - name: Create release
+        if: needs.configure.outputs.is_dry_run == 'false'
+        run: |
+          RELEASE_TAG="${{ steps.release.outputs.tag }}"
+          TITLE="${{ steps.release.outputs.title }}"
+          RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
+
+          # Build gh release flags
+          FLAGS=""
+          [[ "${{ steps.release.outputs.is_draft }}" == "true" ]] && FLAGS="$FLAGS --draft"
+          [[ "${{ steps.release.outputs.is_prerelease }}" == "true" ]] && FLAGS="$FLAGS --prerelease"
+          [[ "${{ steps.release.outputs.is_latest }}" == "true" ]] && FLAGS="$FLAGS --latest"
+
+          # Use cross-repo token when publishing to a different repo
+          if [[ "$RELEASE_REPO" != "${{ github.repository }}" ]]; then
+            export GH_TOKEN="${{ secrets.FLATPAK_REPO_API_REQUESTS }}"
+          else
+            export GH_TOKEN="${{ github.token }}"
+          fi
+
+          echo "Creating release..."
+          echo "  Repository: $RELEASE_REPO"
+          echo "  Tag:        $RELEASE_TAG"
+          echo "  Title:      $TITLE"
+
+          gh release create "$RELEASE_TAG" \
+            --repo "$RELEASE_REPO" \
+            --title "$TITLE" \
+            --notes-file release_notes.md \
+            $FLAGS \
+            release-assets/*
+
+          echo ""
+          echo "=========================================="
+          echo "Release created"
+          echo "  URL: https://github.com/${RELEASE_REPO}/releases/tag/${RELEASE_TAG}"
+          echo "=========================================="
+
+      - name: Dry-run summary
+        if: needs.configure.outputs.is_dry_run == 'true'
+        run: |
+          RELEASE_TAG="${{ steps.release.outputs.tag }}"
+          TITLE="${{ steps.release.outputs.title }}"
+          RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
+          RELEASE_TYPE="${{ steps.release.outputs.release_type }}"
+
+          echo "=========================================="
+          echo "DRY RUN - Release Preview"
+          echo "=========================================="
+          echo ""
+          echo "Release would be created with:"
+          echo "  Repository: $RELEASE_REPO"
+          echo "  Tag:        $RELEASE_TAG"
+          echo "  Title:      $TITLE"
+          echo "  Type:       $RELEASE_TYPE"
+          echo ""
+          echo "Assets:"
+          for asset in release-assets/*; do
+            echo "  - $(basename "$asset") ($(du -h "$asset" | cut -f1))"
+          done
+          echo ""
+          echo "Release notes:"
+          echo "------------------------------------------"
+          cat release_notes.md
+          echo "------------------------------------------"
+          echo ""
+          echo "Dry-run complete - no release was created"
+          echo "=========================================="
+
+  # ===========================================================================
+  # Publish to Flathub (main/epicure only)
+  # ===========================================================================
+  publish-flathub:
+    name: Publish to Flathub
+    needs: [configure, build, create-release]
+    if: needs.configure.outputs.publish_flathub == 'true' && needs.configure.outputs.is_dry_run == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout flatpak repo (main branch)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: flatpak-repo
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flatpak-artifacts-full
+          path: downloaded-artifacts/
+
+      - name: Install Flatpak
+        run: |
+          echo "Installing Flatpak..."
+
+          unset pkg_mgr
+          for candidate in apt pacman dnf; do
+            command -v "$candidate" &> /dev/null && pkg_mgr="$candidate" && break
+          done
+
+          case "${pkg_mgr:-}" in
+            apt)
+              sudo add-apt-repository -y ppa:flatpak/stable
+              sudo apt update
+              sudo apt install -y flatpak
+              ;;
+            pacman)
+              sudo pacman -Syu --noconfirm flatpak
+              ;;
+            dnf)
+              sudo dnf install -y flatpak
+              ;;
+            *)
+              echo "ERROR: No supported package manager found (apt, pacman, dnf)"
+              exit 1
+              ;;
+          esac
+
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+          echo "Flatpak installed"
+
+      - name: Install Flathub builder
+        run: |
+          flatpak install -y --user flathub org.flatpak.Builder
+          echo "Flathub builder installed"
+
+      - name: Prepare source files for validation
+        run: |
+          cp downloaded-artifacts/components-sources.json flatpak-repo/components-sources.json
+          cp downloaded-artifacts/application-sources.json flatpak-repo/application-sources.json
+          echo "Source files staged for validation"
+
+      - name: Test build with Flathub buildbot
+        run: |
+          MANIFEST="${APP_ID}.yml"
+
+          echo "Testing build with Flathub buildbot..."
+          echo "  Manifest: $MANIFEST"
+
+          cd flatpak-repo
+          flatpak run --command=flathub-build org.flatpak.Builder "$MANIFEST"
+
+          echo "Flathub build test passed"
+
+      - name: Lint build with Flathub linter
+        run: |
+          EXCEPTIONS_FILE="flatpak-repo/automation-tools/flathub-lint-exceptions.json"
+
+          echo "Running Flathub linter..."
+
+          cd flatpak-repo
+          LINT_OUTPUT=$(flatpak run --command=flatpak-builder-lint \
+            org.flatpak.Builder repo repo 2>&1) || true
+
+          echo "Linter output:"
+          echo "$LINT_OUTPUT"
+
+          ERRORS=$(echo "$LINT_OUTPUT" | jq -r '.errors // [] | .[]')
+
+          if [[ -z "$ERRORS" ]]; then
+            echo "No linter errors found"
+            exit 0
+          fi
+
+          cd ..
+
+          if [[ ! -f "$EXCEPTIONS_FILE" ]]; then
+            echo "ERROR: Exceptions file not found: $EXCEPTIONS_FILE"
+            exit 1
+          fi
+
+          echo "Checking errors against approved exceptions..."
+
+          UNAPPROVED=()
+          while IFS= read -r error; do
+            [[ -z "$error" ]] && continue
+
+            IS_APPROVED=$(jq -r --arg e "$error" \
+              'if index($e) != null then "true" else "false" end' \
+              "$EXCEPTIONS_FILE")
+
+            if [[ "$IS_APPROVED" == "true" ]]; then
+              echo "  Approved exception: $error"
+            else
+              echo "  Unapproved error:   $error"
+              UNAPPROVED+=("$error")
+            fi
+          done <<< "$ERRORS"
+
+          if [[ "${#UNAPPROVED[@]}" -gt 0 ]]; then
+            echo ""
+            echo "=========================================="
+            echo "FAILED: ${#UNAPPROVED[@]} unapproved linter error(s)"
+            for error in "${UNAPPROVED[@]}"; do
+              echo "  - $error"
+            done
+            echo ""
+            echo "See https://docs.flathub.org/linter for details"
+            echo "Add approved exceptions to: $EXCEPTIONS_FILE"
+            echo "=========================================="
+            exit 1
+          fi
+
+          echo "All linter errors are approved exceptions - validation passed"
+
+      - name: Determine Flathub target
+        id: flathub
+        run: |
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          VERSION="${{ needs.build.outputs.version }}"
+          FLATHUB_REPO="flathub/${APP_ID}"
+
+          if [[ "$IS_EPICURE" == "true" ]]; then
+            FLATHUB_BRANCH="beta"
+          else
+            FLATHUB_BRANCH="master"
+          fi
+
+          echo "flathub_branch=$FLATHUB_BRANCH" >> $GITHUB_OUTPUT
+          echo "flathub_repo=$FLATHUB_REPO" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "=========================================="
+          echo "Flathub Publish Parameters"
+          echo "=========================================="
+          echo "  Flathub repo:   $FLATHUB_REPO"
+          echo "  Flathub branch: $FLATHUB_BRANCH"
+          echo "  Version:        $VERSION"
+          echo "=========================================="
+
+      - name: Clone Flathub repo
+        run: |
+          FLATHUB_REPO="${{ steps.flathub.outputs.flathub_repo }}"
+          FLATHUB_BRANCH="${{ steps.flathub.outputs.flathub_branch }}"
+
+          git clone \
+            --branch "$FLATHUB_BRANCH" \
+            --depth 1 \
+            "https://github.com/${FLATHUB_REPO}.git" \
+            flathub-repo
+
+          echo "Cloned Flathub repo (branch: $FLATHUB_BRANCH)"
+
+      - name: Prepare and push to Flathub
+        run: |
+          VERSION="${{ steps.flathub.outputs.version }}"
+          FLATHUB_REPO="${{ steps.flathub.outputs.flathub_repo }}"
+          MANIFEST_FILE="${APP_ID}.yml"
+
+          cd flathub-repo
+
+          # Configure git
+          git config user.name "${{ secrets.GITNAME }}"
+          git config user.email "${{ secrets.GITMAIL }}"
+
+          # Create version branch
+          git checkout -b "$VERSION"
+
+          # Copy files
+          cp "../flatpak-repo/${MANIFEST_FILE}" "$MANIFEST_FILE"
+          echo "$VERSION" > version
+          cp ../downloaded-artifacts/application-sources.json application-sources.json
+          cp ../downloaded-artifacts/components-sources.json components-sources.json
+
+          # Stage and commit
+          git add \
+            "$MANIFEST_FILE" \
+            version \
+            application-sources.json \
+            components-sources.json
+
+          if ! git diff --staged --quiet; then
+            git commit -m "Update to version ${VERSION}"
+          else
+            echo "No changes detected - files may already be up to date"
+          fi
+
+          # Push
+          git remote set-url origin "https://x-access-token:${{ secrets.FLATHUB_PUSH }}@github.com/${FLATHUB_REPO}"
+          git push --force origin "$VERSION"
+
+          echo ""
+          echo "=========================================="
+          echo "Pushed to Flathub"
+          echo "  Repository: $FLATHUB_REPO"
+          echo "  Branch:     $VERSION"
+          echo "  PR URL:     https://github.com/${FLATHUB_REPO}/compare/${VERSION}"
+          echo "=========================================="
+
+  # ===========================================================================
+  # Summary
+  # ===========================================================================
+  summary:
+    name: Build Summary
+    needs: [check-trigger, configure, build, create-release, publish-flathub]
+    if: always() && needs.check-trigger.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate summary
+        run: |
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          IS_DRY_RUN="${{ needs.configure.outputs.is_dry_run }}"
+          VERSION="${{ needs.build.outputs.version }}"
+          RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
+          PUBLISH_FLATHUB="${{ needs.configure.outputs.publish_flathub }}"
+
+          BUILD_RESULT="${{ needs.build.result }}"
+          RELEASE_RESULT="${{ needs.create-release.result }}"
+          FLATHUB_RESULT="${{ needs.publish-flathub.result }}"
+
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$IS_DRY_RUN" == "true" ]]; then
+            echo "**Mode:** Dry run" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | \`${BRANCH}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Epicure | ${IS_EPICURE} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | \`${VERSION}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Components | \`${{ needs.configure.outputs.components_release }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Release repo | \`${RELEASE_REPO}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${BUILD_RESULT} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Release | ${RELEASE_RESULT} |" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$PUBLISH_FLATHUB" == "true" ]]; then
+            echo "| Flathub | ${FLATHUB_RESULT} |" >> $GITHUB_STEP_SUMMARY
+          fi
