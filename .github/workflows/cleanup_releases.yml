@@ -1,0 +1,505 @@
+name: Cleanup Releases
+
+on:
+  # Automatic trigger after build workflow completes
+  workflow_run:
+    workflows: ["Build Flatpak"]
+    types:
+      - completed
+
+  # Trigger on branch deletion (for cooker repo cleanup)
+  delete:
+
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to cleanup'
+        required: false
+        type: choice
+        options:
+          - 'all'
+          - 'epicure'
+          - 'cooker'
+        default: 'all'
+      branch_override:
+        description: 'Override: specific feature branch name (e.g. feat/my-feature). Takes priority over dropdown.'
+        required: false
+        type: string
+      keep_count:
+        description: 'Override retention count for targeted branch type'
+        required: false
+        type: number
+      dry_run:
+        description: 'Dry run - show what would be deleted without deleting'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+env:
+  COOKER_REPO: ${{ github.repository_owner }}/Cooker
+
+jobs:
+  cleanup:
+    name: Cleanup Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure cleanup settings
+        id: config
+        run: |
+          # Default retention counts
+          DEFAULT_EPICURE_KEEP=2
+          DEFAULT_COOKER_KEEP=5
+          DEFAULT_FEATURE_KEEP=5
+
+          # Branches whose releases should never be deleted
+          PROTECTED_BRANCHES="main"
+
+          # Determine effective target
+          TARGET=""
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ -n "${{ inputs.branch_override }}" ]]; then
+              TARGET="${{ inputs.branch_override }}"
+            elif [[ "${{ inputs.branch }}" != "all" ]]; then
+              TARGET="${{ inputs.branch }}"
+            fi
+          fi
+
+          # Determine dry run mode
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.dry_run }}" == "true" ]]; then
+            DRY_RUN="true"
+          else
+            DRY_RUN="false"
+          fi
+
+          # Determine keep counts with optional override
+          EPICURE_KEEP="$DEFAULT_EPICURE_KEEP"
+          COOKER_KEEP="$DEFAULT_COOKER_KEEP"
+          FEATURE_KEEP="$DEFAULT_FEATURE_KEEP"
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.keep_count }}" ]]; then
+            OVERRIDE_COUNT="${{ inputs.keep_count }}"
+            case "$TARGET" in
+              "epicure" )
+                EPICURE_KEEP="$OVERRIDE_COUNT"
+              ;;
+              "cooker" )
+                COOKER_KEEP="$OVERRIDE_COUNT"
+              ;;
+              "" )
+                # "all" selected - override applies to all prunable types
+                EPICURE_KEEP="$OVERRIDE_COUNT"
+                COOKER_KEEP="$OVERRIDE_COUNT"
+                FEATURE_KEEP="$OVERRIDE_COUNT"
+              ;;
+              * )
+                # Specific feature branch
+                FEATURE_KEEP="$OVERRIDE_COUNT"
+              ;;
+            esac
+            echo "Keep count override applied: $OVERRIDE_COUNT"
+          fi
+
+          # Determine target repo scope for routing
+          # epicure -> RetroDECK repo only, cooker -> Cooker repo only, feature branch -> Cooker repo only, all -> both
+          TARGET_FLATPAK="false"
+          TARGET_COOKER="false"
+
+          case "$TARGET" in
+            "epicure" )
+              TARGET_FLATPAK="true"
+            ;;
+            "cooker" )
+              TARGET_COOKER="true"
+            ;;
+            "" )
+              # "all" - both repos
+              TARGET_FLATPAK="true"
+              TARGET_COOKER="true"
+            ;;
+            * )
+              # Specific feature branch -> cooker only
+              TARGET_COOKER="true"
+            ;;
+          esac
+
+          # Write outputs
+          echo "target=$TARGET" >> $GITHUB_OUTPUT
+          echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
+          echo "epicure_keep=$EPICURE_KEEP" >> $GITHUB_OUTPUT
+          echo "cooker_keep=$COOKER_KEEP" >> $GITHUB_OUTPUT
+          echo "feature_keep=$FEATURE_KEEP" >> $GITHUB_OUTPUT
+          echo "protected_branches=$PROTECTED_BRANCHES" >> $GITHUB_OUTPUT
+          echo "target_flatpak=$TARGET_FLATPAK" >> $GITHUB_OUTPUT
+          echo "target_cooker=$TARGET_COOKER" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "=========================================="
+          echo "Cleanup Configuration"
+          echo "=========================================="
+          echo "  Trigger:            ${{ github.event_name }}"
+          echo "  Target:             ${TARGET:-all}"
+          echo "  Dry run:            $DRY_RUN"
+          echo "  Epicure keep:       $EPICURE_KEEP"
+          echo "  Cooker keep:        $COOKER_KEEP"
+          echo "  Feature keep:       $FEATURE_KEEP"
+          echo "  Protected:          $PROTECTED_BRANCHES"
+          echo "  Scope flatpak:      $TARGET_FLATPAK"
+          echo "  Scope cooker:       $TARGET_COOKER"
+          echo "=========================================="
+
+      - name: Handle branch deletion
+        id: branch-delete
+        if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+        run: |
+          DELETED_BRANCH="${{ github.event.ref }}"
+          PROTECTED="${{ steps.config.outputs.protected_branches }}"
+
+          echo "Branch deleted: $DELETED_BRANCH"
+
+          # Check if branch is protected
+          for branch in $PROTECTED; do
+            if [[ "$DELETED_BRANCH" == "$branch" ]]; then
+              echo "Branch $DELETED_BRANCH is protected - skipping cleanup"
+              echo "skip=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          done
+
+          # Convert branch name to release tag prefix (slashes to dashes)
+          # Feature branch releases use format: branch-<sanitized-name>-<version>-<date>
+          TAG_PREFIX="branch-$(echo "$DELETED_BRANCH" | sed 's|/|-|g')"
+
+          echo "Will delete all cooker releases with prefix: ${TAG_PREFIX}-"
+          echo "skip=false" >> $GITHUB_OUTPUT
+          echo "tag_prefix=$TAG_PREFIX" >> $GITHUB_OUTPUT
+
+      - name: Delete releases for deleted branch
+        if: |
+          github.event_name == 'delete' &&
+          github.event.ref_type == 'branch' &&
+          steps.branch-delete.outputs.skip != 'true'
+        run: |
+          TAG_PREFIX="${{ steps.branch-delete.outputs.tag_prefix }}"
+
+          echo "Fetching releases from cooker repo with prefix: ${TAG_PREFIX}-"
+
+          RELEASES=$(gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName \
+            -q ".[] | select(.tagName | startswith(\"${TAG_PREFIX}-\")) | .tagName")
+
+          COUNT=$(echo "$RELEASES" | grep -c . || true)
+
+          if [[ "$COUNT" -eq 0 ]]; then
+            echo "No releases found for deleted branch"
+            exit 0
+          fi
+
+          echo "Found $COUNT release(s) to delete"
+
+          SUCCESS=0
+          FAILED=0
+
+          while IFS= read -r release; do
+            if [[ -n "$release" ]]; then
+              echo "Deleting: $release"
+              if gh release delete "$release" --repo "$COOKER_REPO" --yes --cleanup-tag; then
+                SUCCESS=$((SUCCESS + 1))
+              else
+                echo "Failed to delete: $release"
+                FAILED=$((FAILED + 1))
+              fi
+            fi
+          done <<< "$RELEASES"
+
+          echo ""
+          echo "=========================================="
+          echo "Branch deletion cleanup complete"
+          echo "  Deleted: $SUCCESS release(s)"
+          if [[ "$FAILED" -gt 0 ]]; then
+            echo "  Failed:  $FAILED release(s)"
+          fi
+          echo "=========================================="
+        env:
+          GH_TOKEN: ${{ secrets.FLATPAK_REPO_API_REQUESTS }}
+
+      - name: Prune flatpak repo releases
+        id: prune-flatpak
+        if: |
+          github.event_name != 'delete' &&
+          steps.config.outputs.target_flatpak == 'true'
+        run: |
+          EPICURE_KEEP="${{ steps.config.outputs.epicure_keep }}"
+          DRY_RUN="${{ steps.config.outputs.dry_run }}"
+
+          echo "Fetching epicure releases from RetroDECK repo..."
+
+          EPICURE_RELEASES=$(gh release list --limit 1000 --json tagName,createdAt \
+            -q '[.[] | select(.tagName | startswith("epicure-"))] | sort_by(.createdAt) | reverse | .[].tagName')
+
+          TOTAL=$(echo "$EPICURE_RELEASES" | grep -c . || true)
+          echo "Epicure releases found: $TOTAL (keeping $EPICURE_KEEP)"
+
+          if [[ "$TOTAL" -le "$EPICURE_KEEP" ]]; then
+            echo "Within retention limit - no cleanup needed"
+            echo "delete_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          TO_DELETE=$(echo "$EPICURE_RELEASES" | tail -n +$((EPICURE_KEEP + 1)))
+          DELETE_COUNT=$(echo "$TO_DELETE" | grep -c . || true)
+
+          echo "Releases to delete: $DELETE_COUNT"
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo ""
+            echo "DRY RUN - The following would be deleted:"
+            while IFS= read -r release; do
+              echo "  - $release"
+            done <<< "$TO_DELETE"
+            echo "delete_count=$DELETE_COUNT" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          SUCCESS=0
+          FAILED=0
+
+          while IFS= read -r release; do
+            if [[ -n "$release" ]]; then
+              echo "Deleting: $release"
+              if gh release delete "$release" --yes --cleanup-tag; then
+                SUCCESS=$((SUCCESS + 1))
+              else
+                echo "Failed to delete: $release"
+                FAILED=$((FAILED + 1))
+              fi
+            fi
+          done <<< "$TO_DELETE"
+
+          echo ""
+          echo "=========================================="
+          echo "Flatpak repo cleanup complete"
+          echo "  Deleted: $SUCCESS release(s)"
+          if [[ "$FAILED" -gt 0 ]]; then
+            echo "  Failed:  $FAILED release(s)"
+          fi
+          echo "=========================================="
+
+          echo "delete_count=$SUCCESS" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Prune cooker repo releases
+        id: prune-cooker
+        if: |
+          github.event_name != 'delete' &&
+          steps.config.outputs.target_cooker == 'true'
+        run: |
+          TARGET="${{ steps.config.outputs.target }}"
+          COOKER_KEEP="${{ steps.config.outputs.cooker_keep }}"
+          FEATURE_KEEP="${{ steps.config.outputs.feature_keep }}"
+          DRY_RUN="${{ steps.config.outputs.dry_run }}"
+
+          echo "Fetching all releases from cooker repo..."
+
+          gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName,createdAt \
+            | jq '.' > cooker_releases.json
+
+          TOTAL=$(jq 'length' cooker_releases.json)
+          echo "Total cooker repo releases: $TOTAL"
+
+          # Collect all releases to delete across types
+          > cooker_to_delete.txt
+
+          # --- Cooker branch releases (prefix: cooker-) ---
+          if [[ -z "$TARGET" || "$TARGET" == "cooker" ]]; then
+            echo ""
+            echo "--- Cooker branch releases ---"
+
+            COOKER_RELEASES=$(jq -r \
+              '[.[] | select(.tagName | startswith("cooker-"))] |
+              sort_by(.createdAt) | reverse | .[].tagName' \
+              cooker_releases.json)
+
+            COOKER_TOTAL=$(echo "$COOKER_RELEASES" | grep -c . || true)
+            echo "Found: $COOKER_TOTAL (keeping $COOKER_KEEP)"
+
+            if [[ "$COOKER_TOTAL" -gt "$COOKER_KEEP" ]]; then
+              COOKER_DELETE=$(echo "$COOKER_RELEASES" | tail -n +$((COOKER_KEEP + 1)))
+              echo "$COOKER_DELETE" >> cooker_to_delete.txt
+
+              DELETE_COUNT=$(echo "$COOKER_DELETE" | grep -c . || true)
+              echo "Marked for deletion: $DELETE_COUNT"
+            else
+              echo "Within retention limit - no cleanup needed"
+            fi
+          fi
+
+          # --- Feature branch releases (prefix: branch-) ---
+          if [[ -z "$TARGET" || ("$TARGET" != "cooker" && "$TARGET" != "epicure") ]]; then
+            echo ""
+            echo "--- Feature branch releases ---"
+
+            FEATURE_RELEASES=$(jq -r \
+              '[.[] | select(.tagName | startswith("branch-"))] |
+              sort_by(.createdAt) | reverse | .[].tagName' \
+              cooker_releases.json)
+
+            FEATURE_TOTAL=$(echo "$FEATURE_RELEASES" | grep -c . || true)
+
+            if [[ "$FEATURE_TOTAL" -eq 0 ]]; then
+              echo "No feature branch releases found"
+            else
+              echo "Total feature releases: $FEATURE_TOTAL"
+
+              if [[ -n "$TARGET" && "$TARGET" != "cooker" ]]; then
+                # Targeting a specific feature branch
+                SPECIFIC_PREFIX="branch-$(echo "$TARGET" | sed 's|/|-|g')"
+                echo "Targeting specific branch prefix: ${SPECIFIC_PREFIX}-"
+
+                BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${SPECIFIC_PREFIX}-" || true)
+                BRANCH_COUNT=$(echo "$BRANCH_RELEASES" | grep -c . || true)
+                echo "  Found: $BRANCH_COUNT (keeping $FEATURE_KEEP)"
+
+                if [[ "$BRANCH_COUNT" -gt "$FEATURE_KEEP" ]]; then
+                  BRANCH_DELETE=$(echo "$BRANCH_RELEASES" | tail -n +$((FEATURE_KEEP + 1)))
+                  echo "$BRANCH_DELETE" >> cooker_to_delete.txt
+
+                  DELETE_COUNT=$(echo "$BRANCH_DELETE" | grep -c . || true)
+                  echo "  Marked for deletion: $DELETE_COUNT"
+                else
+                  echo "  Within retention limit - no cleanup needed"
+                fi
+              else
+                # Process all feature branches
+                # Extract unique prefixes by stripping trailing -<version>-<YYYY-MM-DD>
+                # Tag format: branch-<sanitized-name>-<version>-<YYYY-MM-DD>
+                declare -A SEEN_PREFIXES
+                while IFS= read -r tag; do
+                  if [[ -n "$tag" ]]; then
+                    prefix=$(echo "$tag" | sed -E 's/-[0-9]+\.[0-9]+[^-]*-[0-9]{4}-[0-9]{2}-[0-9]{2}$//')
+                    SEEN_PREFIXES["$prefix"]=1
+                  fi
+                done <<< "$FEATURE_RELEASES"
+
+                for prefix in "${!SEEN_PREFIXES[@]}"; do
+                  BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${prefix}-" || true)
+                  BRANCH_COUNT=$(echo "$BRANCH_RELEASES" | grep -c . || true)
+
+                  echo "  Prefix '$prefix': $BRANCH_COUNT release(s) (keeping $FEATURE_KEEP)"
+
+                  if [[ "$BRANCH_COUNT" -gt "$FEATURE_KEEP" ]]; then
+                    BRANCH_DELETE=$(echo "$BRANCH_RELEASES" | tail -n +$((FEATURE_KEEP + 1)))
+                    echo "$BRANCH_DELETE" >> cooker_to_delete.txt
+
+                    DELETE_COUNT=$(echo "$BRANCH_DELETE" | grep -c . || true)
+                    echo "    Marked for deletion: $DELETE_COUNT"
+                  fi
+                done
+              fi
+            fi
+          fi
+
+          # Remove any empty lines from the delete list
+          sed -i '/^$/d' cooker_to_delete.txt
+          DELETE_TOTAL=$(wc -l < cooker_to_delete.txt || echo 0)
+
+          echo ""
+          echo "=========================================="
+          echo "Total cooker releases marked for deletion: $DELETE_TOTAL"
+          echo "=========================================="
+
+          if [[ "$DELETE_TOTAL" -eq 0 ]]; then
+            echo "delete_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo ""
+            echo "DRY RUN - The following would be deleted:"
+            while IFS= read -r release; do
+              echo "  - $release"
+            done < cooker_to_delete.txt
+            echo "delete_count=$DELETE_TOTAL" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          SUCCESS=0
+          FAILED=0
+
+          while IFS= read -r release; do
+            if [[ -n "$release" ]]; then
+              echo "Deleting: $release"
+              if gh release delete "$release" --repo "$COOKER_REPO" --yes --cleanup-tag; then
+                SUCCESS=$((SUCCESS + 1))
+              else
+                echo "Failed to delete: $release"
+                FAILED=$((FAILED + 1))
+              fi
+            fi
+          done < cooker_to_delete.txt
+
+          echo ""
+          echo "=========================================="
+          echo "Cooker repo cleanup complete"
+          echo "  Deleted: $SUCCESS release(s)"
+          if [[ "$FAILED" -gt 0 ]]; then
+            echo "  Failed:  $FAILED release(s)"
+          fi
+          echo "=========================================="
+
+          echo "delete_count=$SUCCESS" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.FLATPAK_REPO_API_REQUESTS }}
+          
+      - name: Summary
+        if: always()
+        run: |
+          EVENT="${{ github.event_name }}"
+          DRY_RUN="${{ steps.config.outputs.dry_run }}"
+
+          echo "## Cleanup Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** $EVENT" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo "**Mode:** Dry run" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$EVENT" == "delete" ]]; then
+            if [[ "${{ steps.branch-delete.outputs.skip }}" == "true" ]]; then
+              echo "Protected branch deletion - no action taken" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Deleted all cooker releases for branch prefix: \`${{ steps.branch-delete.outputs.tag_prefix }}\`" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            FLATPAK_COUNT="${{ steps.prune-flatpak.outputs.delete_count }}"
+            COOKER_COUNT="${{ steps.prune-cooker.outputs.delete_count }}"
+
+            echo "### Flatpak Repo (epicure)" >> $GITHUB_STEP_SUMMARY
+            if [[ "${FLATPAK_COUNT:-0}" -eq 0 ]]; then
+              echo "No cleanup needed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Releases cleaned up: $FLATPAK_COUNT" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Cooker Repo" >> $GITHUB_STEP_SUMMARY
+            if [[ "${COOKER_COUNT:-0}" -eq 0 ]]; then
+              echo "No cleanup needed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Releases cleaned up: $COOKER_COUNT" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Run again with dry_run disabled to perform actual cleanup" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
