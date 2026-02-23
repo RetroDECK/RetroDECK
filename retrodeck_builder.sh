@@ -231,7 +231,7 @@ construct_version_string() {
     *)
       local sanitized_branch
       sanitized_branch=$(sanitize_branch "$branch")
-      echo "${sanitized_branch}-${version}-${date}"
+      echo "branch-${sanitized_branch}-${version}-${date}"
       ;;
   esac
 }
