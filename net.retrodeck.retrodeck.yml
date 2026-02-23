@@ -299,11 +299,11 @@ modules:
   - name: install-components
     buildsystem: simple
     build-commands:
-      - bash automation_tools/install_components.sh --cicd
+      - bash automation_tools/install_components.sh
     sources:
-      - type: dir
-        path: .
-
+      - application-sources.json
+      - component-sources.json
+      
   # -------------------------------------------------------------------------
   # finisher - final tidy‑up steps: move files, create icons, install desktop
   #            entries, copy resources, and clean up temporary bits.
@@ -368,8 +368,7 @@ modules:
       # Fix for Dolphin
       - ln -s "/app/retrodeck/components/dolphin/share/dolphin-emu" "/app/share/dolphin-emu"
     sources:
-      - type: dir
-        path: .
+      - application-sources.json
 
   - name: summary
     buildsystem: simple
