@@ -352,7 +352,7 @@ api_get_bios_file_status() {
     filepath="${found_file_lookup[$filename]}"
 
     md5_matched="No"
-    if [[ -n "$known_md5" && "$known_md5" != "Unknown" && -f "$filepath" ]]; then
+    if [[ -n "$known_md5" && "$known_md5" != "Unknown" && -e "$filepath" ]]; then
       actual_md5=$(md5sum "$filepath" | cut -d' ' -f1)
       if [[ "$known_md5" == *"$actual_md5"* ]]; then
         md5_matched="Yes"
