@@ -7,13 +7,15 @@ set -euo pipefail
 # Constants
 # =============================================================================
 
+git config protocol.file.allow always
+
 METAINFO_FILE="net.retrodeck.retrodeck.metainfo.xml"
 MANIFEST_FILE="net.retrodeck.retrodeck.yml"
 CODENAME_WORDLIST="automation_tools/codename_wordlist.txt"
 COMPONENTS_REPO="RetroDECK/components"
-COMPONENT_SOURCES_FILE="component-sources.json"
-APPLICATION_SOURCES_FILE="application-sources.json"
+COMPONENT_SOURCES_FILE="components-sources.json"
 APPLICATION_REPO="RetroDECK/RetroDECK"
+APPLICATION_SOURCES_FILE="application-sources.json"
 VERSION_FILE="version"
 OUT_FOLDER="output"
 
