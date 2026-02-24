@@ -423,7 +423,7 @@ jobs:
               sudo apt install -y flatpak flatpak-builder xmlstarlet jq
               ;;
             pacman)
-              sudo pacman -Syu --noconfirm flatpak flatpak-builder libxml2 jq
+              sudo pacman -Sy --noconfirm flatpak flatpak-builder libxml2 jq
               ;;
             dnf)
               sudo dnf install -y flatpak flatpak-builder xmlstarlet jq
@@ -870,7 +870,7 @@ jobs:
               sudo apt install -y flatpak
               ;;
             pacman)
-              sudo pacman -Syu --noconfirm flatpak
+              sudo pacman -Sy --noconfirm flatpak
               ;;
             dnf)
               sudo dnf install -y flatpak
