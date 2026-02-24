@@ -228,6 +228,11 @@ build_retrodeck_current_presets() {
   do
     while IFS= read -r component # Iterate all system names in this preset
     do
+      if [[ ! -f "$rd_components/$component/component_manifest.json" ]]; then
+        log i "Component manifest $component not found, may have been removed. Skipping preset updates."
+        continue
+      fi
+
       local child_component=""
       local parent_component="$(jq -r --arg preset "$preset" --arg component "$component" '
                                                                                           .presets[$preset]
