@@ -325,7 +325,7 @@ jobs:
   # Validate source files
   # ===========================================================================
   validate:
-    name: Validate Sources
+    name: Validate Source Files
     needs: configure
     runs-on: ubuntu-latest
     steps:
@@ -522,7 +522,7 @@ jobs:
           echo "  Variant:    $VARIANT"
           echo "  Build type: $BUILD_TYPE"
 
-          ./automation-tools/build/builder.sh --build-flatpak "$BUILD_TYPE"
+          /bin/bash ./retrodeck_builder.sh --build-flatpak "$BUILD_TYPE"
 
           echo "Build complete"
 
