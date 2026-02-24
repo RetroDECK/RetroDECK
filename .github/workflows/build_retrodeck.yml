@@ -629,12 +629,41 @@ jobs:
 
       - name: Generate release notes
         run: |
+          # Install xmlstarlet for metainfo extraction
+          sudo apt install -y xmlstarlet
+
           RELEASE_TAG="${{ steps.release.outputs.tag }}"
           BRANCH="${{ needs.configure.outputs.branch }}"
           IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
           COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
+          METAINFO_FILE="${APP_ID}.metainfo.xml"
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
 
+          # Extract changelog URL from metainfo
+          CHANGELOG_URL=""
+          if [[ -f "$METAINFO_FILE" ]]; then
+            CHANGELOG_URL=$(xmlstarlet sel -t -v "/component/releases/release[1]/url" "$METAINFO_FILE" 2>/dev/null || true)
+          fi
+
+          # Download components release metadata for changed component info
+          COMPONENTS_METADATA_URL="https://github.com/${COMPONENTS_REPO}/releases/download/${COMPONENTS_RELEASE}"
+          CHANGED_COMPONENTS=""
+
+          if gh release download "$COMPONENTS_RELEASE" \
+            --repo "$COMPONENTS_REPO" \
+            -p "release_metadata.json" \
+            -D . 2>/dev/null; then
+
+            CHANGED_COMPONENTS=$(jq -r '
+              to_entries
+              | map(select(.value.status == "new"))
+              | sort_by(.key)
+              | .[]
+              | "- **\(.key)**: \(.value.version)"
+            ' release_metadata.json)
+          fi
+
+          # Build release notes
           cat > release_notes.md <<EOF
           ## Flatpak Release - ${RELEASE_TAG}
 
@@ -649,10 +678,30 @@ jobs:
           cat >> release_notes.md <<EOF
           **Commit:** \`${{ github.sha }}\`
           **Components Release:** ${COMPONENTS_RELEASE}
+          EOF
+
+          if [[ -n "$CHANGELOG_URL" ]]; then
+            echo "**Changelog:** [View changelog](${CHANGELOG_URL})" >> release_notes.md
+          fi
+
+          cat >> release_notes.md <<EOF
 
           ---
 
           EOF
+
+          # Changed components section
+          if [[ -n "$CHANGED_COMPONENTS" ]]; then
+            cat >> release_notes.md <<EOF
+          ### Updated Components
+
+          ${CHANGED_COMPONENTS}
+
+          EOF
+          fi
+
+          echo "**Components sources:** [components-sources.json](${COMPONENTS_METADATA_URL}/components-sources.json)" >> release_notes.md
+          echo "" >> release_notes.md
 
           # Cooker variant info
           if [[ "$BRANCH" == "cooker" ]]; then
@@ -696,6 +745,8 @@ jobs:
           done
 
           echo "Release notes generated"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Create release
         if: needs.configure.outputs.is_dry_run == 'false'
