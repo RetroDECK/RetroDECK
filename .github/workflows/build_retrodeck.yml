@@ -33,18 +33,18 @@ on:
 
       # Internal - set by cross-repo triggers from components repo
       triggered_by_components:
-        description: 'Internal - set when triggered by components repo'
+        description: 'INTERNAL WORKFLOW USE - set when triggered by components repo'
         required: false
         type: boolean
         default: false
 
       components_branch:
-        description: 'Internal - branch that was built in components repo'
+        description: 'INTERNAL WORKFLOW USE - branch that was built in components repo'
         required: false
         type: string
 
       components_release_tag:
-        description: 'Internal - components release tag from trigger'
+        description: 'INTERNAL WORKFLOW USE - components release tag from trigger'
         required: false
         type: string
 
