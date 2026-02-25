@@ -324,8 +324,6 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -rf res/folder-iconsets ${FLATPAK_DEST}/retrodeck/graphics
-      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
-      - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
 
@@ -359,11 +357,37 @@ modules:
       # Prepare codecs-extra location
       - mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/codecs-extra
 
-      # Removing the retrodeck_function_wrapper.sh in non-cooker versions (aka main)
+      # Prepare build variant alterations
       - |
-        if ! grep -q "cooker" "${FLATPAK_DEST}/retrodeck/version"; then
-          rm -f "${FLATPAK_DEST}/tools/retrodeck_function_wrapper.sh"
-        fi
+        version_string=$(< version)
+
+        case "$version_string" in
+          "cooker"*)
+            echo "cooker build detected, applying customizations"
+            cp -f res/rd_icons/rd-cooker/rd-cooker-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+            cp -f res/rd_icons/rd-cooker/rd-cooker-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
+          ;;
+          "countertop"*)
+            echo "countertop build detected, applying customizations"
+            cp -f res/rd_icons/rd-countertop/rd-countertop-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+            cp -f res/rd_icons/rd-countertop/rd-countertop-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
+          ;;
+          "epicure"*)
+            echo "epicure build detected, applying customizations"
+            cp -f res/rd_icons/rd-epicure/rd-epicure-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+            cp -f res/rd_icons/rd-epicure/rd-epicure-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
+          ;;
+          "branch"*)
+            echo "feature branch build detected, applying customizations"
+            cp -f res/rd_icons/rd-stable/rd-stable-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+            cp -f res/rd_icons/rd-stable/rd-stable-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
+          ;;
+          *)
+            echo "main build detected, applying customizations"
+            cp -f res/rd_icons/rd-stable/rd-stable-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+            cp -f res/rd_icons/rd-stable/rd-stable-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
+          ;;
+        esac
 
       # Fix for Dolphin
       - ln -s "/app/retrodeck/components/dolphin/share/dolphin-emu" "/app/share/dolphin-emu"
