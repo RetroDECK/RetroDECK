@@ -212,7 +212,9 @@ construct_version_string() {
   local version="$3"
   local codename="$4"
   local date
+  local time
   date=$(date +%Y-%m-%d)
+  time=$(date -u +%H%M%S)
 
   case "$branch" in
     main)
@@ -228,17 +230,17 @@ construct_version_string() {
     cooker)
       case "$build_type" in
         countertop)
-          echo "countertop-${version}-${codename}-${date}"
+          echo "countertop-${version}-${codename}-${date}-${time}"
           ;;
         *)
-          echo "cooker-${version}-${codename}-${date}"
+          echo "cooker-${version}-${codename}-${date}-${time}"
           ;;
       esac
       ;;
     *)
       local sanitized_branch
       sanitized_branch=$(sanitize_branch "$branch")
-      echo "branch-${sanitized_branch}-${version}-${date}"
+      echo "branch-${sanitized_branch}-${version}-${date}-${time}"
       ;;
   esac
 }
