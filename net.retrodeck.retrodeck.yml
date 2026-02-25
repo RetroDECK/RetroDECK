@@ -359,7 +359,7 @@ modules:
 
       # Prepare build variant alterations
       - |
-        version_string=$(< version)
+        version_string=$(< "${FLATPAK_DEST}/retrodeck/version")
 
         case "$version_string" in
           "cooker"*)
