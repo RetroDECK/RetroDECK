@@ -302,7 +302,7 @@ modules:
       - bash automation_tools/install_components.sh
     sources:
       - application-sources.json
-      - component-sources.json
+      - components-sources.json
       
   # -------------------------------------------------------------------------
   # finisher - final tidy‑up steps: move files, create icons, install desktop
