@@ -510,6 +510,7 @@ jobs:
         id: build
         run: |
           IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          IS_DRY_RUN="${{ needs.configure.outputs.is_dry_run }}"
           VARIANT="${{ matrix.variant }}"
 
           if [[ "$IS_EPICURE" == "true" ]]; then
@@ -518,15 +519,24 @@ jobs:
             BUILD_TYPE="$VARIANT"
           fi
 
-          echo "Building flatpak bundle..."
+          BUILD_ARGS="--build-flatpak $BUILD_TYPE"
+
+          if [[ "$IS_DRY_RUN" == "true" ]]; then
+            BUILD_ARGS="$BUILD_ARGS --no-bundle"
+            echo "Dry-run mode - building without producing bundle"
+          fi
+
+          echo "Building flatpak..."
           echo "  Variant:    $VARIANT"
           echo "  Build type: $BUILD_TYPE"
+          echo "  Dry run:    $IS_DRY_RUN"
 
-          /bin/bash ./retrodeck_builder.sh --build-flatpak "$BUILD_TYPE"
+          /bin/bash ./retrodeck_builder.sh $BUILD_ARGS
 
           echo "Build complete"
 
       - name: Verify build output
+        if: needs.configure.outputs.is_dry_run == 'false'
         run: |
           if [[ ! -d "output" ]]; then
             echo "ERROR: output directory not created by builder"
@@ -537,6 +547,7 @@ jobs:
           ls -lh output/
 
       - name: Upload build artifacts
+        if: needs.configure.outputs.is_dry_run == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: flatpak-artifacts-${{ matrix.variant }}
@@ -561,12 +572,14 @@ jobs:
           ref: ${{ needs.configure.outputs.branch }}
 
       - name: Download all build artifacts
+        if: needs.configure.outputs.is_dry_run == 'false'
         uses: actions/download-artifact@v4
         with:
           path: downloaded-artifacts/
           pattern: 'flatpak-artifacts-*'
 
       - name: Collect release assets
+        if: needs.configure.outputs.is_dry_run == 'false'
         id: collect
         run: |
           mkdir -p release-assets
@@ -644,6 +657,7 @@ jobs:
           echo "=========================================="
 
       - name: Generate release notes
+        if: needs.configure.outputs.is_dry_run == 'false'
         run: |
           # Install xmlstarlet for metainfo extraction
           sudo apt install -y xmlstarlet
@@ -814,21 +828,13 @@ jobs:
           echo "DRY RUN - Release Preview"
           echo "=========================================="
           echo ""
+          echo "Build completed with --no-bundle (no flatpak bundle produced)"
+          echo ""
           echo "Release would be created with:"
           echo "  Repository: $RELEASE_REPO"
           echo "  Tag:        $RELEASE_TAG"
           echo "  Title:      $TITLE"
           echo "  Type:       $RELEASE_TYPE"
-          echo ""
-          echo "Assets:"
-          for asset in release-assets/*; do
-            echo "  - $(basename "$asset") ($(du -h "$asset" | cut -f1))"
-          done
-          echo ""
-          echo "Release notes:"
-          echo "------------------------------------------"
-          cat release_notes.md
-          echo "------------------------------------------"
           echo ""
           echo "Dry-run complete - no release was created"
           echo "=========================================="
