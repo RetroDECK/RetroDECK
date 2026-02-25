@@ -608,11 +608,11 @@ jobs:
           TITLE="${{ github.repository_owner }} ${{ github.event.repository.name }} ${RELEASE_TAG}"
 
           # Determine release flags based on branch type and trigger
-          #   main + [release]  -> latest (production)
-          #   main + [build]    -> draft
-          #   epicure           -> pre-release
-          #   cooker            -> pre-release
-          #   feature branches  -> draft
+          #   main + [release]  -> latest (in RetroDECK repo)
+          #   main + [build]    -> draft (in RetroDECK repo)
+          #   epicure           -> pre-release (in RetroDECK repo)
+          #   cooker            -> pre-release (in Cooker repo)
+          #   feature branches  -> pre-release (in Cooker repo)
 
           IS_LATEST="false"
           IS_PRERELEASE="false"
@@ -634,8 +634,8 @@ jobs:
             IS_PRERELEASE="true"
             RELEASE_TYPE="Pre-release (Cooker)"
           else
-            IS_DRAFT="true"
-            RELEASE_TYPE="Draft (${BRANCH})"
+            IS_PRERELEASE="true"
+            RELEASE_TYPE="Pre-release (${BRANCH})"
           fi
 
           echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
