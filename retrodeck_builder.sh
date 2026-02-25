@@ -216,12 +216,19 @@ construct_version_string() {
 
   case "$branch" in
     main)
-      echo "$version"
-      ;;
-    cooker)
       case "$build_type" in
         epicure)
           echo "epicure-${version}-${date}"
+          ;;
+        *)
+          echo "$version"
+          ;;
+        esac
+      ;;
+    cooker)
+      case "$build_type" in
+        countertop)
+          echo "countertop-${version}-${codename}-${date}"
           ;;
         *)
           echo "cooker-${version}-${codename}-${date}"
