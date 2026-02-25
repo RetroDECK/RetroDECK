@@ -522,9 +522,6 @@ jobs:
           echo "  Variant:    $VARIANT"
           echo "  Build type: $BUILD_TYPE"
 
-          echo "DEBUG:"
-          ls -la .
-
           /bin/bash ./retrodeck_builder.sh --build-flatpak "$BUILD_TYPE"
 
           echo "Build complete"
