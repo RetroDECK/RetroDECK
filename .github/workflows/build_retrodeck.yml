@@ -656,6 +656,152 @@ jobs:
           echo "  Branch:     $BRANCH"
           echo "=========================================="
 
+      - name: Generate build metadata
+        if: needs.configure.outputs.is_dry_run == 'false'
+        run: |
+          RELEASE_TAG="${{ steps.release.outputs.tag }}"
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
+
+          jq -n \
+            --arg release_tag "$RELEASE_TAG" \
+            --arg branch "$BRANCH" \
+            --arg is_epicure "$IS_EPICURE" \
+            --arg components_release "$COMPONENTS_RELEASE" \
+            --arg commit "${{ github.sha }}" \
+            --arg built_on "$(date -u +"%Y-%m-%d %H:%M:%S UTC")" \
+            '{
+              release_tag: $release_tag,
+              branch: $branch,
+              is_epicure: $is_epicure,
+              components_release: $components_release,
+              commit: $commit,
+              built_on: $built_on
+            }' > release-assets/build_metadata.json
+
+          echo "Build metadata generated:"
+          cat release-assets/build_metadata.json
+
+      - name: Determine component changes since last flatpak release
+        if: needs.configure.outputs.is_dry_run == 'false'
+        id: component-diff
+        run: |
+          BRANCH="${{ needs.configure.outputs.branch }}"
+          IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
+          RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
+
+          # Determine tag prefix for finding previous flatpak release
+          if [[ "$IS_EPICURE" == "true" ]]; then
+            TAG_PREFIX="epicure-"
+          elif [[ "$BRANCH" == "main" ]]; then
+            TAG_PREFIX=""
+          elif [[ "$BRANCH" == "cooker" ]]; then
+            TAG_PREFIX="cooker-"
+          else
+            BRANCH_SAFE=$(echo "$BRANCH" | sed 's/\//-/g')
+            TAG_PREFIX="branch-${BRANCH_SAFE}-"
+          fi
+
+          echo "Searching for previous flatpak release in $RELEASE_REPO (prefix: ${TAG_PREFIX:-<none>})"
+
+          # Find previous flatpak release
+          if [[ -n "$TAG_PREFIX" ]]; then
+            PREV_FLATPAK_TAG=$(gh release list \
+              --repo "$RELEASE_REPO" \
+              --limit 100 \
+              --json tagName \
+              -q "[.[] | select(.tagName | startswith(\"${TAG_PREFIX}\"))] | .[0].tagName")
+          else
+            # Main releases have no prefix - find latest non-epicure release
+            PREV_FLATPAK_TAG=$(gh release list \
+              --repo "$RELEASE_REPO" \
+              --limit 100 \
+              --json tagName \
+              -q "[.[] | select(.tagName | startswith(\"epicure-\") | not)] | .[0].tagName")
+          fi
+
+          # Resolve previous components release from previous flatpak's build_metadata.json
+          PREV_COMP_REL=""
+          if [[ -n "$PREV_FLATPAK_TAG" && "$PREV_FLATPAK_TAG" != "null" ]]; then
+            echo "Previous flatpak release: $PREV_FLATPAK_TAG"
+
+            if gh release download "$PREV_FLATPAK_TAG" \
+              --repo "$RELEASE_REPO" \
+              -p "build_metadata.json" \
+              -D . 2>/dev/null; then
+              PREV_COMP_REL=$(jq -r '.components_release // empty' build_metadata.json)
+              rm -f build_metadata.json
+              echo "Previous components release: ${PREV_COMP_REL:-(not found)}"
+            else
+              echo "No build_metadata.json in previous flatpak release (older format)"
+            fi
+          else
+            echo "No previous flatpak release found"
+          fi
+
+          # Download current components metadata
+          CURRENT_METADATA="{}"
+          if gh release download "$COMPONENTS_RELEASE" \
+            --repo "$COMPONENTS_REPO" \
+            -p "release_metadata.json" \
+            -D . 2>/dev/null; then
+            CURRENT_METADATA=$(cat release_metadata.json)
+            rm -f release_metadata.json
+            echo "Current components metadata downloaded"
+          else
+            echo "Could not download current components metadata"
+          fi
+
+          # Download previous components metadata
+          PREV_METADATA="{}"
+          if [[ -n "$PREV_COMP_REL" ]]; then
+            if gh release download "$PREV_COMP_REL" \
+              --repo "$COMPONENTS_REPO" \
+              -p "release_metadata.json" \
+              -D . 2>/dev/null; then
+              PREV_METADATA=$(cat release_metadata.json)
+              rm -f release_metadata.json
+              echo "Previous components metadata downloaded (from $PREV_COMP_REL)"
+            else
+              echo "Could not download previous components metadata"
+            fi
+          fi
+
+          # Diff: find all components whose version changed between prev and current
+          CHANGED_COMPONENTS=$(jq -n \
+            --argjson current "$CURRENT_METADATA" \
+            --argjson prev "$PREV_METADATA" \
+            '
+            $current | to_entries | map(
+              .key as $name |
+              .value.version as $cur_ver |
+              ($prev[$name].version // "none") as $prev_ver |
+              select($cur_ver != $prev_ver) |
+              {name: $name, version: $cur_ver, prev_version: $prev_ver}
+            ) | sort_by(.name)
+            ')
+
+          CHANGE_COUNT=$(echo "$CHANGED_COMPONENTS" | jq 'length')
+          echo "Components changed since last flatpak release: $CHANGE_COUNT"
+
+          # Format for release notes
+          if [[ "$CHANGE_COUNT" -gt 0 ]]; then
+            echo "$CHANGED_COMPONENTS" | jq -r '.[] |
+              if .prev_version == "none" then
+                "- **\(.name)**: \(.version) (new)"
+              else
+                "- **\(.name)**: \(.prev_version) -> \(.version)"
+              end' > component_changes.md
+          else
+            echo "" > component_changes.md
+          fi
+
+          echo "change_count=$CHANGE_COUNT" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.FLATPAK_REPO_API_REQUESTS }}
+
       - name: Generate release notes
         if: needs.configure.outputs.is_dry_run == 'false'
         run: |
@@ -668,29 +814,12 @@ jobs:
           COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
           METAINFO_FILE="${APP_ID}.metainfo.xml"
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          COMPONENTS_METADATA_URL="https://github.com/${COMPONENTS_REPO}/releases/download/${COMPONENTS_RELEASE}"
 
           # Extract changelog URL from metainfo
           CHANGELOG_URL=""
           if [[ -f "$METAINFO_FILE" ]]; then
             CHANGELOG_URL=$(xmlstarlet sel -t -v "/component/releases/release[1]/url" "$METAINFO_FILE" 2>/dev/null || true)
-          fi
-
-          # Download components release metadata for changed component info
-          COMPONENTS_METADATA_URL="https://github.com/${COMPONENTS_REPO}/releases/download/${COMPONENTS_RELEASE}"
-          CHANGED_COMPONENTS=""
-
-          if gh release download "$COMPONENTS_RELEASE" \
-            --repo "$COMPONENTS_REPO" \
-            -p "release_metadata.json" \
-            -D . 2>/dev/null; then
-
-            CHANGED_COMPONENTS=$(jq -r '
-              to_entries
-              | map(select(.value.status == "new"))
-              | sort_by(.key)
-              | .[]
-              | "- **\(.key)**: \(.value.version)"
-            ' release_metadata.json)
           fi
 
           # Build release notes
@@ -720,14 +849,15 @@ jobs:
 
           EOF
 
-          # Changed components section
-          if [[ -n "$CHANGED_COMPONENTS" ]]; then
+          # Component changes section (full diff since last flatpak release)
+          CHANGE_COUNT="${{ steps.component-diff.outputs.change_count }}"
+          if [[ "$CHANGE_COUNT" -gt 0 && -s component_changes.md ]]; then
             cat >> release_notes.md <<EOF
-          ### Updated Components
-
-          ${CHANGED_COMPONENTS}
+          ### Updated Components (since last flatpak release)
 
           EOF
+            cat component_changes.md >> release_notes.md
+            echo "" >> release_notes.md
           fi
 
           echo "**Components sources:** [components-sources.json](${COMPONENTS_METADATA_URL}/components-sources.json)" >> release_notes.md
