@@ -3,7 +3,7 @@
    id="svg29"
    version="1.1"
    viewBox="0 0 1280 800"
-   sodipodi:docname="newsplash.svg"
+   sodipodi:docname="newsplash_v2.svg"
    inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -20,7 +20,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.7062229"
-     inkscape:cx="590.46514"
+     inkscape:cx="591.17313"
      inkscape:cy="653.4764"
      inkscape:window-width="1920"
      inkscape:window-height="1008"
@@ -40,17 +40,9 @@
          stop-color="#c957e6"
          offset="0" />
       <stop
-         id="stop19"
-         stop-color="#c957e6"
-         offset="0.03308862" />
-      <stop
-         id="stop20"
-         stop-color="#1a9fff"
-         offset="0.65571296" />
-      <stop
          id="stop21"
          stop-color="#1a9fff"
-         offset="1" />
+         offset="0.56974316" />
     </linearGradient>
     <linearGradient
        id="linearGradient10"
