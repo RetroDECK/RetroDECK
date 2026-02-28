@@ -100,6 +100,14 @@
       "holiday_type": "dynamic",
       "filename": "rd-carnival-splash.svg"
     },
+    "holi": {
+      "start_date": "0303",
+      "end_date": "0303",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "dynamic",
+      "filename": "rd-holi-splash.svg"
+    },
     "retrodeck_birthday_gmday": {
       "start_date": "0304",
       "end_date": "0304",
