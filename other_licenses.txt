@@ -26395,10 +26395,30 @@ SOFTWARE.
                             Splash screens
 ===============================================================================
 
-Various splash screen assets were sourced from the following platforms:
+Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
 
-https://pixabay.com/
-https://openclipart.org
+The majority of visual assets incorporated herein were created using materials distributed under open-source and/or Creative Commons licenses, obtained from the following repositories, or were independently produced:
+
+- **SVGRepo**
+- **OpenClipart**
+- **KenneyNL**
+- **Creazilla**
+- **Pixabay**
+
+We acknowledge and extend our appreciation to the respective creators and contributors who make these assets publicly available under open licenses.
+
+All referenced artwork is utilized solely for non-promotional purposes, specifically to present and illustrate a seasonal Easter egg feature.
+
+We make reasonable and good-faith efforts to source only authentically licensed open-content artwork for inclusion in the boot logos. 
+
+This includes applying relevant license filters and verification measures provided by the respective repositories. 
+However, while due diligence is exercised, we cannot guarantee the accuracy of third-party license classifications or representations made on external platforms.
+
+In addition, certain works available within open repositories may incorporate, reuse, or modify pre-existing artwork as part of derivative compositions. 
+Such reuse can make it difficult to accurately trace the original source or determine whether prior modifications have occurred. 
+While we endeavor to assess provenance where feasible, comprehensive verification of the full modification history of third-party assets may not always be possible.
+
+If any artwork is identified as improperly attributed, mislicensed, or otherwise unsuitable for inclusion, please contact the team via official social media channels to request review and, where appropriate, prompt removal or correction.
 
 -------------------------------------------------------------------------------
 Specific Assets & License References
