@@ -26389,13 +26389,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
+===============================================================================
+                  Reiki the Cyber Shark — The RetroDECK Mascot
+===============================================================================
 
+Copyright © Tyson Tan (钛山). All rights reserved.
+
+Reiki, the official RetroDECK mascot, is made available under the terms of the Creative Commons Attribution–ShareAlike (CC BY-SA) license.
+
+Subject to the terms of the CC BY-SA license, the artwork may be shared, reproduced, and adapted for any purpose, provided that:
+
+1. Appropriate credit is given to Tyson Tan (钛山) (and optionally but appreciated the RetroDECK Team).
+2. A reference to the applicable Creative Commons BY-SA license is included.
+3. Any redistributed or derivative works are licensed under the same CC BY-SA terms.
+
+No additional restrictions may be applied that would limit the rights granted under the license. All use must comply with the full legal text of the Creative Commons BY-SA license.
+
+Both Tyson Tan (钛山) and the RetroDECK Team warmly encourage fan art and creative reinterpretations of Reiki. 
+
+We would love to see your unique contributions, please share them with us via our official social media channels or community platforms!
+
+If you wish to create Reiki artwork specifically for inclusion within the RetroDECK Project, please contact the RetroDECK Team directly for guidance and submission details.
+
+To stay up to date with the latest Reiki lore, updates, and official information, please visit the following link: https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/reiki/reiki/
 
 ===============================================================================
                             Splash screens
 ===============================================================================
 
-Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
+### Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
 
 The majority of visual assets incorporated herein were created using materials distributed under open-source and/or Creative Commons licenses, obtained from the following repositories, or were independently produced:
 
@@ -26407,18 +26429,22 @@ The majority of visual assets incorporated herein were created using materials d
 
 We acknowledge and extend our appreciation to the respective creators and contributors who make these assets publicly available under open licenses.
 
-All referenced artwork is utilized solely for non-promotional purposes, specifically to present and illustrate a seasonal Easter egg feature.
+All referenced artwork is utilized solely for non-promotional purposes, specifically to present and illustrate a seasonal real-world holiday as an Easter egg feature.
 
-We make reasonable and good-faith efforts to source only authentically licensed open-content artwork for inclusion in the boot logos. 
+We make reasonable and good-faith efforts to source only authentically licensed open-source or Creative Commons artwork for inclusion in the boot logos. 
 
-This includes applying relevant license filters and verification measures provided by the respective repositories. 
-However, while due diligence is exercised, we cannot guarantee the accuracy of third-party license classifications or representations made on external platforms.
+This includes applying relevant license filters, verification measures, and content screening processes provided by the respective repositories. 
 
-In addition, certain works available within open repositories may incorporate, reuse, or modify pre-existing artwork as part of derivative compositions. 
-Such reuse can make it difficult to accurately trace the original source or determine whether prior modifications have occurred. 
+As part of this effort, we seek to prioritize human-created artwork and avoid the inclusion of AI-generated content where such distinctions are identifiable through available metadata or repository filters. 
+
+However, while due diligence is exercised, we cannot guarantee the accuracy of third-party license classifications, authorship representations, or content tagging on external platforms.
+
+In addition, certain works available within open repositories may incorporate, reuse, or modify pre-existing artwork as part of derivative compositions. Such reuse can make it difficult to accurately trace the original source or determine whether prior modifications have occurred. 
+
 While we endeavor to assess provenance where feasible, comprehensive verification of the full modification history of third-party assets may not always be possible.
 
 If any artwork is identified as improperly attributed, mislicensed, or otherwise unsuitable for inclusion, please contact the team via official social media channels to request review and, where appropriate, prompt removal or correction.
+
 
 -------------------------------------------------------------------------------
 Specific Assets & License References
