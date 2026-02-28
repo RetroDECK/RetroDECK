@@ -60,8 +60,16 @@
       "holiday_type": "dynamic",
       "filename": "rd-up-helly-aa-splash.svg"
     },
-    "setsubun": {
+    "groundhog_day": {
       "start_date": "0202",
+      "end_date": "0202",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "stable",
+      "filename": "rd-groundhog-day-splash.svg"
+    },
+    "setsubun": {
+      "start_date": "0203",
       "end_date": "0203",
       "start_time": "0000",
       "end_time": "2359",
