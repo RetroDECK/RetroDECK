@@ -39,35 +39,51 @@ changes and integration notes, please refer to:
 https://github.com/RetroDECK/components/
 
 -------------------------------------------------------------------------------
-MODIFICATIONS POLICY
+                    RETRODECK AND MODIFICATIONS POLICY
 -------------------------------------------------------------------------------
 
-RetroDECK does not substantially alter the original functionality of
-third-party projects beyond integration and configuration purposes.
+RetroDECK does not generate or execute any game code on its own, nor does it run BIOS or firmware files; 
+all game functionality is provided exclusively by third-party modules that are fully open-source software, 
+including but not limited to RetroArch, UZDoom, OpenSurge, and various other emulators, clients, 
+multi-emulators, game engines, ports, and systems, each of which operates as an independent module. 
+
+RetroDECK functions solely as a platform and as a curated collection of software components that 
+facilitate integration, configuration, and execution within its environment.
+
+During its build process, RetroDECK obtains all third-party modules exclusively from their official sources, 
+such as official websites, GitHub repositories, or other locations where the respective developers publish 
+their releases. RetroDECK does not modify the source code of these modules beyond the minimal 
+configuration, integration, and environment adaptation required for proper operation within the 
+RetroDECK platform.
+
+RetroDECK may include additional files, such as BIOS or system files, only if they are open-source, 
+freely released by the official rights holders, or otherwise provided with the express permission or blessing 
+of the respective developers. Such files are distributed separately from RetroDECK’s core components 
+to ensure clear distinction and legal compliance.
 
 RetroDECK generally limits its modifications to:
 
-- Adjusting default configurations to match the RetroDECK folder
-  structure (e.g., saves, BIOS, system directories).
+- Adjusting default configurations to match the RetroDECK folder structure 
+  (e.g., saves, BIOS, system directories).
 
 - Ensuring compatibility with Steam Input Templates.
 
-- Applying community-tested configuration tweaks intended to provide
+- Applying community-tested configuration tweaks intended to provide 
   optimal performance and usability on supported hardware.
 
-- Decoupling or separating libraries where necessary to reduce
-  redundancy, save space, and maintain consistency across components inside the flatpak.
+- Decoupling or separating libraries where necessary to reduce 
+  redundancy, save space, and maintain consistency across components 
+  inside the Flatpak.
 
-- Integrating components into the general modular architecture.
-  This means launching the component via a custom script that
-  allows it to locate required libraries, dependencies, and file paths
-  within the RetroDECK environment.
+- Integrating components into the general modular architecture. This 
+  entails launching each component via a custom script that enables it 
+  to locate required libraries, dependencies, and file paths within the 
+  RetroDECK environment.
 
-- RetroDECK assumes no responsibility or liability for community-created,
-user-made, or third-party external modifications ("mods"), plugins, components,
-patches, or other alterations applied outside of the official
-RetroDECK distribution. Use of such external content is at the user's
-own risk.
+RetroDECK assumes no responsibility or liability for any community-created, 
+user-made, or third-party external modifications ("mods"), plugins, components, 
+patches, or other alterations applied outside of the official RetroDECK distribution. 
+Use of such external content is entirely at the user's own risk.
 
 ===============================================================================
 
@@ -26417,7 +26433,7 @@ To stay up to date with the latest Reiki lore, updates, and official information
                             Splash screens
 ===============================================================================
 
-### Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
+Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
 
 The majority of visual assets incorporated herein were created using materials distributed under open-source and/or Creative Commons licenses, obtained from the following repositories, or were independently produced:
 
