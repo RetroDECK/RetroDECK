@@ -26417,7 +26417,7 @@ To stay up to date with the latest Reiki lore, updates, and official information
                             Splash screens
 ===============================================================================
 
-### Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
+Attribution and Acknowledgment of Open-Source and Creative Commons Art Resources
 
 The majority of visual assets incorporated herein were created using materials distributed under open-source and/or Creative Commons licenses, obtained from the following repositories, or were independently produced:
 
