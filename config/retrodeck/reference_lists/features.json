@@ -228,8 +228,16 @@
       "holiday_type": "dynamic",
       "filename": "rd-la-tomatina-splash.svg"
     },
-    "oktoberfest": {
+    "talk_like_a_pirate": {
       "start_date": "0919",
+      "end_date": "0919",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "stable",
+      "filename": "rd-pirate-splash.svg"
+    },
+    "oktoberfest": {
+      "start_date": "0920",
       "end_date": "0920",
       "start_time": "0000",
       "end_time": "2359",
