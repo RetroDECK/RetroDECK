@@ -60,8 +60,16 @@
       "holiday_type": "dynamic",
       "filename": "rd-up-helly-aa-splash.svg"
     },
-    "setsubun": {
+    "groundhog_day": {
       "start_date": "0202",
+      "end_date": "0202",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "stable",
+      "filename": "rd-groundhog-day-splash.svg"
+    },
+    "setsubun": {
+      "start_date": "0203",
       "end_date": "0203",
       "start_time": "0000",
       "end_time": "2359",
@@ -91,6 +99,14 @@
       "end_time": "2359",
       "holiday_type": "dynamic",
       "filename": "rd-carnival-splash.svg"
+    },
+    "holi": {
+      "start_date": "0303",
+      "end_date": "0303",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "dynamic",
+      "filename": "rd-holi-splash.svg"
     },
     "retrodeck_birthday_gmday": {
       "start_date": "0304",
@@ -196,6 +212,14 @@
       "holiday_type": "stable",
       "filename": "rd-tanabata-splash.svg"
     },
+    "matariki": {
+      "start_date": "0710",
+      "end_date": "0710",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "dynamic",
+      "filename": "rd-matariki-splash.svg"
+    },
     "mountain_day": {
       "start_date": "0811",
       "end_date": "0812",
@@ -206,7 +230,7 @@
     },
     "obon": {
       "start_date": "0813",
-      "end_date": "0816",
+      "end_date": "0814",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "stable",
@@ -220,13 +244,21 @@
       "holiday_type": "dynamic",
       "filename": "rd-la-tomatina-splash.svg"
     },
-    "oktoberfest": {
+    "talk_like_a_pirate": {
       "start_date": "0919",
+      "end_date": "0919",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "stable",
+      "filename": "rd-pirate-splash.svg"
+    },
+    "oktoberfest": {
+      "start_date": "0920",
       "end_date": "0920",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "dynamic",
-      "filename": "placeholder.svg"
+      "filename": "rd-oktoberfest-splash.svg"
     },
     "tsukimi_mid_autumn": {
       "start_date": "0925",
@@ -268,6 +300,14 @@
       "holiday_type": "stable",
       "filename": "rd-mens-day-splash.svg"
     },
+    "monkey_festival": {
+      "start_date": "1128",
+      "end_date": "1128",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "dynamic",
+      "filename": "rd-monkey-festival-splash.svg"
+    },
     "lucia": {
       "start_date": "1213",
       "end_date": "1213",
@@ -277,8 +317,8 @@
       "filename": "rd-lucia-splash.svg"
     },
     "xmas": {
-      "start_date": "1219",
-      "end_date": "1226",
+      "start_date": "1222",
+      "end_date": "1225",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "stable",
