@@ -212,6 +212,14 @@
       "holiday_type": "stable",
       "filename": "rd-tanabata-splash.svg"
     },
+    "matariki": {
+      "start_date": "0710",
+      "end_date": "0710",
+      "start_time": "0000",
+      "end_time": "2359",
+      "holiday_type": "dynamic",
+      "filename": "rd-matariki-splash.svg"
+    },
     "mountain_day": {
       "start_date": "0811",
       "end_date": "0812",
@@ -222,7 +230,7 @@
     },
     "obon": {
       "start_date": "0813",
-      "end_date": "0816",
+      "end_date": "0814",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "stable",
@@ -309,8 +317,8 @@
       "filename": "rd-lucia-splash.svg"
     },
     "xmas": {
-      "start_date": "1219",
-      "end_date": "1226",
+      "start_date": "1222",
+      "end_date": "1225",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "stable",
