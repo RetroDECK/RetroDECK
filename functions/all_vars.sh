@@ -25,7 +25,6 @@ cooker_repository_name="Cooker"                                                 
 main_repository_name="RetroDECK"                                                                         # The name of the main repository under RetroDECK organization
 features="$rd_core_files/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 folder_iconsets_dir="$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets"
-component_manifest_cache=""
 
 # API-related file locations
 
