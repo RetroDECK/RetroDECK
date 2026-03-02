@@ -845,30 +845,6 @@ create_lock() {
   touch "$rd_lockfile"
 }
 
-deploy_helper_files() {
-  # This script will distribute helper documentation files throughout the filesystem according to the JSON configuration
-  # USAGE: deploy_helper_files
-
-  # Extract helper files information using jq
-  helper_files=$(jq -r '(.helper_files // {}) | keys[]' "$features")
-
-  # Iterate through each helper file entry
-  while IFS= read -r helper_file_name; do
-    current_json_object=$(jq -r --arg helper_file_name "$helper_file_name" '.helper_files[$helper_file_name]' "$features")
-    file=$(echo "$current_json_object" | jq -r '.filename')
-    dest=$(echo "$current_json_object" | jq -r '.location')
-    if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
-      dest=$(echo "$dest" | envsubst)
-      if [[ -d "$dest" ]]; then
-        log d "Copying helper file $file to $dest"
-        cp -f "$helper_files_path/$file" "$dest/$file"
-      else
-        log d "Helper file location $dest does not exist, component may not be installed. Skipping..."
-      fi
-    fi
-  done <<< "$helper_files"
-}
-
 splash_screen() {
   # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
   # USAGE: splash_screen
