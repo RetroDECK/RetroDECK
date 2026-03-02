@@ -165,17 +165,10 @@ api_get_component() {
 }
 
 api_get_all_preset_names() {
-  # This function will gather the names of all compatible presets for all installed components
+  # Gather the names of all compatible presets for all installed components
   # USAGE: api_get_all_preset_names
 
-  local preset_names='[]'
-
-  while read -r preset_name; do
-    local json_obj=$(jq -n --arg preset "$preset_name" '{ preset_name: $preset }')
-    preset_names=$(jq -n --argjson existing_obj "$preset_names" --argjson new_obj "$json_obj" '$existing_obj + [$new_obj]')
-  done < <(jq -r '.presets | keys[]' "$rd_conf")
-  
-  echo "$preset_names" | jq '. | sort_by(.preset_name)'
+  jq '[.presets | keys[] | { preset_name: . }] | sort_by(.preset_name)' "$rd_conf"
 }
 
 api_get_current_preset_state() {
