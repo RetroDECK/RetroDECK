@@ -9,7 +9,6 @@ cli_compress_single_game() {
     read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
     if [[ ! -z "$file" ]]; then
       if [[ -f "$file" ]]; then
-        local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
         local compatible_compression_format=$(find_compatible_compression_format "$file")
         if [[ ! $compatible_compression_format == "none" ]]; then
           log i "$(basename "$file") can be compressed to $compatible_compression_format"
@@ -18,7 +17,7 @@ cli_compress_single_game() {
           else
             post_compression_cleanup="false"
           fi
-          compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+          compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
         else
           log w "$(basename "$file") does not have any compatible compression formats."
         fi
@@ -77,7 +76,7 @@ cli_compress_all_games() {
           local compatible_compression_format=$(find_compatible_compression_format "$file")
           if [[ ! "$compatible_compression_format" == "none" ]]; then
             log i "$(basename "$file") can be compressed to $compatible_compression_format"
-            compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+            compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
           else
             log w "No compatible compression format found for $(basename "$file")"
           fi
