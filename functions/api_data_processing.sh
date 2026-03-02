@@ -376,57 +376,39 @@ api_get_component_menu_entries() {
 }
 
 api_get_empty_rom_folders() {
-  local empty_rom_folders_list="$(mktemp)"
-  echo '[]' > "$empty_rom_folders_list"
+  # Find ROM system directories that contain no game files (only helper/system files or nothing at all).
+  # Returns a sorted JSON array of objects with system name and path, or a message if none are found.
+  # USAGE: api_get_empty_rom_folders
 
-  # Extract helper file names using jq and populate the all_helper_files array
-  local all_ignorable_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+  # Build ignorable files lookup from all component manifests
+  local -A ignorable_files
+  while IFS= read -r helper_filename; do
+    [[ -n "$helper_filename" ]] && ignorable_files["$helper_filename"]=1
+  done < <(get_all_helper_files | jq -r '.[].filename')
+  ignorable_files[".directory"]=1
+  ignorable_files["systeminfo.txt"]=1
 
-  all_ignorable_files+=(".directory" "systeminfo.txt")
+  local -a empty_systems=()
 
   while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
-      sleep 0.1
-    done
-    (
     local dir="$roms_path/$system"
-    local all_files=()
+    local folder_is_empty=true
 
-    while IFS= read -r -d '' file; do
-      all_files+=("$(basename "$file")")
-    done < <(find "$dir" -maxdepth 1 -type f -print0)
-
-    local folder_is_empty="true"
-
-    for file in "${all_files[@]}"; do
-      local is_ignorable="false"
-      for ignorable_file in "${all_ignorable_files[@]}"; do
-        if [[ "$file" == "$ignorable_file" ]]; then
-          is_ignorable="true"
-          break
-        fi
-      done
-
-      if [[ "$is_ignorable" == "false" ]]; then
-        folder_is_empty="false"
+    while IFS= read -r -d '' filepath; do
+      if [[ -z "${ignorable_files[$(basename "$filepath")]+x}" ]]; then
+        folder_is_empty=false
         break
       fi
-    done
+    done < <(find "$dir" -maxdepth 1 -type f -print0)
 
-    if [[ "$folder_is_empty" == "true" ]]; then
-      local json_obj=$(jq -n --arg system "$system" --arg path "$dir" '{ system: $system, path: $path }')
-      (
-      flock -x 200
-      jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$empty_rom_folders_list" > "$empty_rom_folders_list.tmp" && mv "$empty_rom_folders_list.tmp" "$empty_rom_folders_list"
-      ) 200>"$rd_file_lock"
+    if [[ "$folder_is_empty" == true ]]; then
+      empty_systems+=("$system")
     fi
-  ) &
-  wait # wait for background tasks to finish
   done < <(find "$roms_path" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
 
-  if [[ $(jq 'length' "$empty_rom_folders_list") -gt 0 ]]; then
-    local final_json=$(cat "$empty_rom_folders_list" | jq -r 'sort_by(.system)')
-    echo "$final_json"
+  if [[ ${#empty_systems[@]} -gt 0 ]]; then
+    printf '%s\n' "${empty_systems[@]}" | jq -R --arg roms_path "$roms_path" \
+      '{ system: ., path: ($roms_path + "/" + .) }' | jq -s 'sort_by(.system)'
     return 0
   else
     echo "no empty rom folders found"
