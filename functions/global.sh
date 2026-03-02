@@ -124,6 +124,16 @@ for file in /app/libexec/*.sh; do
   fi
 done
 
+component_manifest_cache=""
+
+build_component_manifest_cache
+
+declare -A _compression_system_format
+declare -A _compression_ext_restrictions
+declare -A _compression_allowed_extensions
+
+build_compression_lookups
+
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_xdg_config_logs_path" ]; then
     log d "Creating RetroDECK logs directory at $rd_xdg_config_logs_path"
