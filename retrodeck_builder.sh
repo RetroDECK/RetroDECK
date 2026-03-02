@@ -146,7 +146,14 @@ get_branch() {
 }
 
 sanitize_branch() {
-  echo "${1//\//-}"
+  local sanitized_branch
+
+  sanitized_branch="$1"
+  
+  sanitized_branch=$(echo "${sanitized_branch//\//-}")
+  sanitized_branch=$(echo "${sanitized_branch//\./_}")
+
+  echo "$sanitized_branch"
 }
 
 is_ci() {
