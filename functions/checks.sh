@@ -103,42 +103,44 @@ validate_input() {
 }
 
 check_version_is_older_than() {
-# This function will determine if a given version number is newer than the one currently read from retrodeck.cfg (which will be the previous running version at update time) and will return "true" if it is
-# The given version to check should be in normal RetroDECK version notation of N.N.Nb (eg. 0.8.0b)
-# USAGE: check_version_is_older_than "version"
+  # Determine if current_version is older than new_version using semantic versioning comparison.
+  # Version strings can be production format (e.g. "0.8.0b") or pre-production (e.g. "cooker-0.10.1b-CodeName-date").
+  # Returns 0 (success/true) if current_version is older, 1 (failure/false) otherwise.
+  # USAGE: check_version_is_older_than "$current_version" "$new_version"
 
-local current_version="$1"
-local new_version="$2"
-local is_newer_version="false"
+  local current_version="$1"
+  local new_version="$2"
 
-current_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$current_version")
-new_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$new_version")
+  # Extract the version number by finding the segment containing dots (e.g. "0.10.1b")
+  local current_extracted new_extracted
 
-current_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$current_version")
-new_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$new_version")
+  if [[ "$current_version" =~ ([0-9]+\.[0-9]+[0-9.]*[a-z]*) ]]; then
+    current_extracted="${BASH_REMATCH[1]}"
+  else
+    log e "Could not extract version from: $current_version"
+    return 1
+  fi
 
-current_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$current_version")
-new_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$new_version")
+  if [[ "$new_version" =~ ([0-9]+\.[0-9]+[0-9.]*[a-z]*) ]]; then
+    new_extracted="${BASH_REMATCH[1]}"
+  else
+    log e "Could not extract version from: $new_version"
+    return 1
+  fi
 
-if [[ "$new_version_major_rev" -gt "$current_version_major_rev" ]]; then
-  is_newer_version="true"
-elif [[ "$new_version_major_rev" -eq "$current_version_major_rev" ]]; then
-  if [[ "$new_version_minor_rev" -gt "$current_version_minor_rev" ]]; then
-    is_newer_version="true"
-  elif [[ "$new_version_minor_rev" -eq "$current_version_minor_rev" ]]; then
-    if [[ "$new_version_point_rev" -gt "$current_version_point_rev" ]]; then
-      is_newer_version="true"
+  # Strip trailing non-numeric suffix (e.g. "b")
+  local current_clean="${current_extracted%%[!0-9.]*}"
+  local new_clean="${new_extracted%%[!0-9.]*}"
+
+  if [[ "$current_clean" == "$new_clean" ]]; then
+    if [[ "$hard_version" != "$current_version" ]]; then
+      return 0
     fi
+    return 1
   fi
-fi
 
-# Perform post_update commands for current version if it is a cooker or PR
-if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR" <<< "$hard_version"; then
-  # If newly-installed version is a "cooker" or "PR" build, always perform post_update commands for current version
-  if [[ "$(echo "$hard_version" | cut -d'-' -f2)" == "$new_version" ]]; then
-    is_newer_version="true"
-  fi
-fi
+  local oldest
+  oldest=$(printf '%s\n%s\n' "$current_clean" "$new_clean" | sort -V | head -1)
 
-echo "$is_newer_version"
+  [[ "$oldest" == "$current_clean" ]]
 }
