@@ -4,135 +4,81 @@
 # It will handle the direct demands of the API requests by leveraging the rest of the RetroDECK functions.
 
 api_get_compressible_games() {
-  # Supported parameters:
-  # "everything"  - All games found (regardless of format)
-  # "all"         - Only user-chosen games (later selected via checklist)
-  # "chd", "zip", "rvz" - Only games matching that compression type
+  # Find all games that can be compressed, optionally filtered to a specific format.
+  # Returns a sorted JSON array of objects with game path and compatible format.
+  # USAGE: api_get_compressible_games "<compression_format | all>"
 
-  log d "Started find_compatible_games with parameter: $1"
-
+  local target="$1"
   local compression_format
 
-  if [[ "$1" == "everything" ]]; then
+  # "everything" is a variable value used by the upstream Zenity dialog, but is otherwise equivalent to "all" in this function
+  if [[ "$target" == "everything" ]]; then
     compression_format="all"
   else
-    compression_format="$1"
+    compression_format="$target"
   fi
 
-  local compressible_systems_list
-  if [[ "$compression_format" == "all" ]]; then
-    compressible_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' "$features")
-    log d "compressible_systems_list: $compressible_systems_list"
-  else
-    compressible_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' "$features")
-    log d "compressible_systems_list: $compressible_systems_list"
+  # Build list of systems to scan from the lookup
+  local -a systems_to_scan=()
+  for system in "${!_compression_system_format[@]}"; do
+    if [[ "$compression_format" == "all" || "${_compression_system_format[$system]}" == "$compression_format" ]]; then
+      systems_to_scan+=("$system")
+    fi
+  done
+
+  if [[ ${#systems_to_scan[@]} -eq 0 ]]; then
+    echo '[]'
+    return
   fi
 
-  log d "Finding compatible games for compression ($1)"
-  log d "compression_targets: $compression_targets"
+  local results_dir
+  results_dir=$(mktemp -d)
 
-  local compressible_games_list="$(mktemp)"
+  for system in "${systems_to_scan[@]}"; do
+    [[ ! -d "$roms_path/$system" ]] && continue
 
-  # Initialize the empty JSON file meant for final output
-  echo '[]' > "$compressible_games_list"
-
-  while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
+    while (( $(jobs -p | wc -l) >= system_cpu_max_threads )); do
       sleep 0.1
     done
     (
-    if [[ -d "$roms_path/$system" ]]; then
-      local compression_candidates
-      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt" -not -iname ".directory")
-      if [[ -n "$compression_candidates" ]]; then
-        while IFS= read -r game; do
-          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
-            sleep 0.1
-          done
-          (
-          local compatible_compression_format
-          compatible_compression_format=$(find_compatible_compression_format "$game")
-          if [[ -f "${game%.*}.$compatible_compression_format" ]]; then # If a compressed version of this game already exists
-            log d "Skipping $game because a $compatible_compression_format version already exists."
-            exit
-          fi
-          local file_ext="${game##*.}"
-          case "$compression_format" in
-            "chd")
-              if [[ "$compatible_compression_format" == "chd" ]]; then
-                log d "Game $game is compatible with CHD compression"
-                # Build a JSON object for this game
-                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
-                '{ game: $game, format: $format }')
-                # Write the final JSON object to the output file, locking it to prevent write race conditions.
-                (
-                flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "zip")
-              if [[ "$compatible_compression_format" == "zip" ]]; then
-                log d "Game $game is compatible with ZIP compression"
-                # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
-                '{ game: $game, format: $format }')
-                # Write the final JSON object to the output file, locking it to prevent write race conditions.
-                (
-                flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "rvz")
-              if [[ "$compatible_compression_format" == "rvz" ]]; then
-                log d "Game $game is compatible with ZIP compression"
-                # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
-                '{ game: $game, format: $format }')
-                # Write the final JSON object to the output file, locking it to prevent write race conditions.
-                (
-                flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "all")
-              if [[ "$compatible_compression_format" != "none" ]]; then
-                log d "Game $game is compatible with ZIP compression"
-                # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
-                '{ game: $game, format: $format }')
-                # Write the final JSON object to the output file, locking it to prevent write race conditions.
-                (
-                flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-          esac
-        ) &
-        done < <(printf '%s\n' "$compression_candidates")
-        wait # wait for background tasks to finish
+      local system_results=""
+      while IFS= read -r game; do
+        [[ -z "$game" ]] && continue
+        local compatible_format
+        compatible_format=$(find_compatible_compression_format "$game")
+
+        [[ "$compatible_format" == "none" ]] && continue
+
+        if [[ "$compression_format" != "all" && "$compatible_format" != "$compression_format" ]]; then
+          continue
+        fi
+
+        if [[ -f "${game%.*}.$compatible_format" ]]; then
+          continue
+        fi
+
+        system_results+=$(printf '%s\t%s\n' "$game" "$compatible_format")$'\n'
+      done < <(find "$roms_path/$system" -type f -not -iname "*.txt" -not -iname ".directory")
+
+      if [[ -n "$system_results" ]]; then
+        printf '%s' "$system_results" | awk -F'\t' '{printf "{\"game\":\"%s\",\"format\":\"%s\"}\n", $1, $2}' > "$results_dir/$system.json"
       fi
-    else
-      log d "Rom folder for $system is missing, skipping"
-    fi
     ) &
-  done < <(printf '%s\n' "$compressible_systems_list")
-  wait # wait for background tasks to finish
+  done
 
-  # Sort the final list numerically, then alphabetically
-  local final_json=$(cat "$compressible_games_list" | jq 'sort_by([
-                                                            ( .game
-                                                              | sub(".*/";"")
-                                                              | test("^[0-9]")
-                                                              | not
-                                                            ),
-                                                            ( .game | sub(".*/";"") )
-                                                          ])')
-  rm "$compressible_games_list"
+  wait
 
+  local final_json
+  if compgen -G "$results_dir/*.json" > /dev/null; then
+    final_json=$(jq -s 'flatten | sort_by([
+      (.game | sub(".*/";"") | test("^[0-9]") | not),
+      (.game | sub(".*/";""))
+    ])' "$results_dir"/*.json)
+  else
+    final_json='[]'
+  fi
+
+  rm -rf "$results_dir"
   echo "$final_json"
 }
 
