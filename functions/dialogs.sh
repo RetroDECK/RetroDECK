@@ -641,14 +641,13 @@ configurator_compression_tool_dialog() {
 configurator_compress_single_game_dialog() {
   local file=$(file_browse "Game to compress")
   if [[ ! -z "$file" ]]; then
-    local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
       (
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
-      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -739,28 +738,24 @@ configurator_compress_multiple_games_dialog() {
   local games_left=$total_games
 
   (
-  for game_line in "${games_to_compress[@]}"; do
-    while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
-    sleep 0.1
+    for game_line in "${games_to_compress[@]}"; do
+      while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
+      sleep 0.1
+      done
+      (
+        IFS="^" read -r game compression_format <<< "$game_line"
+        log i "Compressing $(basename "$game") into $compression_format format"
+        echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
+
+        compress_game "$compression_format" "$game" "$post_compression_cleanup"
+
+        games_left=$(( games_left - 1 ))
+        local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
+        echo "$progress" # Update Zenity dialog progress bar
+      ) &
     done
-    (
-    IFS="^" read -r game compression_format <<< "$game_line"
-
-    local system
-    system=$(echo "$game" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
-    log i "Compressing $(basename "$game") into $compression_format format"
-
-    echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
-
-    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
-
-    games_left=$(( games_left - 1 ))
-    local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
-    echo "$progress" # Update Zenity dialog progress bar
-    ) &
-  done
-  wait # wait for background tasks to finish
-  echo "100" # Close Zenity progress dialog when finished
+    wait # wait for background tasks to finish
+    echo "100" # Close Zenity progress dialog when finished
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
