@@ -1,231 +1,5 @@
 #!/bin/bash
 
-compress_game() {
-  # Function for compressing one or more files to .chd format
-  # USAGE: compress_game $format $full_path_to_input_file $cleanup_choice $system(optional)
-  local format="$1"
-  local file="$2"
-  local post_compression_cleanup="$3"
-  local system="$4"
-  local filename_no_path=$(basename "$file")
-  local filename_no_extension="${filename_no_path%.*}"
-  local filename_extension="${filename_no_path##*.}"
-  local source_file=$(dirname "$(realpath "$file")")"/""$(basename "$file")"
-  local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
-
-  if [[ "$format" == "chd" ]]; then
-    compress_chd "$system" "$source_file" "$dest_file"
-  elif [[ "$format" == "zip" ]]; then
-    zip -jq9 "$dest_file".zip "$source_file"
-  elif [[ "$format" == "rvz" ]]; then
-    dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
-  fi
-
-  if [[ "$post_compression_cleanup" == "true" ]]; then # Remove file(s) if requested
-    if [[ -f "${file%.*}.$format" ]]; then
-      log i "Performing post-compression file cleanup"
-      if [[ "$file" == *".cue" ]]; then
-        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-        local file_path=$(dirname "$(realpath "$file")")
-        while IFS= read -r line
-        do
-          log i "Removing file $file_path/$line"
-          rm -f "$file_path/$line"
-        done < <(printf '%s\n' "$cue_bin_files")
-        log i "Removing file $(realpath "$file")"
-        rm -f "$(realpath "$file")"
-      else
-        log i "Removing file $(realpath "$file")"
-        rm -f "$(realpath "$file")"
-      fi
-    else
-      log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
-    fi
-  fi
-}
-
-find_compatible_compression_format() {
-  # This function will determine what compression format, if any, the file and system are compatible with
-  # USAGE: find_compatible_compression_format "$file"
-  local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-  local system=$(echo "$1" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
-
-  # Extract the relevant lists from the JSON file
-  local chd_systems=$(jq -r '.compression_targets.chd[]' "$features")
-  local rvz_systems=$(jq -r '.compression_targets.rvz[]' "$features")
-  local zip_systems=$(jq -r '.compression_targets.zip[]' "$features")
-  local zip_compressable_extensions=$(jq -r '.zip_compressable_extensions[]' "$features")
-
-  if [[ $(validate_for_chd "$1") == "true" ]] && echo "$chd_systems" | grep -q "\b$system\b"; then
-    echo "chd"
-  elif echo "$zip_compressable_extensions" | grep -qF ".${normalized_filename##*.}" && echo "$zip_systems" | grep -q "\b$system\b"; then
-    echo "zip"
-  elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && echo "$rvz_systems" | grep -q "\b$system\b"; then
-    echo "rvz"
-  elif echo "$normalized_filename" | grep -qE '\.iso' && echo "$chd_systems" | grep -q "\b$system\b"; then
-    echo "cso"
-  else
-    # If no compatible format can be found for the input file
-    echo "none"
-  fi
-}
-
-
-validate_for_chd() {
-  # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
-  # USAGE: validate_for_chd $input_file
-
-	local file="$1"
-	local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
-  local file_validated="false"
-	log i "Validating file: $file"
-	if echo "$normalized_filename" | grep -qE '\.iso|\.cue|\.gdi'; then
-		log i ".cue/.iso/.gdi file detected"
-		local file_path=$(dirname "$(realpath "$file")")
-		local file_base_name=$(basename "$file")
-		local file_name=${file_base_name%.*}
-		if [[ "$normalized_filename" == *".cue" ]]; then # Validate .cue file
-			if [[ ! "$file_path" == *"dreamcast"* ]]; then # .bin/.cue compression may not work for Dreamcast, only GDI or ISO # TODO: verify
-        log i "Validating .cue associated .bin files"
-        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-        log i "Associated bin files read:"
-        log i "$(printf '%s\n' "$cue_bin_files")"
-        if [[ ! -z "$cue_bin_files" ]]; then
-          while IFS= read -r line
-          do
-            log i "Looking for $file_path/$line"
-            if [[ -f "$file_path/$line" ]]; then
-              log i ".bin file found at $file_path/$line"
-              file_validated="true"
-            else
-              log e ".bin file NOT found at $file_path/$line"
-              log e ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry."
-              file_validated="false"
-              break
-            fi
-          done < <(printf '%s\n' "$cue_bin_files")
-        fi
-      else
-        log w ".cue files not compatible with CHD compression"
-      fi
-      echo $file_validated
-		else # If file is a .iso or .gdi
-      file_validated="true"
-			echo $file_validated
-		fi
-	else
-		log w "File type not recognized. Supported file types are .cue, .gdi and .iso"
-		echo $file_validated
-	fi
-}
-
-find_compatible_games() {
-  # Supported parameters:
-  # "everything"  - All games found (regardless of format)
-  # "all"         - Only user-chosen games (later selected via checklist)
-  # "chd", "zip", "rvz" - Only games matching that compression type
-
-  log d "Started find_compatible_games with parameter: $1"
-  local output_file="${godot_compression_compatible_games}"
-  [ -f "$output_file" ] && rm -f "$output_file"
-  touch "$output_file"
-
-  local target_selection="$1"
-  local compression_format
-  if [[ "$1" == "everything" ]]; then
-    compression_format="all"
-  else
-    compression_format="$1"
-  fi
-
-  local compressible_systems_list
-  if [[ "$compression_format" == "all" ]]; then
-    compressible_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' "$features")
-    log d "compressible_systems_list: $compressible_systems_list"
-  else
-    compressible_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' "$features")
-    log d "compressible_systems_list: $compressible_systems_list"
-  fi
-
-  log d "Finding compatible games for compression ($1)"
-  log d "compression_targets: $compression_targets"
-
-  while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
-      sleep 0.1
-    done
-    (
-    log d "Checking system: $system"
-    if [[ -d "$roms_path/$system" ]]; then
-      local compression_candidates
-      compression_candidates=$(find "$roms_path/$system" -type f -not -iname "*.txt")
-      if [[ -n "$compression_candidates" ]]; then
-        while IFS= read -r game; do
-          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
-            sleep 0.1
-          done
-          (
-          log d "Checking game: $game"
-          local compatible_compression_format
-          compatible_compression_format=$(find_compatible_compression_format "$game")
-          if [[ -f "${game%.*}.$compatible_compression_format" ]]; then # If a compressed version of this game already exists
-            log d "Skipping $game because a $compatible_compression_format version already exists."
-            exit
-          fi
-          local file_ext="${game##*.}"
-          case "$compression_format" in
-            "chd")
-              if [[ "$compatible_compression_format" == "chd" ]]; then
-                log d "Game $game is compatible with CHD compression"
-                (
-                flock -x 200
-                echo "${game}^chd" >> "$output_file"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "zip")
-              if [[ "$compatible_compression_format" == "zip" ]]; then
-                log d "Game $game is compatible with ZIP compression"
-                (
-                flock -x 200
-                echo "${game}^zip" >> "$output_file"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "rvz")
-              if [[ "$compatible_compression_format" == "rvz" ]]; then
-                log d "Game $game is compatible with RVZ compression"
-                (
-                flock -x 200
-                echo "${game}^rvz" >> "$output_file"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-            "all")
-              if [[ "$compatible_compression_format" != "none" ]]; then
-                log d "Game $game is compatible with $compatible_compression_format compression"
-                (
-                flock -x 200
-                echo "${game}^${compatible_compression_format}" >> "$output_file"
-                ) 200>"$rd_file_lock"
-              fi
-              ;;
-          esac
-        ) &
-        done < <(printf '%s\n' "$compression_candidates")
-        wait # wait for background tasks to finish
-      fi
-    else
-      log d "Rom folder for $system is missing, skipping"
-    fi
-    ) &
-  done < <(printf '%s\n' "$compressible_systems_list")
-  wait # wait for background tasks to finish
-
-  log d "Compatible games have been written to $output_file"
-  cat "$output_file"
-}
-
 cli_compress_single_game() {
 	# This function will compress a single file passed from the CLI arguments
   # USAGE: cli_compress_single_game $full_file_path
@@ -319,4 +93,149 @@ cli_compress_all_games() {
   else
     log i "The response for post-compression file cleanup was not correct. Please try again."
   fi
+}
+
+get_all_compression_targets() {
+  # Gather all compression target information from component manifests.
+  # Returns a JSON object keyed by format with target_systems and optional compressable_extensions.
+  # USAGE: get_all_compression_targets
+
+  get_component_manifest_cache | jq '
+    reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
+      {};
+      .[$entry.key] = {
+        targets: ((.[$entry.key].targets // []) + ($entry.value.targets // []) | unique)
+      }
+      | if $entry.value.extensions then
+          .[$entry.key].extensions = ((.[$entry.key].extensions // []) + $entry.value.extensions | unique)
+        else . end
+    )
+  '
+}
+
+build_compression_lookups() {
+  # Build associative array lookups from compression target data for fast per-file matching.
+  # Should be called once before batch operations like api_get_compressible_games.
+  # USAGE: build_compression_lookups
+
+  local compression_targets
+  compression_targets=$(get_all_compression_targets)
+
+  _compression_system_format=()
+  _compression_ext_restrictions=()
+  _compression_allowed_extensions=()
+
+  # Build system -> format lookup
+  while IFS=$'\t' read -r format system; do
+    log d "format: $format"
+    log d "system: $system"
+    _compression_system_format["$system"]="$format"
+  done < <(jq -r '
+    to_entries[] | .key as $fmt |
+    .value.targets[] |
+    [$fmt, .] | @tsv
+  ' <<< "$compression_targets")
+
+  # Build extension restriction flags and allowed extensions per format
+  while IFS=$'\t' read -r format extension; do
+#     log d "format2: $format"
+#     log d "extension: $extension"
+    _compression_ext_restrictions["$format"]=1
+    _compression_allowed_extensions["${format}:${extension}"]=1
+  done < <(jq -r '
+    to_entries[]
+    | select(.value.extensions)
+    | .key as $fmt
+    | .value.extensions[]
+    | [$fmt, .] | @tsv
+  ' <<< "$compression_targets")
+}
+
+find_compatible_compression_format() {
+  # Determine what compression format, if any, a file and its system are compatible with.
+  # Requires build_compression_lookups to have been called.
+  # Returns the format name or "none".
+  # USAGE: find_compatible_compression_format "$file"
+
+  local file="$1"
+  local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
+  local file_extension=".${normalized_filename##*.}"
+  local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
+
+  # Look up format for this system
+  local format="${_compression_system_format[$system]:-}"
+  if [[ -z "$format" ]]; then
+    echo "none"
+    return
+  fi
+
+  # Check extension restrictions if the format has them
+  if [[ -n "${_compression_ext_restrictions[$format]+x}" ]]; then
+    if [[ -z "${_compression_allowed_extensions[${format}:${file_extension}]+x}" ]]; then
+      echo "none"
+      return
+    fi
+  fi
+
+  # Run format-specific validation
+  local validator="_validate_for_compression::${format}"
+
+  if declare -F "$validator" > /dev/null; then
+    if $("$validator" "$file"); then
+      echo "$format"
+    else
+      echo "none"
+    fi
+  else
+    log e "No validation handler found for format: $format"
+    echo "none"
+  fi
+}
+
+compress_game() {
+  # Compress a file to its compatible format and optionally clean up source files.
+  # USAGE: compress_game "$format" "$full_path_to_input_file" "$cleanup_choice"
+
+  local format="$1"
+  local file="$2"
+  local post_compression_cleanup="$3"
+  local filename_no_extension="${file%.*}"
+  local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+  local dest_file=$(dirname "$(realpath "$file")")"/${filename_no_extension##*/}"
+  local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
+
+  local handler="_compress_game::${format}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No compression handler found for format: $format"
+    return 1
+  fi
+
+  "$handler" "$source_file" "$dest_file" "$system"
+
+  if [[ "$post_compression_cleanup" == "true" && -f "${file%.*}.$format" ]]; then
+    log i "Performing post-compression file cleanup"
+    if [[ "$file" == *".cue" ]]; then
+      local file_path=$(dirname "$(realpath "$file")")
+      while IFS= read -r bin_file; do
+        log i "Removing file $file_path/$bin_file"
+        rm -f "$file_path/$bin_file"
+      done < <(grep -o -P '(?<=FILE ").*(?=".*$)' "$file")
+    fi
+    log i "Removing file $(realpath "$file")"
+    rm -f "$(realpath "$file")"
+  elif [[ "$post_compression_cleanup" == "true" ]]; then
+    log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
+  fi
+}
+
+_validate_for_compression::zip() {
+  local file="$1"
+  # zip accepts any file, validation is handled by extension/system matching
+  return 0
+}
+
+_compress_game::zip() {
+  local source_file="$1"
+  local dest_file="$2"
+  zip -jq9 "$dest_file.zip" "$source_file"
 }
