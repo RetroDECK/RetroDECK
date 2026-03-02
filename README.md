@@ -1,10 +1,9 @@
 <p float="center">
-    <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="550"/>
+    <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/extra_splashes/newsplash.svg?raw=true" alt="RetroDECK logo" width="550"/>
 </p>
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
-![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
