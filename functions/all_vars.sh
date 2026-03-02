@@ -12,8 +12,6 @@ finit_options_list="$rd_core_files/reference_lists/finit_options_list.cfg"      
 splashscreen_dir="/app/retrodeck/graphics/extra_splashes"                                   # The default location of extra splash screens
 current_splash_file="$XDG_CONFIG_HOME/ES-DE/resources/graphics/splash.svg"                                    # The active splash file that will be shown on boot
 default_splash_file="/app/retrodeck/graphics/splash.svg"                               # The default RetroDECK splash screen
-# TODO: instead of this maybe we can iterate the features.json
-multi_user_emulator_config_dirs="$rd_core_files/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                   # The directory where themes packaged with RetroDECK are stored
 rd_lockfile="$XDG_CONFIG_HOME/retrodeck/.lock"                                                                   # Where the lockfile is located
 sd_sdcard_default_path="/run/media/mmcblk0p1"                                                                        # Steam Deck SD default path
