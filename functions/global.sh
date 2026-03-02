@@ -173,17 +173,17 @@ if [[ ! -f "$rd_conf" ]]; then
   fi
 
   # Check if SD card path has changed from SteamOS update
-  if [[ ! -d "$sd_sdcard_default_path" && "$(ls -A "/run/media/deck/" 2>/dev/null)" ]]; then
+  if [[ ! -d "$sdcard_default_path" && "$(ls -A "/run/media/deck/" 2>/dev/null)" ]]; then
     if [[ $(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
-      sd_sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null)"
+      sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null)"
     else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, pick the first one silently
-      sd_sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | head -n 1)"
+      sdcard_default_path="$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | head -n 1)"
     fi
   fi
 
   cp "$rd_defaults" "$rd_conf" # Load default settings file
   set_setting_value "$rd_conf" "version" "$version" retrodeck # Set current version for new installs
-  set_setting_value "$rd_conf" "sdcard" "$sd_sdcard_default_path" retrodeck "paths" # Set SD card location if default path has changed
+  set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths" # Set SD card location if default path has changed
 
   if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
     set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
