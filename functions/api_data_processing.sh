@@ -2,7 +2,6 @@
 
 # This is the main data processing hub for the RetroDECK API.
 # It will handle the direct demands of the API requests by leveraging the rest of the RetroDECK functions.
-# Most of these functions will have been adapted from the ones built for the Zenity Configurator, with the Zenity specifics pulled out and all data passed through JSON objects.
 
 api_get_compressible_games() {
   # Supported parameters:
