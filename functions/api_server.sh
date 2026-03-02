@@ -434,11 +434,10 @@ process_request() {
             local system
             local compression_format
 
-            system=$(echo "$game" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
             compression_format=$(jq -r --arg game_path "$game" '.games.[] | select(.game == $game_path) | .format' <<< "$request_data")
 
             log i "Compressing $(basename "$game") into $compression_format format"
-            compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
+            compress_game "$compression_format" "$game" "$post_compression_cleanup"
             ) &
           done <<< "$(jq -r '.games.[].game' <<< "$request_data")"
           wait # wait for background tasks to finish
