@@ -172,77 +172,81 @@ api_get_all_preset_names() {
 }
 
 api_get_current_preset_state() {
-  # This function will gather the state (enabled/disabled/other) of all the systems in a given preset. An "all" argument can also be given which will check all presets for all components.
-  # Optionally, a specific component can be added, which will make the function return the state of all presets for that one component
-  # USAGE: api_get_current_preset_settings "$preset" ("$specific_component")
+  # Gather the state (enabled/disabled/other) of all systems in a given preset, or all presets.
+  # Optionally filter to a specific component.
+  # USAGE: api_get_current_preset_state "$preset" ["$specific_component"]
 
   local preset="$1"
   local specific_component="$2"
   local preset_settings='{}'
 
   while read -r preset_name; do
-    if [[ "$preset" == "all" || "$preset_name" == "$preset" ]]; then # If iterated preset matches request
-      while read -r component; do
-        if [[ ! -n "$specific_component" || "$component" == "$specific_component" ]]; then
-          if ! jq -e --arg preset_name "$preset_name" '. | has($preset_name)' <<< "$preset_settings" > /dev/null; then
-            log d "Preset $preset_name not yet added to list, adding..."
-            preset_settings=$(jq --arg preset "$preset_name" '. += { ($preset): [] }' <<< "$preset_settings")
-          fi
-          base_component=$(jq -r --arg preset "$preset_name" \
-                                 --arg component "$component" '.presets[$preset]
-                                                              | paths(scalars)
-                                                              | select(.[-1] == $component)
-                                                              | if length > 1 then .[-2] else $preset end
-                                                              ' "$rd_conf")
-          if [[ ! "$preset_name" == "$base_component" ]]; then # If component is a core
-            log d "Component $component is a core of $base_component"
-            base_component="${base_component%_cores}"
-          else
-            base_component="$component"
-          fi
-
-          local json_info=$(jq -r --arg component "$component" '(keys_unsorted[0]) as $system_key
-                                                                | .[$system_key] as $sys
-                                                                | (if $component == $system_key
-                                                                    then $sys
-                                                                    else $sys.cores[$component]
-                                                                  end) as $selection
-                                                                | {
-                                                                    system_name: (if $component == $system_key then $system_key else $component end),
-                                                                    data: {
-                                                                      system_friendly_name:       $selection.name,
-                                                                      description:                $selection.description,
-                                                                      emulated_system:            $selection.system,
-                                                                      emulated_system_friendly_name: $selection.system_friendly_name
-                                                                    }
-                                                                  }
-                                                              ' "$rd_components/$base_component/component_manifest.json")
-
-          local system_name=$(jq -c '.system_name' <<< "$json_info")
-          local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
-          local description=$(jq -c '.data.description' <<< "$json_info")
-          local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
-          local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
-          local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
-
-          local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
-                --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" --arg base_comp "$base_component" \
-                'if $base_comp == $name then
-                  { system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }
-                else
-                  { system_name: $name, parent_component: $base_comp, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly,
-                  status: $status }
-                end')
-
-          preset_settings=$(jq --arg preset "$preset_name" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$preset_settings")
-        fi
-      done < <(jq -r --arg preset "$preset_name" '.presets[$preset]
-                                                    | paths(scalars)
-                                                    | .[-1]
-                                                  ' "$rd_conf") # Find all component names in this preset, finding core names if they exist
+    if [[ "$preset" != "all" && "$preset_name" != "$preset" ]]; then
+      continue
     fi
+
+    while read -r component; do
+      if [[ -n "$specific_component" && "$component" != "$specific_component" ]]; then
+        continue
+      fi
+
+      local base_component
+      base_component=$(jq -r --arg preset "$preset_name" \
+        --arg component "$component" '
+        .presets[$preset]
+        | paths(scalars)
+        | select(.[-1] == $component)
+        | if length > 1 then .[-2] else $preset end
+      ' "$rd_conf")
+
+      local is_core=false
+      if [[ "$base_component" != "$preset_name" ]]; then
+        log d "Component $component is a core of $base_component"
+        is_core=true
+        base_component="${base_component%_cores}"
+      else
+        base_component="$component"
+      fi
+
+      local manifest_data
+      manifest_data=$(get_component_manifest_cache | jq --arg comp "$base_component" '
+        .[] | select(.manifest | has($comp)) | .manifest
+      ')
+
+      if [[ -z "$manifest_data" || "$manifest_data" == "null" ]]; then
+        log e "Manifest not found for component $base_component"
+        continue
+      fi
+
+      local json_obj
+      json_obj=$(jq -c --arg component "$component" \
+        --argjson is_core "$is_core" \
+        --arg base_comp "$base_component" \
+        --arg status "$preset_status" '
+        (keys_unsorted[0]) as $system_key
+        | .[$system_key] as $sys
+        | (if $component == $system_key then $sys else $sys.cores[$component] end) as $selection
+        | {
+            system_name: (if $component == $system_key then $system_key else $component end),
+            system_friendly_name: $selection.name,
+            description: $selection.description,
+            emulated_system: $selection.system,
+            emulated_system_friendly_name: $selection.system_friendly_name,
+            status: $status
+          }
+        | if $is_core then . + { parent_component: $base_comp } else . end
+      ' <<< "$manifest_data")
+
+      preset_settings=$(jq --arg preset "$preset_name" --argjson obj "$json_obj" '
+        .[$preset] = ((.[$preset] // []) + [$obj])
+      ' <<< "$preset_settings")
+
+    done < <(jq -r --arg preset "$preset_name" '
+      .presets[$preset] | paths(scalars) | .[-1]
+    ' "$rd_conf")
   done < <(jq -r '.presets | keys[]' "$rd_conf")
-  echo "$preset_settings" | jq .
+
+  echo "$preset_settings"
 }
 
 api_get_bios_file_status() {
