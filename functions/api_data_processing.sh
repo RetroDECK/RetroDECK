@@ -138,64 +138,30 @@ api_get_compressible_games() {
 }
 
 api_get_component() {
-  local component
-  local manifest_files
-  component="$1"
+  # Gather component metadata from cached manifest data.
+  # Returns a JSON array of component objects sorted alphabetically, with "retrodeck" always first.
+  # USAGE: api_get_component "<component_name | all>"
 
-  if [[ "$component" == "all" ]]; then
-    manifest_files=$(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
-  else # A specific component was named
-    manifest_files=$(find "$rd_components/$component" -maxdepth 1 -mindepth 1 -type f -name "component_manifest.json")
-    if [[ ! -n "$manifest_files" ]]; then # No results were found for the given component name
-      echo "information for component $component could not be found"
-      return 1
-    fi
-  fi
+  local component="$1"
 
-  # Initialize the empty JSON file meant for final output
-  local all_components_obj="$(mktemp)"
-  echo '[]' > "$all_components_obj"
-
-  while IFS= read -r manifest_file; do
-    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
-      sleep 0.1
-    done
-    (
-      json_info=$(jq -r '
-        # Grab the first top‑level key into $system_key
-        (keys_unsorted[0]) as $system_key
-        | .[$system_key] as $sys
-        | {
-            component_name: $system_key,
-            data: ( {
-              component_friendly_name: $sys.name,
-              description: $sys.description,
-              system: $sys.system
-            }
-            + (if $sys.compatible_presets? != null then {compatible_presets: $sys.compatible_presets} else {} end)
-          )
-          }
-      ' "$manifest_file")
-      local component_name=$(jq -r '.component_name' <<< "$json_info")
-      local component_friendly_name=$(jq -r '.data.component_friendly_name // empty' <<< "$json_info")
-      local description=$(jq -r '.data.description // empty' <<< "$json_info")
-      local system=$(jq -r '.data.system // "none"' <<< "$json_info")
-      local compatible_presets=$(jq -c '.data.compatible_presets // "none"' <<< "$json_info")
-      local json_obj=$(jq -n --arg name "$component_name" --arg friendly_name "$component_friendly_name" --arg desc "$description" --arg system "$system" \
-                            --argjson compatible_presets "$compatible_presets" --arg path "$(dirname "$manifest_file")" \
-                            '{ component_name: $name, component_friendly_name: $friendly_name, description: $desc, emulated_system: $system, path: $path, compatible_presets: $compatible_presets }')
-      (
-      flock -x 200
-      jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
-      ) 200>"$rd_file_lock"
-    ) &
-  done < <(echo "$manifest_files")
-  wait # Wait for background tasks to finish
-
-  local final_json=$(jq '[.[] | select(.component_name == "retrodeck")] + ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))' "$all_components_obj") # Ensure RetroDECK is always first in the list
-  rm "$all_components_obj"
-
-  echo "$final_json"
+  get_component_manifest_cache | jq --arg component "$component" '
+    [.[] |
+     .component_path as $path |
+     .manifest | to_entries[] |
+     .key as $component_name | .value as $sys |
+     select($component == "all" or $component_name == $component) |
+     {
+       component_name: $component_name,
+       component_friendly_name: ($sys.name // ""),
+       description: ($sys.description // ""),
+       emulated_system: ($sys.system // "none"),
+       path: $path,
+       compatible_presets: ($sys.compatible_presets // "none")
+     }
+    ]
+    | [.[] | select(.component_name == "retrodeck")] +
+      ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))
+  '
 }
 
 api_get_all_preset_names() {
