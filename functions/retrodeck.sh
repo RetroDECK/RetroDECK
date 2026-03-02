@@ -137,7 +137,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --configurator)
-            sh /app/tools/configurator.sh
+            /bin/bash /app/tools/configurator.sh
             exit 0
             ;;
         --reset)
