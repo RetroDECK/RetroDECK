@@ -167,55 +167,31 @@ conf_read() {
 }
 
 conf_write() {
-  # This function will update the RetroDECK config file with matching variables from memory
+  # Write current in-memory values for version, paths, and options back to the RetroDECK JSON config file.
   # USAGE: conf_write
 
-  if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-    local tmp jq_args=() filter
+  local tmp jq_args=() filter
 
-    # Update version
-    jq_args+=(--arg version "$version")
-    filter='.version = $version'
+  jq_args+=(--arg version "$version")
+  filter='.version = $version'
 
-    # Update paths section
-    while read -r setting_name; do
-      local setting_value="${!setting_name}"
-      jq_args+=(--arg "$setting_name" "$setting_value")
-      filter+=" | .paths.$setting_name = \$$setting_name"
-    done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
+  while read -r setting_name; do
+    [[ -z "$setting_name" ]] && continue
+    local setting_value="${!setting_name}"
+    jq_args+=(--arg "$setting_name" "$setting_value")
+    filter+=" | .paths.$setting_name = \$$setting_name"
+  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
-    # Update options section
-    while read -r setting_name; do
-      local setting_value="${!setting_name}"
-      jq_args+=(--arg "$setting_name" "$setting_value")
-      filter+=" | .options.$setting_name = \$$setting_name"
-    done < <(jq -r '(.options // {}) | keys[]' "$rd_conf")
+  while read -r setting_name; do
+    [[ -z "$setting_name" ]] && continue
+    local setting_value="${!setting_name}"
+    jq_args+=(--arg "$setting_name" "$setting_value")
+    filter+=" | .options.$setting_name = \$$setting_name"
+  done < <(jq -r '(.options // {}) | keys[]' "$rd_conf")
 
-    # Write all gathered information
-    tmp=$(mktemp)
-    jq "${jq_args[@]}" \
-      "$filter" \
-      "$rd_conf" > "$tmp" \
-      && mv "$tmp" "$rd_conf"
-  else
-    while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-    do
-      if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-        if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-          local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-        else
-          if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-            local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-            local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-            if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
-              set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
-            fi
-          fi
-        fi
-      fi
-    done < "$rd_conf"
-  fi
+  tmp=$(mktemp)
+  jq "${jq_args[@]}" "$filter" "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
+
   log d "retrodeck.cfg written"
 }
 
@@ -1317,62 +1293,6 @@ check_if_updated() {
   else
     log w "Lockfile not found"
     finit             # Executing First/Force init
-  fi
-}
-
-source_component_functions() {
-  # This function will iterate the component_functions.sh file for every installed component and source it for use in the greater application
-  # Specific component names can be specified, as well as the unique values of "retrodeck", "external" or "internal"
-  # The "retrodeck" option will source only the RetroDECK component_functions.sh file, which is typically needed to be sourced before anything else on boot
-  # The "internal" option will source components which are specifically internal to RetroDECK, such as SRM or ES-DE, but not RetroDECK itself
-  # The "external" option will source everything else, excluding the RetroDECK and internal files for speed reasons
-  # A specific component name will also be allowed, where the component_functions.sh file under $rd_components/<component name> will be sourced.
-  # A fallback where all files are sourced when there is no component specified is also an option.
-
-  local choice="$1"
-
-  if [[ -n "$choice" ]]; then
-    case "$choice" in
-
-    "internal" )
-      set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      source "$rd_components/es-de/component_functions.sh"
-      log d "Sourcing $rd_components/es-de/component_functions.sh"
-      source "$rd_components/steam-rom-manager/component_functions.sh"
-      log d "Sourcing $rd_components/steam-rom-manager/component_functions.sh"
-      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-    ;;
-
-    "external" )
-      while IFS= read -r functions_file; do
-        if [[ ! $(basename $(dirname $functions_file)) =~ ^(retrodeck|es-de|steam-rom-manager)$ ]]; then
-          log d "Found component functions file $functions_file"
-          set -o allexport # Export all the variables found during sourcing, for use elsewhere
-          source "$functions_file"
-          set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-        fi
-      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_functions.sh")
-    ;;
-
-    * )
-      if [[ -n $(find "$rd_components/$choice" -maxdepth 1 -mindepth 1 -type f -name "component_functions.sh") ]]; then
-        set -o allexport # Export all the variables found during sourcing, for use elsewhere
-        log d "Sourcing $rd_components/$choice/component_functions.sh"
-        source "$rd_components/$choice/component_functions.sh"
-        set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-      else
-        log e "component_functions.sh file for component $choice could not be found."
-      fi
-    ;;
-
-    esac
-  else
-    while IFS= read -r functions_file; do
-      log d "Found component functions file $functions_file"
-      set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      source "$functions_file"
-      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_functions.sh")
   fi
 }
 
