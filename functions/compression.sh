@@ -99,6 +99,7 @@ find_compatible_compression_format() {
 
 compress_game() {
   # Compress a file to its compatible format and optionally clean up source files.
+  # Dispatches to the appropriate component handler based on format.
   # USAGE: compress_game "$format" "$full_path_to_input_file" "$cleanup_choice"
 
   local format="$1"
@@ -107,7 +108,6 @@ compress_game() {
   local filename_no_extension="${file%.*}"
   local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
   local dest_file=$(dirname "$(realpath "$file")")"/${filename_no_extension##*/}"
-  local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
 
   local handler="_compress_game::${format}"
   if ! declare -F "$handler" > /dev/null; then
@@ -115,7 +115,7 @@ compress_game() {
     return 1
   fi
 
-  "$handler" "$source_file" "$dest_file" "$system"
+  "$handler" "$source_file" "$dest_file"
 
   if [[ "$post_compression_cleanup" == "true" && -f "${file%.*}.$format" ]]; then
     log i "Performing post-compression file cleanup"
