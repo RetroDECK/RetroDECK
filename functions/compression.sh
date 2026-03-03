@@ -25,7 +25,7 @@ get_all_compression_targets() {
 
 build_compression_lookups() {
   # Build associative array lookups from compression target data for fast per-file matching.
-  # Should be called once before batch operations like api_get_compressible_games.
+  # Should be called once during application startup, after component functions are sourced.
   # USAGE: build_compression_lookups
 
   local compression_targets
@@ -86,7 +86,7 @@ find_compatible_compression_format() {
   # Run format-specific validation
   local validator="_validate_for_compression::${format}"
   if declare -F "$validator" > /dev/null; then
-    if [[ $("$validator" "$file") ]]; then
+    if "$validator" "$file"; then
       echo "$format"
     else
       echo "none"
