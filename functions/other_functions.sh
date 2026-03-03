@@ -777,20 +777,6 @@ finit() {
   fi
 }
 
-install_retrodeck_starterpack() {
-  # This function will install the roms, gamelists and metadata for the RetroDECK Starter Pack, a curated selection of games the creators of RetroDECK enjoy.
-  # USAGE: install_retrodeck_starterpack
-
-  ## DOOM section ##
-  cp /app/retrodeck/extras/doom1.wad "$roms_path/doom/doom1.wad" # No -f in case the user already has it
-  create_dir "$XDG_CONFIG_HOME/ES-DE/gamelists/doom"
-  if [[ ! -f "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml"
-  fi
-  create_dir "$downloaded_media_path/doom"
-  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$downloaded_media_path/doom/"
-}
-
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
@@ -933,31 +919,6 @@ install_release() {
 
   configurator_generic_dialog "RetroDECK - Online Update" "<span foreground='$purple'><b>The update process is now complete!</b></span>\n\nRetroDECK will now quit."
   quit_retrodeck
-}
-
-# Don't remove this function as itś used in post update of 0.10.b to remove ponzu itself
-ponzu_remove() {
-
-  # Call me with yuzu or citra and I will remove them
-
-  if [[ "$1" == "citra" ]]; then
-    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
-      log i "Ponzu: removing Citra"
-      rm -rf "$XDG_DATA_HOME/ponzu/Citra"
-      set_setting_value "$rd_conf" "akai_ponzu" "false" retrodeck "options"
-      configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
-    fi
-  elif [[ "$1" == "yuzu" ]]; then
-    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
-      log i "Ponzu: removing Yuzu"
-      rm -rf "$XDG_DATA_HOME/ponzu/Yuzu"
-      set_setting_value "$rd_conf" "kiroi_ponzu" "false" retrodeck "options"
-      configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
-    fi
-  else
-    log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
-  fi
-  configurator_tools_dialog
 }
 
 release_selector() {

@@ -1033,13 +1033,6 @@ configurator_browse_retrodeck_wiki_dialog() {
   configurator_developer_dialog
 }
 
-configurator_install_retrodeck_starter_pack_dialog() {
-  if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
-    install_retrodeck_starterpack
-  fi
-  configurator_developer_dialog
-}
-
 configurator_retrodeck_multiuser_dialog() {
   if [[ $(get_setting_value "$rd_conf" "multi_user_mode" retrodeck "options") == "true" ]]; then
     rd_zenity --question \
