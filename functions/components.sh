@@ -123,94 +123,41 @@ deploy_helper_files() {
   done < <(get_all_helper_files | jq -c '.[]')
 }
 
-get_all_compression_targets() {
-  # Gather all compression target information from component manifests.
-  # Returns a JSON object keyed by format with target_systems and optional compressable_extensions.
-  # USAGE: get_all_compression_targets
+source_component_functions() {
+  # Source component_functions.sh files from installed components, making their variables and functions globally available.
+  # Framework is always sourced first as it provides core application infrastructure.
+  # A specific component name can be given to source only that component.
+  # USAGE: source_component_functions "[$component] (optional, default: all)"
 
-  get_component_manifest_cache | jq '
-    reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
-      {};
-      .[$entry.key] = {
-        target_systems: ((.[$entry.key].target_systems // []) + ($entry.value.target_systems // []) | unique)
-      }
-      | if $entry.value.compressable_extensions then
-          .[$entry.key].compressable_extensions = ((.[$entry.key].compressable_extensions // []) + $entry.value.compressable_extensions | unique)
-        else . end
-    )
-  '
-}
+  local choice="${1:-all}"
 
-build_compression_lookups() {
-  # Build associative array lookups from compression target data for fast per-file matching.
-  # Should be called once before batch operations like api_get_compressible_games.
-  # USAGE: build_compression_lookups
-
-  local compression_targets
-  compression_targets=$(get_all_compression_targets)
-
-  _compression_system_format=()
-  _compression_ext_restrictions=()
-  _compression_allowed_extensions=()
-
-  # Build system -> format lookup
-  while IFS=$'\t' read -r format system; do
-    _compression_system_format["$system"]="$format"
-  done < <(jq -r '
-    to_entries[] | .key as $fmt |
-    .value.target_systems[] |
-    [$fmt, .] | @tsv
-  ' <<< "$compression_targets")
-
-  # Build extension restriction flags and allowed extensions per format
-  while IFS=$'\t' read -r format extension; do
-    _compression_ext_restrictions["$format"]=1
-    _compression_allowed_extensions["${format}:${extension}"]=1
-  done < <(jq -r '
-    to_entries[]
-    | select(.value.compressable_extensions)
-    | .key as $fmt
-    | .value.compressable_extensions[]
-    | [$fmt, .] | @tsv
-  ' <<< "$compression_targets")
-}
-
-find_compatible_compression_format() {
-  # Determine what compression format, if any, a file and its system are compatible with.
-  # Requires build_compression_lookups to have been called.
-  # Returns the format name or "none".
-  # USAGE: find_compatible_compression_format "$file"
-
-  local file="$1"
-  local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
-  local file_extension=".${normalized_filename##*.}"
-  local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
-
-  # Look up format for this system
-  local format="${_compression_system_format[$system]:-}"
-  if [[ -z "$format" ]]; then
-    echo "none"
-    return
-  fi
-
-  # Check extension restrictions if the format has them
-  if [[ -n "${_compression_ext_restrictions[$format]+x}" ]]; then
-    if [[ -z "${_compression_allowed_extensions[${format}:${file_extension}]+x}" ]]; then
-      echo "none"
-      return
+  if [[ "$choice" == "all" ]]; then
+    # Framework always sources first
+    local framework_file
+    framework_file=$(find_component_files "component_functions.sh" "framework")
+    if [[ -n "$framework_file" ]]; then
+      log d "Sourcing framework: $framework_file"
+      source "$framework_file"
     fi
-  fi
 
-  # Run format-specific validation
-  local validator="_validate_for_compression::${format}"
-  if declare -F "$validator" > /dev/null; then
-    if [[ $("$validator" "$file") ]]; then
-      echo "$format"
-    else
-      echo "none"
-    fi
+    # Source all other components
+    while IFS= read -r func_file; do
+      [[ -z "$func_file" ]] && continue
+      local component_name
+      component_name=$(basename "$(dirname "$function_file")")
+      [[ "$component_name" == "framework" ]] && continue
+      log d "Sourcing component: $function_file"
+      source "$function_file"
+    done < <(find_component_files "component_functions.sh")
   else
-    log e "No validation handler found for format: $format"
-    echo "none"
+    local function_file
+    function_file=$(find_component_files "component_functions.sh" "$choice")
+    if [[ -n "$function_file" ]]; then
+      log d "Sourcing component: $function_file"
+      source "$function_file"
+    else
+      log e "component_functions.sh for component $choice could not be found"
+      return 1
+    fi
   fi
 }
