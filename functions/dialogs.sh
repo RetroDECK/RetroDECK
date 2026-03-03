@@ -985,34 +985,6 @@ configurator_browse_retrodeck_wiki_dialog() {
   configurator_developer_dialog
 }
 
-configurator_retrodeck_multiuser_dialog() {
-  if [[ $(get_setting_value "$rd_conf" "multi_user_mode" retrodeck "options") == "true" ]]; then
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
-    --text="Multi-user mode is currently enabled. Do you want to disable it?\n\nIf there is more than one user configured, you will be given a choice of which user to keep as the single RetroDECK user.\n\nThis users files will be moved to the default locations.\n\nOther users files will remain in the mutli-user-data folder."
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      multi_user_disable_multi_user_mode
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
-  else
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Multi-user support" \
-    --text="Multi-user mode is currently disabled. Do you want to enable it?\n\nThe current users saves and states will be backed up and moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
-
-    if [ $? == 0 ]
-    then
-      multi_user_enable_multi_user_mode
-    else
-      configurator_developer_dialog
-    fi
-  fi
-}
-
 configurator_online_update_channel_dialog() {
   if [[ $(get_setting_value "$rd_conf" "update_repo" retrodeck "options") == "RetroDECK" ]]; then
     rd_zenity --question \
