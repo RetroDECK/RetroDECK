@@ -2,9 +2,6 @@
 
 # Component-parsing-related variables
 component_manifest_cache=""
-declare -A _compression_system_format
-declare -A _compression_ext_restrictions
-declare -A _compression_allowed_extensions
 
 find_component_files() {
   # Find files of a given name across all component directories, with external components taking precedence over internal ones when both exist.
