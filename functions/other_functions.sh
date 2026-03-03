@@ -146,47 +146,24 @@ download_file() {
 }
 
 conf_read() {
-  # This function will read the RetroDECK config file into memory
+  # Read the RetroDECK JSON config file and load version, paths, and options into global variables.
   # USAGE: conf_read
 
-  set -o allexport # Export all the variables found during sourcing, for use elsewhere  
+  while IFS=$'\t' read -r name value; do
+    [[ -z "$name" ]] && continue
+    declare -g "$name=$value"
+    export "$name"
+  done < <(jq -r '
+    ({ version: .version }
+    + (.paths   // {})
+    + (.options // {})
+    )
+    | to_entries[]
+    | [.key, (.value | tostring)]
+    | @tsv
+  ' "$rd_conf")
 
-  if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-    while IFS== read -r name value; do
-      printf -v "$name" '%s' "$value"
-      export "${name}"
-    done < <(jq -r '
-      # grab standalone object version into $ver
-      .version as $ver
-      |
-      # build a new object with just version, + paths, + options
-      ({ version: $ver }
-      + (.paths   // {} )
-      + (.options // {} )
-      )
-      # turn it into ["key","value"] pairs, then "key=value"
-      | to_entries[]
-      | "\(.key)=\(.value)"
-      ' "$rd_conf")
-    else
-      while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-      do
-        if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-          if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-            local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-          else
-            if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-              local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
-              local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
-              declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
-              export "$current_setting_name"
-            fi
-          fi
-        fi
-      done < "$rd_conf"
-    fi
   log d "retrodeck.cfg read and loaded"
-  set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
 }
 
 conf_write() {
