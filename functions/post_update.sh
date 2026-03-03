@@ -22,12 +22,12 @@ post_update() {
 
   # Start of post_update actions
 
-  if [[ $(check_version_is_older_than "$version_being_updated" "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+  if check_version_is_older_than "$version_being_updated" "0.5.0b"; then # If updating from prior to save sorting change at 0.5.0b
     log d "Version is older than 0.5.0b, executing save migration"
     save_migration
   fi
 
-  if [[ $(check_version_is_older_than "$version_being_updated" "0.10.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.10.0b
+  if check_version_is_older_than "$version_being_updated" "0.10.0b"; then # If updating from prior to save sorting change at 0.10.0b
 
     log d "Version is older than 0.10.0b, defining legacy paths for proper post_update processing."
     rdhome="$rd_home_path"

@@ -133,6 +133,7 @@ check_version_is_older_than() {
   local new_clean="${new_extracted%%[!0-9.]*}"
 
   if [[ "$current_clean" == "$new_clean" ]]; then
+    # Pre-production builds (any prefix present) always run post_update for their matching version
     if [[ "$hard_version" != "$current_version" ]]; then
       return 0
     fi
