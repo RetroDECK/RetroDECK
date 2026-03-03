@@ -784,34 +784,6 @@ create_lock() {
   touch "$rd_lockfile"
 }
 
-splash_screen() {
-  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
-  # USAGE: splash_screen
-
-  current_day=$(date +"%m%d")  # Read the current date in a format that can be calculated in ranges
-  current_time=$(date +"%H%M") # Read the current time in a format that can be calculated in ranges
-
-  # Read the JSON file and extract splash screen data using jq
-  splash_screen=$(jq -r --arg current_day "$current_day" --arg current_time "$current_time" '
-    .splash_screens | to_entries[] |
-    select(
-      ($current_day | tonumber) >= (.value.start_date | tonumber) and
-      ($current_day | tonumber) <= (.value.end_date | tonumber) and
-      ($current_time | tonumber) >= (.value.start_time | tonumber) and
-      ($current_time | tonumber) <= (.value.end_time | tonumber)
-    ) | .value.filename' "$features")
-
-  # Determine the splash file to use
-  if [[ -n "$splash_screen" ]]; then
-    new_splash_file="$splashscreen_dir/$splash_screen"
-  else
-    new_splash_file="$default_splash_file"
-  fi
-
-  mkdir -p "$XDG_CONFIG_HOME/ES-DE/resources/graphics"
-  cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
-}
-
 install_release() {
   log d "Attempting to install release: $1 from repo $update_repo"
 
@@ -1121,19 +1093,6 @@ open_component(){
       log e "No launcher could be found for the component: $command"
     fi
   fi
-}
-
-add_retrodeck_to_steam() {
-  (
-    log i "RetroDECK has been added to Steam"
-    rd_srm enable --names "RetroDECK Launcher"
-    rd_srm add
-  ) |
-  rd_zenity --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Adding RetroDECK to Steam" \
-    --text="RetroDECK is being added to Steam.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>"
-  rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\n\<span foreground='$purple'><b>Please restart Steam to see the changes.</b></span>"
 }
 
 repair_paths() {
