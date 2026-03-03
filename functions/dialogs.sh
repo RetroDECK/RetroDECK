@@ -512,40 +512,6 @@ configurator_power_user_warning_dialog() {
   fi
 }
 
-configurator_portmaster_toggle_dialog() {
-  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - PortMaster Visibility" \
-    --text="PortMaster is currently <span foreground='$purple'><b>Visible</b></span> in ES-DE. Do you want to hide it?\n\n\<span foreground='$purple'><b>Note: The installed games will still be visible.</b></span>"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      portmaster_show "false"
-      rd_zenity --info \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - PortMaster Visibility" \
-      --text="PortMaster is now <span foreground='$purple'><b>Hidden</b></span> in ES-DE.\n\Please refresh your game list in ES-DE or restart RetroDECK to see the changes.\n\n\To launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
-    fi
-  else
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - PortMaster Visibility" \
-    --text="PortMaster is currently <span foreground='$purple'><b>Hidden</b></span> in ES-DE. Do you want to show it?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      portmaster_show "true"
-      rd_zenity --info \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - PortMaster Visibility" \
-      --text="PortMaster is now <span foreground='$purple'><b>Visible</b></span> in ES-DE.\nPlease refresh your game list in ES-DE or restart RetroDECK to see the changes."
-    fi
-  fi
-
-  configurator_global_presets_and_settings_dialog
-}
-
 configurator_bios_checker_dialog() {
 
   log d "Starting BIOS checker"
@@ -970,21 +936,6 @@ configurator_clean_empty_systems_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Clean Empty System Folders" --text "Searching for empty system folders.\n\nPlease wait..."
 
-  configurator_data_management_dialog
-}
-
-configurator_rebuild_esde_systems() {
-  start_esde --create-system-dirs
-  local current_iconset=$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")
-  if [[ ! "$current_iconset" == "false" ]]; then
-    (
-    handle_folder_iconsets "$current_iconset"
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Rebuilding Folder Iconsets In Progress"
-  fi
-  configurator_generic_dialog "RetroDECK Configurator - Rebuild System Folders" "<span foreground='$purple'><b>The rebuilding process is complete.</b></span>\n\nAll missing default system folders will now exist in <span foreground='$purple'><b>$roms_path</b></span>."
   configurator_data_management_dialog
 }
 
