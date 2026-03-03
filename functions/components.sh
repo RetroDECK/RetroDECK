@@ -161,3 +161,114 @@ source_component_functions() {
     fi
   fi
 }
+
+prepare_component() {
+  # Perform one of several actions on one or more components.
+  # Actions include "reset" (initialize component), "postmove" (update paths after folder move), and "startup" (run startup actions).
+  # A component can be called by name or "all" to perform the action on all components. Framework always runs first.
+  # USAGE: prepare_component "$action" "$component"
+
+  if [[ "$1" == "factory-reset" ]]; then
+    log i "User requested full RetroDECK reset"
+    rm -f "$rd_lockfile" && log d "Lockfile removed"
+    retrodeck
+    return
+  fi
+
+  local action="$1"
+  local component="$2"
+
+  if [[ -z "$component" || -z "$action" ]]; then
+    log e "No component or action specified."
+    return 1
+  fi
+
+  log d "Preparing component: \"$component\", action: \"$action\""
+
+  if [[ "$component" == "all" ]]; then
+    # Framework always runs first
+    local framework_handler="_prepare_component::framework"
+    if declare -F "$framework_handler" > /dev/null; then
+      log d "Running prepare handler for framework"
+      "$framework_handler" "$action"
+    else
+      log e "No prepare handler found for framework"
+    fi
+
+    # Run all other component handlers, sorted by name
+    local -a all_handlers
+    mapfile -t all_handlers < <(declare -F | awk '{print $3}' | grep '^_prepare_component::' | grep -v '::framework$' | sort)
+    for handler in "${all_handlers[@]}"; do
+      local comp_name="${handler#_prepare_component::}"
+      log d "Running prepare handler for $comp_name"
+      "$handler" "$action"
+    done
+  else
+    local handler="_prepare_component::${component}"
+    if declare -F "$handler" > /dev/null; then
+      log d "Running prepare handler for $component"
+      "$handler" "$action"
+    else
+      log e "No prepare handler found for component $component"
+      return 1
+    fi
+  fi
+
+  # Reset presets to their disabled state for affected components
+  if [[ "$action" == "reset" ]]; then
+    local manifest_cache
+    manifest_cache=$(get_component_manifest_cache)
+
+    while IFS= read -r preset; do
+      while IFS= read -r preset_component; do
+        if [[ "$component" != "all" && "$preset_component" != *"$component"* ]]; then
+          continue
+        fi
+
+        local parent_component
+        parent_component=$(jq -r --arg preset "$preset" --arg component "$preset_component" '
+          .presets[$preset]
+          | paths(scalars)
+          | select(.[-1] == $component)
+          | if length > 1 then .[-2] else $preset end
+        ' "$rd_conf")
+
+        local child_component=""
+        local manifest_component="$preset_component"
+        if [[ "$parent_component" != "$preset" ]]; then
+          child_component="$preset_component"
+          parent_component="${parent_component%_cores}"
+          manifest_component="$parent_component"
+        fi
+
+        local preset_disabled_state
+        preset_disabled_state=$(jq -r --arg comp "$manifest_component" \
+          --arg core "$child_component" --arg preset "$preset" '
+          .[] | .manifest | select(has($comp)) | .[$comp] |
+          if $core != "" then
+            .compatible_presets[$core][$preset][0] // empty
+          else
+            .compatible_presets[$preset][0] // empty
+          end
+        ' <<< "$manifest_cache")
+
+        local preset_current_state
+        preset_current_state=$(get_setting_value "$rd_conf" "$preset_component" "retrodeck" "$preset")
+
+        if [[ "$preset_current_state" != "$preset_disabled_state" && -n "$preset_disabled_state" ]]; then
+          log d "Disabling preset $preset for component $preset_component"
+          set_setting_value "$rd_conf" "$preset_component" "$preset_disabled_state" "retrodeck" "$preset"
+        fi
+      done < <(jq -r --arg preset "$preset" '.presets[$preset] | to_entries[] |
+        if (.key | endswith("_cores")) then
+          .value | keys[]
+        else
+          .key
+        end' "$rd_conf")
+    done < <(jq -r '.presets | keys[]' "$rd_conf")
+  fi
+
+  if [[ "$component" =~ ^(all|framework) ]]; then
+    conf_write
+  fi
+}
