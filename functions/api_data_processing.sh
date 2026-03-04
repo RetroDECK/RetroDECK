@@ -20,8 +20,8 @@ api_get_compressible_games() {
 
   # Build list of systems to scan from the lookup
   local -a systems_to_scan=()
-  for system in "${!_compression_system_format[@]}"; do
-    if [[ "$compression_format" == "all" || "${_compression_system_format[$system]}" == "$compression_format" ]]; then
+  for system in "${!compression_system_format[@]}"; do
+    if [[ "$compression_format" == "all" || "${compression_system_format[$system]}" == "$compression_format" ]]; then
       systems_to_scan+=("$system")
     fi
   done
