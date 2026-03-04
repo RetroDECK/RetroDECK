@@ -21,131 +21,131 @@
 #
 # The function auto-detects if the shell is sh and avoids colorizing the output in that case.
 
-log() {
+# Color and prefix exports for ES-DE
+export logcolor_debug="\033[32m[DEBUG]"
+export logcolor_error="\033[31m[ERROR]"
+export logcolor_warn="\033[33m[WARN]"
+export logcolor_info="\033[37m[INFO]"
+export logcolor_default="\033[37m[LOG]"
+export logprefix_debug="[DEBUG]"
+export logprefix_error="[ERROR]"
+export logprefix_warn="[WARN]"
+export logprefix_info="[INFO]"
+export logprefix_default="[LOG]"
 
-  # Define and export log color environment variables for ES-DE
-  export logcolor_debug="\033[32m[DEBUG]"
-  export logcolor_error="\033[31m[ERROR]"
-  export logcolor_warn="\033[33m[WARN]"
-  export logcolor_info="\033[37m[INFO]"
-  export logcolor_default="\033[37m[LOG]"
+# Log level numeric mapping
+declare -A log_level_priority=( [none]=0 [error]=1 [warn]=2 [info]=3 [debug]=4 )
+declare -A log_message_priority=( [e]=1 [w]=2 [i]=3 [d]=4 )
 
-  # Define and export log prefix environment variables for ES-DE
-  export logprefix_debug="[DEBUG]"
-  export logprefix_error="[ERROR]"
-  export logprefix_warn="[WARN]"
-  export logprefix_info="[INFO]"
-  export logprefix_default="[LOG]"
+# Persistent file descriptor for the default log file
+log_fd=""
+log_fd_file=""
 
-  # Exit immediately if rd_logging_level is "none"
-  if [[ $rd_logging_level == "none" ]]; then
+log_open_fd() {
+  # Open a persistent file descriptor for the log file to avoid repeated open/close cycles.
+  # USAGE: log_open_fd "$logfile"
+
+  local logfile="$1"
+
+  # Already open for this file
+  if [[ "$log_fd" != "" && "$log_fd_file" == "$logfile" ]]; then
     return
   fi
 
-  local level="$1"          # Current message level
-  local message="$2"        # Message to log
-  local logfile="${3:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"   # Timestamp
-  local colorize_terminal=true
-
-  # Determine the calling function, or use [FWORK]
-  local caller="${FUNCNAME[1]:-FWORK}"
-  caller="${caller^^}"  # Convert to uppercase
-
-  # # Check if the shell is sh to avoid colorization
-  # if [ "${SHELL##*/}" = "sh" ]; then
-  #   colorize_terminal=false
-  # fi
-
-  # Internal function to check if the message should be logged
-  should_log() {
-    case "$rd_logging_level" in
-      debug) return 0 ;;  # Log everything
-      info) [[ "$level" == "i" || "$level" == "e" ]] && return 0 ;;
-      warn) [[ "$level" != "d" ]] && return 0 ;;
-      error) [[ "$level" == "e" ]] && return 0 ;;
-    esac
-    return 1
-  }
-
-  if should_log; then
-    # Define colors based on the message level
-    case "$level" in
-      d)
-        color="${logcolor_debug:-\033[32m[DEBUG]}"
-        prefix="${logprefix_debug:-[DEBUG]}"
-        ;;
-      e)
-        color="${logcolor_error:-\033[31m[ERROR]}"
-        prefix="${logprefix_error:-[ERROR]}"
-        ;;
-      w)
-        color="${logcolor_warn:-\033[33m[WARN]}"
-        prefix="${logprefix_warn:-[WARN]}"
-        ;;
-      i)
-        color="${logcolor_info:-\033[37m[INFO]}"
-        prefix="${logprefix_info:-[INFO]}"
-        ;;
-      *)
-        color="${logcolor_default:-\033[37m[LOG]}"
-        prefix="${logprefix_default:-[LOG]}"
-        ;;
-    esac
-
-    # Build the message to display
-    if [ "$colorize_terminal" = true ]; then
-      colored_message="$color [$caller] $message\e[0m"
-    else
-      colored_message="$timestamp $prefix [$caller] $message"
-    fi
-    log_message="$timestamp $prefix [$caller] $message"
-
-    # If silent mode is not active, print the message to the terminal
-    if [[ "${LOG_SILENT:-false}" != "true" ]]; then
-      echo -e "$colored_message" >&2
-    fi
-
-    # Ensure the log file exists
-    if [ ! -f "$logfile" ]; then
-      if [[ ! -d "$(dirname "$logfile")" ]]; then
-        mkdir -p "$(dirname "$logfile")"
-      fi
-      touch "$logfile"
-    fi
-
-    # Write the log to the file
-    echo "$log_message" >> "$logfile"
+  # Close existing fd if switching files
+  if [[ "$log_fd" != "" ]]; then
+    eval "exec $log_fd>&-" 2>/dev/null
   fi
+
+  # Ensure directory and file exist
+  local logdir
+  logdir=$(dirname "$logfile")
+  [[ ! -d "$logdir" ]] && mkdir -p "$logdir"
+
+  log_fd=4
+  log_fd_file="$logfile"
+  eval "exec $log_fd>>\"$logfile\""
 }
 
+log() {
+  # Log a message to the terminal and log file at the specified level.
+  # USAGE: log $level "$message" ["$logfile"]
 
-# The rotate_logs function manages log file rotation to limit the number of logs retained.
-# It compresses the current log file into a .tar.gz archive, increments the version of 
-# older log files (e.g., retrodeck.1.tar.gz to retrodeck.2.tar.gz), and deletes the oldest 
-# archive if it exceeds the maximum limit (default: 3 rotated logs). After rotation, 
-# the original log file is cleared for continued logging.
+  local level="$1"
+  local message="$2"
+  local logfile="${3:-$rd_xdg_config_logs_path/retrodeck.log}"
+
+  # Fast exit if logging is disabled or message level is below threshold
+  local configured_priority=${log_level_priority[${rd_logging_level:-info}]:-3}
+  [[ "$configured_priority" -eq 0 ]] && return
+  local message_priority=${log_message_priority[$level]:-0}
+  [[ "$message_priority" -eq 0 || "$message_priority" -gt "$configured_priority" ]] && return
+
+  local timestamp
+  printf -v timestamp '[%(%Y-%m-%d %H:%M:%S)T]' -1
+
+  # Caller detection
+  local caller="${FUNCNAME[1]:-FWORK}"
+  caller="${caller^^}"
+
+  # Select prefix and color based on level
+  local prefix color
+  case "$level" in
+    d) prefix="[DEBUG]" color="\033[32m[DEBUG]" ;;
+    e) prefix="[ERROR]" color="\033[31m[ERROR]" ;;
+    w) prefix="[WARN]"  color="\033[33m[WARN]"  ;;
+    i) prefix="[INFO]"  color="\033[37m[INFO]"  ;;
+    *) prefix="[LOG]"   color="\033[37m[LOG]"   ;;
+  esac
+
+  # Terminal output
+  if [[ "${LOG_SILENT:-false}" != "true" ]]; then
+    echo -e "$color [$caller] $message\e[0m" >&2
+  fi
+
+  # File output via persistent fd
+  log_open_fd "$logfile"
+  echo "$timestamp $prefix [$caller] $message" >&$log_fd
+}
 
 rotate_logs() {
-  local logfile="${1:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
-  local max_logs=3  # Maximum number of rotated logs to keep
+  # Rotate log files, compressing the current log and incrementing older archives.
+  # USAGE: rotate_logs ["$logfile"]
 
-  # Rotate existing logs
+  local logfile="${1:-$rd_xdg_config_logs_path/retrodeck.log}"
+  local max_logs=3
+
+  # Close the persistent fd before rotating
+  if [[ "$log_fd" != "" && "$log_fd_file" == "$logfile" ]]; then
+    eval "exec $log_fd>&-" 2>/dev/null
+    log_fd=""
+    log_fd_file=""
+  fi
+
   for ((i=max_logs; i>0; i--)); do
     if [[ -f "${logfile}.${i}.tar.gz" ]]; then
       if (( i == max_logs )); then
-        # Remove the oldest log if it exceeds the limit
         rm -f "${logfile}.${i}.tar.gz"
       else
-        # Rename log file to the next number
         mv "${logfile}.${i}.tar.gz" "${logfile}.$((i+1)).tar.gz"
       fi
     fi
   done
 
-  # Compress the current log file if it exists
   if [[ -f "$logfile" ]]; then
-    # Compress without directory structure and suppress tar output
     tar -czf "${logfile}.1.tar.gz" -C "$(dirname "$logfile")" "$(basename "$logfile")" --remove-files &>/dev/null
   fi
 }
+
+log_close_fd() {
+  # Close the persistent log file descriptor if open.
+  # USAGE: log_close_fd
+
+  if [[ "$log_fd" != "" ]]; then
+    eval "exec $log_fd>&-" 2>/dev/null
+    log_fd=""
+    log_fd_file=""
+  fi
+}
+
+register_cleanup log_close_fd
