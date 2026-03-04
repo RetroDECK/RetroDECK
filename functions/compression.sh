@@ -1,23 +1,18 @@
 #!/bin/bash
 
-# Component-compression-related variables
-declare -A _compression_system_format
-declare -A _compression_ext_restrictions
-declare -A _compression_allowed_extensions
-
 get_all_compression_targets() {
   # Gather all compression target information from component manifests.
-  # Returns a JSON object keyed by format with target_systems and optional compressable_extensions.
+  # Returns a JSON object keyed by format with targets and optional extensions.
   # USAGE: get_all_compression_targets
 
   get_component_manifest_cache | jq '
     reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
       {};
       .[$entry.key] = {
-        target_systems: ((.[$entry.key].target_systems // []) + ($entry.value.target_systems // []) | unique)
+        targets: ((.[$entry.key].targets // []) + ($entry.value.targets // []) | unique)
       }
-      | if $entry.value.compressable_extensions then
-          .[$entry.key].compressable_extensions = ((.[$entry.key].compressable_extensions // []) + $entry.value.compressable_extensions | unique)
+      | if $entry.value.extensions then
+          .[$entry.key].extensions = ((.[$entry.key].extensions // []) + $entry.value.extensions | unique)
         else . end
     )
   '
@@ -31,29 +26,29 @@ build_compression_lookups() {
   local compression_targets
   compression_targets=$(get_all_compression_targets)
 
-  _compression_system_format=()
-  _compression_ext_restrictions=()
-  _compression_allowed_extensions=()
+  declare -gA compression_system_format=()
+  declare -gA compression_ext_restrictions=()
+  declare -gA compression_allowed_extensions=()
 
   # Build system -> format lookup
   while IFS=$'\t' read -r format system; do
-    _compression_system_format["$system"]="$format"
+    compression_system_format["$system"]="$format"
   done < <(jq -r '
-    to_entries[] | .key as $fmt |
-    .value.target_systems[] |
-    [$fmt, .] | @tsv
+    to_entries[] | .key as $format |
+    .value.targets[] |
+    [$format, .] | @tsv
   ' <<< "$compression_targets")
 
   # Build extension restriction flags and allowed extensions per format
   while IFS=$'\t' read -r format extension; do
-    _compression_ext_restrictions["$format"]=1
-    _compression_allowed_extensions["${format}:${extension}"]=1
+    compression_ext_restrictions["$format"]=1
+    compression_allowed_extensions["${format}:${extension}"]=1
   done < <(jq -r '
     to_entries[]
-    | select(.value.compressable_extensions)
-    | .key as $fmt
-    | .value.compressable_extensions[]
-    | [$fmt, .] | @tsv
+    | select(.value.extensions)
+    | .key as $format
+    | .value.extensions[]
+    | [$format, .] | @tsv
   ' <<< "$compression_targets")
 }
 
@@ -69,15 +64,15 @@ find_compatible_compression_format() {
   local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
 
   # Look up format for this system
-  local format="${_compression_system_format[$system]:-}"
+  local format="${compression_system_format[$system]:-}"
   if [[ -z "$format" ]]; then
     echo "none"
     return
   fi
 
   # Check extension restrictions if the format has them
-  if [[ -n "${_compression_ext_restrictions[$format]+x}" ]]; then
-    if [[ -z "${_compression_allowed_extensions[${format}:${file_extension}]+x}" ]]; then
+  if [[ -n "${compression_ext_restrictions[$format]+x}" ]]; then
+    if [[ -z "${compression_allowed_extensions[${format}:${file_extension}]+x}" ]]; then
       echo "none"
       return
     fi
