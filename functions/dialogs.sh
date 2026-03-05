@@ -1256,6 +1256,17 @@ configurator_iconset_toggle_dialog() {
   configurator_global_presets_and_settings_dialog
 }
 
+configurator_install_retrodeck_controller_profile_dialog() {
+  install_retrodeck_controller_profile
+
+  rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - Install RetroDECK Controller Profiles" \
+      --text="The RetroDECK Steam Controller Profiles are now <span foreground='$purple'><b>installed</b></span>."
+  
+  configurator_tools_dialog
+}
+
 finit_install_controller_profile_dialog() {
   get_steam_user "finit"
   if [[ -n "$steam_id" ]]; then
