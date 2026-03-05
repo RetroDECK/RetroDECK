@@ -1001,21 +1001,9 @@ quit_retrodeck() {
 }
 
 start_retrodeck() {
-  get_steam_user # get steam user info
-  splash_screen # Check if today has a surprise splashscreen and load it if so
-  prepare_component "startup" "all"
-
-  log d "Checking if PortMaster should be shown"
-  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "false" ]]; then
-    log d "Assuring that PortMaster is hidden on ES-DE"
-    portmaster_show "false"
-  else
-    log d "Assuring that PortMaster is shown on ES-DE"
-    portmaster_show "true"
-  fi
-
   log i "Starting RetroDECK v$version"
-  start_esde
+
+  prepare_component "startup" "all"
 }
 
 convert_to_markdown() {
