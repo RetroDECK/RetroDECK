@@ -10,8 +10,6 @@ post_update() {
   update_rd_conf
   update_component_presets
 
-  export CONFIGURATOR_GUI="zenity"
-
   # Optional userdata backup prior to update
 
   local backup_question_response=$(configurator_generic_question_dialog "RetroDECK Update - Backup Userdata" "Would you like to back up some or all RetroDECK userdata prior to the update?")
@@ -79,8 +77,6 @@ post_update() {
   else
     changelog_dialog "$version"
   fi
-
-  unset CONFIGURATOR_GUI
 
   log i "Upgrade process completed successfully."
 }
