@@ -993,18 +993,10 @@ release_selector() {
 }
 
 quit_retrodeck() {
-  log i "Quitting ES-DE"
-  pkill -f "es-de"
-
-  # if steam sync is on do the magic
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") =~ (true|native|flatpak) ]]; then
-    export CONFIGURATOR_GUI="zenity"
-    steam_sync
-  fi
-  log i "Shutting down RetroDECK's framework"
-  pkill -f "retrodeck"
-  
   log i "See you next time"
+  
+  prepare_component "shutdown" "all"
+  
   exit
 }
 
