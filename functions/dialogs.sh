@@ -125,7 +125,7 @@ configurator_move_folder_dialog() {
           configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder is already at that location. Please select a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
-          if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
+          if verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root"; then # Make sure there is enough space at the destination
             configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder to <span foreground='$purple'><b>$dest_root/$rd_dir_path</b></span>)"
             if [[ -L "$dest_root/$rd_dir_path" ]]; then
               unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
@@ -1089,7 +1089,7 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_path") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$bios_path") == "false" ]]; then
+        if verify_space "$choice/RetroDECK Import/ROMs" "$roms_path" || verify_space "$choice/RetroDECK Import/BIOS" "$bios_path"; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
             rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_path"
