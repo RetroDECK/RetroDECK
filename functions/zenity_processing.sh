@@ -291,18 +291,21 @@ build_zenity_open_component_menu_array() {
 }
 
 build_zenity_reset_component_menu_array() {
-  local dest_array="$1"
-  local -a temp_bash_array=()
+  # Build a Bash array of component entries with checkboxes for use in a Zenity reset dialog.
+  # Each entry consists of four consecutive elements: checkbox_state, component_name, friendly_name, description.
+  # USAGE: build_zenity_reset_component_menu_array "$dest_array_name"
 
-  while read -r obj; do # Iterate through all returned menu objects
-    local checkbox_state="FALSE"
-    local name=$(jq -r '.component_name' <<< "$obj")
-    local friendly_name=$(jq -r '.component_friendly_name' <<< "$obj")
-    local desc=$(jq -r '.description' <<< "$obj")
-    temp_bash_array+=("$checkbox_state" "$name" "$friendly_name" "$desc")
-  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null and .component_name != "retrodeck")')
+  local -n dest_array="$1"
 
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+  mapfile -t dest_array < <(api_get_component "all" | jq -r '
+    sort_by(.component_name)
+    | .[]
+    | select(.component_name != null and .component_name != "retrodeck")
+    | "FALSE",
+      .component_name,
+      .component_friendly_name,
+      .description
+  ')
 }
 
 build_zenity_find_empty_rom_folders_menu_array() {
