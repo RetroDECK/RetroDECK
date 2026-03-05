@@ -788,7 +788,7 @@ api_do_move_retrodeck_directory() {
         echo "the chosen retrodeck directory is already at the given destination"
         return 1
       else
-        if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
+        if verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root"; then # Make sure there is enough space at the destination
           unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
           move "$dir_to_move" "$dest_root/$rd_dir_path"
           if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
