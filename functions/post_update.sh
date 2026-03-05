@@ -12,9 +12,7 @@ post_update() {
 
   # Optional userdata backup prior to update
 
-  local backup_question_response=$(configurator_generic_question_dialog "RetroDECK Update - Backup Userdata" "Would you like to back up some or all RetroDECK userdata prior to the update?")
-
-  if [[ "$backup_question_response" == "true" ]]; then
+  if configurator_generic_question_dialog "RetroDECK Update - Backup Userdata" "Would you like to back up some or all RetroDECK userdata prior to the update?"; then
     configurator_retrodeck_backup_dialog
   fi
 
