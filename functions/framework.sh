@@ -174,23 +174,25 @@ delete_setting() {
 }
 
 disable_setting() {
-  # This function will add a '#' to the beginning of a defined setting line, disabling it.
-  # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
+  # Function for disabling a setting (via #) from a file.
+  # This function acts as a router for individual component pair functions
+  # The component should provide a _disable_setting::<component name> function in its component_functions.sh file
+  # USAGE: disable_setting $setting_file $setting_line $system [$section]
 
-  local current_setting_line="$2"
-  local current_section_name="${4:-}"
+  local file="$1" line="$2" component="$3" section="${4:-}"
 
-  case $3 in
+  if [[ ! -f "$file" ]]; then
+    log e "File $file does not exist, cannot get setting $setting"
+    return 1
+  fi
 
-  * )
-    if [[ -z $current_section_name ]]; then
-      sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' "$1"
-    else
-      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' "$1"
-    fi
-  ;;
+  local handler="_disable_setting::${component}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No _disable_setting handler found for component: $component"
+    return 1
+  fi
 
-  esac
+  "$handler" "$file" "$line" "$section"
 }
 
 enable_setting() {
