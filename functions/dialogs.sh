@@ -349,21 +349,20 @@ configurator_change_preset_value_dialog() {
       local component_obj=$(api_get_current_preset_state "$preset" "$component" | jq -c '.[].[]')
 
       local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
-      local child_component=""
       local current_status="$(jq -r '.status' <<< $component_obj)"
+      local component_id="$component"
 
       if [[ -n "$parent_name" ]]; then
-        child_component="$component"
-        component="$parent_name"
+        component_id="$parent_name"
       fi
 
-      local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+      local preset_disabled_state=$(jq -r --arg component "$component" --arg parent "$parent_name" --arg preset "$preset" '
                               if $core != "" then
-                                .[$component].compatible_presets[$core][$preset].[0] // empty
+                                .[$parent].compatible_presets[$component][$preset].[0] // empty
                               else
                                 .[$component].compatible_presets[$preset].[0] // empty
                               end
-                            ' "$rd_components/$component/component_manifest.json")
+                            ' "$rd_components/$component_id/component_manifest.json")
 
       if [[ "$preset" =~ (cheevos|cheevos_hardcore) && ! "$choice" == "$preset_disabled_state" ]]; then
         if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
