@@ -54,66 +54,6 @@ build_retrodeck_current_presets() {
   done < <(jq -r '.presets | keys[]' "$rd_conf")
 }
 
-fetch_all_presets() {
-  # TODO: Remove, likely not needed anymore
-  # This function fetches all possible presets from the presets directory
-  # USAGE: fetch_all_presets [--pretty] [system_name]
-
-  local rd_config_presets_path="$rd_core_files/presets"
-  local presets=()
-  local pretty_presets=()
-  local pretty_output=false
-  local system_name=""
-
-  if [[ "$1" == "--pretty" ]]; then
-    pretty_output=true
-    system_name="$2"
-  else
-    system_name="$1"
-  fi
-
-  if [[ -n "$system_name" ]]; then
-    preset_file="$rd_config_presets_path/${system_name}_presets.cfg"
-    if [[ -f "$preset_file" ]]; then
-      while IFS= read -r line; do
-        if [[ $line =~ ^(change|enable)\^([a-zA-Z0-9_]+)\^ ]]; then
-          preset="${BASH_REMATCH[2]}"
-          if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
-            presets+=("$preset")
-            if $pretty_output; then
-              pretty_preset_name=${preset//_/ } # Preset name prettification
-              pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-              pretty_presets+=("$pretty_preset_name")
-            fi
-          fi
-        fi
-      done < "$preset_file"
-    fi
-  else
-    for preset_file in "$rd_config_presets_path"/*_presets.cfg; do
-      while IFS= read -r line; do
-        if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
-          preset="${BASH_REMATCH[1]}"
-          if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
-            presets+=("$preset")
-            if $pretty_output; then
-              pretty_preset_name=${preset//_/ } # Preset name prettification
-              pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-              pretty_presets+=("$pretty_preset_name")
-            fi
-          fi
-        fi
-      done < "$preset_file"
-    done
-  fi
-
-  if $pretty_output; then
-    printf "%s\n" "${pretty_presets[@]}"
-  else
-    echo "${presets[@]}"
-  fi
-}
-
 change_presets_cli() {
   # TODO: Rebuild for API use
   # This function will allow a user to change presets either individually or all for a preset class from the CLI.
