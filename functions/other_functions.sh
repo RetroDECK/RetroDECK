@@ -619,23 +619,6 @@ backup_retrodeck_userdata() {
   fi
 }
 
-make_name_pretty() {
-  # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
-  # If the name is nout found it only returns the short name such as "gbc"
-  # USAGE: make_name_pretty "system name"
-
-  local system_name="$1"
-
-  # Use jq to parse the JSON and find the pretty name from the components component_manifest.json
-  while IFS= read -r component_manifest; do
-    if jq -e --arg system "$system_name" 'to_entries | any(.value.system == $system)' "$component_manifest" > /dev/null; then
-      local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
-      echo "$pretty_name"
-      break
-    fi
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
-}
-
 finit_browse() {
   # Function for choosing data directory location during first/forced init
   path_selected=false
