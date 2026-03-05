@@ -152,22 +152,25 @@ add_setting() {
 }
 
 delete_setting() {
-  # This function will delete a setting line from a file. This is useful for dynamically generated config files like Retroarch override files
-  # USAGE: delete_setting $setting_file $setting_name $system $section (optional)
+  # Function for removing a setting from a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
+  # This function acts as a router for individual component pair functions
+  # The component should provide a _delete_setting::<component name> function in its component_functions.sh file
+  # USAGE: delete_setting $setting_file $setting_name $system [$section]
 
-  local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
+  local file="$1" setting="$2" component="$3" section="${4:-}"
 
-  case $3 in
+  if [[ ! -f "$file" ]]; then
+    log e "File $file does not exist, cannot get setting $setting"
+    return 1
+  fi
 
-  "retroarch" )
-    if [[ -z $current_section_name ]]; then
-      sed -i '\^'"$current_setting_name"'^d' "$1"
-      sed -i '/^$/d' "$1" # Cleanup empty lines left behind
-    fi
-    ;;
+  local handler="_delete_setting::${component}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No _delete_setting handler found for component: $component"
+    return 1
+  fi
 
-  esac
+  "$handler" "$file" "$setting" "$section"
 }
 
 disable_setting() {
