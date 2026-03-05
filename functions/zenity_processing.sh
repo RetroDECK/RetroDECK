@@ -274,17 +274,20 @@ build_zenity_preset_value_menu_array() {
 }
 
 build_zenity_open_component_menu_array() {
-  local dest_array="$1"
-  local -a temp_bash_array=()
+  # Build a Bash array of component entries for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: friendly_name, description, path.
+  # USAGE: build_zenity_open_component_menu_array "$dest_array_name"
 
-  while read -r obj; do # Iterate through all returned menu objects
-    local name=$(jq -r '.component_friendly_name' <<< "$obj")
-    local desc=$(jq -r '.description' <<< "$obj")
-    local command=$(jq -r '.path' <<< "$obj")
-    temp_bash_array+=("$name" "$desc" "$command")
-  done < <(api_get_component "all" | jq -c 'sort_by(.component_name) | .[] | select(.component_name != null and .component_name != "retrodeck")')
+  local -n dest_array="$1"
 
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+  mapfile -t dest_array < <(api_get_component "all" | jq -r '
+    sort_by(.component_name)
+    | .[]
+    | select(.component_name != null and .component_name != "retrodeck")
+    | .component_friendly_name,
+      .description,
+      .path
+  ')
 }
 
 build_zenity_reset_component_menu_array() {
