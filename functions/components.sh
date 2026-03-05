@@ -191,27 +191,36 @@ prepare_component() {
     if declare -F "$framework_handler" > /dev/null; then
       log d "Running prepare handler for framework"
       "$framework_handler" "$action"
-    else
-      log e "No prepare handler found for framework"
     fi
 
-    # Run all other component handlers, sorted by name
-    local -a all_handlers
-    mapfile -t all_handlers < <(declare -F | awk '{print $3}' | grep '^_prepare_component::' | grep -v '::framework$' | sort)
-    for handler in "${all_handlers[@]}"; do
-      local comp_name="${handler#_prepare_component::}"
-      log d "Running prepare handler for $comp_name"
-      "$handler" "$action"
-    done
-  else
-    local handler="_prepare_component::${component}"
-    if declare -F "$handler" > /dev/null; then
-      log d "Running prepare handler for $component"
-      "$handler" "$action"
-    else
-      log e "No prepare handler found for component $component"
-      return 1
-    fi
+    # Build a priority-sorted list of remaining handlers
+    local manifest_cache
+    manifest_cache=$(get_component_manifest_cache)
+
+    while IFS=$'\t' read -r priority comp_name; do
+      [[ "$comp_name" == "framework" ]] && continue
+      local handler="_prepare_component::${comp_name}"
+      if declare -F "$handler" > /dev/null; then
+        log d "Running prepare handler for $comp_name (priority: $priority)"
+        "$handler" "$action"
+      fi
+    done < <(jq -r --arg action "$action" '
+      [.[] | .manifest | to_entries[] |
+       {name: .key, priority: (
+         .value.prepare_priority
+         | if type == "object" then
+             .[$action] // .default // 50
+           elif type == "number" then
+             .
+           else
+             50
+           end
+       )}]
+      | sort_by(.priority)
+      | .[]
+      | [(.priority | tostring), .name]
+      | @tsv
+    ' <<< "$manifest_cache")
   fi
 
   # Reset presets to their disabled state for affected components
