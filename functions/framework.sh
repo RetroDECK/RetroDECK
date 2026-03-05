@@ -1,5 +1,30 @@
 #!/bin/bash
 
+sed_escape_pattern() {
+  # Escape a string for safe use in a sed pattern/match context, using ^ as the delimiter.
+  # USAGE: escaped=$(sed_escape_pattern "$string")
+
+  local input="$1"
+  input="${input//\\/\\\\}"
+  input="${input//./\\.}"
+  input="${input//\*/\\*}"
+  input="${input//\[/\\[}"
+  input="${input//^/\\^}"
+  input="${input//$/\\$}"
+  printf '%s' "$input"
+}
+
+sed_escape_replacement() {
+  # Escape a string for safe use in a sed replacement context, using ^ as the delimiter.
+  # USAGE: escaped=$(sed_escape_replacement "$string")
+
+  local input="$1"
+  input="${input//\\/\\\\}"  # backslashes first
+  input="${input//&/\\&}"    # ampersand
+  input="${input//^/\\^}"    # delimiter
+  printf '%s' "$input"
+}
+
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value "$setting_file" "$setting_name" "$new_setting_value" "$system" "$section_name(optional)"
