@@ -139,28 +139,37 @@ remove_group_from_array() {
 }
 
 build_zenity_menu_array() {
-  local dest_array="$1"
-  local menu_name="$2"
-  local -a temp_bash_array=()
-  local all_menu_entries=$(api_get_component_menu_entries "$menu_name") # Collect all relevent menu objects from all components
+  # Build a Bash array of menu entries for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: name, description, command.
+  # USAGE: build_zenity_menu_array "$dest_array_name" "$menu_name"
 
-  if [[ "$menu_name" == "settings" ]]; then # If building the Settings menu, start with all known presets
-    while read -r preset_name; do
-      local name=$(jq -r --arg preset "$preset_name" '.presets[$preset].name // empty' "$features")
-      local desc=$(jq -r --arg preset "$preset_name" '.presets[$preset].desc // empty' "$features")
-      local command="configurator_change_preset_dialog $preset_name"
-      temp_bash_array+=("$name" "$desc" "$command")
-    done < <(api_get_all_preset_names | jq -r '.[].preset_name')
+  local -n dest_array="$1"
+  local menu_name="$2"
+  dest_array=()
+
+  if [[ "$menu_name" == "settings" ]]; then
+    local preset_definitions
+    preset_definitions=$(get_all_preset_definitions)
+
+    mapfile -t dest_array < <(
+      api_get_all_preset_names | jq -r --argjson defs "$preset_definitions" '
+        .[] | .preset_name as $pn |
+        ($defs[$pn].name // $pn),
+        ($defs[$pn].description // ""),
+        ("configurator_change_preset_dialog " + $pn)
+      '
+    )
   fi
 
-  while read -r obj; do # Iterate through all returned menu objects
-    local name=$(jq -r '.name' <<< "$obj")
-    local desc=$(jq -r '.description' <<< "$obj")
-    local command=$(jq -r '.command.zenity' <<< "$obj")
-    temp_bash_array+=("$name" "$desc" "$command")
-  done < <(jq -c --arg menu "$menu_name" '.[$menu].[]' <<< "$all_menu_entries")
+  local -a menu_entries=()
+  mapfile -t menu_entries < <(api_get_component_menu_entries "$menu_name" | jq -r --arg menu "$menu_name" '
+    .[$menu] // [] | .[] |
+    .name,
+    .description,
+    .command.zenity
+  ')
 
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+  dest_array+=("${menu_entries[@]}")
 }
 
 build_zenity_preset_menu_array() {
