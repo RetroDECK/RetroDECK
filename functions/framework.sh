@@ -68,136 +68,65 @@ set_setting_value() {
 }
 
 get_setting_value() {
-# Function for getting the current value of a setting from a config file
-# USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
+  # Function for getting the current value of a setting from a config file
+  # This function acts as a router for individual component pair functions
+  # The component should provide a _get_setting_value::<component name> function in its component_functions.sh file
+  # USAGE: get_setting_value $setting_file "$setting_name" $system [$section]
 
-  local current_setting_name="$2"
-  local current_section_name="${4:-}"
+  local file="$1" setting="$2" component="$3" section="${4:-}"
 
-  case $3 in
+  if [[ ! -f "$file" ]]; then
+    log e "File $file does not exist, cannot get setting $setting"
+    return 1
+  fi
 
-    "retrodeck" )
-    if [[ -z "$current_section_name" ]]; then
-      if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-        jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
-      else
-        echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
-      fi
-    else
-      if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-        if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
-          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section] | .. | objects | select(has($setting_name)) | .[$setting_name] // empty' "$1"
-        else
-          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
-        fi
-      else
-        sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
-      fi
-    fi
-  ;;
+  local handler="_get_setting_value::${component}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No _get_setting_value handler found for component: $component"
+    return 1
+  fi
 
-  "melonds" | "yuzu" | "gzdoom" ) # For files with this syntax - setting_name=setting_value
-    if [[ -z $current_section_name ]]; then
-      echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
-    else
-      sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
-    fi
-  ;;
+  local result
+  result=$("$handler" "$file" "$setting" "$section")
 
-  "azahar" ) # For files with this syntax - setting_name=setting_value but also maybe backslashes in the setting name
-    escaped_setting_name=$(printf '%s\n' "$current_setting_name" | sed 's/[[\.*^$/]/\\&/g')
-
-    if [[ -n "$current_section_name" ]]; then
-        awk -F'=' -v section="[$current_section_name]" -v key="$escaped_setting_name" '
-            $0 == section { in_section=1; next }
-            /^\[/ { in_section=0 }
-            in_section && $1 == key { print $2; exit }
-        ' "$1"
-    else
-        awk -F'=' -v key="$escaped_setting_name" '
-            /^\[/ { exit }
-            $1 == key { print $2; exit }
-        ' "$1"
-    fi
-  ;;
-
-  "retroarch" ) # For files with this syntax - setting_name = "setting_value"
-    if [[ -z $current_section_name ]]; then
-      echo $(grep -o -P "(?<=^$current_setting_name = \").*(?=\")" "$1")
-    else
-      sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
-    fi
-  ;;
-
-  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" ) # For files with this syntax - setting_name = setting_value
-    if [[ -z $current_section_name ]]; then
-      echo $(grep -o -P "(?<=^$current_setting_name = ).*" "$1")
-    else
-      sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name = ).*"
-    fi
-  ;;
-
-  "rpcs3" | "vita3k" ) # For files with this syntax - setting_name: setting_value
-    if [[ -z $current_section_name ]]; then
-      echo $(grep -o -P "(?<=$current_setting_name: ).*" "$1")
-    else
-      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=$current_setting_name: ).*"
-    fi
-  ;;
-
-  "cemu" )
-    if [[ -z "$current_section_name" ]]; then
-      echo $(xml sel -t -v "//$current_setting_name" "$1")
-    else
-      echo $(xml sel -t -v "//$current_section_name/$current_setting_name" "$1")
-    fi
-  ;;
-
-  "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
-    if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
-      echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
-    elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
-      echo $(xml sel -t -v "/mameconfig/system[@name='$current_section_name']//*[@type='$current_setting_name']//*" -v "text()" -n "$1")
-    fi
-  ;;
-
-  "ryubing" )
-    if [[ -z "$current_section_name" ]]; then
-      jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
-    else
-      jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
-    fi
-  ;;
-
-  "es_settings" )
-    echo $(grep -o -P "(?<=$current_setting_name\" value=\").*(?=\")" "$1")
-  ;;
-
-  esac
+  if [[ -n "$result" ]]; then
+    echo "$result"
+    return
+  else
+    log e "Failed to get setting $setting value from $file"
+    return 1
+  fi
 }
 
-add_setting_line() {
-  # This function will add a setting line to a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
-  # USAGE: add_setting_line $setting_file $setting_line $system $section (optional)
+get_setting_name() {
+  # Function for getting the current name of a setting from a provided full config line
+  # This function acts as a router for individual component pair functions
+  # The component should provide a _get_setting_name::<component name> function in its component_functions.sh file
+  # USAGE: get_setting_name "$setting_line" "$system" ["$section"]
 
-  local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${4:-}")
+  local line="$1" component="$2" section="${3:-}"
 
-  case $3 in
+  if [[ ! -f "$line" ]]; then
+    log e "No setting line provided, cannot perform name extraction"
+    return 1
+  fi
 
-  * )
-    if [[ -z $current_section_name ]]; then
-      if [[ -f "$1" ]]; then
-        sed -i '$ a '"$current_setting_line"'' "$1"
-      else # If the file doesn't exist, sed add doesn't work for the first line
-        echo "$current_setting_line" > "$1"
-      fi
-    else
-      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' "$1"
-    fi
-    ;;
+  local handler="_get_setting_name::${component}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No _get_setting_name handler found for component: $component"
+    return 1
+  fi
 
-  esac
+  local result
+  result=$("$handler" "$line" "$section")
+
+  if [[ -n "$result" ]]; then
+    echo "$result"
+    return
+  else
+    log e "Failed to get setting name from $line"
+    return 1
+  fi  
 }
 
 add_setting() {
