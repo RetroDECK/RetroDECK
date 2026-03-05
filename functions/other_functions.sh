@@ -1460,6 +1460,23 @@ launch_command() {
   "$function_name" "$@"
 }
 
+prune_empty_parents() {
+  # Remove empty directories walking up from start_dir to stop_dir (inclusive).
+  # USAGE: prune_empty_parents "$start_dir" "$stop_dir"
+
+  local current="$1"
+  local stop="$2"
+
+  while [[ -d "$current" && -z "$(ls -A "$current" 2>/dev/null)" ]]; do
+    log d "Directory $current is empty, removing"
+    rmdir "$current"
+    [[ "$current" == "$stop" ]] && break
+    current=$(dirname "$current")
+    # Don't go above the stop directory
+    [[ "${current}" != "${stop}"* ]] && break
+  done
+}
+
 finit_default_yes() {
   log i "Defaulting setting "$@" enabled."
   return 0
