@@ -70,9 +70,9 @@ verify_space() {
   dest_avail=$(df -k --output=avail "$2" | tail -1)
 
   if [[ $source_size -ge $dest_avail ]]; then
-    echo "false"
+    return 1
   else
-    echo "true"
+    return 0
   fi
 }
 
