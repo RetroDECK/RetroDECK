@@ -220,53 +220,57 @@ build_zenity_preset_menu_array() {
 }
 
 build_zenity_preset_value_menu_array() {
-  local dest_array="$1"
+  # Build a Bash array of available preset values for a specific component, for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: is_current_value, display_name, raw_value.
+  # USAGE: build_zenity_preset_value_menu_array "$dest_array_name" "$preset_name" "$component"
+
+  local -n dest_array="$1"
   local preset_name="$2"
   local component="$3"
 
-  local -a temp_bash_array=()
+  local preset_current_value
+  preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
 
-  local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
+  local base_component
+  base_component=$(jq -r --arg preset "$preset_name" --arg component "$component" '
+    .presets[$preset]
+    | paths(scalars)
+    | select(.[-1] == $component)
+    | if length > 1 then .[-2] else $preset end
+  ' "$rd_conf")
 
-  local base_component=$(jq -r --arg preset "$preset_name" \
-                        --arg component "$component" '.presets[$preset]
-                                                    | paths(scalars)
-                                                    | select(.[-1] == $component)
-                                                    | if length > 1 then .[-2] else $preset end
-                                                    ' "$rd_conf")
-
-  if [[ ! "$preset_name" == "$base_component" ]]; then # If component is a core
+  if [[ "$preset_name" != "$base_component" ]]; then
     log d "Component $component is a core of $base_component"
     base_component="${base_component%_cores}"
   else
     base_component="$component"
   fi
 
-  while read -r preset_value; do
-    if [[ "$preset_value" == "false" ]]; then
-      local pretty_status="Disabled"
-    elif [[ "$preset_value" == "true" ]]; then
-      local pretty_status="Enabled"
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  mapfile -t dest_array < <(jq -r --arg comp "$component" \
+    --arg parent "$base_component" \
+    --arg preset "$preset_name" \
+    --arg current "$preset_current_value" \
+    --argjson manifests "$manifest_cache" '
+    ([$manifests[] | .manifest | select(has($parent)) | .[$parent]] | first) as $manifest |
+    (if $parent != $comp then
+      $manifest.compatible_presets[$comp][$preset]
     else
-      local pretty_status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
-    fi
+      $manifest.compatible_presets[$preset]
+    end // []) | .[] |
+    . as $val |
 
-    if [[ "$preset_value" == "$preset_current_value" ]]; then
-      local currently_set_value="true"
-    else
-      local currently_set_value="false"
-    fi
-
-    temp_bash_array+=("$currently_set_value" "$pretty_status" "$preset_value")
-  done < <(jq -r --arg component "$component" --arg parent "$base_component" --arg preset "$preset_name" '
-                                if $parent != $component then
-                                  .[$parent].compatible_presets[$component][$preset].[] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[] // empty
-                                end
-                                ' "$rd_components/$base_component/component_manifest.json")
-
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+    (if $val == $current then "true" else "false" end),
+    (if $val == "false" then "Disabled"
+     elif $val == "true" then "Enabled"
+     else ($val | split(" ") | map(
+       (.[0:1] | ascii_upcase) + .[1:]
+     ) | join(" "))
+     end),
+    $val
+  ' <<< "$manifest_cache")
 }
 
 build_zenity_open_component_menu_array() {
