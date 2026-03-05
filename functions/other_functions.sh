@@ -1164,29 +1164,56 @@ check_if_updated() {
 }
 
 update_rd_conf() {
-  # This function will update the retrodeck.cfg file with any new settings which are included in the shipped defaults file.
-  # This will allow expansion of the included settings over time while keeping all existing user settings intact.
+  # Update the retrodeck.cfg file with any new settings from the shipped defaults file.
+  # New sections and settings are added with their default values. Existing settings are not modified.
+  # New settings in the "paths" section have their base path rewritten to match the user's actual rd_home_path.
+  # USAGE: update_rd_conf
 
-  for section_name in $(jq -r '. | keys[]' "$rd_defaults"); do
-    if [[ ! "$section_name" == "version" ]]; then
-      if ! jq -e --arg section "$section_name" '. | has($section)' "$rd_conf" > /dev/null; then # If the name of the section doesn't exist at all.
-        log d "Section \"$section_name\" not found in retrodeck.cfg, creating it."
-        tmpfile=$(mktemp)
-        jq --arg section "$section_name" '. += { ($section): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
-      fi
-      for setting_name in $(jq -r --arg section "$section_name" '.[$section] | keys[]' "$rd_defaults"); do
-        if jq -e --arg section "$section_name" --arg setting "$setting_name" '.[$section] | has($setting)' "$rd_conf" > /dev/null; then
-          log d "The section \"$section_name\" already contains the setting \"$setting_name\". Skipping."
+  local tmp
+  tmp=$(mktemp)
+
+  jq -s '
+    .[0] as $current |
+    .[1] as $defaults |
+    ($current.paths.rd_home_path // $defaults.paths.rd_home_path) as $actual_home |
+    ($defaults.paths.rd_home_path) as $default_home |
+    reduce ($defaults | to_entries[] | select(.key != "version")) as $section (
+      $current;
+      if has($section.key) then
+        .[$section.key] = (
+          ($section.value // {}) as $default_settings |
+          .[$section.key] as $current_settings |
+          reduce ($default_settings | to_entries[]) as $setting (
+            $current_settings;
+            if has($setting.key) then .
+            else
+              . + {($setting.key): (
+                if $section.key == "paths" and ($setting.value | type) == "string" and ($setting.value | startswith($default_home)) then
+                  ($setting.value | sub($default_home; $actual_home))
+                else
+                  $setting.value
+                end
+              )}
+            end
+          )
+        )
+      else
+        if $section.key == "paths" then
+          . + {($section.key): (
+            $section.value | with_entries(
+              if (.value | type) == "string" and (.value | startswith($default_home)) then
+                .value |= sub($default_home; $actual_home)
+              else . end
+            )
+          )}
         else
-          default_setting_value=$(jq -r --arg section "$section_name" --arg setting "$setting_name" '.[$section][$setting]' "$rd_defaults")
-          log d "Adding setting \"$setting_name\" with default value '$default_setting_value' to section \"$section_name\"."
-          tmpfile=$(mktemp)
-          jq --arg section "$section_name" --arg setting "$setting_name" --arg value "$default_setting_value" \
-            '.[$section] += { ($setting): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
-        fi
-      done
-    fi
-  done
+          . + {($section.key): $section.value}
+        end
+      end
+    )
+  ' "$rd_conf" "$rd_defaults" > "$tmp" && mv "$tmp" "$rd_conf"
+
+  log d "retrodeck.cfg updated with any new default settings"
 }
 
 update_component_presets() {
