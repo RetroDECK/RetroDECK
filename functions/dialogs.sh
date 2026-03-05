@@ -60,7 +60,7 @@ configurator_destination_choice_dialog() {
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
-  if [[ $(check_is_steam_deck) == "true" ]]; then
+  if check_is_steam_deck; then
     choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")

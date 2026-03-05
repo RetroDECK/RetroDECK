@@ -303,7 +303,7 @@ if [[ $multi_user_mode == "true" ]]; then
 fi
 
 # Run optional startup checks
-if [[ $(check_is_steam_deck) == "true" ]]; then # Only warn about Desktop Mode on Steam Deck, ignore for other platforms
+if check_is_steam_deck; then # Only warn about Desktop Mode on Steam Deck, ignore for other platforms
   desktop_mode_warning
 fi
 low_space_warning
