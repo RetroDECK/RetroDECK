@@ -27,167 +27,44 @@ sed_escape_replacement() {
 
 set_setting_value() {
   # Function for editing settings
-  # USAGE: set_setting_value "$setting_file" "$setting_name" "$new_setting_value" "$system" "$section_name(optional)"
+  # This function acts as a router for individual component pair functions
+  # The component should provide a _set_setting_value::<component name> function in its component_functions.sh file
+  # USAGE: set_setting_value "$setting_file" "$setting_name" "$new_setting_value" "$system" ["$section_name"]
 
-  local setting_name_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
-  local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
-  local current_section_name=$(sed -e 's/%/\\%/g' <<< "${5:-}")
+  local file="$1" setting="$2" value="$3" component="$4" section="${5:-}"
 
-  log d "Setting $setting_name_to_change=$setting_value_to_change in $1"
-  if [[ ! -f "$1" ]]; then
-    log e "File $1 does not exist, cannot set setting $setting_name_to_change"
+  log d "Setting $setting=$value in $file"
+
+  if [[ ! -f "$file" ]]; then
+    log e "File $file does not exist, cannot set setting $setting"
     return 1
   fi
 
-  case $4 in
+  local set_handler="_set_setting_value::${component}"
+  local get_handler="_get_setting_value::${component}"
 
-    "retrodeck" )
-      if [[ -z "$current_section_name" ]]; then
-        if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-          jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-        else
-          sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-        fi
-      else
-        if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-          if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
-            parent_key=$(jq -r --arg section "$current_section_name" --arg setting "$setting_name_to_change" '
-                        .presets[$section]
-                        | paths(scalars)
-                        | select(.[-1] == $setting)
-                        | if length > 1 then .[-2] else $section end
-                        ' "$1") # Find parent key of supplied setting name, in case it is nested
-            if [[ "$current_section_name" == "$parent_key" ]]; then # Setting is not nested
-              jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-            else
-              jq --arg section "$current_section_name" --arg parent "$parent_key" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$parent][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-            fi
-          else
-            jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-          fi
-        else
-          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-        fi
-      fi
-      if [[ "$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options" ]]; then
-        log d "Exporting value of setting $setting_name_to_change as $setting_value_to_change"
-        declare -g "$setting_name_to_change=$setting_value_to_change"
-      fi
-    ;;
+  if ! declare -F "$set_handler" > /dev/null; then
+    log e "No _set_setting_value handler found for component: $component"
+    return 1
+  fi
 
-    "yuzu" | "azahar" | "libretro_scummvm" | "gzdoom" | "dosbox-x" )
-      if [[ -z $current_section_name ]]; then
-        sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-      else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-      fi
-    ;;
+  if ! declare -F "$get_handler" > /dev/null; then
+    log e "No _get_setting_value handler found for component: $component"
+    return 1
+  fi
 
-    "retroarch" )
-      if [[ -z $current_section_name ]]; then
-        sed -i 's^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' "$1"
-      else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' = ^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' "$1"
-      fi
-    ;;
+  "$set_handler" "$file" "$setting" "$value" "$section"
 
-    "dolphin" | "duckstation" | "melonds" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
-      if [[ -z $current_section_name ]]; then
-        sed -i 's^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' "$1"
-      else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' =^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' "$1"
-      fi
-    ;;
+  local result
+  result=$("$get_handler" "$file" "$setting" "$section")
 
-    "rpcs3" | "vita3k" )
-       # This does not currently work for settings with a $ in them
-
-      if [[ "$1" =~ (.ini)$ ]]; then # If this is a RPCS3 .ini file
-        if [[ -z $current_section_name ]]; then
-          sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-        else
-          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-        fi
-      elif [[ "$1" =~ (.yml)$ ]]; then # If this is an YML-based file
-        if [[ -z $current_section_name ]]; then
-          sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
-        else
-          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
-        fi
-      fi
-    ;;
-
-    "cemu" )
-      if [[ -z "$current_section_name" ]]; then
-        xml ed -L -u "//$setting_name_to_change" -v "$setting_value_to_change" "$1"
-      else
-        xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
-      fi
-    ;;
-
-    "mame" )
-      # In this option, $current_section_name is the <system name> in the .cfg file.
-
-      local mame_current_value=$(get_setting_value "$1" "$setting_name_to_change" "$4" "$current_section_name")
-      if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
-        sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
-      elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
-        sed -i '\^\<system name=\"'"$current_section_name"'\">^,\^<\/system>^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
-      fi
-    ;;
-
-    "ryubing" )
-      if [[ -z "$current_section_name" ]]; then
-        jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $setting ] =
-                                                                                            ( if ($newval == "true")  then true
-                                                                                              elif ($newval == "false") then false
-                                                                                              else $newval
-                                                                                              end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-      else
-        jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[ $section ][ $setting ] =
-                                                                                                                                  ( if ($newval == "true")  then true
-                                                                                                                                    elif ($newval == "false") then false
-                                                                                                                                    else $newval
-                                                                                                                                    end )' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
-      fi
-    ;;
-
-    "es_settings" )
-      sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
-    ;;
-
-  esac
-}
-
-get_setting_name() {
-  # Function for getting the setting name from a full setting line from a config file
-  # USAGE: get_setting_name "$current_setting_line" $system
-
-  local current_setting_line="$1"
-
-  case $2 in
-
-  "es_settings" )
-    echo ''"$current_setting_line"'' | grep -o -P '(?<=name\=\").*(?=\" value)'
-    ;;
-
-  "rpcs3" | "vita3k" )
-    if [[ "$1" =~ (.ini)$ ]]; then # If this is a RPCS3 .ini file
-      echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?=\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g;s^\\$^^'
-    elif [[ "$1" =~ (.yml)$ ]]; then # If this is an YML-based file
-      echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
-    fi
-    ;;
-
-  "mame" ) # This only works for mame .ini files, not the .cfg XML files
-    echo "$current_setting_line" | awk '{print $1}'
-    ;;
-
-  * )
-    echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?=\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g;s^\\$^^'
-    ;;
-
-  esac
+  if [[ "$result" != "$value" && ! "$result" == "blind_write" ]]; then
+    log e "Failed to set $setting=$value in $file (got: $result)"
+    return 1
+  else
+    log d "Successfully set $setting=$value in $file"
+    return
+  fi
 }
 
 get_setting_value() {
