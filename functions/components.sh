@@ -92,7 +92,7 @@ get_all_helper_files() {
     [.[] | .component_path as $component_path |
      .manifest | .. | objects | select(has("helper_files")) |
      .helper_files | to_entries[].value |
-     . + {source_path: ($component_path + "/rd_assets/helper_files")}]
+     . + {source_path: ($component_path + "/helper_files")}]
   '
 }
 
