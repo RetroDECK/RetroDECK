@@ -298,3 +298,17 @@ get_own_component_path() {
   local component="${caller##*::}"
   get_component_path "$component"
 }
+
+get_all_preset_definitions() {
+  # Gather preset class definitions from all component manifests.
+  # Framework definitions take precedence for shared preset classes.
+  # Returns a JSON object keyed by preset name with name and description.
+  # USAGE: get_all_preset_definitions
+
+  get_component_manifest_cache | jq '
+    reduce (.[] | .manifest | .. | objects | select(has("preset_definitions")) | .preset_definitions | to_entries[]) as $entry (
+      {};
+      if has($entry.key) then . else . + {($entry.key): $entry.value} end
+    )
+  '
+}
