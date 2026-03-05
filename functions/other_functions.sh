@@ -195,6 +195,70 @@ conf_write() {
 }
 
 dir_prep() {
+  # Create a symlink at a specified location pointing to a real directory, merging any existing data.
+  # If conflicting files exist during the merge, they are preserved in a lost+found directory.
+  # USAGE: dir_prep "$real_dir" "$symlink_location"
+
+  if [[ -z "$1" || -z "$2" ]]; then
+    log e "dir_prep requires both a real directory and symlink location"
+    return 1
+  fi
+
+  local real symlink
+  real=$(realpath -s "$1")
+  symlink=$(realpath -s "$2")
+
+  log d "Preparing directory: real=$real symlink=$symlink"
+
+  if [[ -L "$symlink" ]]; then
+    log d "$symlink is already a symlink, unlinking"
+    unlink "$symlink"
+  fi
+
+  local staged_dir=""
+  if [[ -d "$symlink" ]]; then
+    staged_dir=$(mktemp -d "${symlink}.merging.XXXXXX" 2>/dev/null) || staged_dir=$(mktemp -d)
+    log d "$symlink is an existing directory, staging as $staged_dir"
+    mv -f "$symlink" "$staged_dir/contents"
+  fi
+
+  if [[ -L "$real" ]]; then
+    log d "$real is already a symlink, unlinking"
+    unlink "$real"
+  fi
+
+  if [[ ! -d "$real" ]]; then
+    log d "$real not found, creating"
+    create_dir "$real"
+  fi
+
+  create_dir "$(dirname "$symlink")"
+  ln -svf "$real" "$symlink"
+  log d "Linked $symlink -> $real"
+
+  if [[ -n "$staged_dir" && -d "$staged_dir/contents" ]]; then
+    # Merge non-conflicting files into real, skipping any that already exist
+    rsync -a --ignore-existing "$staged_dir/contents/" "$real/"
+
+    # Remove successfully merged files, leaving only conflicts behind
+    rsync -a --ignore-existing --delete "$real/" "$staged_dir/contents/" 2>/dev/null
+
+    # Anything remaining in staged is a conflict
+    if [[ -n "$(find "$staged_dir/contents" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]]; then
+      local lost_found="$real/lost_and_found"
+      create_dir "$lost_found"
+      rsync -a "$staged_dir/contents/" "$lost_found/"
+      log w "Conflicting files preserved in $lost_found"
+    fi
+
+    rm -rf "$staged_dir"
+    log d "Merge complete"
+  fi
+
+  log i "$symlink is now linked to $real"
+}
+
+LEGACY_dir_prep() {
   # This script is creating a symlink preserving old folder contents and moving them in the new one
 
   # Call me with:
