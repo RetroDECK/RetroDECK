@@ -823,13 +823,6 @@ finit() {
   fi
 }
 
-create_lock() {
-  # creating RetroDECK's lock file and writing the version in the config file
-  version=$hard_version
-  log i "Creating RetroDECK lock file in $rd_lockfile"
-  touch "$rd_lockfile"
-}
-
 install_release() {
   log d "Attempting to install release: $1 from repo $update_repo"
 
