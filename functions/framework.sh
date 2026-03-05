@@ -220,7 +220,6 @@ enable_setting() {
 disable_file() {
   # This function adds the suffix ".disabled" to the end of a file to prevent it from being used entirely.
   # USAGE: disable_file $file_name
-  # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file
 
   mv "$(realpath "$1")" "$(realpath "$1")".disabled
 }
@@ -228,7 +227,6 @@ disable_file() {
 enable_file() {
   # This function removes the suffix ".disabled" to the end of a file to allow it to be used.
   # USAGE: enable_file $file_name
-  # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
 
   mv "$(realpath "$1".disabled)" "$(realpath "$(echo "$1" | sed -e 's/\.disabled//')")"
 }
