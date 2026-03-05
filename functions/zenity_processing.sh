@@ -309,19 +309,26 @@ build_zenity_reset_component_menu_array() {
 }
 
 build_zenity_find_empty_rom_folders_menu_array() {
-  local dest_array="$1"
-  local -a temp_bash_array=()
+  # Build a Bash array of empty ROM folder entries with checkboxes for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: checkbox_state, system, path.
+  # USAGE: build_zenity_find_empty_rom_folders_menu_array "$dest_array_name"
 
-  while read -r obj; do # Iterate through all returned menu objects
-    if [[ ! "$obj" == "no empty rom folders found" ]]; then
-      local checkbox_state="TRUE"
-      local system=$(jq -r '.system' <<< "$obj")
-      local path=$(jq -r '.path' <<< "$obj")
-      temp_bash_array+=("$checkbox_state" "$system" "$path")
-    fi
-  done < <(api_get_empty_rom_folders | jq -c '.[]')
+  local -n dest_array="$1"
 
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+  local empty_folders
+  empty_folders=$(api_get_empty_rom_folders)
+
+  if [[ "$empty_folders" == "no empty rom folders found" ]]; then
+    dest_array=()
+    return
+  fi
+
+  mapfile -t dest_array < <(jq -r '
+    .[] |
+    "TRUE",
+    .system,
+    .path
+  ' <<< "$empty_folders")
 }
 
 build_zenity_bios_checker_menu_array() {
