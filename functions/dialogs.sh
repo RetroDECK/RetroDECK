@@ -453,7 +453,7 @@ desktop_mode_warning() {
   # This function will check if desktop mode is currently being used and if the warning has not been disabled, and show it if needed.
   # USAGE: desktop_mode_warning
 
-  if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
+  if check_desktop_mode && [[ $desktop_mode_warning == "true" ]]; then
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK - Warning: Desktop Mode" \

@@ -18,13 +18,12 @@ check_network_connectivity() {
 }
 
 check_desktop_mode() {
-  # This function will do a basic check of if we are running in Steam Deck game mode or not, and return "true" if we are outside of game mode
-  # USAGE: if [[ $(check_desktop_mode) == "true" ]]; then
+  # This function will do a basic check of if we are running in Steam Deck game mode or not
 
   if [[ ! "$XDG_CURRENT_DESKTOP" == "gamescope" ]]; then
-    echo "true"
+    return 0
   else
-    echo "false"
+    return 1
   fi
 }
 
