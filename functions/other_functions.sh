@@ -107,8 +107,7 @@ create_dir() {
   # If -d it will delete it prior the creation
 
   if [[ "$1" == "-d" ]]; then
-    # If "force" flag is provided, delete the directory first
-    shift # Remove the first argument (-f)
+    shift
     if [[ -e "$1" ]]; then
       rm -rf "$1" # Forcefully delete the directory
       log d "Found \"$1\", deleting it."
@@ -121,7 +120,7 @@ create_dir() {
   fi
 
   if [[ ! -d "$1" ]]; then
-    mkdir -p "$1" #|| log e "Failed to create directory: $1"
+    mkdir -p "$1"
     log d "Created directory: $1"
   else
     log d "Directory \"$1\" already exists, skipping."
