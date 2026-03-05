@@ -173,45 +173,50 @@ build_zenity_menu_array() {
 }
 
 build_zenity_preset_menu_array() {
-  local dest_array="$1"
+  # Build a Bash array of preset state entries for use in a Zenity dialog.
+  # Each entry consists of five consecutive elements: status, friendly_name, emulated_system, description, system_name.
+  # USAGE: build_zenity_preset_menu_array "$dest_array_name" "$preset_name"
+
+  local -n dest_array="$1"
   local preset_name="$2"
-  local -a temp_bash_array=()
-  local current_preset_states=$(api_get_current_preset_state "$preset_name")
 
-  while read -r obj; do # Iterate through all returned menu objects
-    local system_name=$(jq -r '.system_name // empty' <<< "$obj")
-    local friendly_name=$(jq -r '.system_friendly_name // empty' <<< "$obj")
-    local desc=$(jq -r '.description // empty' <<< "$obj")
-    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name | if type=="array" then join(", ") else . end // empty' <<< "$obj")
-    local status=$(jq -r '.status // empty' <<< "$obj")
-    local parent_component=$(jq -r '.parent_component // empty' <<< "$obj")
+  local current_preset_states
+  current_preset_states=$(api_get_current_preset_state "$preset_name")
 
-    if [[ -n "$parent_component" ]]; then
-      local component="$parent_component"
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  mapfile -t dest_array < <(jq -r --arg preset "$preset_name" --argjson manifests "$manifest_cache" '
+    .[$preset] // [] | .[] |
+    .system_name as $sn |
+    .parent_component as $parent |
+    (if $parent != "" then $parent else $sn end) as $comp |
+
+    # Find the disabled state from the manifest cache
+    ([$manifests[] | .manifest | select(has($comp)) | .[$comp]] | first) as $manifest |
+    (if $parent != "" then
+      $manifest.compatible_presets[$sn][$preset][0] // ""
     else
-      local component="$system_name"
-    fi
+      $manifest.compatible_presets[$preset][0] // ""
+    end) as $disabled_state |
 
-    local preset_disabled_state=$(jq -r --arg component "$system_name" --arg parent "$parent_component" --arg preset "$preset_name" '
-                                if $parent != "" then
-                                  .[$parent].compatible_presets[$component][$preset].[0] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[0] // empty
-                                end
-                              ' "$rd_components/$component/component_manifest.json")
+    # Resolve display status
+    (if .status == $disabled_state then "Disabled"
+     elif .status == "true" then "Enabled"
+     else (.status | split(" ") | map(
+       (.[0:1] | ascii_upcase) + .[1:]
+     ) | join(" "))
+     end) as $display_status |
 
-    if [[ "$status" == "$preset_disabled_state" ]]; then
-      status="Disabled"
-    elif [[ "$status" == "true" ]]; then
-      status="Enabled"
-    else
-      status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
-    fi
+    # Resolve emulated system friendly name
+    (.emulated_system_friendly_name | if type == "array" then join(", ") else . end // "") as $emu_name |
 
-    temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
-  done < <(jq -c --arg preset "$preset_name" '.[$preset].[]' <<< "$current_preset_states")
-
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+    $display_status,
+    (.system_friendly_name // ""),
+    $emu_name,
+    (.description // ""),
+    $sn
+  ' <<< "$current_preset_states")
 }
 
 build_zenity_preset_value_menu_array() {
