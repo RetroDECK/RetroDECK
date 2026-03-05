@@ -205,58 +205,44 @@ remove_preset_files() {
   # If the source (the installed file/folder from its "shipped" location) is a file and the dest a file path to wherever it was installed when enabled, it will be removed.
   # If the source is a file and the dest is a directory (meaning the file would have been installed into a folder with other files in it), the specific file will be removed from the dest directory.
   # If the source is a directory and the dest is also a directory (meaning multiple files were installed somewhere), the function will compare all files in the source and remove them from the dest,
-  # meaning even if multipl preset files were installed into a location containing non-preset files, only the correct ones (the ones that exist in the "shipped" location) will be removed.
+  # meaning even if multiple preset files were installed into a location containing non-preset files, only the correct ones (the ones that exist in the "shipped" location) will be removed.
   # In all cases, if the destination contains one or more subfolders which are empty after the files have been removed, they will be pruned as well.
-  # USAGE: remove_preset_files "$source" "$dest"
+  # Optionally, the mode can be set to "purge" and the dest will be removed regardless of other contents, so should only be used if there are no non-preset-related files there.
+  # USAGE: remove_preset_files "$source" "$dest" ["$mode"]
+
   local source="$1"
   local dest="$2"
-  local mode="$3"
+  local mode="${3:-}"
 
-  source=$(echo "$source" | envsubst)
-  dest=$(echo "$dest" | envsubst)
-
-  if [[ ! -e "$source" ]]; then # Validate that source exists at all.
+  if [[ ! -e "$source" ]]; then
     log d "Source location $source does not exist."
     return 1
   fi
 
   local dest_root
-  if [[ -d "${dest%/}" ]]; then # Normalize destination path if it is a directory
+  if [[ -d "${dest%/}" ]]; then
     dest_root="${dest%/}"
   else
-    dest_root="$(dirname "$dest")"
+    dest_root=$(dirname "$dest")
   fi
 
   if [[ -f "$source" && -f "$dest" ]]; then # If source and dest are both single files
     log d "Removing preset file $(basename "$source") from location $dest_root"
     rm -f "$dest"
-    if [[ -d "$dest_root" && -z "$(ls -A "$dest_root")" ]]; then # If the parent folder of the dest file is empty, remove it
-      log d "Parent folder $dest_root is empty, removing as well..."
-      rmdir "$dest_root"
-    fi
+    prune_empty_parents "$dest_root" "$dest_root"
     return 0
   fi
 
-  if [[ -f "$source" && -d "${dest%/}" ]]; then # If the source is a file and the dest is a directory, where the "source" file will be removed from the "dest" directory
-    log d "Removing file $(basename "$source") from destination directory $dest"
-    local base
-    local target
-    local parent_dir
-    base="$(basename "$source")"
+  if [[ -f "$source" && -d "${dest%/}" ]]; then
+    local base target
+    base=$(basename "$source")
     target="${dest%/}/$base"
     if [[ -f "$target" ]]; then
+      log d "Removing file $base from destination directory $dest"
       rm -f "$target"
-      parent_dir="$(dirname "$target")"
-      while [[ "$parent_dir" != "${dest%/}" && -d "$parent_dir" && -z "$(ls -A "$parent_dir")" ]]; do # Remove empty subdirs up to the dest path itself
-        log d "Parent directory $parent_dir is empty, removing as well..."
-        rmdir "$parent_dir"
-        parent_dir="$(dirname "$parent_dir")"
-      done
+      prune_empty_parents "$(dirname "$target")" "${dest%/}"
     fi
-    if [[ -z "$(ls -A "${dest%/}")" ]]; then # If the dest dir itself is empty, also remove it
-      log d "Destination directory $dest is empty, removing as well..."
-      rmdir "${dest%/}"
-    fi
+    prune_empty_parents "${dest%/}" "${dest%/}"
     return 0
   fi
 
@@ -265,38 +251,23 @@ remove_preset_files() {
       log d "Purging preset file location $dest"
       rm -rf "$dest"
     else
-      log d "Removing preset files from $source located in $dest"
-      local source_dir
-      local dest_dir
-      local relative_path
-      local target
-      local parent_dir
-      source_dir="${source%/}"
-      dest_dir="${dest%/}"
+      local source_dir="${source%/}"
+      local dest_dir="${dest%/}"
 
-      while IFS= read -r -d '' source_file; do # find every file under source, remove its twin under dest
-        relative_path="${source_file#$source_dir/}"
-        target="$dest_dir/$relative_path"
+      while IFS= read -r -d '' source_file; do
+        local relative_path="${source_file#$source_dir/}"
+        local target="$dest_dir/$relative_path"
         if [[ -f "$target" ]]; then
           log d "Preset file $target found, removing."
           rm -f "$target"
-          parent_dir="$(dirname "$target")"
-          while [[ "$parent_dir" != "$dest_dir" &&  -d "$parent_dir" && -z "$(ls -A "$parent_dir")" ]]; do # Remove empty subdirs up to the dest path itself
-            log d "Parent directory $parent_dir is empty, removing as well..."
-            rmdir "$parent_dir"
-            parent_dir="$(dirname "$parent_dir")"
-          done
+          prune_empty_parents "$(dirname "$target")" "$dest_dir"
         fi
       done < <(find "$source_dir" -type f -print0)
 
-      if [[ -z "$(ls -A "$dest_dir")" ]]; then
-        log d "Destination directory $dest is empty, removing as well..."
-        rmdir "$dest_dir"
-      fi
-      return 0
+      prune_empty_parents "$dest_dir" "$dest_dir"
     fi
+    return 0
   fi
 
-  # If everything else fails, exit poorly
   return 1
 }
