@@ -177,26 +177,23 @@ change_presets_cli() {
 }
 
 install_preset_files() {
-  # This function will copy files from a source to a destination, for the purposes of making them available for a preset.
-  # An example of this purpose would be the Dynamic Input Textures for use in Dolphin or Primehack
-  # The destination path must be the FULL destination, even if it does not currently exist, not the parent directory of the destination.
+  # Copy files from a source to a destination for use by a preset.
+  # The destination path must be the FULL destination, even if it does not currently exist.
   # If the destination path does not exist it will be created.
   # USAGE: install_preset_files "$source" "$destination"
 
   local source="$1"
   local dest="$2"
 
-  source=$(echo "$source" | envsubst)
-  dest=$(echo "$dest" | envsubst)
-
-  if [[ -d "$source" ]]; then # Ensure paths to directories always have a trailing slash
-    [[ "${source}" != */ ]] && source="${source}/"
-  elif [[ ! -f "$source" ]]; then # If given path is neither a file or folder
+  if [[ -d "$source" ]]; then
+    [[ "$source" != */ ]] && source="${source}/"
+  elif [[ ! -f "$source" ]]; then
     log d "Provided source $source is neither a valid file or directory"
     return 1
   fi
-  if [[ -d "$dest" ]]; then # Ensure paths to directories always have a trailing slash
-    [[ "${dest}" != */ ]] && dest="${dest}/"
+
+  if [[ -d "$dest" ]]; then
+    [[ "$dest" != */ ]] && dest="${dest}/"
   fi
 
   log d "Installing files from $source to $dest"
