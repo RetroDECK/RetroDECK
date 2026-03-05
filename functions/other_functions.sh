@@ -162,7 +162,7 @@ conf_read() {
     | @tsv
   ' "$rd_conf")
 
-  log d "retrodeck.cfg read and loaded"
+  log d "retrodeck.json read and loaded"
 }
 
 conf_write() {
@@ -191,7 +191,7 @@ conf_write() {
   tmp=$(mktemp)
   jq "${jq_args[@]}" "$filter" "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
 
-  log d "retrodeck.cfg written"
+  log d "retrodeck.json written"
 }
 
 dir_prep() {
