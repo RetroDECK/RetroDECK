@@ -325,11 +325,15 @@ build_zenity_find_empty_rom_folders_menu_array() {
 }
 
 build_zenity_bios_checker_menu_array() {
-  local dest_array="$1"
-  local system_filter="${2:-}"
-  local -a temp_bash_array=()
+  # Build a Bash array of BIOS file status entries for use in a Zenity dialog.
+  # Each entry consists of eight consecutive elements per BIOS file.
+  # USAGE: build_zenity_bios_checker_menu_array "$dest_array_name" "$system_filter(optional)"
 
-  mapfile -t temp_bash_array < <(api_get_bios_file_status "$system_filter" | jq -r --arg bios_path "$bios_path" '.[] |
+  local -n dest_array="$1"
+  local system_filter="${2:-}"
+
+  mapfile -t dest_array < <(api_get_bios_file_status "$system_filter" | jq -r --arg bios_path "$bios_path" '
+    .[] |
     .file // "Unknown",
     .systems // "Unknown",
     .file_found // "No",
@@ -339,6 +343,4 @@ build_zenity_bios_checker_menu_array() {
     .description // "No description provided",
     .known_md5_hashes // "Unknown"
   ')
-
-  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
