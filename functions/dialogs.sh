@@ -49,9 +49,9 @@ configurator_generic_question_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
   if [[ $? == "0" ]]; then
-    echo "true"
+    return 0
   else
-    echo "false"
+    return 1
   fi
 }
 
@@ -1089,7 +1089,7 @@ configurator_usb_import_dialog() {
 
       if [[ ! -z "$choice" ]]; then
         if verify_space "$choice/RetroDECK Import/ROMs" "$roms_path" || verify_space "$choice/RetroDECK Import/BIOS" "$bios_path"; then
-          if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
+          if configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?"; then
             (
             rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_path"
             rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_path"
