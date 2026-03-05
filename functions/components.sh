@@ -276,8 +276,25 @@ prepare_component() {
         end' "$rd_conf")
     done < <(jq -r '.presets | keys[]' "$rd_conf")
   fi
+}
 
-  if [[ "$component" =~ ^(all|framework) ]]; then
-    conf_write
-  fi
+get_component_path() {
+  # Return the installation path for a given component, resolving internal vs external automatically.
+  # USAGE: get_component_path "$component_name"
+
+  local component="$1"
+
+  get_component_manifest_cache | jq -r --arg component "$component" '
+    .[] | select(.manifest | has($component)) | .component_path
+  ' | head -1
+}
+
+get_own_component_path() {
+  # Return the installation path for the calling component, derived from the function name.
+  # Expects to be called from a function named "something::component_name".
+  # USAGE: get_own_component_path
+
+  local caller="${FUNCNAME[1]}"
+  local component="${caller##*::}"
+  get_component_path "$component"
 }
