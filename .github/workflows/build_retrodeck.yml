@@ -404,6 +404,40 @@ jobs:
 
           echo "All JSON files passed validation"
 
+      - name: Install linting dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+
+      - name: Lint required XML files
+        run: |
+          XML_FILES=(
+            "net.retrodeck.retrodeck.metainfo.xml"
+            "config/retrodeck/net.retrodeck.retrodeck.mime.xml"
+            "config/retrodeck/retrodeck-mimetype.xml"
+          )
+
+          ERRORS=0
+          for xml_file in "${XML_FILES[@]}"; do
+            if [[ ! -f "$xml_file" ]]; then
+              echo "ERROR: File not found: $xml_file"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            if ! xmllint --noout "$xml_file" 2>/dev/null; then
+              echo "FAILED: $xml_file"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          if [[ "$ERRORS" -gt 0 ]]; then
+            echo "ERROR: $ERRORS file(s) failed XML validation"
+            exit 1
+          fi
+
+          echo "All XML files passed validation"
+
   # ===========================================================================
   # Build the Flatpak bundle(s)
   # ===========================================================================
