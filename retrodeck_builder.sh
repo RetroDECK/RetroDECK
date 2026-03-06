@@ -247,7 +247,15 @@ construct_version_string() {
     *)
       local sanitized_branch
       sanitized_branch=$(sanitize_branch "$branch")
-      echo "branch-${sanitized_branch}-${version}-${date}-${time}"
+
+      case "$build_type" in
+        countertop)
+          echo "branch-${sanitized_branch}-${version}-${date}-${time}-countertop"
+          ;;
+        *)
+          echo "branch-${sanitized_branch}-${version}-${date}-${time}"
+          ;;
+      esac
       ;;
   esac
 }
