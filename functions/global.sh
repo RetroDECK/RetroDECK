@@ -138,11 +138,6 @@ if [[ ! -d "$rd_api_dir" ]]; then1
   create_dir "$rd_api_dir"
 fi
 
-if [[ ! -e "$rd_file_lock" ]]; then
-  log d "Creating RetroDECK API lockfile at $rd_file_lock"
-  touch "$rd_file_lock" || log e "Failed to create RetroDECK API lockfile at $rd_file_lock"
-fi
-
 # Legacy config conversion
 if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" && ! -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.json" ]]; then
   log i "Old-style RetroDECK config file found, converting"
@@ -181,6 +176,10 @@ if [[ ! -f "$rd_conf" ]]; then
   fi
 
   cp "$rd_defaults" "$rd_conf"
+  chmod +rw "$rd_conf"
+
+  conf_read
+  
   set_setting_value "$rd_conf" "version" "$version" retrodeck
   set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths"
 
@@ -193,11 +192,11 @@ if [[ ! -f "$rd_conf" ]]; then
     set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
   fi
 
-  chmod +rw "$rd_conf"
   log i "RetroDECK config file initialized"
-  conf_read
 else
   log i "Loading RetroDECK config file from $rd_conf"
+
+  conf_read
 
   # If this is a pre-production build
   if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
@@ -223,9 +222,6 @@ else
       quit_retrodeck
     fi
   fi
-
-  multi_user_data_folder="$rd_home_path/multi-user-data"
-  export multi_user_data_folder
 fi
 
 # Phase 5: Source component functions (depends on config paths being loaded)
