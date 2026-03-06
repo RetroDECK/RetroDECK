@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch_override:
-        description: 'Branch to build (leave empty to use current branch)'
+        description: 'Branch to build (leave empty to use current branch, cross-repo sets this to components branch)'
         required: false
         type: string
 
@@ -14,8 +14,14 @@ on:
         type: boolean
         default: false
 
-      components_release_override:
-        description: 'Components release tag override (leave empty for auto-detect)'
+      force_countertop:
+        description: 'Force countertop variant build regardless of branch'
+        required: false
+        type: boolean
+        default: false
+
+      components_release_tag:
+        description: 'Components release tag (leave empty for auto-detect)'
         required: false
         type: string
 
@@ -38,16 +44,6 @@ on:
         type: boolean
         default: false
 
-      components_branch:
-        description: 'INTERNAL WORKFLOW USE - branch that was built in components repo'
-        required: false
-        type: string
-
-      components_release_tag:
-        description: 'INTERNAL WORKFLOW USE - components release tag from trigger'
-        required: false
-        type: string
-
   push:
     branches:
       - main
@@ -57,6 +53,7 @@ permissions:
   contents: write
 
 env:
+  FLATPAK_REPO: ${{ github.repository_owner }}/RetroDECK
   COMPONENTS_REPO: ${{ github.repository_owner }}/components
   COOKER_REPO: ${{ github.repository_owner }}/Cooker
   APP_ID: net.retrodeck.retrodeck
@@ -73,6 +70,7 @@ jobs:
       trigger_type: ${{ steps.check.outputs.trigger_type }}
       publish_flathub: ${{ steps.check.outputs.publish_flathub }}
       is_dry_run: ${{ steps.check.outputs.is_dry_run }}
+      force_countertop: ${{ steps.check.outputs.force_countertop }}
     steps:
       - name: Checkout code
         if: github.event_name == 'push'
@@ -87,6 +85,7 @@ jobs:
           BUILD_TRIGGER="build"
           RELEASE_TRIGGER="release"
           DRY_RUN_TRIGGER="dry-run"
+          COUNTERTOP_TRIGGER="countertop"
 
           # Manual or components-repo-triggered dispatch
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -96,8 +95,16 @@ jobs:
               echo "should_build=true" >> $GITHUB_OUTPUT
               echo "is_dry_run=false" >> $GITHUB_OUTPUT
 
+              # Pass through countertop flag
+              if [[ "${{ inputs.force_countertop }}" == "true" ]]; then
+                echo "force_countertop=true" >> $GITHUB_OUTPUT
+                echo "Cross-repo trigger with forced countertop build"
+              else
+                echo "force_countertop=false" >> $GITHUB_OUTPUT
+              fi
+
               # Epicure cross-repo triggers auto-publish to Flathub beta
-              if [[ "${{ inputs.components_branch }}" == "epicure" ]]; then
+              if [[ "${{ inputs.branch_override }}" == "epicure" ]]; then
                 echo "publish_flathub=true" >> $GITHUB_OUTPUT
                 echo "Cross-repo trigger from epicure - will publish to Flathub beta"
               else
@@ -122,6 +129,12 @@ jobs:
             else
               echo "publish_flathub=false" >> $GITHUB_OUTPUT
             fi
+
+            if [[ "${{ inputs.force_countertop }}" == "true" ]]; then
+              echo "force_countertop=true" >> $GITHUB_OUTPUT
+            else
+              echo "force_countertop=false" >> $GITHUB_OUTPUT
+            fi
             exit 0
           fi
 
@@ -130,12 +143,29 @@ jobs:
 
           COMMITS=$(git log --format=%B ${{ github.event.before }}..${{ github.event.after }})
 
+          # Detect [countertop] flag in commits (can combine with other triggers)
+          FORCE_COUNTERTOP="false"
+          if echo "$COMMITS" | grep -qiE "\[${COUNTERTOP_TRIGGER}\]"; then
+            echo "Found [countertop] trigger in commit messages"
+            FORCE_COUNTERTOP="true"
+          fi
+          echo "force_countertop=$FORCE_COUNTERTOP" >> $GITHUB_OUTPUT
+
           # PR merge commits always trigger a build (no trigger word needed)
           if echo "$COMMITS" | grep -qiE "^Merge pull request #"; then
             echo "PR merge detected - auto-building"
             echo "should_build=true" >> $GITHUB_OUTPUT
             echo "publish_flathub=false" >> $GITHUB_OUTPUT
             echo "is_dry_run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # [countertop] -> build + release
+          if [[ "$FORCE_COUNTERTOP" == "true" ]]; then
+            echo "[countertop] implies release behavior"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "is_dry_run=false" >> $GITHUB_OUTPUT
+            echo "publish_flathub=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
@@ -148,7 +178,7 @@ jobs:
             exit 0
           fi
 
-          # [release] -> build + publish to Flathub (main branch only)
+          # [release] -> build + release + publish to Flathub (main branch only)
           if echo "$COMMITS" | grep -qiE "\[${RELEASE_TRIGGER}\]"; then
             if [[ "${{ github.ref_name }}" == "main" ]]; then
               echo "Found [release] trigger on main branch"
@@ -193,16 +223,18 @@ jobs:
       release_repo: ${{ steps.config.outputs.release_repo }}
       publish_flathub: ${{ steps.flathub.outputs.publish_flathub }}
       is_dry_run: ${{ needs.check-trigger.outputs.is_dry_run }}
+      force_countertop: ${{ needs.check-trigger.outputs.force_countertop }}
     steps:
       - name: Determine build parameters
         id: config
         run: |
           TRIGGER_TYPE="${{ needs.check-trigger.outputs.trigger_type }}"
+          FORCE_COUNTERTOP="${{ needs.check-trigger.outputs.force_countertop }}"
           IS_EPICURE="false"
 
           # Determine branch and epicure status
           if [[ "$TRIGGER_TYPE" == "cross-repo" ]]; then
-            COMPONENTS_BRANCH="${{ inputs.components_branch }}"
+            COMPONENTS_BRANCH="${{ inputs.branch_override }}"
 
             if [[ "$COMPONENTS_BRANCH" == "epicure" ]]; then
               BRANCH="main"
@@ -234,9 +266,12 @@ jobs:
           fi
 
           # Determine build variants
-          # Only cooker builds both full and countertop
-          if [[ "$BRANCH" == "cooker" && "$IS_EPICURE" == "false" ]]; then
+          # Cooker always builds both full and countertop
+          # Other branches build countertop only when forced
+          if [[ "$BRANCH" == "cooker" ]]; then
             BUILD_VARIANTS='["full", "countertop"]'
+          elif [[ "$FORCE_COUNTERTOP" == "true" ]]; then
+            BUILD_VARIANTS='["countertop"]'
           else
             BUILD_VARIANTS='["full"]'
           fi
@@ -251,28 +286,25 @@ jobs:
           echo "=========================================="
           echo "Build Configuration"
           echo "=========================================="
-          echo "  Trigger type:       $TRIGGER_TYPE"
-          echo "  Branch:             $BRANCH"
-          echo "  Is epicure:         $IS_EPICURE"
-          echo "  Release repo:       $RELEASE_REPO"
-          echo "  Build variants:     $BUILD_VARIANTS"
-          echo "  Dry run:            ${{ needs.check-trigger.outputs.is_dry_run }}"
+          echo "  Trigger type:         $TRIGGER_TYPE"
+          echo "  Branch:               $BRANCH"
+          echo "  Is epicure:           $IS_EPICURE"
+          echo "  Force countertop:     $FORCE_COUNTERTOP"
+          echo "  Release repo:         $RELEASE_REPO"
+          echo "  Build variants:       $BUILD_VARIANTS"
+          echo "  Dry run:              ${{ needs.check-trigger.outputs.is_dry_run }}"
           echo "=========================================="
 
       - name: Determine components release
         id: components
         run: |
-          TRIGGER_TYPE="${{ needs.check-trigger.outputs.trigger_type }}"
           IS_EPICURE="${{ steps.config.outputs.is_epicure }}"
           BRANCH="${{ steps.config.outputs.branch }}"
 
-          # Priority: cross-repo tag > manual override > auto-detect
-          if [[ "$TRIGGER_TYPE" == "cross-repo" && -n "${{ inputs.components_release_tag }}" ]]; then
+          # Use provided release tag if set, otherwise auto-detect
+          if [[ -n "${{ inputs.components_release_tag }}" ]]; then
             COMPONENTS_TAG="${{ inputs.components_release_tag }}"
-            echo "Using components release from cross-repo trigger: $COMPONENTS_TAG"
-          elif [[ -n "${{ inputs.components_release_override }}" ]]; then
-            COMPONENTS_TAG="${{ inputs.components_release_override }}"
-            echo "Using components release from manual override: $COMPONENTS_TAG"
+            echo "Using provided components release: $COMPONENTS_TAG"
           else
             # Auto-detect most recent components release for matching branch
             if [[ "$IS_EPICURE" == "true" ]]; then
@@ -811,6 +843,7 @@ jobs:
           RELEASE_TAG="${{ steps.release.outputs.tag }}"
           BRANCH="${{ needs.configure.outputs.branch }}"
           IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
+          FORCE_COUNTERTOP="${{ needs.configure.outputs.force_countertop }}"
           COMPONENTS_RELEASE="${{ needs.configure.outputs.components_release }}"
           METAINFO_FILE="${APP_ID}.metainfo.xml"
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
@@ -863,8 +896,8 @@ jobs:
           echo "**Components sources:** [components-sources.json](${COMPONENTS_METADATA_URL}/components-sources.json)" >> release_notes.md
           echo "" >> release_notes.md
 
-          # Cooker variant info
-          if [[ "$BRANCH" == "cooker" ]]; then
+          # Variant info (cooker always has countertop; other branches when forced)
+          if [[ "$BRANCH" == "cooker" || "$FORCE_COUNTERTOP" == "true" ]]; then
             cat >> release_notes.md <<EOF
           ### Variants
 
@@ -1204,6 +1237,7 @@ jobs:
           BRANCH="${{ needs.configure.outputs.branch }}"
           IS_EPICURE="${{ needs.configure.outputs.is_epicure }}"
           IS_DRY_RUN="${{ needs.configure.outputs.is_dry_run }}"
+          FORCE_COUNTERTOP="${{ needs.configure.outputs.force_countertop }}"
           VERSION="${{ needs.build.outputs.version }}"
           RELEASE_REPO="${{ needs.configure.outputs.release_repo }}"
           PUBLISH_FLATHUB="${{ needs.configure.outputs.publish_flathub }}"
@@ -1224,6 +1258,7 @@ jobs:
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| Branch | \`${BRANCH}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Epicure | ${IS_EPICURE} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Force countertop | ${FORCE_COUNTERTOP} |" >> $GITHUB_STEP_SUMMARY
           echo "| Version | \`${VERSION}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Components | \`${{ needs.configure.outputs.components_release }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Release repo | \`${RELEASE_REPO}\` |" >> $GITHUB_STEP_SUMMARY
