@@ -1057,7 +1057,7 @@ jobs:
           name: flatpak-artifacts-full
           path: downloaded-artifacts/
 
-      - name: Install Flatpak
+      - name: Install Flatpak dependencies
         run: |
           echo "Installing Flatpak..."
 
