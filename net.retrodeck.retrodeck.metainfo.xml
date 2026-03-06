@@ -138,6 +138,8 @@
                 <ul>
                     <li>BIOS CHECKER: Resolved inconsistencies within the BIOS lists.</li>
                     <li>EASTER EGG: Adjusted and refined several holiday entries.</li>
+                </ul>
+            </description>
         <release version="0.10.4" date="2026-02-21">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.11.0/0.11.0/</url>
             <description>
