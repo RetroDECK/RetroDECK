@@ -133,7 +133,7 @@ done
 build_component_manifest_cache
 
 # Initialize directories
-if [[ ! -d "$rd_api_dir" ]]; then1
+if [[ ! -d "$rd_api_dir" ]]; then
   log d "Creating RetroDECK API directory at $rd_api_dir"
   create_dir "$rd_api_dir"
 fi
