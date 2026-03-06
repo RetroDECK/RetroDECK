@@ -1217,8 +1217,9 @@ update_rd_conf() {
 }
 
 update_component_presets() {
-  # This function will create, as needed, component entries for different presets in retrodeck.cfg
-  # This will allow us to expand the supported presets for every component in the presets section at once, creating new component entries in each named preset as needed.
+  # Update the presets section of retrodeck.cfg with entries from all component manifests.
+  # New preset sections, component entries, and nested core entries are added with their default (disabled) values.
+  # Existing entries are not modified.
   # USAGE: update_component_presets
 
   local manifest_cache
