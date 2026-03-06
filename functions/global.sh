@@ -224,8 +224,8 @@ else
   fi
 fi
 
-# Phase 5: Source component functions (depends on config paths being loaded)
+# Source component functions for further use
 source_component_functions
 
-# Phase 6: Build runtime caches that depend on component functions
+# Build runtime caches that depend on component functions
 build_compression_lookups
