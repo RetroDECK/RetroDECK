@@ -584,169 +584,191 @@ finit_browse() {
 }
 
 finit() {
-  # Force/First init, depending on the situation
+  # First-time initialization and setup of RetroDECK.
+  # Guides the user through storage location selection and optional component setup.
+  # USAGE: finit
 
   log i "Executing finit"
 
-  # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "<b>Welcome to RetroDECKs first-time setup!</b>\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>ROMs and Games \nBIOS and Firmware \nGame Saves \nArt Data \nEtc...</b></span>." )
-  
-  if [[ "$finit_dest_choice" == "" ]]; then
-    log i "User closed the window"
-  else
-    log i "User choice: $finit_dest_choice"
-  fi
+  local finit_dest_choice
+  local path_choice
 
-  case "$finit_dest_choice" in
+  finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" \
+    "<b>Welcome to RetroDECKs first-time setup!</b>\n\nRead each prompt carefully during installation so everything is configured correctly.\n\nChoose where RetroDECK should store its data.\n\nA data folder named <span foreground='$purple'><b>retrodeck</b></span> will be created at the location you choose.\n\nThis folder will hold all of your important files:\n\n<span foreground='$purple'><b>ROMs and Games \nBIOS and Firmware \nGame Saves \nArt Data \nEtc...</b></span>.")
 
-  "Quit" | "Back" | "" ) # Back, Quit or X button quits
-    rm -f "$rd_conf" # Cleanup unfinished retrodeck.json if first install is interrupted
-    log i "Now quitting"
-    exit 2
-  ;;
+  case "${finit_dest_choice:-}" in
 
-  "Internal Storage" | "Home Directory" ) # Internal
-    log i "Internal selected"
-    rd_home_path="$HOME/retrodeck"
-    if [[ -L "$rd_home_path" ]]; then #Remove old symlink from existing install, if it exists
-      unlink "$rd_home_path"
-    fi
-  ;;
+    "Quit" | "Back" | "")
+      log i "User closed the window or chose to quit"
+      rm -f "$rd_conf"
+      exit 2
+      ;;
 
-  "SD Card" )
-    log i "SD Card selected"
-    external_devices=()
-
-    while read -r size device_path; do
-      device_name=$(basename "$device_path")
-      log d "External device $device_path found"
-      external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
-    done < <(df --output=size,target -h | grep "/run/media/" | awk '{$1=$1;print}')
-
-    if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
-      configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-      --hide-column=3 --print-column=3 \
-      --column "Device Name" \
-      --column "Device Size" \
-      --column "path" \
-      "${external_devices[@]}")
-
-      if [[ -n "$choice" ]]; then # User chose a device
-        sdcard="$choice"
-      else # User did not make a choice
-        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        exit 2
+    "Internal Storage" | "Home Directory")
+      log i "Internal selected"
+      set_setting_value "$rd_conf" "$rd_home_path" "$HOME/retrodeck" "retrodeck" "paths"
+      if [[ -L "$rd_home_path" ]]; then
+        unlink "$rd_home_path"
       fi
-    else # No external storage detected
-      log e "No external storage detected"
-      rd_zenity --error --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK" \
-      --ok-label "Browse" \
-      --text="No external drives were detected.\nPlease manually select the location of your SD card."
-      sdcard="$(finit_browse)" # Calling the browse function
-      if [[ -z "$sdcard" ]]; then # If user hit the cancel button
-        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        exit 2
+      ;;
+
+    "SD Card")
+      log i "SD Card selected"
+      local -a external_devices=()
+
+      while read -r size device_path; do
+        local device_name
+        device_name=$(basename "$device_path")
+        log d "External device $device_path found"
+        external_devices+=("$device_name" "$size" "$device_path")
+      done < <(df --output=size,target -h | grep "/run/media/" | awk '{$1=$1;print}')
+
+      if [[ ${#external_devices[@]} -gt 0 ]]; then
+        configurator_generic_dialog "RetroDeck Installation - SD Card" \
+          "One or more external storage devices have been detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
+        path_choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+          --hide-column=3 --print-column=3 \
+          --column "Device Name" \
+          --column "Device Size" \
+          --column "path" \
+          "${external_devices[@]}")
+
+        if [[ ! -n "$path_choice" ]]; then
+          log i "User closed the window or chose to quit"
+          rm -f "$rd_conf"
+          exit 2
+        fi
+      else
+        log e "No external storage detected"
+        rd_zenity --error --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --ok-label "Browse" \
+          --text="No external drives were detected.\nPlease manually select the location of your SD card."
+        path_choice="$(finit_browse)"
+        if [[ -z "$path_choice" ]]; then
+          log i "User closed the window or chose to quit"
+          rm -f "$rd_conf"
+          exit 2
+        fi
       fi
-    fi
-    
-    if [ ! -w "$sdcard" ] #SD card found but not writable
-      then
+
+      if [[ ! -w "$path_choice" ]]; then
         log e "SD card found but not writable"
         rd_zenity --error --no-wrap \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK" \
-        --ok-label "Quit" \
-        --text="SD card detected, but it cannot be written to.\n\This often occurs when the card was formatted on a PC.\n\n\What to do:\n\n\Switch the Steam Deck to <span foreground='$purple'><b>Game Mode</b></span>.\n\Settings > System > Format SD Card\n\n\Run RetroDECK again.."
-        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --ok-label "Quit" \
+          --text="SD card detected, but it cannot be written to.\n\nThis often occurs when the card was formatted on a PC.\n\nWhat to do:\n\nSwitch the Steam Deck to <span foreground='$purple'><b>Game Mode</b></span>.\nSettings > System > Format SD Card\n\nRun RetroDECK again."
+        rm -f "$rd_conf"
         log i "Now quitting"
         quit_retrodeck
-    else
-      rd_home_path="$sdcard/retrodeck"
-    fi
-  ;;
+      else
+        set_setting_value "$rd_conf" "$rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
+      fi
+      ;;
 
-  "Custom Location" )
+    "Custom Location")
       log i "Custom Location selected"
       rd_zenity --info --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK" \
-      --ok-label "Browse" \
-      --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      rd_home_path="$(finit_browse)" # Calling the browse function
-      if [[ -n "$rd_home_path" ]]; then 
-        rd_home_path="$rd_home_path/retrodeck"
-      else # If user hit the cancel button
-        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --ok-label "Browse" \
+        --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
+      path_choice="$(finit_browse)"
+      if [[ -n "$path_choice" ]]; then
+        set_setting_value "$rd_conf" "$rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
+      else
+        log i "User closed the window or chose to quit"
+        rm -f "$rd_conf"
         exit 2
       fi
-    ;;
+      ;;
 
   esac
 
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
-  prepare_component "reset" "framework" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
-  source_component_functions "internal"
-  source_component_functions "external"
+  # Set up framework paths and write initial config
+  prepare_component "reset" "framework"
 
-  local finit_choices=()
+  # Source component functions now that config paths are loaded
+  source_component_functions
 
-  while read -r manifest_file; do
-    if jq -e '.. | objects | select(has("finit_options")) | any' "$manifest_file" > /dev/null; then
-      while read -r finit_array_obj; do
-        local option_dialog=$(jq -r '.dialog' <<< "$finit_array_obj")
-        local option_action=$(jq -r '.action' <<< "$finit_array_obj")
+  # Gather finit options from component manifests
+  local -a finit_choices=()
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
 
-        if launch_command "$option_dialog"; then
-          finit_choices+=("$option_action")
-        fi
-      done < <(jq -c '.[].finit_options.[]' "$manifest_file")
-    else
-      continue
+  while IFS= read -r finit_entry; do
+    [[ -z "$finit_entry" ]] && continue
+    local option_dialog option_action
+    read -r option_dialog option_action < <(jq -r '[.dialog, .action] | @tsv' <<< "$finit_entry")
+    if launch_command "$option_dialog"; then
+      finit_choices+=("$option_action")
     fi
-  done < <({
-            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json" | grep "^$rd_components/framework/component_manifest.json" || true
-            find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json" | grep -v "^$rd_components/framework/component_manifest.json" | sort
-           })
+  done < <(jq -c '[.[] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]' <<< "$manifest_cache")
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
-  --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n<span foreground='$purple'><b>This may take up to a minute or two</b></span>\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
+    --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n<span foreground='$purple'><b>This may take up to a minute or two</b></span>\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
 
-  (
+  # Set up progress pipe for zenity
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK: Installing" \
+    --text="RetroDECK is completing its initial setup.\n\nPlease check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>" \
+    < "$progress_pipe" &
+  local zenity_pid=$!
+
+  # Open the pipe for writing
+  exec 3>"$progress_pipe"
+
+  echo "10" >&3
+  echo "# Resetting components..." >&3
   prepare_component "reset" "all"
+
+  echo "50" >&3
+  echo "# Applying presets..." >&3
   update_component_presets
+
+  echo "70" >&3
+  echo "# Deploying helper files..." >&3
   deploy_helper_files
 
-  if [[ -n "${finit_choices:-}" ]]; then # Process optional finit choices
+  if [[ ${#finit_choices[@]} -gt 0 ]]; then
+    local total_choices=${#finit_choices[@]}
+    local choice_idx=0
     for choice in "${finit_choices[@]}"; do
+      choice_idx=$((choice_idx + 1))
+      local progress=$((70 + (30 * choice_idx / total_choices)))
+      echo "$progress" >&3
+      echo "# Processing: $choice..." >&3
       log d "Processing finit user choice $choice"
       launch_command "$choice"
     done
   fi
 
-  ) |
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK: Installing" \
-    --text="RetroDECK is completing its initial setup.\n\n\Please check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>"
+  echo "100" >&3
 
-  create_lock
+  # Close the pipe and clean up
+  exec 3>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
 
-  # Inform the user where to put the ROMs and BIOS files
   rd_zenity --question --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --ok-label="Start RetroDECK" \
     --cancel-label="Return to Desktop" \
     --title "RetroDECK Initial Setup - Complete" \
-    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> or <span foreground='$purple'><b>Return to Desktop</b></span>.\n\nPlace your <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span> Place your <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\nRetroDECK Team"
+    --text="RetroDECK initial setup is Complete!\n\nEither <span foreground='$purple'><b>Start RetroDECK</b></span> or <span foreground='$purple'><b>Return to Desktop</b></span>.\n\nPlace your <span foreground='$purple'><b>Game Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span>Place your <span foreground='$purple'><b>BIOS and Firmware Files</b></span> in the following directory:\n\n<span foreground='$purple'><b>$rd_home_path/bios</b></span>\n\nTIP: Check out the <span foreground='$purple'><b>RetroDECK Wiki and Website</b></span>\n\nThey contain detailed guides and tips on getting the most out of RetroDECK.\n\nHave a fantastic time!\n\nRetroDECK Team"
 
-  local rc=$?
-  if [[ $rc == "1" ]]; then
+  if [[ $? -eq 1 ]]; then
     quit_retrodeck
   fi
 }
