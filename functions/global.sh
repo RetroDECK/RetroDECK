@@ -132,6 +132,9 @@ done
 # Build component manifest cache
 build_component_manifest_cache
 
+# Source framework functions for early use
+source_component_functions "framework"
+
 # Initialize directories
 if [[ ! -d "$rd_api_dir" ]]; then
   log d "Creating RetroDECK API directory at $rd_api_dir"
