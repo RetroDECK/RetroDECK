@@ -704,7 +704,7 @@ finit() {
   while IFS= read -r finit_entry; do
     [[ -z "$finit_entry" ]] && continue
     local option_dialog option_action
-    read -r option_dialog option_action < <(jq -r '[.dialog, .action] | @tsv' <<< "$finit_entry")
+    IFS=$'\t' read -r option_dialog option_action < <(jq -r '[.dialog, .action] | @tsv' <<< "$finit_entry")
     if launch_command "$option_dialog"; then
       finit_choices+=("$option_action")
     fi
