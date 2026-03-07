@@ -665,7 +665,7 @@ finit() {
         log i "Now quitting"
         quit_retrodeck
       else
-        set_setting_value "$rd_conf" "$rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
+        set_setting_value "$rd_conf" "rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
       fi
       ;;
 
