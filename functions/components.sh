@@ -141,8 +141,8 @@ source_component_functions() {
     fi
 
     # Source all other components
-    while IFS= read -r func_file; do
-      [[ -z "$func_file" ]] && continue
+    while IFS= read -r function_file; do
+      [[ -z "$function_file" ]] && continue
       local component_name
       component_name=$(basename "$(dirname "$function_file")")
       [[ "$component_name" == "framework" ]] && continue
