@@ -606,7 +606,7 @@ finit() {
 
     "Internal Storage" | "Home Directory")
       log i "Internal selected"
-      set_setting_value "$rd_conf" "$rd_home_path" "$HOME/retrodeck" "retrodeck" "paths"
+      set_setting_value "$rd_conf" "rd_home_path" "$HOME/retrodeck" "retrodeck" "paths"
       if [[ -L "$rd_home_path" ]]; then
         unlink "$rd_home_path"
       fi
@@ -678,7 +678,7 @@ finit() {
         --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
       path_choice="$(finit_browse)"
       if [[ -n "$path_choice" ]]; then
-        set_setting_value "$rd_conf" "$rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
+        set_setting_value "$rd_conf" "rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
       else
         log i "User closed the window or chose to quit"
         rm -f "$rd_conf"
