@@ -752,9 +752,9 @@ finit() {
       log d "Processing finit user choice $choice"
       launch_command "$choice"
     done
+  else
+    echo "100" >&3
   fi
-
-  echo "100" >&3
 
   # Close the pipe and clean up
   exec 3>&-
