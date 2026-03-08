@@ -1120,61 +1120,61 @@ sanitize() {
 
 check_if_updated() {
   # Check if an update has happened
-    if [ "$hard_version" != "$version" ]; then
-      log d "Update triggered"
-      log d "Lockfile found but the version doesn't match with the config file"
-      log i "Config file's version is $version but the actual version is $hard_version"
+  if [ "$hard_version" != "$version" ]; then
+    log d "Update triggered"
+    log d "Lockfile found but the version doesn't match with the config file"
+    log i "Config file's version is $version but the actual version is $hard_version"
     if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then # If newly-installed version is a non-production build
       log d "Newly-installed version is a \"pre-production\" build"
-        configurator_generic_dialog "RetroDECK -Warning: Cooker" "<span foreground='$purple'><b>RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS!</b></span>\n\nAll of your RetroDECK data is at risk, including:\n<span foreground='$purple'><b>BIOS files</b></span>\n<span foreground='$purple'><b>Borders</b></span>\n<span foreground='$purple'><b>Downloaded media</b></span>\n<span foreground='$purple'><b>Gamelists</b></span>\n<span foreground='$purple'><b>Mods</b></span>\n<span foreground='$purple'><b>ROMs</b></span>\n<span foreground='$purple'><b>Saves</b></span>\n<span foreground='$purple'><b>States</b></span>\n<span foreground='$purple'><b>Screenshots</b></span>\n<span foreground='$purple'><b>Texture packs</b></span>\n<span foreground='$purple'><b>Themes</b></span>\n\n<span foreground='$purple'><b>Proceeding may result in loss or corruption of these files!</b></span>"
-        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-        set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
-        set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
-        set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
-        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything and Fresh Install" \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="RetroDECK - RetroDECK Cooker: Upgrade" \
-        --text="You are upgrading a cooker build of RetroDECK.\n\nPress the <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\nWarning!\n\nPressing the <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
-        rc=$? # Capture return code, as "Yes" button has no text value
-        if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-          if [[ "$choice" =~ "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
-            log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
-            set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-          elif [[ "$choice" =~ "Delete Everything and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
-            if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>This will delete ALL RetroDECK data!</b></span>\n\nAffected data includes:\n<span foreground='$purple'><b>BIOS files</b></span>\n<span foreground='$purple'><b>Borders</b></span>\n<span foreground='$purple'><b>Media</b></span>\n<span foreground='$purple'><b>Gamelists</b></span>\n<span foreground='$purple'><b>Mods</b></span>\n<span foreground='$purple'><b>ROMs</b></span>\n<span foreground='$purple'><b>Saves</b></span>\n<span foreground='$purple'><b>States</b></span>\n<span foreground='$purple'><b>Screenshots</b></span>\n<span foreground='$purple'><b>Texture packs</b></span>\n<span foreground='$purple'><b>Themes</b></span>\n<span foreground='$purple'><b>And more</b></span>\n\nAre you sure you want to continue?\n<span foreground='$purple'><b>Remember what happened last time!</b></span>"; then
-              if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>Are you absolutely sure?</b></span>\n\nThere is no going back from this process — everything will be permanently deleted.\n<span foreground='$purple'><b>Dust in the wind.</b></span>\n<span foreground='$purple'><b>Yesterday's omelette.</b></span>"; then
-                if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>But are you super DUPER sure?</b></span>\n\nWe REALLY want to make sure you understand what is about to happen.\n\nThe following folders and <b>ALL of their contents</b> will be <span foreground='$purple'><b>PERMANENTLY deleted like what happened to Rowan Skye!</b></span>:\n<span foreground='$purple'><b>~/retrodeck</b></span>\n<span foreground='$purple'><b>~/.var/app/net.retrodeck.retrodeck</b></span>\n\n<span foreground='$purple'><b>This is irreversible — proceed at your own risk!</b></span>"; then
-                  configurator_generic_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Ok, if you're that sure, here we go!</b></span>"
-                  if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground='$purple'><b>No backsies...OK?!</b></span>"; then
-                    log w "Deleting all RetroDECK Data & Fresh Install"
-                    rm -rf /var
-                    rm -rf "$HOME/retrodeck"
-                    rm -rf "$rd_home_path"
-                    source /app/libexec/global.sh
-                    finit
-                  fi
+      configurator_generic_dialog "RetroDECK -Warning: Cooker" "<span foreground='$purple'><b>RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS!</b></span>\n\nAll of your RetroDECK data is at risk, including:\n<span foreground='$purple'><b>BIOS files</b></span>\n<span foreground='$purple'><b>Borders</b></span>\n<span foreground='$purple'><b>Downloaded media</b></span>\n<span foreground='$purple'><b>Gamelists</b></span>\n<span foreground='$purple'><b>Mods</b></span>\n<span foreground='$purple'><b>ROMs</b></span>\n<span foreground='$purple'><b>Saves</b></span>\n<span foreground='$purple'><b>States</b></span>\n<span foreground='$purple'><b>Screenshots</b></span>\n<span foreground='$purple'><b>Texture packs</b></span>\n<span foreground='$purple'><b>Themes</b></span>\n\n<span foreground='$purple'><b>Proceeding may result in loss or corruption of these files!</b></span>"
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
+      cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Delete Everything and Fresh Install" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title="RetroDECK - RetroDECK Cooker: Upgrade" \
+      --text="You are upgrading a cooker build of RetroDECK.\n\nPress the <span foreground='$purple'><b>Upgrade</b></span> button to perform a upgrade.\n\nPress the <span foreground='$purple'><b>Don't Upgrade</b></span> to skip the upgrade.\n\nWarning!\n\nPressing the <span foreground='$purple'><b>Delete Everything and Fresh Install</b></span> button deletes all data, including:\nROMs, BIOS, Saves and everything else stored in retrodeck folder.\nDo not press it unless you know what you are doing!")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ "$choice" =~ "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+          log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+        elif [[ "$choice" =~ "Delete Everything and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>This will delete ALL RetroDECK data!</b></span>\n\nAffected data includes:\n<span foreground='$purple'><b>BIOS files</b></span>\n<span foreground='$purple'><b>Borders</b></span>\n<span foreground='$purple'><b>Media</b></span>\n<span foreground='$purple'><b>Gamelists</b></span>\n<span foreground='$purple'><b>Mods</b></span>\n<span foreground='$purple'><b>ROMs</b></span>\n<span foreground='$purple'><b>Saves</b></span>\n<span foreground='$purple'><b>States</b></span>\n<span foreground='$purple'><b>Screenshots</b></span>\n<span foreground='$purple'><b>Texture packs</b></span>\n<span foreground='$purple'><b>Themes</b></span>\n<span foreground='$purple'><b>And more</b></span>\n\nAre you sure you want to continue?\n<span foreground='$purple'><b>Remember what happened last time!</b></span>"; then
+            if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>Are you absolutely sure?</b></span>\n\nThere is no going back from this process — everything will be permanently deleted.\n<span foreground='$purple'><b>Dust in the wind.</b></span>\n<span foreground='$purple'><b>Yesterday's omelette.</b></span>"; then
+              if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install: Reset" "<span foreground='$purple'><b>But are you super DUPER sure?</b></span>\n\nWe REALLY want to make sure you understand what is about to happen.\n\nThe following folders and <b>ALL of their contents</b> will be <span foreground='$purple'><b>PERMANENTLY deleted like what happened to Rowan Skye!</b></span>:\n<span foreground='$purple'><b>~/retrodeck</b></span>\n<span foreground='$purple'><b>~/.var/app/net.retrodeck.retrodeck</b></span>\n\n<span foreground='$purple'><b>This is irreversible — proceed at your own risk!</b></span>"; then
+                configurator_generic_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Ok, if you're that sure, here we go!</b></span>"
+                if configurator_generic_question_dialog "RetroDECK Cooker: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground='$purple'><b>No backsies...OK?!</b></span>"; then
+                  log w "Deleting all RetroDECK Data & Fresh Install"
+                  rm -rf /var
+                  rm -rf "$HOME/retrodeck"
+                  rm -rf "$rd_home_path"
+                  source /app/libexec/global.sh
+                  finit
                 fi
               fi
             fi
           fi
-        else
-          log i "Performing normal upgrade process for version $cooker_base_version"
-          version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
-          post_update
         fi
-      else # If newly-installed version is a normal build.
-      if [[ ! "$version" =~ ^[0-9] && ! "$version" =~ ^(epicure) ]]; then # If previous version is a non-production build
-          cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-          version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
-          set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
-          set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
-          set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
-          set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
-          set_setting_value "$rd_conf" "rd_logging_level" "info" retrodeck "options"
-        fi
-        post_update       # Executing post update script
+      else
+        log i "Performing normal upgrade process for version $cooker_base_version"
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        post_update
       fi
+    else # If newly-installed version is a normal build.
+      if [[ ! "$version" =~ ^[0-9] && ! "$version" =~ ^(epicure) ]]; then # If previous version is a non-production build
+        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "rd_logging_level" "info" retrodeck "options"
+      fi
+      post_update       # Executing post update script
+    fi
   fi
 }
 
