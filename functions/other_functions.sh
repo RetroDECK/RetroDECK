@@ -1124,8 +1124,8 @@ check_if_updated() {
       log d "Update triggered"
       log d "Lockfile found but the version doesn't match with the config file"
       log i "Config file's version is $version but the actual version is $hard_version"
-      if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
-        log d "Newly-installed version is a \"cooker\" build"
+    if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then # If newly-installed version is a non-production build
+      log d "Newly-installed version is a \"pre-production\" build"
         configurator_generic_dialog "RetroDECK -Warning: Cooker" "<span foreground='$purple'><b>RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS!</b></span>\n\nAll of your RetroDECK data is at risk, including:\n<span foreground='$purple'><b>BIOS files</b></span>\n<span foreground='$purple'><b>Borders</b></span>\n<span foreground='$purple'><b>Downloaded media</b></span>\n<span foreground='$purple'><b>Gamelists</b></span>\n<span foreground='$purple'><b>Mods</b></span>\n<span foreground='$purple'><b>ROMs</b></span>\n<span foreground='$purple'><b>Saves</b></span>\n<span foreground='$purple'><b>States</b></span>\n<span foreground='$purple'><b>Screenshots</b></span>\n<span foreground='$purple'><b>Texture packs</b></span>\n<span foreground='$purple'><b>Themes</b></span>\n\n<span foreground='$purple'><b>Proceeding may result in loss or corruption of these files!</b></span>"
         set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
         set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
@@ -1164,7 +1164,7 @@ check_if_updated() {
           post_update
         fi
       else # If newly-installed version is a normal build.
-        if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
+      if [[ ! "$version" =~ ^[0-9] && ! "$version" =~ ^(epicure) ]]; then # If previous version is a non-production build
           cooker_base_version=$(echo "$version" | cut -d'-' -f2)
           version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
           set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
