@@ -1120,7 +1120,6 @@ sanitize() {
 
 check_if_updated() {
   # Check if an update has happened
-  if [ -f "$rd_lockfile" ]; then
     if [ "$hard_version" != "$version" ]; then
       log d "Update triggered"
       log d "Lockfile found but the version doesn't match with the config file"
@@ -1176,12 +1175,6 @@ check_if_updated() {
         fi
         post_update       # Executing post update script
       fi
-    fi
-  # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
-  # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-  else
-    log w "Lockfile not found"
-    finit             # Executing First/Force init
   fi
 }
 
