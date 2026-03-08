@@ -193,7 +193,8 @@ if [[ ! -f "$rd_conf" ]]; then
     set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
   fi
 
-  log i "RetroDECK config file initialized"
+  log i "RetroDECK config file initialized, proceeding to finit"
+  finit
 else
   log i "Loading RetroDECK config file from $rd_conf"
 
