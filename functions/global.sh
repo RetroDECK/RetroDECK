@@ -155,17 +155,21 @@ fi
 if [[ ! -f "$rd_conf" ]]; then
   log w "RetroDECK config file not found in $rd_conf, initializing with default values"
 
+  cp "$rd_defaults" "$rd_conf"
+  chmod +rw "$rd_conf"
+
+  conf_read
+
   if [[ -z "$version" ]]; then
     if [[ -f "$rd_lockfile" ]]; then
-      local lock_version
       lock_version=$(cat "$rd_lockfile")
       if [[ "$lock_version" == *"0.4."* || "$lock_version" == *"0.3."* || "$lock_version" == *"0.2."* || "$lock_version" == *"0.1."* ]]; then
-        log w "Upgrading from very old version, running version workaround"
-        version="$lock_version"
+        log w "Upgrading from very old version, running version workaround using lockfile version $lock_version"
+        set_setting_value "$rd_conf" "version" "$lock_version" retrodeck
       fi
     else
-      version="$hard_version"
-      log d "Setting version to $version"
+      log d "Setting version to $hard_version"
+      set_setting_value "$rd_conf" "version" "$hard_version" retrodeck
     fi
   fi
 
@@ -173,18 +177,12 @@ if [[ ! -f "$rd_conf" ]]; then
   if [[ ! -d "$sdcard_default_path" && $(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | wc -l) -eq 1 ]]; then
     sdcard_default_path=$(find "/run/media/deck/"* -maxdepth 0 -type d -print 2>/dev/null | head -n 1)
     log d "sdcard_default_path not found, assigning $sdcard_default_path"
+    set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths"
   else
     sdcard_default_path=""
     log d "sdcard_default_path could not be determined, clearing setting value in retrodeck.json"
+    set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths"
   fi
-
-  cp "$rd_defaults" "$rd_conf"
-  chmod +rw "$rd_conf"
-
-  conf_read
-  
-  set_setting_value "$rd_conf" "version" "$version" retrodeck
-  set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths"
 
   # If this is a pre-production build
   if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
