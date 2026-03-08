@@ -20,9 +20,7 @@
     "storage_path": "/home/deck/retrodeck/storage",
     "portmaster_path": "/home/deck/retrodeck/PortMaster",
     "videos_path": "/home/deck/retrodeck/videos",
-    "rd_external_components_path": "/home/deck/retrodeck/external_components",
-    "rd_external_shared_libs_path": "/home/deck/retrodeck/external_components/shared-libs",
-    "rd_external_shared_data_path": "/home/deck/retrodeck/external_components/shared-data"
+    "rd_external_components_path": "/home/deck/retrodeck/external_components"
   },
   "options": {
     "power_user_warning": "true",
