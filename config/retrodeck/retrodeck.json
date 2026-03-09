@@ -18,7 +18,6 @@
     "cheats_path": "/home/deck/retrodeck/cheats",
     "sdcard": "/run/media/mmcblk0p1",
     "storage_path": "/home/deck/retrodeck/storage",
-    "portmaster_path": "/home/deck/retrodeck/PortMaster",
     "videos_path": "/home/deck/retrodeck/videos",
     "rd_external_components_path": "/home/deck/retrodeck/external_components"
   },
