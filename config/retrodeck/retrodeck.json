@@ -43,5 +43,6 @@
     "portmaster_show": "true",
     "iconset": "lahrs-main"
   },
+  "component_versions": {},
   "presets": {}
 }
