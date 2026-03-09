@@ -95,7 +95,7 @@ source /app/libexec/all_vars.sh
 
 for file in /app/libexec/*.sh; do
   case "$(basename "$file")" in
-    global.sh|logger.sh|all_vars.sh) continue ;;
+    global.sh|cleanup.sh|logger.sh|all_vars.sh|launcher_functions.sh) continue ;;
   esac
   log d "Sourcing $file"
   source "$file"
