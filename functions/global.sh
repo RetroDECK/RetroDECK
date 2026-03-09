@@ -182,7 +182,7 @@ else
   fi
 
   # If the defined rd_home_path doesn't exist, meaning it may have been moved manually
-  if [[ ! -d "$rd_home_path" || ! -L "$rd_home_path" ]]; then
+  if [[ ! -d "$rd_home_path" && ! -L "$rd_home_path" ]]; then
     log e "Defined $rd_home_path does not exist, asking user to locate it manually"
     configurator_generic_dialog "RetroDECK Setup - Warning: No Data Folder Found" \
       "The RetroDECK data folder was not found in the expected location.\nThis may occur after a OS update or if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>\"retrodeck\"</b></span> folder."
