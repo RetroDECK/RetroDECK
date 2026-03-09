@@ -156,30 +156,12 @@ if [[ ! -f "$rd_conf" ]]; then
     set_setting_value "$rd_conf" "sdcard" "$sdcard_default_path" retrodeck "paths"
   fi
 
-  # If this is a pre-production build
-  if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
-    log d "Pre-production version $hard_version detected, setting debugging values in retrodeck.json"
-    set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-    set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
-    set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
-    set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
-  fi
-
   log i "RetroDECK config file initialized, proceeding to finit"
   finit
 else
   log i "Loading RetroDECK config file from $rd_conf"
 
   conf_read
-
-  # If this is a pre-production build
-  if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
-    log d "Pre-production version $hard_version detected, setting debugging values in retrodeck.json"
-    set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-    set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
-    set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
-    set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
-  fi
 
   # If the defined rd_home_path doesn't exist, meaning it may have been moved manually
   if [[ ! -d "$rd_home_path" && ! -L "$rd_home_path" ]]; then
@@ -196,6 +178,22 @@ else
       quit_retrodeck
     fi
   fi
+fi
+
+# If this is a pre-production build
+if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
+  log d "Pre-production version $hard_version detected, setting debugging values in retrodeck.json"
+  set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+  set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+  set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+  set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
+else
+  log d "Production version $hard_version detected, resetting debugging values in retrodeck.json"
+  set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+  set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+  set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+  set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+  set_setting_value "$rd_conf" "rd_logging_level" "info" retrodeck "options"
 fi
 
 # Source component functions for further use
