@@ -375,8 +375,8 @@ check_component_compatibility() {
   ' <<< "$manifest_cache" | head -1)
 
   local component_framework_compat
-  component_framework_compat=$(jq -r --arg comp "$component" '
-    .[] | .manifest | select(has($comp)) | .[$comp].core_framework_compatibility // "0"
+  component_framework_compat=$(jq -r --arg component "$component" '
+    .[] | .manifest | select(has($component)) | .[$component].core_framework_compatibility // "0"
   ' <<< "$manifest_cache" | head -1)
 
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
@@ -555,31 +555,31 @@ install_external_component() {
     return 1
   fi
 
-  local comp_name
-  comp_name=$(get_component_name_from_archive "$archive")
+  local component_name
+  component_name=$(get_component_name_from_archive "$archive")
 
-  if [[ -z "$comp_name" ]]; then
+  if [[ -z "$component_name" ]]; then
     log e "Could not determine component name from archive"
     return 1
   fi
 
   # Check if component already exists (internal or external)
   local existing_path
-  existing_path=$(find_component_files "component_manifest.json" "$comp_name")
+  existing_path=$(find_component_files "component_manifest.json" "$component_name")
 
   if [[ -n "$existing_path" ]]; then
     local existing_dir
     existing_dir=$(dirname "$existing_path")
     if [[ "$existing_dir" == "$rd_components/"* ]]; then
-      log e "Component $comp_name is already installed as an internal component and cannot be overridden"
+      log e "Component $component_name is already installed as an internal component and cannot be overridden"
       return 1
     else
-      log w "Component $comp_name is already installed externally, upgrading"
-      _remove_external_component_files "$comp_name"
+      log w "Component $component_name is already installed externally, upgrading"
+      _remove_external_component_files "$component_name"
     fi
   fi
 
-  local component_path="$rd_external_components_path/$comp_name"
+  local component_path="$rd_external_components_path/$component_name"
   log d "Extracting $archive to $component_path"
   create_dir "$component_path"
 
@@ -591,7 +591,7 @@ install_external_component() {
 
   # Handle shared libs
   if [[ -d "$component_path/shared-libs" ]]; then
-    log d "Merging shared-libs for $comp_name"
+    log d "Merging shared-libs for $component_name"
     create_dir "$rd_external_components_path/shared-libs"
     cp -a --no-clobber "$component_path/shared-libs/." "$rd_external_components_path/shared-libs/"
     rm -rf "$component_path/shared-libs"
@@ -599,7 +599,7 @@ install_external_component() {
 
   # Handle shared data
   if [[ -d "$component_path/shared-data" ]]; then
-    log d "Merging shared-data for $comp_name"
+    log d "Merging shared-data for $component_name"
     create_dir "$rd_external_components_path/shared-data"
     cp -a --no-clobber "$component_path/shared-data/." "$rd_external_components_path/shared-data/"
     rm -rf "$component_path/shared-data"
@@ -610,7 +610,7 @@ install_external_component() {
 
   # Source the component's functions
   if [[ -f "$component_path/component_functions.sh" ]]; then
-    log d "Sourcing component functions for $comp_name"
+    log d "Sourcing component functions for $component_name"
     source "$component_path/component_functions.sh"
   fi
 
@@ -618,21 +618,21 @@ install_external_component() {
   update_component_presets
 
   # Run initialization
-  local prepare_handler="_prepare_component::${comp_name}"
+  local prepare_handler="_prepare_component::${component_name}"
   if declare -F "$prepare_handler" > /dev/null; then
-    log d "Running initial setup for $comp_name"
+    log d "Running initial setup for $component_name"
     "$prepare_handler" "reset"
   fi
 
   # Record the installed version
-  local comp_version
-  comp_version=$(get_component_version "$comp_name")
-  set_installed_component_version "$comp_name" "$comp_version"
+  local component_version
+  component_version=$(get_component_version "$component_name")
+  set_installed_component_version "$component_name" "$component_version"
 
   # Deploy helper files for the new component
   deploy_helper_files
 
-  log i "Component $comp_name installed successfully"
+  log i "Component $component_name installed successfully"
   return 0
 }
 
@@ -640,8 +640,8 @@ remove_external_component_files() {
   # Remove an external component's files from the external components directory.
   # USAGE: remove_external_component_files "$component_name"
 
-  local comp_name="$1"
-  local component_path="$rd_external_components_path/$comp_name"
+  local component_name="$1"
+  local component_path="$rd_external_components_path/$component_name"
 
   if [[ -d "$component_path" ]]; then
     rm -rf "$component_path"
@@ -653,64 +653,64 @@ remove_external_component() {
   # Remove an installed external component, running cleanup hooks and removing config entries.
   # USAGE: remove_external_component "$component_name"
 
-  local comp_name="$1"
-  local component_path="$rd_external_components_path/$comp_name"
+  local component_name="$1"
+  local component_path="$rd_external_components_path/$component_name"
 
   if [[ ! -d "$component_path" ]]; then
-    log e "External component $comp_name is not installed"
+    log e "External component $component_name is not installed"
     return 1
   fi
 
   # Verify this is actually an external component
   if [[ "$component_path" != "$rd_external_components_path/"* ]]; then
-    log e "Component $comp_name is not an external component and cannot be removed this way"
+    log e "Component $component_name is not an external component and cannot be removed this way"
     return 1
   fi
 
-  log i "Removing external component: $comp_name"
+  log i "Removing external component: $component_name"
 
   # Run the component's uninstall hook if it has one
-  local prepare_handler="_prepare_component::${comp_name}"
+  local prepare_handler="_prepare_component::${component_name}"
   if declare -F "$prepare_handler" > /dev/null; then
-    log d "Running uninstall hook for $comp_name"
+    log d "Running uninstall hook for $component_name"
     "$prepare_handler" "uninstall"
   fi
 
   # Remove component's preset entries from the config
   local presets_to_clean
-  presets_to_clean=$(jq -r --arg comp "$comp_name" --arg comp_cores "${comp_name}_cores" '
+  presets_to_clean=$(jq -r --arg component "$component_name" --arg component_cores "${component_name}_cores" '
     .presets | to_entries[] |
-    select(.value | has($comp) or has($comp_cores)) |
+    select(.value | has($component) or has($component_cores)) |
     .key
   ' "$rd_conf")
 
   if [[ -n "$presets_to_clean" ]]; then
     local tmp
     tmp=$(mktemp)
-    jq --arg comp "$comp_name" --arg comp_cores "${comp_name}_cores" '
+    jq --arg component "$component_name" --arg component_cores "${component_name}_cores" '
       .presets |= with_entries(
-        .value |= (del(.[$comp]) | del(.[$comp_cores]))
+        .value |= (del(.[$component]) | del(.[$component_cores]))
       )
       | .presets |= with_entries(select(.value | length > 0))
     ' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
-    log d "Cleaned up preset entries for $comp_name"
+    log d "Cleaned up preset entries for $component_name"
   fi
 
   # Remove version tracking entry
-  if jq -e --arg comp "$comp_name" '.component_versions | has($comp)' "$rd_conf" > /dev/null 2>&1; then
+  if jq -e --arg component "$component_name" '.component_versions | has($component)' "$rd_conf" > /dev/null 2>&1; then
     local tmp
     tmp=$(mktemp)
-    jq --arg comp "$comp_name" 'del(.component_versions[$comp])' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
+    jq --arg component "$component_name" 'del(.component_versions[$component])' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
   fi
 
   # Remove the component files
-  remove_external_component_files "$comp_name"
+  remove_external_component_files "$component_name"
 
   # Rebuild caches and re-source
   build_component_manifest_cache
   build_compression_lookups
 
-  log i "Component $comp_name removed successfully"
+  log i "Component $component_name removed successfully"
   return 0
 }
 
@@ -722,40 +722,40 @@ check_component_for_update() {
   # Echoes the download URL if an update is available.
   # USAGE: check_component_for_update "$component_name"
 
-  local comp_name="$1"
+  local component_name="$1"
 
   local manifest_cache
   manifest_cache=$(get_component_manifest_cache)
 
-  local comp_manifest
-  comp_manifest=$(jq -c --arg comp "$comp_name" '
-    .[] | .manifest | select(has($comp)) | .[$comp]
+  local component_manifest
+  component_manifest=$(jq -c --arg component "$component_name" '
+    .[] | .manifest | select(has($component)) | .[$component]
   ' <<< "$manifest_cache" | head -1)
 
-  if [[ -z "$comp_manifest" || "$comp_manifest" == "null" ]]; then
-    log e "Manifest not found for component $comp_name"
+  if [[ -z "$component_manifest" || "$component_manifest" == "null" ]]; then
+    log e "Manifest not found for component $component_name"
     return 1
   fi
 
   # Check for a custom update check function first
-  local custom_checker="_check_update::${comp_name}"
+  local custom_checker="_check_update::${component_name}"
   if declare -F "$custom_checker" > /dev/null; then
-    log d "Using custom update checker for $comp_name"
+    log d "Using custom update checker for $component_name"
     "$custom_checker"
     return $?
   fi
 
   # Fall back to update_url based checking
   local update_url
-  update_url=$(jq -r '.update_url // empty' <<< "$comp_manifest")
+  update_url=$(jq -r '.update_url // empty' <<< "$component_manifest")
 
   if [[ -z "$update_url" ]]; then
-    log d "No update_url or custom checker defined for $comp_name, cannot check for updates"
+    log d "No update_url or custom checker defined for $component_name, cannot check for updates"
     return 1
   fi
 
   local current_version
-  current_version=$(jq -r '.component_version // "0"' <<< "$comp_manifest")
+  current_version=$(jq -r '.component_version // "0"' <<< "$component_manifest")
 
   # Resolve the API URL and platform from the provided URL
   local resolved_api_url resolved_platform
@@ -772,7 +772,7 @@ check_component_for_update() {
   latest_info=$(curl --silent --max-time 10 "$resolved_api_url" 2>/dev/null)
 
   if [[ -z "$latest_info" ]]; then
-    log w "Failed to fetch update information for $comp_name"
+    log w "Failed to fetch update information for $component_name"
     return 1
   fi
 
@@ -780,16 +780,16 @@ check_component_for_update() {
   extract_release_info "$resolved_platform" "$latest_info" latest_version download_url
 
   if [[ -z "$latest_version" ]]; then
-    log w "Could not determine latest version for $comp_name"
+    log w "Could not determine latest version for $component_name"
     return 1
   fi
 
   if check_version_is_older_than "$current_version" "$latest_version"; then
-    log i "Update available for $comp_name: $current_version upgrades to $latest_version"
+    log i "Update available for $component_name: $current_version upgrades to $latest_version"
     echo "$download_url"
     return 0
   else
-    log d "Component $comp_name is up to date at $current_version"
+    log d "Component $component_name is up to date at $current_version"
     return 1
   fi
 }
@@ -923,48 +923,48 @@ update_external_component() {
   # Update an external component by downloading and installing a new version.
   # USAGE: update_external_component "$component_name"
 
-  local comp_name="$1"
+  local component_name="$1"
 
   local download_url
-  download_url=$(check_component_for_update "$comp_name")
+  download_url=$(check_component_for_update "$component_name")
 
   if [[ $? -ne 0 || -z "$download_url" ]]; then
-    log d "No update available or no download URL for $comp_name"
+    log d "No update available or no download URL for $component_name"
     return 1
   fi
 
-  log i "Downloading update for $comp_name from $download_url"
+  log i "Downloading update for $component_name from $download_url"
 
   local tmp_archive
   tmp_archive=$(mktemp --suffix=".tar.gz")
 
   if ! curl --silent --location --output "$tmp_archive" "$download_url"; then
-    log e "Failed to download update for $comp_name"
+    log e "Failed to download update for $component_name"
     rm -f "$tmp_archive"
     return 1
   fi
 
   # install_external_component handles upgrading existing components
   if install_external_component "$tmp_archive"; then
-    log i "Component $comp_name updated successfully"
+    log i "Component $component_name updated successfully"
     rm -f "$tmp_archive"
 
     # Run post-update handler
     local installed_version
-    installed_version=$(get_installed_component_version "$comp_name")
-    local handler="_post_update::${comp_name}"
+    installed_version=$(get_installed_component_version "$component_name")
+    local handler="_post_update::${component_name}"
     if declare -F "$handler" > /dev/null; then
       "$handler" "$installed_version"
     fi
 
     # Record new version
     local new_version
-    new_version=$(get_component_version "$comp_name")
-    set_installed_component_version "$comp_name" "$new_version"
+    new_version=$(get_component_version "$component_name")
+    set_installed_component_version "$component_name" "$new_version"
 
     return 0
   else
-    log e "Failed to update component $comp_name"
+    log e "Failed to update component $component_name"
     rm -f "$tmp_archive"
     return 1
   fi
@@ -977,17 +977,17 @@ check_all_external_component_updates() {
 
   local -a updatable=()
 
-  while IFS= read -r comp_dir; do
-    [[ -z "$comp_dir" ]] && continue
-    local comp_name
-    comp_name=$(basename "$comp_dir")
+  while IFS= read -r component_dir; do
+    [[ -z "$component_dir" ]] && continue
+    local component_name
+    component_name=$(basename "$component_dir")
 
     local download_url
-    download_url=$(check_component_for_update "$comp_name")
+    download_url=$(check_component_for_update "$component_name")
     if [[ $? -eq 0 && -n "$download_url" ]]; then
       local current_version
-      current_version=$(get_component_version "$comp_name")
-      updatable+=("$comp_name"$'\t'"$current_version"$'\t'"$download_url")
+      current_version=$(get_component_version "$component_name")
+      updatable+=("$component_name"$'\t'"$current_version"$'\t'"$download_url")
     fi
   done < <(find "$rd_external_components_path" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
 
