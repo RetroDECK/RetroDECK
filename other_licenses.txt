@@ -23703,18 +23703,22 @@ SOFTWARE.
                   Reiki the Cyber Shark - The RetroDECK Mascot
 ===============================================================================
 
-Reiki, the official RetroDECK mascot, is made available under the terms of the: 
+Reiki, the official RetroDECK mascot, is made available under the terms of the following licences:
 
-Creative Commons BY-SA License: https://creativecommons.org/licenses/by-sa/4.0/ 
-GPL3: https://www.gnu.org/licenses/gpl-3.0.en.html licenses.
+Creative Commons BY-SA
+https://creativecommons.org/licenses/by-sa/4.0/
+
+GPL3
+https://www.gnu.org/licenses/gpl-3.0.en.html
 
 ------------------------------------------------------------------------------
                           Tyson Tan - Artist / Creator
 ------------------------------------------------------------------------------
 
-Tyson Tan is responsible for the base design of the current Reiki.
+Tyson Tan created the base design of the current Reiki character.
 
-You may request new Reiki artworks as well as to alter the existing itterations by contacting Tyson.
+Requests for new Reiki artwork or modifications to existing versions can be directed to Tyson Tan.
+Contact details are provided below.
 
 Contact:
 
@@ -23723,8 +23727,8 @@ Contact:
 
 Portfolio:
 
-- [Tyson Tan: Website (EN)](https://tysontan.com/)
-- [Tyson Tan: Website (CN)](https://tai3.cn)
+- Tyson Tan: Website (EN) - https://tysontan.com
+- Tyson Tan: Website (CN - https://tai3.cn
 
 
 ------------------------------------------------------------------------------
@@ -23737,7 +23741,9 @@ We would love to see your unique contributions, please share them with us via ou
 
 If you wish to create Reiki artwork specifically for inclusion within the RetroDECK Project, please contact the RetroDECK Team directly for guidance and submission details.
 
-To stay up to date with the latest Reiki lore, updates, and official information, please visit the following link: https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/reiki/reiki/
+To stay up to date with the latest Reiki lore, updates, and official information, please visit the following link:
+
+https://retrodeck.readthedocs.io/en/latest/wiki_development/graphics/reiki/reiki/
 
 Guidelines
 
