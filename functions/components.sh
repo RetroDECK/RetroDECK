@@ -614,6 +614,9 @@ install_external_component() {
     source "$component_path/component_functions.sh"
   fi
 
+  # Initialize component options from manifest defaults
+  init_component_options "$component_name"
+
   # Update presets for the new component
   update_component_presets
 
@@ -702,6 +705,9 @@ remove_external_component() {
     tmp=$(mktemp)
     jq --arg component "$component_name" 'del(.component_versions[$component])' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
   fi
+
+  # Remove component options from config
+  remove_component_options "$component_name"
 
   # Remove the component files
   remove_external_component_files "$component_name"
@@ -1057,8 +1063,123 @@ run_component_updates() {
   ' <<< "$manifest_cache")
 
   if [[ "$component_updated" == true ]]; then
+    update_component_options
     update_component_presets
     deploy_helper_files
     build_retrodeck_current_presets
   fi
+}
+
+init_component_options() {
+  # Initialize component options in the config file from the component's manifest defaults.
+  # Only adds settings that don't already exist, preserving any existing values.
+  # The manifest should declare defaults under a "component_options" key.
+  # USAGE: init_component_options "$component_name"
+
+  local component_name="$1"
+
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  local default_options
+  default_options=$(jq -c --arg component "$component_name" '
+    .[] | .manifest | select(has($component)) | .[$component].component_options // null
+  ' <<< "$manifest_cache" | head -1)
+
+  if [[ -z "$default_options" || "$default_options" == "null" ]]; then
+    log d "No component_options defined in manifest for $component_name"
+    return
+  fi
+
+  # Ensure the component_options section exists
+  if ! jq -e '.component_options' "$rd_conf" > /dev/null 2>&1; then
+    jq '. + {component_options: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+  fi
+
+  # Merge defaults without overwriting existing values
+  jq --arg component "$component_name" --argjson defaults "$default_options" '
+    .component_options[$component] = (
+      ($defaults) as $d |
+      (.component_options[$component] // {}) as $existing |
+      reduce ($d | to_entries[]) as $entry (
+        $existing;
+        if has($entry.key) then . else . + {($entry.key): $entry.value} end
+      )
+    )
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log d "Component options initialized for $component_name"
+}
+
+update_component_options() {
+  # Update component_options in the config file with any new defaults from component manifests.
+  # Existing values are not modified.
+  # USAGE: update_component_options
+
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  while IFS=$'\t' read -r component_name; do
+    [[ -z "$component_name" ]] && continue
+    init_component_options "$component_name"
+  done < <(jq -r '
+    .[] | .manifest | to_entries[] |
+    select(.value.component_options != null) |
+    .key
+  ' <<< "$manifest_cache")
+
+  log d "Component options updated from manifests"
+}
+
+remove_component_options() {
+  # Remove all options for a component from the config file.
+  # USAGE: remove_component_options "$component_name"
+
+  local component_name="$1"
+
+  if ! jq -e --arg component "$component_name" '.component_options | has($component)' "$rd_conf" > /dev/null 2>&1; then
+    log d "No component_options to remove for $component_name"
+    return
+  fi
+
+  jq --arg component "$component_name" '
+    del(.component_options[$component])
+    | if (.component_options | length) == 0 then del(.component_options) else . end
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log d "Component options removed for $component_name"
+}
+
+get_component_option() {
+  # Get a component-specific option value from the config file.
+  # USAGE: get_component_option "$component_name" "$setting_name"
+
+  local component_name="$1"
+  local setting_name="$2"
+
+  jq -r --arg component "$component_name" --arg setting "$setting_name" '
+    .component_options[$component][$setting] // empty
+  ' "$rd_conf"
+}
+
+set_component_option() {
+  # Set a component-specific option value in the config file. Only updates existing settings.
+  # USAGE: set_component_option "$component_name" "$setting_name" "$value"
+
+  local component_name="$1"
+  local setting_name="$2"
+  local value="$3"
+
+  if ! jq -e --arg component "$component_name" --arg setting "$setting_name" '
+    .component_options[$component] | has($setting)
+  ' "$rd_conf" > /dev/null 2>&1; then
+    log w "Setting $setting_name not found in component_options for $component_name, skipping"
+    return 1
+  fi
+
+  jq --arg component "$component_name" --arg setting "$setting_name" --arg val "$value" '
+    .component_options[$component][$setting] = $val
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log d "Set component option $component_name.$setting_name = $value"
 }
