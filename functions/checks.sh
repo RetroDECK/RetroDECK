@@ -123,9 +123,10 @@ check_if_preprod() {
               configurator_generic_dialog "RetroDECK Pre-Production: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Ok, if you're that sure, here we go!</b></span>"
               if configurator_generic_question_dialog "RetroDECK Pre-Production: Delete Everything and Fresh Install" "<span foreground='$purple'><b>Are you actually being serious here?</b></span>\n\nBecause we are...\n\n<span foreground='$purple'><b>No backsies...OK?!</b></span>"; then
                 log w "Deleting all RetroDECK Data & Fresh Install"
-                rm -rf /var
+                quit_retrodeck
+                rm -rf "$XDG_CONFIG_HOME"
                 rm -rf "$rd_home_path"
-                source /app/libexec/global.sh
+                source "/app/libexec/global.sh"
               fi
             fi
           fi
