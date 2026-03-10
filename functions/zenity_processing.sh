@@ -141,6 +141,7 @@ remove_group_from_array() {
 build_zenity_menu_array() {
   # Build a Bash array of menu entries for use in a Zenity dialog.
   # Each entry consists of three consecutive elements: name, description, command.
+  # Entries with a "priority" key are sorted by priority first, followed by remaining entries sorted alphabetically.
   # USAGE: build_zenity_menu_array "$dest_array_name" "$menu_name"
 
   local -n dest_array="$1"
@@ -153,20 +154,29 @@ build_zenity_menu_array() {
 
     mapfile -t dest_array < <(
       api_get_all_preset_names | jq -r --argjson defs "$preset_definitions" '
-        .[] | .preset_name as $pn |
-        ($defs[$pn].name // $pn),
-        ($defs[$pn].description // ""),
-        ("configurator_change_preset_dialog " + $pn)
+        [.[] | .preset_name as $pn | {
+          name: ($defs[$pn].name // $pn),
+          description: ($defs[$pn].description // ""),
+          command: ("configurator_change_preset_dialog " + $pn),
+          priority: ($defs[$pn].priority // null)
+        }]
+        | (map(select(.priority != null)) | sort_by(.priority, .name))
+          + (map(select(.priority == null)) | sort_by(.name))
+        | .[]
+        | .name, .description, .command
       '
     )
   fi
 
   local -a menu_entries=()
   mapfile -t menu_entries < <(api_get_component_menu_entries "$menu_name" | jq -r --arg menu "$menu_name" '
-    .[$menu] // [] | .[] |
-    .name,
-    .description,
-    .command.zenity
+    .[$menu] // [] |
+    (map(select(.priority != null)) | sort_by(.priority))
+      + (map(select(.priority == null)) | sort_by(.name))
+    | .[]
+    | .name,
+      .description,
+      .command.zenity
   ')
 
   dest_array+=("${menu_entries[@]}")
