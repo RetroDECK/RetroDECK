@@ -170,9 +170,9 @@ prepare_component() {
 
   if [[ "$1" == "factory-reset" ]]; then
     log i "User requested full RetroDECK reset"
-    rm -f "$rd_lockfile" && log d "Lockfile removed"
-    retrodeck
-    return
+    quit_retrodeck
+    rm -rf "$XDG_CONFIG_HOME"
+    source /app/libexec/global.sh
   fi
 
   local action="$1"
