@@ -357,8 +357,8 @@ get_installed_component_version() {
 
   local component="$1"
 
-  jq -r --arg comp "$component" '
-    .component_versions[$comp] // "0"
+  jq -r --arg component "$component" '
+    .component_versions[$component] // "0"
   ' "$rd_conf"
 }
 
