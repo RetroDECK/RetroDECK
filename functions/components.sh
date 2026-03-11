@@ -143,7 +143,7 @@ source_component_functions() {
   # Source component_functions.sh files from installed components, making their variables and functions globally available.
   # Framework is always sourced first as it provides core application infrastructure.
   # A specific component name can be given to source only that component.
-  # USAGE: source_component_functions "[$component] (optional, default: all)"
+  # USAGE: source_component_functions "[$component]"
 
   local choice="${1:-all}"
 
