@@ -1419,3 +1419,10 @@ handle_folder_iconsets() {
     set_setting_value "$rd_conf" "iconset" "false" retrodeck "options"
   fi
 }
+
+url_encode() {
+  # URL-encode a string, escaping all special characters for safe use in URLs and form data.
+  # USAGE: url_encode "$string"
+
+  jq -sRr @uri <<< "$1"
+}
