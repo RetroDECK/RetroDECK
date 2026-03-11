@@ -429,17 +429,29 @@ get_cheevos_token_dialog() {
   # This function will return a RetroAchvievements token from a valid username and password, will return an error code otherwise
   # USAGE: get_cheevos_token_dialog
 
-  local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
-  --text="Username and password." \
-  --separator="^" \
-  --add-entry="Username" \
-  --add-password="Password")
+  local cheevos_username
+  cheevos_username=$(rd_zenity --entry \
+    --title="RetroAchievements Login" \
+    --text="Enter your RetroAchievements username:")
 
-  IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
+  if [[ -z "$cheevos_username" ]]; then
+    return 1
+  fi
+
+  local cheevos_password
+  cheevos_password=$(rd_zenity --password \
+    --title="RetroAchievements Login" \
+    --text="Enter your password for $cheevos_username:")
+
+  if [[ -z "$cheevos_password" ]]; then
+    return 1
+  fi
+
+  local cheevos_info
   if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
     log d "Cheevos login succeeded"
     echo "$cheevos_info"
-  else # login failed
+  else
     log d "Cheevos login failed"
     echo "RetroAchievements login failed, check your username and password."
     return 1
