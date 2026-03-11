@@ -467,10 +467,10 @@ validate_component_archive() {
   fi
 
   # Extract component name and check required manifest fields
-  local comp_name
-  comp_name=$(jq -r 'keys[0]' "$manifest_file")
+  local component_name
+  component_name=$(jq -r 'keys[0]' "$manifest_file")
 
-  if [[ -z "$comp_name" || "$comp_name" == "null" ]]; then
+  if [[ -z "$component_name" || "$component_name" == "null" ]]; then
     log e "component_manifest.json does not contain a valid component name"
     rm -rf "$tmp_dir"
     return 1
@@ -478,15 +478,15 @@ validate_component_archive() {
 
   local missing_fields=()
 
-  if [[ $(jq -r --arg comp "$comp_name" '.[$comp].name // empty' "$manifest_file") == "" ]]; then
+  if [[ $(jq -r --arg component "$component_name" '.[$component].name // empty' "$manifest_file") == "" ]]; then
     missing_fields+=("name")
   fi
 
-  if [[ $(jq -r --arg comp "$comp_name" '.[$comp].component_version // empty' "$manifest_file") == "" ]]; then
+  if [[ $(jq -r --arg component "$component_name" '.[$component].component_version // empty' "$manifest_file") == "" ]]; then
     missing_fields+=("component_version")
   fi
 
-  if [[ $(jq -r --arg comp "$comp_name" '.[$comp].core_framework_compatibility // empty' "$manifest_file") == "" ]]; then
+  if [[ $(jq -r --arg component "$component_name" '.[$component].core_framework_compatibility // empty' "$manifest_file") == "" ]]; then
     missing_fields+=("core_framework_compatibility")
   fi
 
@@ -506,10 +506,10 @@ validate_component_archive() {
   ' <<< "$manifest_cache" | head -1)
 
   local component_framework_compat
-  component_framework_compat=$(jq -r --arg comp "$comp_name" '.[$comp].core_framework_compatibility // "0"' "$manifest_file")
+  component_framework_compat=$(jq -r --arg component "$component_name" '.[$component].core_framework_compatibility // "0"' "$manifest_file")
 
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
-    log e "Component $comp_name requires core Framework version $component_framework_compat but current is $core_framework_version"
+    log e "Component $component_name requires core Framework version $component_framework_compat but current is $core_framework_version"
     rm -rf "$tmp_dir"
     return 1
   fi
@@ -529,13 +529,13 @@ validate_component_archive() {
     fi
   done
   if [[ "$lint_failed" == true ]]; then
-    log e "Component $comp_name has linting issues, cannot install."
+    log e "Component $component_name has linting issues, cannot install."
     rm -rf "$tmp_dir"
     return 1
   fi
 
   rm -rf "$tmp_dir"
-  log i "Component archive validated successfully: $comp_name"
+  log i "Component archive validated successfully: $component_name"
   return 0
 }
 
