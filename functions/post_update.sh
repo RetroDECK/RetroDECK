@@ -59,7 +59,7 @@ post_update() {
 
   if [[ "$core_updated" == true ]]; then
     echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nRunning RetroDECK core updates..." >&3
-    local framework_handler="_post_update::framework"
+    local framework_handler="_post_update::retrodeck"
     if declare -F "$framework_handler" > /dev/null; then
       log d "Running post-update handler for framework"
       "$framework_handler" "$version_being_updated"
