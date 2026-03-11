@@ -245,6 +245,9 @@ prepare_component() {
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
 
+    # Deploy helper files for the reset components
+    deploy_helper_files "$component"
+
     while IFS= read -r preset; do
       while IFS= read -r preset_component; do
         if [[ "$component" != "all" && "$preset_component" != *"$component"* ]]; then
