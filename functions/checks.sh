@@ -1,20 +1,18 @@
 #!/bin/bash
 
 check_network_connectivity() {
-  # This function will do a basic check for network availability and return "true" if it is working.
-  # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
+  # Check for network availability by testing multiple remote targets.
+  # Returns 0 if any target is reachable, 1 if none are.
+  # USAGE: if check_network_connectivity; then
 
-  if [[ ! -z $(wget --spider -t 1 "$remote_network_target_1" | grep "HTTP response 200") ]]; then
-    local network_connected="true"
-  elif [[ ! -z $(wget --spider -t 1 "$remote_network_target_2" | grep "HTTP response 200") ]]; then
-    local network_connected="true"
-  elif [[ ! -z $(wget --spider -t 1 "$remote_network_target_3" | grep "HTTP response 200") ]]; then
-    local network_connected="true"
-  else
-    local network_connected="false"
-  fi
+  local target
+  for target in "$remote_network_target_1" "$remote_network_target_2" "$remote_network_target_3"; do
+    if curl --silent --head --max-time 5 --output /dev/null "$target" 2>/dev/null; then
+      return 0
+    fi
+  done
 
-  echo "$network_connected"
+  return 1
 }
 
 check_desktop_mode() {
