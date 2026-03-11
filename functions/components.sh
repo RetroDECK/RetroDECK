@@ -83,26 +83,42 @@ get_component_manifest_cache() {
   echo "$component_manifest_cache"
 }
 
-get_all_helper_files() {
-  # Gather all helper file information from all component manifests, including the source path for each file.
+get_helper_files() {
+  # Gather helper file information from component manifests, including the source path for each file.
+  # Optionally filtered to a specific component.
   # Returns a JSON array of helper file objects with filename, location, and source_path.
-  # USAGE: get_all_helper_files
+  # USAGE: get_helper_files "[$component_name]"
 
-  get_component_manifest_cache | jq '
-    [.[] | .component_path as $component_path |
-     .manifest | .. | objects | select(has("helper_files")) |
-     .helper_files | to_entries[].value |
-     . + {source_path: ($component_path + "/helper_files")}]
-  '
+  local component="${1:-all}"
+
+  if [[ "$component" == "all" ]]; then
+    get_component_manifest_cache | jq '
+      [.[] | .component_path as $component_path |
+       .manifest | .. | objects | select(has("helper_files")) |
+       .helper_files | to_entries[].value |
+       . + {source_path: ($component_path + "/rd_assets/helper_files")}]
+    '
+  else
+    get_component_manifest_cache | jq --arg component "$component" '
+      [.[] | select(.manifest | has($component)) |
+       .component_path as $component_path |
+       .manifest[$component] | select(has("helper_files")) |
+       .helper_files | to_entries[].value |
+       . + {source_path: ($component_path + "/rd_assets/helper_files")}]
+    '
+  fi
 }
 
 deploy_helper_files() {
   # Distribute helper documentation files throughout the filesystem according to component manifest configurations.
-  # USAGE: deploy_helper_files
+  # Optionally limited to a specific component.
+  # USAGE: deploy_helper_files "[$component_name]"
+
+  local component="${1:-all}"
 
   while IFS= read -r entry; do
     [[ -z "$entry" ]] && continue
-    read -r file dest source_path < <(jq -r '[.filename, .location, .source_path] | @tsv' <<< "$entry")
+    IFS=$'\t' read -r file dest source_path < <(jq -r '[.filename, .location, .source_path] | @tsv' <<< "$entry")
     dest=$(envsubst <<< "$dest")
 
     if [[ -z "$file" || -z "$dest" ]]; then
@@ -120,7 +136,7 @@ deploy_helper_files() {
     else
       log d "Helper file location $dest does not exist, component may not be installed. Skipping..."
     fi
-  done < <(get_all_helper_files | jq -c '.[]')
+  done < <(get_helper_files "$component" | jq -c '.[]')
 }
 
 source_component_functions() {
