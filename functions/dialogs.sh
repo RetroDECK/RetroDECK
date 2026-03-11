@@ -23,10 +23,9 @@ configurator_process_complete_dialog() {
   --title "RetroDECK Configurator - Process Complete" \
   --text="The process of <span foreground='$purple'><b>$1</b></span> is now complete.\n\nYou may need to <span foreground='$purple'><b>restart RetroDECK</b></span> for the changes to take effect.\n\nClick OK to return to the main menu or Quit to exit RetroDECK."
 
-  if [ ! $? == 0 ]; then # OK button clicked
-      configurator_welcome_dialog
-  elif [ ! $? == 1 ]; then # Quit button clicked
-      quit_retrodeck
+  if [ ! $? == 1 ]; then # Quit button clicked
+    configurator_nav="quit"
+    quit_retrodeck
   fi
 }
 
@@ -71,9 +70,7 @@ configurator_destination_choice_dialog() {
   fi
 
   local rc=$?
-  if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then
-    echo "Back"
-  else
+  if [[ $rc == "0" ]] && [[ -n "$choice" ]]; then
     echo "$choice"
   fi
 }
@@ -777,7 +774,6 @@ configurator_update_notify_dialog() {
       set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
     fi
   fi
-  configurator_tools_dialog
 }
 
 configurator_repair_paths_dialog() {
@@ -979,8 +975,6 @@ configurator_version_history_dialog() {
   ;;
 
   esac
-
-  configurator_about_retrodeck_dialog
 }
 
 configurator_retrodeck_credits_dialog() {
@@ -988,12 +982,10 @@ configurator_retrodeck_credits_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - RetroDECK Team Credits" \
   --filename="$rd_core_files/reference_lists/retrodeck_credits.txt"
-  configurator_about_retrodeck_dialog
 }
 
 configurator_browse_retrodeck_wiki_dialog() {
   xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
-  configurator_developer_dialog
 }
 
 configurator_online_update_channel_dialog() {
