@@ -1033,7 +1033,7 @@ run_component_updates() {
 
   # All non-Framework components
   while IFS=$'\t' read -r component_name manifest_version; do
-    [[ -z "$component_name" || "$component_name" == "framework" ]] && continue
+    [[ -z "$component_name" || "$component_name" == "retrodeck" ]] && continue
 
     if ! check_component_compatibility "$component_name"; then
       log w "Skipping update for incompatible component: $component_name"
