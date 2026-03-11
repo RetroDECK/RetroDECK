@@ -238,6 +238,15 @@ prepare_component() {
       | [(.priority | tostring), .name]
       | @tsv
     ' <<< "$manifest_cache")
+  else
+    local handler="_prepare_component::${component}"
+    if declare -F "$handler" > /dev/null; then
+      log d "Running prepare handler for $component"
+      "$handler" "$action"
+    else
+      log e "No prepare handler found for component $component"
+      return 1
+    fi
   fi
 
   # Reset presets to their disabled state for affected components
