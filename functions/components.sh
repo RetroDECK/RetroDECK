@@ -722,6 +722,7 @@ remove_external_component() {
   # Rebuild caches and re-source
   build_component_manifest_cache
   build_compression_lookups
+  source_component_functions
 
   log i "Component $component_name removed successfully"
   return 0
