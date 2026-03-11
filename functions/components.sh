@@ -204,7 +204,7 @@ prepare_component() {
 
   if [[ "$component" == "all" ]]; then
     # Framework always runs first
-    local framework_handler="_prepare_component::framework"
+    local framework_handler="_prepare_component::retrodeck"
     if declare -F "$framework_handler" > /dev/null; then
       log d "Running prepare handler for framework"
       "$framework_handler" "$action"
@@ -214,11 +214,11 @@ prepare_component() {
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
 
-    while IFS=$'\t' read -r priority comp_name; do
-      [[ "$comp_name" == "framework" ]] && continue
-      local handler="_prepare_component::${comp_name}"
+    while IFS=$'\t' read -r priority component_name; do
+      [[ "$component_name" == "retrodeck" ]] && continue
+      local handler="_prepare_component::${component_name}"
       if declare -F "$handler" > /dev/null; then
-        log d "Running prepare handler for $comp_name (priority: $priority)"
+        log d "Running prepare handler for $component_name (priority: $priority)"
         "$handler" "$action"
       fi
     done < <(jq -r --arg action "$action" '
