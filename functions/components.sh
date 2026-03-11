@@ -340,13 +340,13 @@ get_component_version() {
 
   local component="$1"
 
-  if [[ "$component" == "framework" ]]; then
+  if [[ "$component" == "retrodeck" ]]; then
     echo "$hard_version"
     return
   fi
 
-  get_component_manifest_cache | jq -r --arg comp "$component" '
-    .[] | .manifest | select(has($comp)) | .[$comp].component_version // "0"
+  get_component_manifest_cache | jq -r --arg component "$component" '
+    .[] | .manifest | select(has($component)) | .[$component].component_version // "0"
   ' | head -1
 }
 
