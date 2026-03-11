@@ -640,19 +640,13 @@ install_external_component() {
   update_component_presets
 
   # Run initialization
-  local prepare_handler="_prepare_component::${component_name}"
-  if declare -F "$prepare_handler" > /dev/null; then
-    log d "Running initial setup for $component_name"
-    "$prepare_handler" "reset"
-  fi
+  log d "Running initial setup for $component_name"
+  prepare_component "reset" "$component_name"
 
   # Record the installed version
   local component_version
   component_version=$(get_component_version "$component_name")
   set_installed_component_version "$component_name" "$component_version"
-
-  # Deploy helper files for the new component
-  deploy_helper_files
 
   log i "Component $component_name installed successfully"
   return 0
