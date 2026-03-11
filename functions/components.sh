@@ -591,11 +591,10 @@ install_external_component() {
     local existing_dir
     existing_dir=$(dirname "$existing_path")
     if [[ "$existing_dir" == "$rd_components/"* ]]; then
-      log e "Component $component_name is already installed as an internal component and cannot be overridden"
-      return 1
+      log w "Component $component_name is already installed as an internal component and will be overridden"
     else
-      log w "Component $component_name is already installed externally, upgrading"
-      _remove_external_component_files "$component_name"
+      log i "Component $component_name is already installed externally, upgrading"
+      remove_external_component_files "$component_name"
     fi
   fi
 
