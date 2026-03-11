@@ -391,7 +391,7 @@ check_component_compatibility() {
 
   local core_framework_version
   core_framework_version=$(jq -r '
-    .[] | .manifest | select(has("framework")) | .framework.core_framework_version // "0"
+    .[] | .manifest | select(has("retrodeck")) | .framework.core_framework_version // "0"
   ' <<< "$manifest_cache" | head -1)
 
   local component_framework_compat
