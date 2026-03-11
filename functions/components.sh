@@ -400,7 +400,7 @@ check_component_compatibility() {
   ' <<< "$manifest_cache" | head -1)
 
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
-    log e "Component $component requires core API version $component_framework_compat but current is $core_framework_version"
+    log e "Component $component requires core Framework version $component_framework_compat but current is $core_framework_version"
     return 1
   fi
 
