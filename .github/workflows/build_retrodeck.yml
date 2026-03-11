@@ -1220,8 +1220,8 @@ jobs:
           cd flathub-repo
 
           # Configure git
-          git config user.name "${{ secrets.GITNAME }}"
-          git config user.email "${{ secrets.GITMAIL }}"
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
           # Create version branch
           git checkout -b "$VERSION"
