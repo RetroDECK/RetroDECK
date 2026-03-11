@@ -964,11 +964,11 @@ update_external_component() {
     rm -f "$tmp_archive"
 
     # Run post-update handler
-    local installed_version
-    installed_version=$(get_installed_component_version "$component_name")
+    local previous_version
+    previous_version=$(get_installed_component_version "$component_name")
     local handler="_post_update::${component_name}"
     if declare -F "$handler" > /dev/null; then
-      "$handler" "$installed_version"
+      "$handler" "$previous_version"
     fi
 
     # Record new version
