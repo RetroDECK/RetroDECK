@@ -84,14 +84,12 @@ Contributions are welcome from everyone.
 
 ---
 
-### 🛠 Service Links
+### Service Links
 
 | Category | Link | Description |
 |----------|------|-------------|
-| 🌍 Github Status | [GitHub Status](https://www.githubstatus.com/) | GitHub platform service status |
-| 🌍 Flathub Status | [Flathub Status](https://status.flathub.org/) | Flathub platform service status |
-| 🤖 Flathub Buildbot Status | [Flathub Buildbot](https://buildbot.flathub.org/#/apps/net.retrodeck.retrodeck) | Live build status for net.retrodeck.retrodeck on Flathub |
+| Github Status | [GitHub Status](https://www.githubstatus.com/) | GitHub platform service status |
+| Flathub Status | [Flathub Status](https://status.flathub.org/) | Flathub platform service status |
+| Flathub Buildbot Status | [Flathub Buildbot](https://buildbot.flathub.org/#/apps/net.retrodeck.retrodeck) | Live build status for net.retrodeck.retrodeck on Flathub |
 
 ---
-
-© RetroDECK Project
