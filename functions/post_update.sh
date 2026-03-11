@@ -65,7 +65,7 @@ post_update() {
       "$framework_handler" "$version_being_updated"
     fi
     echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nDeploying helper files..." >&3
-    deploy_helper_files
+    deploy_helper_files "retrodeck"
     echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nApplying RetroDECK icons..." >&3
     rsync -rlD --delete --mkpath "/app/retrodeck/graphics/folder-iconsets/" "$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets/"
     handle_folder_iconsets "$iconset"
