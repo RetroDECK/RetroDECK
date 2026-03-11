@@ -691,7 +691,7 @@ finit() {
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
   # Set up framework paths and write initial config
-  prepare_component "reset" "framework"
+  prepare_component "reset" "retrodeck"
 
   # Source component functions now that config paths are loaded
   source_component_functions
