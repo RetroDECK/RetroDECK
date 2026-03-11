@@ -114,15 +114,13 @@ compress_game() {
 
   if [[ "$post_compression_cleanup" == "true" && -f "${file%.*}.$format" ]]; then
     log i "Performing post-compression file cleanup"
-    if [[ "$file" == *".cue" ]]; then
-      local file_path=$(dirname "$(realpath "$file")")
-      while IFS= read -r bin_file; do
-        log i "Removing file $file_path/$bin_file"
-        rm -f "$file_path/$bin_file"
-      done < <(grep -o -P '(?<=FILE ").*(?=".*$)' "$file")
+    local cleanup_handler="_post_compression_cleanup::${format}"
+    if ! declare -F "$cleanup_handler" > /dev/null; then
+      log e "No compression cleanup handler found for format: $format"
+      return 1
     fi
-    log i "Removing file $(realpath "$file")"
-    rm -f "$(realpath "$file")"
+
+    "$cleanup_handler" "$source_file"
   elif [[ "$post_compression_cleanup" == "true" ]]; then
     log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
   fi
