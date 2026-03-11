@@ -184,15 +184,16 @@ prepare_component() {
   # A component can be called by name or "all" to perform the action on all components. Framework always runs first.
   # USAGE: prepare_component "$action" "$component"
 
-  if [[ "$1" == "factory-reset" ]]; then
-    log i "User requested full RetroDECK reset"
-    quit_retrodeck
-    rm -rf "$XDG_CONFIG_HOME"
-    source /app/libexec/global.sh
-  fi
-
   local action="$1"
   local component="$2"
+
+  if [[ "$action" == "factory-reset" ]]; then
+    # REBUILD
+    log i "User requested full RetroDECK reset"
+    rm -rf "$XDG_CONFIG_HOME"
+    quit_retrodeck
+    source /app/libexec/global.sh
+  fi
 
   if [[ -z "$component" || -z "$action" ]]; then
     log e "No component or action specified."
