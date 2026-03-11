@@ -719,7 +719,7 @@ finit() {
   progress_pipe=$(mktemp -u)
   mkfifo "$progress_pipe"
 
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK: Installing" \
     --text="RetroDECK is completing its initial setup.\n\nPlease check for any background <span foreground='$purple'><b>windows or pop-ups</b></span> that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>" \
@@ -729,15 +729,12 @@ finit() {
   # Open the pipe for writing
   exec 3>"$progress_pipe"
 
-  echo "10" >&3
   echo "# Resetting components..." >&3
   prepare_component "reset" "all"
 
-  echo "50" >&3
   echo "# Applying presets..." >&3
   update_component_presets
 
-  echo "70" >&3
   echo "# Deploying helper files..." >&3
   deploy_helper_files
 
