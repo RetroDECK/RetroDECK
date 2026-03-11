@@ -677,12 +677,6 @@ remove_external_component() {
     return 1
   fi
 
-  # Verify this is actually an external component
-  if [[ "$component_path" != "$rd_external_components_path/"* ]]; then
-    log e "Component $component_name is not an external component and cannot be removed this way"
-    return 1
-  fi
-
   log i "Removing external component: $component_name"
 
   # Run the component's uninstall hook if it has one
