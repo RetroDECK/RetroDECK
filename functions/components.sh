@@ -369,7 +369,7 @@ set_installed_component_version() {
   local component="$1"
   local version="$2"
 
-  if [[ ! "$component" == "framework" ]]; then
+  if [[ ! "$component" == "retrodeck" ]]; then
     # Ensure the component_versions section exists
     if ! jq -e '.component_versions' "$rd_conf" > /dev/null 2>&1; then
       jq '. + {component_versions: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
