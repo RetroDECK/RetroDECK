@@ -162,6 +162,11 @@ conf_read() {
     | @tsv
   ' "$rd_conf")
 
+  if [[ -n "$rd_logging_override" ]]; then
+    rd_logging_level="$rd_logging_override"
+    export rd_logging_level
+  fi
+
   log d "retrodeck.json read and loaded"
 }
 
