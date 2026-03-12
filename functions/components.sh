@@ -203,14 +203,6 @@ prepare_component() {
   log d "Preparing component: \"$component\", action: \"$action\""
 
   if [[ "$component" == "all" ]]; then
-    # Framework always runs first
-    local framework_handler="_prepare_component::retrodeck"
-    if declare -F "$framework_handler" > /dev/null; then
-      log d "Running prepare handler for framework"
-      "$framework_handler" "$action"
-    fi
-
-    # Build a priority-sorted list of remaining handlers
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
 
@@ -220,6 +212,11 @@ prepare_component() {
       if declare -F "$handler" > /dev/null; then
         log d "Running prepare handler for $component_name (priority: $priority)"
         "$handler" "$action"
+        if [[ "$action" == "reset" ]]; then
+          set_installed_component_version "$component_name" "$(get_component_version "$component_name")"
+          reset_component_options "$component_name"
+          deploy_helper_files "$component_name"
+        fi
       fi
     done < <(jq -r --arg action "$action" '
       [.[] | .manifest | to_entries[] |
@@ -243,26 +240,21 @@ prepare_component() {
     if declare -F "$handler" > /dev/null; then
       log d "Running prepare handler for $component"
       "$handler" "$action"
+      if [[ "$action" == "reset" ]]; then
+        set_installed_component_version "$component" "$(get_component_version "$component")"
+        reset_component_options "$component"
+        deploy_helper_files "$component"
+      fi
     else
       log e "No prepare handler found for component $component"
       return 1
     fi
   fi
 
-  # Reset presets and component-specific options to their disabled state for affected components
+  # Reset presets to their disabled state for actioned components
   if [[ "$action" == "reset" ]]; then
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
-
-    # Reset component options to manifest defaults
-    if [[ "$component" == "all" ]]; then
-      reset_component_options "all"
-    else
-      reset_component_options "$component"
-    fi
-
-    # Deploy helper files for the reset components
-    deploy_helper_files "$component"
 
     while IFS= read -r preset; do
       while IFS= read -r preset_component; do
@@ -1069,8 +1061,7 @@ run_component_updates() {
     local installed_version
     installed_version=$(get_installed_component_version "$component_name")
 
-    # On legacy upgrade, component has no recorded version yet, so always run
-    if [[ "$is_legacy_upgrade" == true || "$manifest_version" != "$installed_version" ]]; then
+    if [[ "$manifest_version" != "$installed_version" ]]; then
       local handler="_post_update::${component_name}"
       if declare -F "$handler" > /dev/null; then
         log d "Running post-update handler for $component_name (installed: $installed_version, manifest: $manifest_version)"
@@ -1318,4 +1309,27 @@ set_component_option() {
   ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
 
   log d "Set component option $component_name.$setting_name = $value"
+}
+
+check_for_component_updates() {
+  # Quick check if any installed components have a different version than what's recorded in the config file.
+  # Returns 0 if any component needs updating, 1 if all are current.
+  # USAGE: if check_for_component_updates; then run_component_updates "$version"; fi
+
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  # Check all components
+  local mismatched
+  mismatched=$(jq -r --argjson config_versions "$(jq '.component_versions // {}' "$rd_conf")" '
+    .[] | .manifest | to_entries[] |
+    select(.key != "retrodeck") |
+    .key as $component |
+    (.value.component_version // "0") as $manifest_ver |
+    ($config_versions[$component] // "0") as $installed_ver |
+    select($manifest_ver != $installed_ver) |
+    $component
+  ' <<< "$manifest_cache" | head -1)
+
+  [[ -n "$mismatched" ]]
 }
