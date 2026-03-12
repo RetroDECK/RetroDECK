@@ -74,7 +74,7 @@ jobs:
     steps:
       - name: Checkout code
         if: github.event_name == 'push'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -362,7 +362,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
@@ -453,7 +453,7 @@ jobs:
       fail-fast: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
@@ -614,7 +614,7 @@ jobs:
 
       - name: Upload build artifacts
         if: needs.configure.outputs.is_dry_run == 'false'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: flatpak-artifacts-${{ matrix.variant }}
           path: |
@@ -633,13 +633,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
       - name: Download all build artifacts
         if: needs.configure.outputs.is_dry_run == 'false'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: downloaded-artifacts/
           pattern: 'flatpak-artifacts-*'
@@ -1057,13 +1057,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout flatpak repo (main branch)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: main
           path: flatpak-repo
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: flatpak-artifacts-full
           path: downloaded-artifacts/
