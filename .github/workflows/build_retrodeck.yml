@@ -614,7 +614,7 @@ jobs:
 
       - name: Upload build artifacts
         if: needs.configure.outputs.is_dry_run == 'false'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: flatpak-artifacts-${{ matrix.variant }}
           path: |
