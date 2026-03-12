@@ -171,8 +171,7 @@ else
     log e "Defined $rd_home_path does not exist, asking user to locate it manually"
     configurator_generic_dialog "RetroDECK Setup - Warning: No Data Folder Found" \
       "The RetroDECK data folder was not found in the expected location.\nThis may occur after a OS update or if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>\"retrodeck\"</b></span> folder."
-    new_home_path=$(directory_browse "RetroDECK folder location")
-    if [[ -n "$new_home_path" ]]; then
+    if new_home_path=$(directory_browse "RetroDECK folder location"); then
       set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
       source_component_functions
       prepare_component "postmove" "all"

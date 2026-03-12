@@ -332,6 +332,7 @@ configurator_move_folder_dialog() {
   log i "Showing a configurator_move_folder_dialog for $1"
   local rd_dir_name="$1" # The folder variable name from retrodeck.json
   local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")"
+  local dest
 
   if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.json
     choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename "$dir_to_move") folder.")
@@ -340,16 +341,19 @@ configurator_move_folder_dialog() {
 
     "Internal Storage" | "Home Directory" | "SD Card" | "Custom Location" )
       if [[ "$choice" == "Internal Storage" || "$choice" == "Home Directory" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
-        local dest="internal"
+        dest="internal"
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         if [[ -n "$sdcard" ]]; then
-          local dest="sd"
+          dest="sd"
         else
           configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The SD card location is not configured in retrodeck.json, it cannot be used as a destination."
         fi
       else
         configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder where you would like to store the $(basename "$dir_to_move") folder."
-        local dest=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
+        if ! dest=$(directory_browse "RetroDECK directory location"); then
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No Custom Location was selected."
+          configurator_nav="refresh"
+        fi
       fi
     ;;
 
@@ -361,8 +365,8 @@ configurator_move_folder_dialog() {
     fi
   else # The folder to move was not found at the path pulled from retrodeck.json and it needs to be reconfigured manually.
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
-    dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location")
-    if [[ -n "$dir_to_move" ]]; then
+    
+    if dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location"); then
       set_setting_value "$rd_conf" "$rd_dir_name" "$dir_to_move" "retrodeck" "paths"
       source_component_functions
       prepare_component "postmove" "all"

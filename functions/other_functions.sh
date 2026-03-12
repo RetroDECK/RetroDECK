@@ -1,30 +1,34 @@
 #!/bin/bash
 
 directory_browse() {
-  # This function browses for a directory and returns the path chosen
-  # USAGE: path_to_be_browsed_for=$(directory_browse $action_text)
+  # Browse for a directory and return the selected path.
+  # Returns 1 if the user exits without selecting.
+  # USAGE: selected_path=$(directory_browse "$action_text")
 
-  local path_selected=false
+  local action_text="$1"
 
-  while [ $path_selected == false ]
-  do
-    local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
-    if [ ! -z "$target" ] #yes
-    then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
-      --text="Directory <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
-      if [ $? == 0 ]
-      then
-        path_selected=true
+  while true; do
+    local target
+    target=$(rd_zenity --file-selection --title="Choose $action_text" --directory)
+
+    if [[ -n "$target" ]]; then
+      rd_zenity --question --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --cancel-label="No" --ok-label="Yes" \
+        --text="Directory <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
+      if [[ $? -eq 0 ]]; then
         echo "$target"
-        break
+        return 0
       fi
     else
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
-      --text="No directory selected.\n\n<span foreground='$purple'><b>Do you want to exit the selection process?</b></span>"
-      if [ $? == 0 ]
-      then
-        break
+      rd_zenity --question --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --cancel-label="No" --ok-label="Yes" \
+        --text="No directory selected.\n\n<span foreground='$purple'><b>Do you want to exit the selection process?</b></span>"
+      if [[ $? -eq 0 ]]; then
+        return 1
       fi
     fi
   done
