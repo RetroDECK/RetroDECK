@@ -930,8 +930,8 @@ jobs:
           echo "**Components sources:** [components-sources.json](${COMPONENTS_METADATA_URL}/components-sources.json)" >> release_notes.md
           echo "" >> release_notes.md
 
-          # Variant info (cooker always has countertop; other branches when forced)
-          if [[ "$BRANCH" == "cooker" || "$FORCE_COUNTERTOP" == "true" ]]; then
+          # Variant info
+          if [[ "$BRANCH" == "cooker" ]]; then
             cat >> release_notes.md <<EOF
           ### Variants
 
@@ -941,6 +941,17 @@ jobs:
           - **Countertop**: Lightweight installation with only core components
 
           EOF
+          fi
+
+          if [[ "$FORCE_COUNTERTOP" == "true" ]]; then
+              cat >> release_notes.md <<EOF
+            ### Variants
+
+            This release includes one flatpak variant:
+
+            - **Countertop**: Lightweight installation with only core components
+
+            EOF
           fi
 
           # Flathub info
