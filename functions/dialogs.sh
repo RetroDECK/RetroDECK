@@ -240,7 +240,7 @@ configurator_retrodeck_credits_dialog() {
 }
 
 configurator_browse_retrodeck_wiki_dialog() {
-  xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
+  xdg-open "$rd_wiki_url"
 }
 
 configurator_online_update_channel_dialog() {

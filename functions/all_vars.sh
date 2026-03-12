@@ -14,13 +14,14 @@ export folder_iconsets_dir="$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets"
 # Network / Online-related variables
 
 export remote_network_target_1="https://flathub.org"                                                            # The URL of a common internet target for testing network access
-export remote_network_target_2="$rd_repo"                                                                       # The URL of a common internet target for testing network access
+export remote_network_target_2="$rd_repo_url"                                                                   # The URL of a common internet target for testing network access
 export remote_network_target_3="https://one.one.one.one"                                                        # The URL of a common internet target for testing network access
 export ra_cheevos_api_url="https://retroachievements.org/dorequest.php"                                         # API URL for RetroAchievements.org
 export git_organization_name="RetroDECK"                                                                        # The name of the organization in our git repository such as GitHub
 export main_repository_name="RetroDECK"                                                                         # The name of the main repository under RetroDECK organization
 export cooker_repository_name="Cooker"                                                                          # The name of the cooker repository under RetroDECK organization
-export rd_repo="https://github.com/$git_organization_name/$main_repository_name"                                # The URL of the main RetroDECK GitHub repo
+export rd_repo_url="https://github.com/$git_organization_name/$main_repository_name"                            # The URL of the main RetroDECK GitHub repo
+export rd_wiki_url="https://retrodeck.readthedocs.io"
 
 # RetroDECK API-related variables
 
