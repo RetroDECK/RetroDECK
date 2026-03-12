@@ -239,8 +239,8 @@ jobs:
 
           echo "Fetching epicure releases from RetroDECK repo..."
 
-          EPICURE_RELEASES=$(gh release list --limit 1000 --json tagName,createdAt \
-            -q '[.[] | select(.tagName | startswith("epicure-"))] | sort_by(.createdAt) | reverse | .[].tagName')
+          EPICURE_RELEASES=$(gh release list --limit 1000 --json tagName,publishedAt \
+            -q '[.[] | select(.tagName | startswith("epicure-"))] | sort_by(.publishedAt) | reverse | .[].tagName')
 
           TOTAL=$(echo "$EPICURE_RELEASES" | grep -c . || true)
           echo "Epicure releases found: $TOTAL (keeping $EPICURE_KEEP)"
@@ -307,7 +307,7 @@ jobs:
 
           echo "Fetching all releases from cooker repo..."
 
-          gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName,createdAt \
+          gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName,publishedAt \
             | jq '.' > cooker_releases.json
 
           TOTAL=$(jq 'length' cooker_releases.json)
@@ -323,7 +323,7 @@ jobs:
 
             COOKER_RELEASES=$(jq -r \
               '[.[] | select(.tagName | startswith("cooker-"))] |
-              sort_by(.createdAt) | reverse | .[].tagName' \
+              sort_by(.publishedAt) | reverse | .[].tagName' \
               cooker_releases.json)
 
             COOKER_TOTAL=$(echo "$COOKER_RELEASES" | grep -c . || true)
@@ -347,7 +347,7 @@ jobs:
 
             FEATURE_RELEASES=$(jq -r \
               '[.[] | select(.tagName | startswith("branch-"))] |
-              sort_by(.createdAt) | reverse | .[].tagName' \
+              sort_by(.publishedAt) | reverse | .[].tagName' \
               cooker_releases.json)
 
             FEATURE_TOTAL=$(echo "$FEATURE_RELEASES" | grep -c . || true)
