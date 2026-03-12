@@ -944,14 +944,14 @@ jobs:
           fi
 
           if [[ "$FORCE_COUNTERTOP" == "true" ]]; then
-              cat >> release_notes.md <<EOF
-            ### Variants
+            cat >> release_notes.md <<EOF
+          ### Variants
 
-            This release includes one flatpak variant:
+          This release includes one flatpak variant:
 
-            - **Countertop**: Lightweight installation with only core components
+          - **Countertop**: Lightweight installation with only core components
 
-            EOF
+          EOF
           fi
 
           # Flathub info
