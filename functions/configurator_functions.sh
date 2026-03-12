@@ -47,12 +47,12 @@ configurator_welcome_dialog() {
   build_zenity_menu_array welcome_menu_options welcome
 
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options+=("Developer Options" "Welcome to the DANGER ZONE")
+    welcome_menu_options+=("Developer Options" "Welcome to the DANGER ZONE" "configurator_developer_dialog")
   fi
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator" --cancel-label="Quit" --ok-label="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${welcome_menu_options[@]}")
 
   if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
@@ -70,7 +70,6 @@ configurator_welcome_dialog() {
     ;;
     esac
   fi
-  configurator_nav="quit"
 }
 
 configurator_global_presets_and_settings_dialog() {
