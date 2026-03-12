@@ -104,7 +104,6 @@ finish-args:
   - --unset-env=QEMU_AUDIO_DRV
 
 cleanup:
-  # ES-DE
   - /include
   - /share/ffmpeg
   - /lib/cmake
@@ -115,7 +114,7 @@ cleanup:
   - /bin/zstd*
   - /lib/pkg-config
   - /share/doc
-  - /share/gtk-doc # Steam ROM Manager
+  - /share/gtk-doc
   - /share/man
   - /src
   - '*.a'
@@ -320,12 +319,8 @@ modules:
           rm -rf ${FLATPAK_DEST}/usr
         fi
 
-      # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
-      - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
+      # Include all iconsets
       - cp -rf res/folder-iconsets ${FLATPAK_DEST}/retrodeck/graphics
-      - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
-      - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
 
       # Tools
       - mkdir -p ${FLATPAK_DEST}/tools
