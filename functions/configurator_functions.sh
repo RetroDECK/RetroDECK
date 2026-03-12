@@ -663,8 +663,7 @@ configurator_compression_tool_dialog() {
 
 configurator_compress_single_game_dialog() {
   # REBUILD
-  local file=$(file_browse "Game to compress")
-  if [[ ! -z "$file" ]]; then
+  if file=$(file_browse "Game to compress"); then
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)

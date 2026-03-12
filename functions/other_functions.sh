@@ -36,29 +36,27 @@ directory_browse() {
 
 file_browse() {
   # This function browses for a file and returns the path chosen
+  # Returns 1 if the user exits without selecting.
   # USAGE: file_to_be_browsed_for=$(file_browse $action_text)
 
+  local action_text="$1"
   local file_selected=false
 
-  while [ $file_selected == false ]
-  do
-    local target="$(rd_zenity --file-selection --title="Choose $1")"
-    if [ ! -z "$target" ] #yes
-    then
+  while true; do
+    local target
+    target="$(rd_zenity --file-selection --title="Choose $action_text")"
+    if [[ -n "$target" ]]; then
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="File <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
-      if [ $? == 0 ]
-      then
-        file_selected=true
+      if [[ $? -eq 0 ]]; then
         echo "$target"
-        break
+        return 0
       fi
     else
       rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
       --text="No file selected. Do you want to exit the selection process?"
-      if [ $? == 0 ]
-      then
-        break
+      if [[ $? -eq 0 ]]; then
+        return 1
       fi
     fi
   done
