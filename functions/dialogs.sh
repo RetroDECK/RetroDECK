@@ -41,17 +41,11 @@ configurator_generic_dialog() {
 
 configurator_generic_question_dialog() {
   # This dialog provides a generic dialog for getting a response from a user.
-  # USAGE: $(configurator_generic_question_dialog "title text" "action text")
-  # This function will return a "true" if the user clicks "Yes", and "false" if they click "No".
+  # USAGE: if configurator_generic_question_dialog "title text" "action text; then
   log i "$2"
-  choice=$(rd_zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
+  rd_zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="$2")
-  if [[ $? == "0" ]]; then
-    return 0
-  else
-    return 1
-  fi
+  --text="$2"
 }
 
 configurator_destination_choice_dialog() {
