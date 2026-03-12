@@ -134,7 +134,7 @@ parse_cli_args() {
         exit 0
       ;;
       --configurator)
-        /bin/bash /app/tools/configurator.sh
+        source /app/tools/configurator.sh
         exit 0
       ;;
       --reset)
