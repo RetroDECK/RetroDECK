@@ -25,6 +25,26 @@ check_desktop_mode() {
   fi
 }
 
+check_low_space() {
+  # This function will verify that the drive with the $HOME path on it has at least 10% space free, so the user can be warned before it fills up
+  # USAGE: low_space_warning
+
+  if [[ $low_space_warning == "true" ]]; then
+    local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
+    if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  --extra-button="Never show again" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK - Warning: Low Space" \
+      --text="Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.")
+      if [[ $choice =~ "Never show again" ]]; then
+        log i "Selected: \"Never show this again\""
+        set_setting_value "$rd_conf" "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+      fi
+    fi
+    log i "Selected: \"OK\""
+  fi
+}
+
 check_is_steam_deck() {
   # This function will check the internal product ID for the Steam Deck codename and return 0 if RetroDECK is running on a real Deck
 
