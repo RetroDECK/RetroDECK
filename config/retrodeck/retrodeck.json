@@ -19,7 +19,7 @@
     "sdcard": "/run/media/mmcblk0p1",
     "storage_path": "/home/deck/retrodeck/storage",
     "videos_path": "/home/deck/retrodeck/videos",
-    "rd_external_components_path": "/home/deck/retrodeck/external_components"
+    "rd_external_components_path": "/home/deck/retrodeck/storage/external_components"
   },
   "options": {
     "power_user_warning": "true",
