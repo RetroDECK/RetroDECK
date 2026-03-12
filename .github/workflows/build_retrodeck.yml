@@ -74,7 +74,7 @@ jobs:
     steps:
       - name: Checkout code
         if: github.event_name == 'push'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -362,7 +362,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
@@ -453,7 +453,7 @@ jobs:
       fail-fast: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
@@ -633,7 +633,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.configure.outputs.branch }}
 
@@ -1046,7 +1046,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout flatpak repo (main branch)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main
           path: flatpak-repo
