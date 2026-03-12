@@ -557,42 +557,6 @@ backup_retrodeck_userdata() {
   fi
 }
 
-finit_browse() {
-  # Function for choosing data directory location during first/forced init
-  path_selected=false
-  while [ $path_selected == false ]
-  do
-    local target="$(rd_zenity --file-selection --title="RetroDECK - retrodeck location" --directory)"
-    if [[ ! -z "$target" ]]; then
-      if [[ -w "$target" ]]; then
-        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-        --cancel-label="No" \
-        --ok-label "Yes" \
-        --text="Your RetroDECK main data folder location will be:\n\n<span foreground='$purple'><b>$target/retrodeck</b></span>\n\nIs this correct?"
-        if [ $? == 0 ] #yes
-        then
-          path_selected=true
-          echo "$target"
-          break
-        else
-          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" --text="Do you want to quit?"
-          if [ $? == 0 ] # yes, quit
-          then
-            quit_retrodeck
-          fi
-        fi
-      fi
-    else
-      rd_zenity --error --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK" \
-      --ok-label "Quit" \
-      --text="No location was selected. Please run RetroDECK again to retry."
-      quit_retrodeck
-    fi
-  done
-}
-
 finit() {
   # First-time initialization and setup of RetroDECK.
   # Guides the user through storage location selection and optional component setup.
@@ -655,9 +619,8 @@ finit() {
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK" \
           --ok-label "Browse" \
-          --text="No external drives were detected.\nPlease manually select the location of your SD card."
-        path_choice="$(finit_browse)"
-        if [[ -z "$path_choice" ]]; then
+          --text="No external drives were detected.\n\nPlease select the device where you would like to create the <span foreground='$purple'><b>retrodeck</b></span> data folder."
+        if path_choice="$(directory_browse "SD card location")"; then
           log i "User closed the window or chose to quit"
           rm -f "$rd_conf"
           exit 2
@@ -686,8 +649,7 @@ finit() {
         --title "RetroDECK" \
         --ok-label "Browse" \
         --text="Choose a location for the <span foreground='$purple'><b>retrodeck</b></span> data folder."
-      path_choice="$(finit_browse)"
-      if [[ -n "$path_choice" ]]; then
+      if path_choice="$(directory_browse "custom storage location")"; then
         set_setting_value "$rd_conf" "rd_home_path" "$path_choice/retrodeck" "retrodeck" "paths"
       else
         log i "User closed the window or chose to quit"
