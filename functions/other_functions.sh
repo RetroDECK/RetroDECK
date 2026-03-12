@@ -135,13 +135,16 @@ download_file() {
   # source_url is the location the file is downloaded from
   # file_dest is the destination the file should be in the filesystem, needs filename included!
   # file_name is a user-readable file name or description to be put in the Zenity dialog
+  local source="$1"
+  local dest="$2"
+  local name="$3"
 
   (
-    wget "$1" -O "$2" -q
+    curl --silent --location --output "$dest" "$source"
   ) |
   rd_zenity --progress \
     --title="Downloading File" \
-    --text="Downloading <span foreground='$purple'><b>$3</b></span>..." \
+    --text="Downloading <span foreground='$purple'><b>$name</b></span>..." \
     --pulsate \
     --auto-close
 }
