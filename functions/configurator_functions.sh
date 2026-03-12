@@ -212,11 +212,11 @@ configurator_reset_dialog() {
       # Framework first
       echo "0" >&3
       echo "# Resetting framework..." >&3
-      prepare_component "reset" "framework"
+      prepare_component "reset" "retrodeck"
 
       local remaining=()
       for component in "${all_components[@]}"; do
-        [[ "$component" == "framework" ]] && continue
+        [[ "$component" == "retrodeck" ]] && continue
         remaining+=("$component")
       done
 
