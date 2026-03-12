@@ -1014,25 +1014,6 @@ convert_to_markdown() {
       -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
 }
 
-open_component(){
-  local command="$1"
-  shift
-
-  if [[ "$command" == "--list" ]]; then
-    echo "Installed components:"
-    echo "$(api_get_component "all" | jq -r '.[] | select(.component_name != "retrodeck") | .component_name')"
-  else
-    if [[ -f "$rd_components/$command/component_launcher.sh" ]]; then
-      # Pass any additional arguments given to open_component on to the
-      # component's launcher script so callers can forward flags/parameters.
-      log d "Launching component '$command' with args: $@"
-      /bin/bash "$rd_components/$command/component_launcher.sh" "$@"
-    else
-      log e "No launcher could be found for the component: $command"
-    fi
-  fi
-}
-
 repair_paths() {
   # This function will verify that all folders defined in the [paths] section of retrodeck.cfg exist
   # If a folder doesn't exist and is defined outside of rd_home_path, it will check in rd_home_path first and have the user browse for them manually if it isn't there either
