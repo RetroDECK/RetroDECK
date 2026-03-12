@@ -111,11 +111,11 @@ configurator_open_component_dialog() {
 
     if [[ -n "$component" ]]; then
       /bin/bash "$component/component_launcher.sh"
-      configurator_nav="configurator_open_component_dialog"
+      configurator_nav="refresh"
     fi
   elif [[ $choice =~ "Never show again" ]]; then
     set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
-    configurator_nav="configurator_open_component_dialog"
+    configurator_nav="refresh"
   fi
 }
 
@@ -182,7 +182,7 @@ configurator_reset_dialog() {
       prepare_component "factory-reset"
       configurator_process_complete_dialog "performing a factory reset"
     fi
-    configurator_nav="configurator_reset_dialog"
+    configurator_nav="refresh"
   elif [[ "$choice" =~ "Reset All" ]]; then
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -237,7 +237,7 @@ configurator_reset_dialog() {
       rm -f "$progress_pipe"
 
       configurator_process_complete_dialog "resetting all components"
-      configurator_nav="configurator_reset_dialog"
+      configurator_nav="refresh"
     fi
   elif [[ -n "$choice" ]]; then
     local -a choices=()
@@ -287,7 +287,7 @@ configurator_reset_dialog() {
       rm -f "$progress_pipe"
 
       configurator_process_complete_dialog "resetting selected components"
-      configurator_nav="configurator_reset_dialog"
+      configurator_nav="refresh"
     fi
   fi
 }
