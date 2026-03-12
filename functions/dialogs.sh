@@ -198,10 +198,6 @@ configurator_update_notify_dialog() {
   fi
 }
 
-configurator_repair_paths_dialog() {
-  repair_paths
-}
-
 configurator_version_history_dialog() {
   local version_array=($(xml sel -t -v '//component/releases/release/@version' -n "$rd_metainfo"))
   local all_versions_list=()
