@@ -249,10 +249,17 @@ prepare_component() {
     fi
   fi
 
-  # Reset presets to their disabled state for affected components
+  # Reset presets and component-specific options to their disabled state for affected components
   if [[ "$action" == "reset" ]]; then
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
+
+    # Reset component options to manifest defaults
+    if [[ "$component" == "all" ]]; then
+      reset_component_options "all"
+    else
+      reset_component_options "$component"
+    fi
 
     # Deploy helper files for the reset components
     deploy_helper_files "$component"
@@ -1146,6 +1153,118 @@ update_component_options() {
   ' <<< "$manifest_cache")
 
   log d "Component options updated from manifests"
+}
+
+reset_component_options() {
+  # Reset a component's options in the config file to their manifest defaults.
+  # If "all" is specified, resets options for all components that have them.
+  # USAGE: reset_component_options "$component_name_or_all"
+
+  local component="${1:-all}"
+
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  if [[ "$component" == "all" ]]; then
+    while IFS= read -r comp_name; do
+      [[ -z "$comp_name" ]] && continue
+      reset_component_options "$comp_name"
+    done < <(jq -r '
+      .[] | .manifest | to_entries[] |
+      select(.value.component_options != null) |
+      .key
+    ' <<< "$manifest_cache")
+    return
+  fi
+
+  local default_options
+  default_options=$(jq -c --arg comp "$component" '
+    .[] | .manifest | select(has($comp)) | .[$comp].component_options // null
+  ' <<< "$manifest_cache" | head -1)
+
+  if [[ -z "$default_options" || "$default_options" == "null" ]]; then
+    log d "No component_options defined in manifest for $component, nothing to reset"
+    return
+  fi
+
+  # Ensure the component_options section exists
+  if ! jq -e '.component_options' "$rd_conf" > /dev/null 2>&1; then
+    jq '. + {component_options: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+  fi
+
+  # Overwrite all options with manifest defaults
+  jq --arg comp "$component" --argjson defaults "$default_options" '
+    .component_options[$comp] = $defaults
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log d "Component options reset to defaults for $component"
+}
+
+update_component_presets() {
+  # Update the presets section of retrodeck.cfg with entries from all component manifests.
+  # New preset sections, component entries, and nested core entries are added with their default (disabled) values.
+  # Existing entries are not modified.
+  # USAGE: update_component_presets
+
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  local tmp
+  tmp=$(mktemp)
+
+  jq --argjson manifests "$manifest_cache" '
+    . as $conf |
+
+    # Collect all preset entries from all component manifests
+    reduce ($manifests[] | .manifest | to_entries[] |
+      .key as $comp_name | .value |
+      select(.compatible_presets != null) |
+      .compatible_presets | to_entries[] |
+
+      if .value | type == "array" then
+        # Non-nested: direct component preset
+        {
+          preset: .key,
+          path: [$comp_name],
+          default_value: .value[0]
+        }
+      else
+        # Nested: core presets (e.g. retroarch cores)
+        .key as $core_name | .value | to_entries[] |
+        select(.value | type == "array") |
+        {
+          preset: .key,
+          path: [($comp_name + "_cores"), $core_name],
+          default_value: .value[0]
+        }
+      end
+    ) as $entry (
+      $conf;
+
+      # Ensure the preset section exists
+      (if .presets[$entry.preset] == null then
+        .presets[$entry.preset] = {}
+      else . end) |
+
+      # Apply the entry based on path depth
+      if ($entry.path | length) == 1 then
+        # Non-nested component
+        if .presets[$entry.preset][$entry.path[0]] == null then
+          .presets[$entry.preset][$entry.path[0]] = $entry.default_value
+        else . end
+      else
+        # Nested core
+        if .presets[$entry.preset][$entry.path[0]] == null then
+          .presets[$entry.preset][$entry.path[0]] = {}
+        else . end |
+        if .presets[$entry.preset][$entry.path[0]][$entry.path[1]] == null then
+          .presets[$entry.preset][$entry.path[0]][$entry.path[1]] = $entry.default_value
+        else . end
+      end
+    )
+  ' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
+
+  log d "Component presets updated in retrodeck.cfg"
 }
 
 remove_component_options() {
