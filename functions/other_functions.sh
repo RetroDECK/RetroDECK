@@ -1055,8 +1055,6 @@ repair_paths() {
 
   if [[ $invalid_path_found == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
-    conf_read
-    dir_prep "$logs_path" "$rd_xdg_config_logs_path"
     prepare_component "postmove" "all"
     configurator_generic_dialog "RetroDECK Configurator - Path Repair" "<span foreground='$purple'><b>One or more incorrectly configured paths were repaired.</b></span>"
   else
