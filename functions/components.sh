@@ -1333,3 +1333,129 @@ check_for_component_updates() {
 
   [[ -n "$mismatched" ]]
 }
+
+get_all_compression_targets() {
+  # Gather all compression target information from component manifests.
+  # Returns a JSON object keyed by format with targets and optional extensions.
+  # USAGE: get_all_compression_targets
+
+  get_component_manifest_cache | jq '
+    reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
+      {};
+      .[$entry.key] = {
+        targets: ((.[$entry.key].targets // []) + ($entry.value.targets // []) | unique)
+      }
+      | if $entry.value.extensions then
+          .[$entry.key].extensions = ((.[$entry.key].extensions // []) + $entry.value.extensions | unique)
+        else . end
+    )
+  '
+}
+
+build_compression_lookups() {
+  # Build associative array lookups from compression target data for fast per-file matching.
+  # Should be called once during application startup, after component functions are sourced.
+  # USAGE: build_compression_lookups
+
+  local compression_targets
+  compression_targets=$(get_all_compression_targets)
+
+  declare -gA compression_system_format=()
+  declare -gA compression_ext_restrictions=()
+  declare -gA compression_allowed_extensions=()
+
+  # Build system -> format lookup
+  while IFS=$'\t' read -r format system; do
+    compression_system_format["$system"]="$format"
+  done < <(jq -r '
+    to_entries[] | .key as $format |
+    .value.targets[] |
+    [$format, .] | @tsv
+  ' <<< "$compression_targets")
+
+  # Build extension restriction flags and allowed extensions per format
+  while IFS=$'\t' read -r format extension; do
+    compression_ext_restrictions["$format"]=1
+    compression_allowed_extensions["${format}:${extension}"]=1
+  done < <(jq -r '
+    to_entries[]
+    | select(.value.extensions)
+    | .key as $format
+    | .value.extensions[]
+    | [$format, .] | @tsv
+  ' <<< "$compression_targets")
+}
+
+find_compatible_compression_format() {
+  # Determine what compression format, if any, a file and its system are compatible with.
+  # Requires build_compression_lookups to have been called.
+  # Returns the format name or "none".
+  # USAGE: find_compatible_compression_format "$file"
+
+  local file="$1"
+  local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
+  local file_extension=".${normalized_filename##*.}"
+  local system=$(echo "$file" | grep -oE "$roms_path/[^/]+" | grep -oE "[^/]+$")
+
+  # Look up format for this system
+  local format="${compression_system_format[$system]:-}"
+  if [[ -z "$format" ]]; then
+    echo "none"
+    return
+  fi
+
+  # Check extension restrictions if the format has them
+  if [[ -n "${compression_ext_restrictions[$format]+x}" ]]; then
+    if [[ -z "${compression_allowed_extensions[${format}:${file_extension}]+x}" ]]; then
+      echo "none"
+      return
+    fi
+  fi
+
+  # Run format-specific validation
+  local validator="_validate_for_compression::${format}"
+  if declare -F "$validator" > /dev/null; then
+    if "$validator" "$file"; then
+      echo "$format"
+    else
+      echo "none"
+    fi
+  else
+    log e "No validation handler found for format: $format"
+    echo "none"
+  fi
+}
+
+compress_game() {
+  # Compress a file to its compatible format and optionally clean up source files.
+  # Dispatches to the appropriate component handler based on format.
+  # USAGE: compress_game "$format" "$full_path_to_input_file" "$cleanup_choice"
+
+  local format="$1"
+  local file="$2"
+  local post_compression_cleanup="$3"
+  local filename_no_extension="${file%.*}"
+  local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+  local dest_file=$(dirname "$(realpath "$file")")"/${filename_no_extension##*/}"
+
+  local handler="_compress_game::${format}"
+  if ! declare -F "$handler" > /dev/null; then
+    log e "No compression handler found for format: $format"
+    return 1
+  fi
+
+  "$handler" "$source_file" "$dest_file"
+
+  if [[ "$post_compression_cleanup" == "true" && -f "${file%.*}.$format" ]]; then
+    log i "Performing post-compression file cleanup"
+    local cleanup_handler="_post_compression_cleanup::${format}"
+    if ! declare -F "$cleanup_handler" > /dev/null; then
+      log e "No compression cleanup handler found for format: $format"
+      return 1
+    fi
+
+    "$cleanup_handler" "$source_file"
+  elif [[ "$post_compression_cleanup" == "true" ]]; then
+    log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
+  fi
+}
