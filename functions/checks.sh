@@ -56,25 +56,17 @@ check_is_steam_deck() {
 }
 
 check_for_version_update() {
-  # REBUILD
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
-  log d "Entering funtcion check_for_version_update"
-
-  wget -q --spider "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest"
-
-  if [ $? -eq 0 ]; then
-  
-    # Check if $selected_branch is not set
+  if curl --silent --head --max-time 5 --output /dev/null "$rd_gh_api_url" 2>/dev/null; then
     if [[ -z "$selected_branch" ]]; then
-        # If $selected_branch is not set, get the latest release tag from GitHub API
-        local online_version=$(curl --silent "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+      local online_version=$(curl --silent "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest" | jq -r '.tag_name')
     else
-        local online_version=$(curl -s "https://api.github.com/repos/$git_organization_name/$update_repo/releases" | jq -r --arg bn "$branch_name" 'sort_by(.published_at) | .[] | select(.tag_name | contains($bn)) | .tag_name' | tail -n 1)
+      local online_version=$(curl -s "https://api.github.com/repos/$git_organization_name/$update_repo/releases" | jq -r --arg bn "$branch_name" 'sort_by(.published_at) | .[] | select(.tag_name | contains($bn)) | .tag_name' | tail -n 1)
     fi
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
-      if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< "$version") -le $(sed -e 's/[\.a-z]//g' <<< "$online_version") ]]; then
+      if [[ "$update_repo" == "RetroDECK" ]] && check_version_is_older_than "$version" "$online_version"; then
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  --extra-button="Ignore Version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
@@ -82,16 +74,16 @@ check_for_version_update() {
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
           log i "\"Ignore this version\" selected, updating \"$rd_conf\""
-          set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
+          set_setting_value "$rd_conf" "update_ignore" "$online_version" "retrodeck" "options" # Store version to ignore for future checks
         fi
-      elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
-        log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
+      elif [[ ! "$version" == "$online_version" ]]; then
+        log i "Showing update request dialog as \"$online_version\" was found and is different than \"$version\""
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore Version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK -New Cooker Version Available" \
           --text="RetroDECK Cooker version:\n\n<span foreground='$blue'><b>$online_version</b></span>\nis now available.\n\nYou are on version:\n\n<span foreground='$blue'><b>$hard_version</b></span>.\n\nTo stop seeing this notification, click <span foreground='$purple'><b>Ignore this version</b></span>.\n\n<b>Would you like to update now?</b>")
         rc=$? # Capture return code, as "Yes" button has no text value
-        if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ "$rc" -eq 1 ]]; then # If any button other than "Yes" was clicked
           if [[ $choice =~ "Ignore Version" ]]; then
             log i "\"Ignore this version\" selected, updating \"$rd_conf\""
             set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
