@@ -70,7 +70,7 @@ configurator_destination_choice_dialog() {
   fi
 
   local rc=$?
-  if [[ $rc == "0" ]] && [[ -n "$choice" ]]; then
+  if [[ -n "$choice" ]]; then
     echo "$choice"
   fi
 }
