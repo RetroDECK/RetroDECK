@@ -22,6 +22,7 @@ export main_repository_name="RetroDECK"                                         
 export cooker_repository_name="Cooker"                                                                          # The name of the cooker repository under RetroDECK organization
 export rd_repo_url="https://github.com/$git_organization_name/$main_repository_name"                            # The URL of the main RetroDECK GitHub repo
 export rd_wiki_url="https://retrodeck.readthedocs.io"
+export rd_gh_api_url="https://api.github.com/repos/$git_organization_name/$main_repository_name/releases/latest"
 
 # RetroDECK API-related variables
 
