@@ -1050,9 +1050,12 @@ repair_paths() {
           if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
             log i "$path_name cannot be found at any expected location, having user locate it manually"
             configurator_generic_dialog "RetroDECK Configurator - Path Repair" "The RetroDECK <span foreground='$purple'><b>$path_name</b></span> was not found in the expected location.\nThis may occur if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>$path_name</b></span>."
-            new_path=$(directory_browse "RetroDECK $path_name location")
-            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
-            invalid_path_found="true"
+            if new_path=$(directory_browse "RetroDECK $path_name location"); then
+              set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
+              invalid_path_found="true"
+            else
+              configurator_generic_dialog "RetroDECK Configurator - Path Repair" "No path for $path_name chosen, cannot repair."
+            fi
           else # Folder does exist within defined sdcard path, update accordingly
             log i "$path_name found in $sdcard/retrodeck, correcting path config"
             new_path="$sdcard/retrodeck/${path_value#*retrodeck/}"
