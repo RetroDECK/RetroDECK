@@ -943,7 +943,7 @@ jobs:
           EOF
           fi
 
-          if [[ "$FORCE_COUNTERTOP" == "true" ]]; then
+          if [[ ! "$BRANCH" == "cooker" && "$FORCE_COUNTERTOP" == "true" ]]; then
             cat >> release_notes.md <<EOF
           ### Variants
 
