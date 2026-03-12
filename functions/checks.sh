@@ -314,3 +314,14 @@ check_for_updates() {
     log i "Component upgrade process completed."
   fi
 }
+
+check_flatpak_spawn() {
+  # This function will check if the org.freedektop.Flatpak talk permission exists, which is needed for "flatpak-spawn --host" actions
+  # USAGE: if check_flatpak_spawn; then
+
+  if flatpak-spawn --host flatpak --version > /dev/null; then
+    return 0
+  fi
+
+  return 1
+}
