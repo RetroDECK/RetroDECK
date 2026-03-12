@@ -1063,12 +1063,6 @@ repair_paths() {
   fi
 }
 
-sanitize() {
-    # Function to sanitize strings for filenames
-    # Replace sequences of underscores with a single space
-    echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
-}
-
 update_rd_conf() {
   # Update the retrodeck.cfg file with any new settings from the shipped defaults file.
   # New sections and settings are added with their default values. Existing settings are not modified.
