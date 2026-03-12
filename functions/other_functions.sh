@@ -176,6 +176,7 @@ conf_read() {
 }
 
 conf_write() {
+  # DEPRECATED: Remove when all users are running 0.11.0+
   # Write current in-memory values for version, paths, and options back to the RetroDECK JSON config file.
   # USAGE: conf_write
 
