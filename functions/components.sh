@@ -181,7 +181,8 @@ source_component_functions() {
 prepare_component() {
   # Perform one of several actions on one or more components.
   # Actions include "reset" (initialize component), "postmove" (update paths after folder move), and "startup" (run startup actions).
-  # A component can be called by name or "all" to perform the action on all components. Framework always runs first.
+  # A component can be called by name or "all" to perform the action on all components starting with the core framework.
+  # The option "all-installed" can also be used, where all components *except* the core framework will be acted upon.
   # USAGE: prepare_component "$action" "$component"
 
   local action="$1"
@@ -202,10 +203,20 @@ prepare_component() {
 
   log d "Preparing component: \"$component\", action: \"$action\""
 
-  if [[ "$component" == "all" ]]; then
+  if [[ "$component" == "all" || "$component" == "all-installed" ]]; then
     local manifest_cache
     manifest_cache=$(get_component_manifest_cache)
 
+    if [[ "$component" == "all" ]]; then
+      # Framework always runs first
+      local framework_handler="_prepare_component::framework"
+      if declare -F "$framework_handler" > /dev/null; then
+        log d "Running prepare handler for framework"
+        "$framework_handler" "$action"
+      fi
+    fi
+
+    # Build a priority-sorted list of remaining handlers
     while IFS=$'\t' read -r priority component_name; do
       [[ "$component_name" == "retrodeck" ]] && continue
       local handler="_prepare_component::${component_name}"

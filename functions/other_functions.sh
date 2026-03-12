@@ -702,7 +702,7 @@ finit() {
   exec 3>"$progress_pipe"
 
   echo "# Resetting components..." >&3
-  prepare_component "reset" "all"
+  prepare_component "reset" "all-installed"
 
   echo "# Applying presets..." >&3
   update_component_presets
