@@ -116,6 +116,7 @@ fi
 # Legacy config conversion
 if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" && ! -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.json" ]]; then
   log i "Old-style RetroDECK config file found, converting"
+  source "/app/tools/convert_cfg_to_json.sh"
   if convert_cfg_to_json "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.json"; then
     log i "Conversion successful, backing up legacy file"
     mv "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" "$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"
