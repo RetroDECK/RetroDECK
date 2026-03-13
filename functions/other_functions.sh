@@ -273,7 +273,7 @@ backup_retrodeck_userdata() {
   # This function can compress one or more RetroDECK userdata folders into a single zip file for backup.
   # The function can do a "complete" backup of all userdata including ROMs and ES-DE media, so can end up being very large.
   # The function can also do a "core" backup of all the very important userdata files (like saves, states and gamelists) or a "custom" backup of only specified paths
-  # The function can take both folder names as defined in retrodeck.cfg or full paths as arguments for folders to backup
+  # The function can take both folder names as defined in retrodeck.json or full paths as arguments for folders to backup
   # It will also validate that all the provided paths exist and that there is enough free space to perform the backup before actually proceeding.
   # It will also rotate backups so that there are only 3 maximum of each type (complete, core or custom)
   # USAGE: backup_retrodeck_userdata complete
@@ -331,7 +331,7 @@ backup_retrodeck_userdata() {
       fi
     done
 
-    # Add static paths not defined in retrodeck.cfg
+    # Add static paths not defined in retrodeck.json
     if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
       paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
@@ -384,7 +384,7 @@ backup_retrodeck_userdata() {
       fi
     done
 
-    # Add static paths not defined in retrodeck.cfg
+    # Add static paths not defined in retrodeck.json
     if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
       paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
@@ -782,7 +782,7 @@ convert_to_markdown() {
 }
 
 repair_paths() {
-  # This function will verify that all folders defined in the [paths] section of retrodeck.cfg exist
+  # This function will verify that all folders defined in the [paths] section of retrodeck.json exist
   # If a folder doesn't exist and is defined outside of rd_home_path, it will check in rd_home_path first and have the user browse for them manually if it isn't there either
   # USAGE: repair_paths
 
@@ -831,7 +831,7 @@ repair_paths() {
 }
 
 update_rd_conf() {
-  # Update the retrodeck.cfg file with any new settings from the shipped defaults file.
+  # Update the retrodeck.json file with any new settings from the shipped defaults file.
   # New sections and settings are added with their default values. Existing settings are not modified.
   # New settings in the "paths" section have their base path rewritten to match the user's actual rd_home_path.
   # USAGE: update_rd_conf
@@ -880,7 +880,7 @@ update_rd_conf() {
     )
   ' "$rd_conf" "$rd_defaults" > "$tmp" && mv "$tmp" "$rd_conf"
 
-  log d "retrodeck.cfg updated with any new default settings"
+  log d "retrodeck.json updated with any new default settings"
 }
 
 merge_directories() {

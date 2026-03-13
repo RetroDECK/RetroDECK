@@ -1473,11 +1473,11 @@ compress_game() {
 
 build_retrodeck_current_presets() {
   # REBUILD
-  # This function will read the presets sections of the retrodeck.cfg file and build the default state if it is anything other than disabled
+  # This function will read the presets sections of the retrodeck.json file and build the default state if it is anything other than disabled
   # This can also be used to build the "current" state post-update after adding new systems
   # USAGE: build_retrodeck_current_presets
 
-  while IFS= read -r preset # Iterate all presets listed in retrodeck.cfg
+  while IFS= read -r preset # Iterate all presets listed in retrodeck.json
   do
     while IFS= read -r component # Iterate all system names in this preset
     do

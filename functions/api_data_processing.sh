@@ -866,7 +866,7 @@ api_do_cheevos_login() {
 }
 
 api_do_move_retrodeck_directory() {
-  local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
+  local rd_dir_name="$1" # The folder variable name from retrodeck.json
   local dest="$2"
   local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")" # The path of that folder variable
   local dirname_to_move="$(basename "$dir_to_move")"
@@ -878,7 +878,7 @@ api_do_move_retrodeck_directory() {
     return 1
   fi
 
-  if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.cfg
+  if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.json
     if [[ "$dest" == "internal" ]]; then
       if [[ "$rd_dir_name" == "rd_home_path" ]]; then
         dest_root="$HOME"
