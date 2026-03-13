@@ -674,15 +674,6 @@ finit() {
   local manifest_cache
   manifest_cache=$(get_component_manifest_cache)
 
-  while IFS= read -r finit_entry; do
-    [[ -z "$finit_entry" ]] && continue
-    local option_dialog option_action
-    IFS=$'\t' read -r option_dialog option_action < <(jq -r '[.dialog, .action] | @tsv' <<< "$finit_entry")
-    if launch_command "$option_dialog"; then
-      finit_choices+=("$option_action")
-    fi
-  done < <(jq -c '[.[] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]' <<< "$manifest_cache")
-
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
     --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n<span foreground='$purple'><b>This may take up to a minute or two</b></span>\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
@@ -702,6 +693,9 @@ finit() {
   # Open the pipe for writing
   exec 3>"$progress_pipe"
 
+  echo "# Initializing component settings in main config..." >&3
+  reset_component_options "all"
+
   echo "# Resetting components..." >&3
   prepare_component "reset" "all-installed"
 
@@ -710,6 +704,15 @@ finit() {
 
   echo "# Deploying helper files..." >&3
   deploy_helper_files
+
+  while IFS= read -r finit_entry; do
+    [[ -z "$finit_entry" ]] && continue
+    local option_dialog option_action
+    IFS=$'\t' read -r option_dialog option_action < <(jq -r '[.dialog, .action] | @tsv' <<< "$finit_entry")
+    if launch_command "$option_dialog"; then
+      finit_choices+=("$option_action")
+    fi
+  done < <(jq -c '[.[] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]' <<< "$manifest_cache")
 
   if [[ ${#finit_choices[@]} -gt 0 ]]; then
     local total_choices=${#finit_choices[@]}
