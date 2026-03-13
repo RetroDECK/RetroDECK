@@ -1073,12 +1073,14 @@ run_component_updates() {
     installed_version=$(get_installed_component_version "$component_name")
 
     if [[ "$manifest_version" != "$installed_version" ]]; then
+      init_component_options "$component_name"
       local handler="_post_update::${component_name}"
       if declare -F "$handler" > /dev/null; then
         log d "Running post-update handler for $component_name (installed: $installed_version, manifest: $manifest_version)"
         component_updated=true
         "$handler" "$installed_version"
       fi
+      deploy_helper_files "$component_name"
       set_installed_component_version "$component_name" "$manifest_version"
     else
       log d "Component $component_name is up to date at version $manifest_version"
@@ -1089,9 +1091,7 @@ run_component_updates() {
   ' <<< "$manifest_cache")
 
   if [[ "$component_updated" == true ]]; then
-    update_component_options
     update_component_presets
-    deploy_helper_files
     build_retrodeck_current_presets
   fi
 }
