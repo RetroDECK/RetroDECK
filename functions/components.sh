@@ -211,7 +211,7 @@ prepare_component() {
       # Framework always runs first
       local framework_handler="_prepare_component::framework"
       if declare -F "$framework_handler" > /dev/null; then
-        log d "Running prepare handler for framework"
+        log d "Running $action prepare handler for framework"
         "$framework_handler" "$action"
       fi
     fi
@@ -221,7 +221,7 @@ prepare_component() {
       [[ "$component_name" == "retrodeck" ]] && continue
       local handler="_prepare_component::${component_name}"
       if declare -F "$handler" > /dev/null; then
-        log d "Running prepare handler for $component_name (priority: $priority)"
+        log d "Running $action prepare handler for $component_name (priority: $priority)"
         "$handler" "$action"
         if [[ "$action" == "reset" ]]; then
           set_installed_component_version "$component_name" "$(get_component_version "$component_name")"
@@ -249,7 +249,7 @@ prepare_component() {
   else
     local handler="_prepare_component::${component}"
     if declare -F "$handler" > /dev/null; then
-      log d "Running prepare handler for $component"
+      log d "Running $action prepare handler for $component"
       "$handler" "$action"
       if [[ "$action" == "reset" ]]; then
         set_installed_component_version "$component" "$(get_component_version "$component")"
