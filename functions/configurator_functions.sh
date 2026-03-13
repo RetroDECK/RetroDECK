@@ -342,7 +342,7 @@ configurator_move_folder_dialog() {
     "Internal Storage" | "Home Directory" | "SD Card" | "Custom Location" )
       if [[ "$choice" == "Internal Storage" || "$choice" == "Home Directory" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
         dest="internal"
-      elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
+      elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.json
         if [[ -n "$sdcard" ]]; then
           dest="sd"
         else
@@ -842,7 +842,7 @@ configurator_retrodeck_backup_dialog() {
         compressible_paths+=( "false" "$path_var" "$path_value")
       done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "logs_path" and .key != "sdcard")' "$rd_conf")
 
-      # Add static paths not defined in retrodeck.cfg
+      # Add static paths not defined in retrodeck.json
       if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
         compressible_paths+=( "false" "ES-DE collections" "$rd_home_path/ES-DE/collections")
       else
