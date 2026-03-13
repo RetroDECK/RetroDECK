@@ -137,6 +137,22 @@ rotate_logs() {
   fi
 }
 
+log_command() {
+  # Execute a command and capture its stdout and stderr into the log at the specified level.
+  # The command's exit code is preserved.
+  # USAGE: log_command "$log_level" "$command" "$args..."
+
+  local level="$1"
+  shift
+
+  local line
+  "$@" 2>&1 | while IFS= read -r line; do
+    log "$level" "$line"
+  done
+
+  return "${PIPESTATUS[0]}"
+}
+
 log_close_fd() {
   # Close the persistent log file descriptor if open.
   # USAGE: log_close_fd
