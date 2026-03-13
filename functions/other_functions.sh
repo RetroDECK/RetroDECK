@@ -663,17 +663,6 @@ finit() {
 
   log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
-  # Set up framework paths and write initial config
-  prepare_component "reset" "retrodeck"
-
-  # Source component functions now that config paths are loaded
-  source_component_functions
-
-  # Gather finit options from component manifests
-  local -a finit_choices=()
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK Initial Install - Start" \
     --text="RetroDECK is now going to install the required files.\nWhen the installation finishes, RetroDECK will launch automatically.\n\n<span foreground='$purple'><b>This may take up to a minute or two</b></span>\n\nPress <span foreground='$purple'><b>OK</b></span> to continue."
@@ -693,10 +682,17 @@ finit() {
   # Open the pipe for writing
   exec 3>"$progress_pipe"
 
+  # Set up framework paths and write initial config
+  prepare_component "reset" "retrodeck"
+  echo "# Setting up RetroDECK core..." >&3
+
+  # Source component functions now that config paths are loaded
+  source_component_functions
+
   echo "# Initializing component settings in main config..." >&3
   reset_component_options "all"
 
-  echo "# Resetting components..." >&3
+  echo "# Setting up components for the first time..." >&3
   prepare_component "reset" "all-installed"
 
   echo "# Applying presets..." >&3
@@ -705,6 +701,12 @@ finit() {
   echo "# Deploying helper files..." >&3
   deploy_helper_files
 
+  # Gather finit options from component manifests
+  local -a finit_choices=()
+  local manifest_cache
+  manifest_cache=$(get_component_manifest_cache)
+
+  # Get user decisions on finit optional actions
   while IFS= read -r finit_entry; do
     [[ -z "$finit_entry" ]] && continue
     local option_dialog option_action
@@ -714,6 +716,7 @@ finit() {
     fi
   done < <(jq -c '[.[] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]' <<< "$manifest_cache")
 
+  # Perform any optional finit actions the user agreed to
   if [[ ${#finit_choices[@]} -gt 0 ]]; then
     local total_choices=${#finit_choices[@]}
     local choice_idx=0
@@ -725,6 +728,7 @@ finit() {
       log d "Processing finit user choice $choice"
       launch_command "$choice"
     done
+    echo "100" >&3
   else
     echo "100" >&3
   fi
