@@ -394,8 +394,8 @@ set_installed_component_version() {
       jq '. + {component_versions: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
     fi
 
-    jq --arg comp "$component" --arg ver "$version" \
-      '.component_versions[$comp] = $ver' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+    jq --arg component "$component" --arg version "$version" \
+      '.component_versions[$component] = $ver' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
   fi
 }
 
