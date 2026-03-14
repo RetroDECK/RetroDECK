@@ -728,7 +728,6 @@ finit() {
       log d "Processing finit user choice $choice"
       launch_command "$choice"
     done
-    echo "100" >&3
   else
     echo "100" >&3
   fi
