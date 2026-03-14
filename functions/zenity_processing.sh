@@ -350,3 +350,20 @@ build_zenity_bios_checker_menu_array() {
     .known_md5_hashes // "Unknown"
   ')
 }
+
+build_zenity_compression_menu_array() {
+  # Build a Bash array of compression format entries for use in a Zenity dialog.
+  # Each entry consists of two consecutive elements: display_name, description.
+  # Formats are collected from all component manifests and deduplicated.
+  # USAGE: build_zenity_compression_menu_array "$dest_array_name"
+
+  local -n dest_array="$1"
+
+  mapfile -t dest_array < <(jq -r '
+    [ .[] | .manifest | to_entries[] | .value.compression // empty | keys[] ] |
+    unique | sort[] |
+    (. | ascii_upcase) as $upper |
+    "Compress Multiple Games: \($upper)",
+    "Compress one or more games into the \($upper) format."
+  ' "$component_manifest_cache_file")
+}
