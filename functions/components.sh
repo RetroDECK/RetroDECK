@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Component-parsing-related variables
-component_manifest_cache=""
+# Set up component cache temp file and cleanup
+export component_manifest_cache_file=$(mktemp)
+
+cleanup_component_manifest_cache() {
+  rm -f "$component_manifest_cache_file"
+}
+register_cleanup cleanup_component_manifest_cache
 
 find_component_files() {
   # Find files of a given name across all component directories, with external components taking precedence over internal ones when both exist.
@@ -59,28 +64,13 @@ build_component_manifest_cache() {
   done < <(find_component_files "component_manifest.json")
 
   if [[ ${#manifest_files[@]} -eq 0 ]]; then
-    component_manifest_cache='[]'
+    printf '[]' > "$component_manifest_cache_file"
     return
   fi
-
-  component_manifest_cache=$(
-    for manifest_file in "${manifest_files[@]}"; do
-      jq -c --arg path "$(dirname "$manifest_file")" \
-        '{component_path: $path, manifest: .}' "$manifest_file"
-    done | jq -s '.'
-  )
-}
-
-get_component_manifest_cache() {
-  # Return the cached component manifest data. Requires build_component_manifest_cache to have been called.
-  # USAGE: get_component_manifest_cache
-
-  if [[ -z "$component_manifest_cache" ]]; then
-    log e "Component manifest cache is empty. Was build_component_manifest_cache called?"
-    return 1
-  fi
-
-  echo "$component_manifest_cache"
+  for manifest_file in "${manifest_files[@]}"; do
+    jq -c --arg path "$(dirname "$manifest_file")" \
+      '{component_path: $path, manifest: .}' "$manifest_file"
+  done | jq -s '.' > "$component_manifest_cache_file"
 }
 
 get_helper_files() {
