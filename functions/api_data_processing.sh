@@ -88,9 +88,9 @@ api_get_component() {
   # USAGE: api_get_component "<component_name | all>"
 
   local component="$1"
-
-  get_component_manifest_cache | jq --arg component "$component" '
-    [.[] |
+  jq --arg component "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    [$manifests[0][] |
      .component_path as $path |
      .manifest | to_entries[] |
      .key as $component_name | .value as $sys |
@@ -106,7 +106,7 @@ api_get_component() {
     ]
     | [.[] | select(.component_name == "retrodeck")] +
       ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))
-  '
+  ' <<< 'null'
 }
 
 api_get_all_preset_names() {
@@ -154,9 +154,10 @@ api_get_current_preset_state() {
       fi
 
       local manifest_data
-      manifest_data=$(get_component_manifest_cache | jq --arg comp "$base_component" '
-        .[] | select(.manifest | has($comp)) | .manifest
-      ')
+      manifest_data=$(jq --arg comp "$base_component" \
+        --slurpfile manifests "$component_manifest_cache_file" '
+        $manifests[0][] | select(.manifest | has($comp)) | .manifest
+      ' <<< 'null')
 
       if [[ -z "$manifest_data" || "$manifest_data" == "null" ]]; then
         log e "Manifest not found for component $base_component"
@@ -200,29 +201,29 @@ api_get_bios_file_status() {
   # USAGE: api_get_bios_file_status ["$systems_json_array"]
 
   local systems_to_check="${1:-[]}"
+  local tmp_bios
+  tmp_bios=$(mktemp)
 
   # Merge BIOS info from cache
-  merged_bios_info=$(get_component_manifest_cache | jq --argjson systems "$systems_to_check" '
+  jq --argjson systems "$systems_to_check" \
+    --slurpfile manifests "$component_manifest_cache_file" '
     {bios: (
-      [.[] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
+      [$manifests[0][] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
       if ($systems | length) == 0
       then .
       else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
       end
     )}
-  ')
-
-  # Translate stored variable names into real values
-  merged_bios_info=$(echo "$merged_bios_info" | envsubst)
+  ' <<< 'null' | envsubst > "$tmp_bios"
 
   # Find all files in BIOS directories
   mapfile -t files_to_check < <(
     {
-      echo "$merged_bios_info" | jq -r --argjson systems "$systems_to_check" '
+      jq -r --argjson systems "$systems_to_check" '
         if ($systems | length) == 0
         then [.bios[] | select(has("paths")) | .paths]
         else [.bios[] | select(has("paths") and ([.system] | flatten | any(. as $s | $systems | index($s)))) | .paths]
-        end | flatten | unique | .[]'
+        end | flatten | unique | .[]' "$tmp_bios"
       echo "$bios_path"
     } | xargs -I {} sh -c '[ -d "{}" ] && find "{}" -maxdepth 1 -type f -not -iname ".directory" -not -iname "*.txt"'
   )
@@ -241,8 +242,7 @@ api_get_bios_file_status() {
   local -a md5_paths=()
   while read -r filename; do
     [[ -n "${found_file_lookup[$filename]+x}" ]] && md5_paths+=("${found_file_lookup[$filename]}")
-  done < <(jq -r '.bios[] | select(.md5 != null) | .filename' <<< "$merged_bios_info")
-
+  done < <(jq -r '.bios[] | select(.md5 != null) | .filename' "$tmp_bios")
   if [[ ${#md5_paths[@]} -gt 0 ]]; then
     md5_json=$(md5sum "${md5_paths[@]}" | awk '{print $2, $1}' | jq -R 'split(" ") | {(.[0] | split("/") | .[-1]): .[1]}' | jq -s 'add')
   fi
@@ -278,8 +278,9 @@ api_get_bios_file_status() {
         (.systems | sub(".*/";"") | test("^[0-9]") | not),
         (.systems | sub(".*/";""))
       ])
-  ' <<< "$merged_bios_info")
-
+  ' "$tmp_bios")
+  
+  rm -f "$tmp_bios"
   echo "$final_json" > "$logs_path/retrodeck_bios_check.log"
   echo "$final_json"
 }
@@ -309,15 +310,15 @@ api_get_component_menu_entries() {
   # USAGE: api_get_component_menu_entries "<menu_name | all>"
 
   local requested_menu="$1"
-
-  get_component_manifest_cache | jq --arg menu "$requested_menu" '
-    reduce (.[] | .manifest | .. | objects | select(has("configurator_menus")) | .configurator_menus | to_entries[]) as $entry (
+  jq --arg menu "$requested_menu" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    reduce ($manifests[0][] | .manifest | .. | objects | select(has("configurator_menus")) | .configurator_menus | to_entries[]) as $entry (
       {};
       if ($menu == "all" or $entry.key == $menu) then
         .[$entry.key] = ((.[$entry.key] // []) + [$entry.value | to_entries[].value])
       else . end
     )
-  '
+  ' <<< 'null'
 }
 
 api_get_empty_rom_folders() {
@@ -461,16 +462,16 @@ api_set_preset_state() {
     component="$parent_component"
   fi
 
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
+  local tmp_manifest
+  tmp_manifest=$(mktemp)
+  jq --arg comp "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($comp)) | .[$comp]
+  ' <<< 'null' | head -1 > "$tmp_manifest"
 
-  local component_manifest
-  component_manifest=$(jq --arg comp "$component" '
-    .[] | .manifest | select(has($comp)) | .[$comp]
-  ' <<< "$manifest_cache")
-
-  if [[ -z "$component_manifest" || "$component_manifest" == "null" ]]; then
+  if [[ ! -s "$tmp_manifest" || "$(cat "$tmp_manifest")" == "null" ]]; then
     echo "manifest not found for component $component"
+    rm -f "$tmp_manifest"
     return 1
   fi
 
@@ -482,10 +483,11 @@ api_set_preset_state() {
     else
       .compatible_presets[$preset][0] // empty
     end
-  ' <<< "$component_manifest")
+  ' "$tmp_manifest")
 
   if [[ -z "$preset_disabled_state" ]]; then
     echo "disabled state for component $component preset $preset could not be determined"
+    rm -f "$tmp_manifest"
     return 1
   fi
 
@@ -497,10 +499,11 @@ api_set_preset_state() {
     else
       .compatible_presets[$preset] | index($state) != null
     end
-  ' <<< "$component_manifest")
+  ' "$tmp_manifest")
 
   if [[ "$state_is_valid" != "true" ]]; then
     echo "desired state $state for component $component preset $preset is invalid"
+    rm -f "$tmp_manifest"
     return 1
   fi
 
@@ -519,7 +522,7 @@ api_set_preset_state() {
   else
     # Enabling preset: check conflicting presets
     local conflicting_presets
-    conflicting_presets=$(jq -c '.conflicting_presets // []' <<< "$component_manifest")
+    conflicting_presets=$(jq -c '.conflicting_presets // []' "$tmp_manifest")
 
     if [[ "$conflicting_presets" != "[]" ]]; then
       while IFS= read -r pair; do
@@ -547,10 +550,11 @@ api_set_preset_state() {
             else
               .compatible_presets[$preset][0] // empty
             end
-          ' <<< "$component_manifest")
+          ' "$tmp_manifest")
 
           if [[ "$conflicting_state" != "$conflicting_disabled_state" ]]; then
             echo "conflicting preset $conflicting_preset is currently enabled, cannot enable $preset"
+            rm -f "$tmp_manifest"
             return 1
           fi
         fi
@@ -559,7 +563,7 @@ api_set_preset_state() {
 
     # Check prerequisites
     local prerequisites
-    prerequisites=$(jq -c --arg preset "$preset" '.preset_prerequisites[$preset] // null' <<< "$component_manifest")
+    prerequisites=$(jq -c --arg preset "$preset" '.preset_prerequisites[$preset] // null' "$tmp_manifest")
 
     if [[ "$prerequisites" != "null" && -n "$prerequisites" ]]; then
       while IFS= read -r var_name; do
@@ -567,6 +571,7 @@ api_set_preset_state() {
           local error_msg
           error_msg=$(jq -r '.error_message // "prerequisite check failed"' <<< "$prerequisites")
           echo "$error_msg"
+          rm -f "$tmp_manifest"
           return 1
         fi
       done < <(jq -r '.required_vars[]' <<< "$prerequisites")
@@ -586,7 +591,7 @@ api_set_preset_state() {
     else
       .preset_actions.config_file_format
     end
-  ' <<< "$component_manifest")
+  ' "$tmp_manifest")
 
   log d "Config file format: $config_format"
 
@@ -814,8 +819,9 @@ api_set_preset_state() {
     else
       .preset_actions[$preset][]
     end
-  ' <<< "$component_manifest")
+  ' "$tmp_manifest")
 
+  rm -f "$tmp_manifest"
   echo "preset $preset for component $config_component was successfully changed to $state"
 }
 

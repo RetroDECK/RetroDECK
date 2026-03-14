@@ -703,9 +703,7 @@ finit() {
 
   # Gather finit options from component manifests
   local -a finit_choices=()
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
+  
   # Get user decisions on finit optional actions
   while IFS= read -r finit_entry; do
     [[ -z "$finit_entry" ]] && continue
@@ -714,7 +712,9 @@ finit() {
     if launch_command "$option_dialog"; then
       finit_choices+=("$option_action")
     fi
-  done < <(jq -c '[.[] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]' <<< "$manifest_cache")
+  done < <(jq -c --slurpfile manifests "$component_manifest_cache_file" '
+    [$manifests[0][] | .manifest | .. | objects | select(has("finit_options")) | .finit_options[]] | .[]
+  ' <<< 'null')
 
   # Perform any optional finit actions the user agreed to
   if [[ ${#finit_choices[@]} -gt 0 ]]; then

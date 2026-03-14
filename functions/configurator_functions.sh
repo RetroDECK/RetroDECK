@@ -189,13 +189,11 @@ configurator_reset_dialog() {
       --title "RetroDECK Configurator - Reset All" \
       --text="<span foreground='$purple'><b>This action will reset all component settings to their default values.</b></span>\n\nYour personal data: including games, saves, and scraped artwork, will not be affected.\n\n<span foreground='$purple'><b>Are you sure you want to proceed?</b></span>"
     if [[ $? -eq 0 ]]; then
-      local manifest_cache
-      manifest_cache=$(get_component_manifest_cache)
-
       local -a all_components=()
-      mapfile -t all_components < <(jq -r '
-        [.[] | .manifest | keys[]] | unique | .[]
-      ' <<< "$manifest_cache")
+      mapfile -t all_components < <(jq -r \
+        --slurpfile manifests "$component_manifest_cache_file" '
+        [$manifests[0][] | .manifest | keys[]] | unique | .[]
+      ' <<< 'null')
 
       local progress_pipe
       progress_pipe=$(mktemp -u)
@@ -243,14 +241,12 @@ configurator_reset_dialog() {
     local -a choices=()
     IFS='^' read -ra choices <<< "$choice"
 
-    local manifest_cache
-    manifest_cache=$(get_component_manifest_cache)
-
     # Resolve friendly names from manifest cache
     local pretty_names
-    pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R --argjson manifests "$manifest_cache" '
+    pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R \
+      --slurpfile manifests "$component_manifest_cache_file" '
       . as $component |
-      [$manifests[] | .manifest | select(has($component)) | .[$component].name // $component] | first
+      [$manifests[0][] | .manifest | select(has($component)) | .[$component].name // $component] | first
     ')
 
     rd_zenity --question \

@@ -186,30 +186,25 @@ build_zenity_preset_menu_array() {
   # Build a Bash array of preset state entries for use in a Zenity dialog.
   # Each entry consists of five consecutive elements: status, friendly_name, emulated_system, description, system_name.
   # USAGE: build_zenity_preset_menu_array "$dest_array_name" "$preset_name"
-
+  
   local -n dest_array="$1"
   local preset_name="$2"
-
   local current_preset_states
+  
   current_preset_states=$(api_get_current_preset_state "$preset_name")
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
-  mapfile -t dest_array < <(jq -r --arg preset "$preset_name" --argjson manifests "$manifest_cache" '
+  mapfile -t dest_array < <(jq -r --arg preset "$preset_name" \
+    --slurpfile manifests "$component_manifest_cache_file" '
     .[$preset] // [] | .[] |
     .system_name as $sn |
     .parent_component as $parent |
     (if $parent != "" then $parent else $sn end) as $comp |
-
     # Find the disabled state from the manifest cache
-    ([$manifests[] | .manifest | select(has($comp)) | .[$comp]] | first) as $manifest |
+    ([$manifests[0][] | .manifest | select(has($comp)) | .[$comp]] | first) as $manifest |
     (if $parent != "" then
       $manifest.compatible_presets[$sn][$preset][0] // ""
     else
       $manifest.compatible_presets[$preset][0] // ""
     end) as $disabled_state |
-
     # Resolve display status
     (if .status == $disabled_state then "Disabled"
      elif .status == "true" then "Enabled"
@@ -217,10 +212,8 @@ build_zenity_preset_menu_array() {
        (.[0:1] | ascii_upcase) + .[1:]
      ) | join(" "))
      end) as $display_status |
-
     # Resolve emulated system friendly name
     (.emulated_system_friendly_name | if type == "array" then join(", ") else . end // "") as $emu_name |
-
     $display_status,
     (.system_friendly_name // ""),
     $emu_name,
@@ -256,22 +249,18 @@ build_zenity_preset_value_menu_array() {
     base_component="$component"
   fi
 
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   mapfile -t dest_array < <(jq -r --arg comp "$component" \
     --arg parent "$base_component" \
     --arg preset "$preset_name" \
     --arg current "$preset_current_value" \
-    --argjson manifests "$manifest_cache" '
-    ([$manifests[] | .manifest | select(has($parent)) | .[$parent]] | first) as $manifest |
+    --slurpfile manifests "$component_manifest_cache_file" '
+    ([$manifests[0][] | .manifest | select(has($parent)) | .[$parent]] | first) as $manifest |
     (if $parent != $comp then
       $manifest.compatible_presets[$comp][$preset]
     else
       $manifest.compatible_presets[$preset]
     end // []) | .[] |
     . as $val |
-
     (if $val == $current then "true" else "false" end),
     (if $val == "false" then "Disabled"
      elif $val == "true" then "Enabled"
@@ -280,7 +269,7 @@ build_zenity_preset_value_menu_array() {
      ) | join(" "))
      end),
     $val
-  ' <<< "$manifest_cache")
+  ' <<< 'null')
 }
 
 build_zenity_open_component_menu_array() {

@@ -82,20 +82,21 @@ get_helper_files() {
   local component="${1:-all}"
 
   if [[ "$component" == "all" ]]; then
-    get_component_manifest_cache | jq '
-      [.[] | .component_path as $component_path |
+    jq --slurpfile manifests "$component_manifest_cache_file" '
+      [$manifests[0][] | .component_path as $component_path |
        .manifest | .. | objects | select(has("helper_files")) |
        .helper_files | to_entries[].value |
        . + {source_path: ($component_path + "/helper_files")}]
-    '
+    ' <<< 'null'
   else
-    get_component_manifest_cache | jq --arg component "$component" '
-      [.[] | select(.manifest | has($component)) |
+    jq --arg component "$component" \
+       --slurpfile manifests "$component_manifest_cache_file" '
+      [$manifests[0][] | select(.manifest | has($component)) |
        .component_path as $component_path |
        .manifest[$component] | select(has("helper_files")) |
        .helper_files | to_entries[].value |
        . + {source_path: ($component_path + "/helper_files")}]
-    '
+    ' <<< 'null'
   fi
 }
 
@@ -194,9 +195,6 @@ prepare_component() {
   log d "Preparing component: \"$component\", action: \"$action\""
 
   if [[ "$component" == "all" || "$component" == "all-installed" ]]; then
-    local manifest_cache
-    manifest_cache=$(get_component_manifest_cache)
-
     if [[ "$component" == "all" ]]; then
       # Framework always runs first
       local framework_handler="_prepare_component::framework"
@@ -219,8 +217,9 @@ prepare_component() {
           deploy_helper_files "$component_name"
         fi
       fi
-    done < <(jq -r --arg action "$action" '
-      [.[] | .manifest | to_entries[] |
+    done < <(jq -r --arg action "$action" \
+      --slurpfile manifests "$component_manifest_cache_file" '
+      [$manifests[0][] | .manifest | to_entries[] |
        {name: .key, priority: (
          .value.prepare_priority
          | if type == "object" then
@@ -235,7 +234,7 @@ prepare_component() {
       | .[]
       | [(.priority | tostring), .name]
       | @tsv
-    ' <<< "$manifest_cache")
+    ' <<< 'null')
   else
     local handler="_prepare_component::${component}"
     if declare -F "$handler" > /dev/null; then
@@ -254,9 +253,6 @@ prepare_component() {
 
   # Reset presets to their disabled state for actioned components
   if [[ "$action" == "reset" ]]; then
-    local manifest_cache
-    manifest_cache=$(get_component_manifest_cache)
-
     while IFS= read -r preset; do
       while IFS= read -r preset_component; do
         if [[ "$component" != "all" && "$preset_component" != *"$component"* ]]; then
@@ -281,14 +277,15 @@ prepare_component() {
 
         local preset_disabled_state
         preset_disabled_state=$(jq -r --arg comp "$manifest_component" \
-          --arg core "$child_component" --arg preset "$preset" '
-          .[] | .manifest | select(has($comp)) | .[$comp] |
+          --arg core "$child_component" --arg preset "$preset" \
+          --slurpfile manifests "$component_manifest_cache_file" '
+          $manifests[0][] | .manifest | select(has($comp)) | .[$comp] |
           if $core != "" then
             .compatible_presets[$core][$preset][0] // empty
           else
             .compatible_presets[$preset][0] // empty
           end
-        ' <<< "$manifest_cache")
+        ' <<< 'null')
 
         local preset_current_state
         preset_current_state=$(get_setting_value "$rd_conf" "$preset_component" "retrodeck" "$preset")
@@ -312,10 +309,10 @@ get_component_path() {
   # USAGE: get_component_path "$component_name"
 
   local component="$1"
-
-  get_component_manifest_cache | jq -r --arg component "$component" '
-    .[] | select(.manifest | has($component)) | .component_path
-  ' | head -1
+  jq -r --arg component "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | select(.manifest | has($component)) | .component_path
+  ' <<< 'null' | head -1
 }
 
 get_own_component_path() {
@@ -333,13 +330,13 @@ get_all_preset_definitions() {
   # Framework definitions take precedence for shared preset classes.
   # Returns a JSON object keyed by preset name with name and description.
   # USAGE: get_all_preset_definitions
-
-  get_component_manifest_cache | jq '
-    reduce (.[] | .manifest | .. | objects | select(has("preset_definitions")) | .preset_definitions | to_entries[]) as $entry (
+  
+  jq --slurpfile manifests "$component_manifest_cache_file" '
+    reduce ($manifests[0][] | .manifest | .. | objects | select(has("preset_definitions")) | .preset_definitions | to_entries[]) as $entry (
       {};
       if has($entry.key) then . else . + {($entry.key): $entry.value} end
     )
-  '
+  ' <<< 'null'
 }
 
 get_component_version() {
@@ -353,10 +350,10 @@ get_component_version() {
     echo "$hard_version"
     return
   fi
-
-  get_component_manifest_cache | jq -r --arg component "$component" '
-    .[] | .manifest | select(has($component)) | .[$component].component_version // "0"
-  ' | head -1
+  jq -r --arg component "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($component)) | .[$component].component_version // "0"
+  ' <<< 'null' | head -1
 }
 
 get_installed_component_version() {
@@ -394,20 +391,17 @@ check_component_compatibility() {
   # USAGE: check_component_compatibility "$component_name"
 
   local component="$1"
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   local core_framework_version
-  core_framework_version=$(jq -r '
-    .[] | .manifest | select(has("retrodeck")) | .framework.core_framework_version // "0"
-  ' <<< "$manifest_cache" | head -1)
-
+  core_framework_version=$(jq -r \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
+  ' <<< 'null' | head -1)
+  
   local component_framework_compat
-  component_framework_compat=$(jq -r --arg component "$component" '
-    .[] | .manifest | select(has($component)) | .[$component].core_framework_compatibility // "0"
-  ' <<< "$manifest_cache" | head -1)
-
+  component_framework_compat=$(jq -r --arg component "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($component)) | .[$component].core_framework_compatibility // "0"
+  ' <<< 'null' | head -1)
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
     log e "Component $component requires core Framework version $component_framework_compat but current is $core_framework_version"
     return 1
@@ -506,17 +500,13 @@ validate_component_archive() {
   fi
 
   # Check Framework compatibility
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   local core_framework_version
-  core_framework_version=$(jq -r '
-    .[] | .manifest | select(has("retrodeck")) | .framework.core_framework_version // "0"
-  ' <<< "$manifest_cache" | head -1)
-
+  core_framework_version=$(jq -r \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
+  ' <<< 'null' | head -1)
   local component_framework_compat
   component_framework_compat=$(jq -r --arg component "$component_name" '.[$component].core_framework_compatibility // "0"' "$manifest_file")
-
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
     log e "Component $component_name requires core Framework version $component_framework_compat but current is $core_framework_version"
     rm -rf "$tmp_dir"
@@ -747,14 +737,11 @@ check_component_for_update() {
 
   local component_name="$1"
 
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   local component_manifest
-  component_manifest=$(jq -c --arg component "$component_name" '
-    .[] | .manifest | select(has($component)) | .[$component]
-  ' <<< "$manifest_cache" | head -1)
-
+  component_manifest=$(jq -c --arg component "$component_name" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($component)) | .[$component]
+  ' <<< 'null' | head -1)
   if [[ -z "$component_manifest" || "$component_manifest" == "null" ]]; then
     log e "Manifest not found for component $component_name"
     return 1
@@ -1027,10 +1014,6 @@ run_component_updates() {
   # USAGE: run_component_updates "$previous_app_version"
 
   local previous_app_version="$1"
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   local component_updated=false
 
   # Determine if this is a legacy upgrade (pre-component-versioning)
@@ -1075,11 +1058,10 @@ run_component_updates() {
     else
       log d "Component $component_name is up to date at version $manifest_version"
     fi
-  done < <(jq -r '
-    .[] | .manifest | to_entries[] |
+  done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | to_entries[] |
     [.key, (.value.component_version // "0")] | @tsv
-  ' <<< "$manifest_cache")
-
+  ' <<< 'null')
   if [[ "$component_updated" == true ]]; then
     update_component_presets
     build_retrodeck_current_presets
@@ -1093,15 +1075,11 @@ init_component_options() {
   # USAGE: init_component_options "$component_name"
 
   local component_name="$1"
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   local default_options
-  default_options=$(jq -c --arg component "$component_name" '
-    .[] | .manifest | select(has($component)) | .[$component].component_options // null
-  ' <<< "$manifest_cache" | head -1)
-
+  default_options=$(jq -c --arg component "$component_name" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($component)) | .[$component].component_options // null
+  ' <<< 'null' | head -1)
   if [[ -z "$default_options" || "$default_options" == "null" ]]; then
     log d "No component_options defined in manifest for $component_name"
     return
@@ -1131,19 +1109,16 @@ update_component_options() {
   # Update component_options in the config file with any new defaults from component manifests.
   # Existing values are not modified.
   # USAGE: update_component_options
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
+  
   while IFS=$'\t' read -r component_name; do
     [[ -z "$component_name" ]] && continue
     init_component_options "$component_name"
-  done < <(jq -r '
-    .[] | .manifest | to_entries[] |
+  done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | to_entries[] |
     select(.value.component_options != null) |
     .key
-  ' <<< "$manifest_cache")
-
+  ' <<< 'null')
+  
   log d "Component options updated from manifests"
 }
 
@@ -1153,27 +1128,23 @@ reset_component_options() {
   # USAGE: reset_component_options "$component_name_or_all"
 
   local component="${1:-all}"
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
   if [[ "$component" == "all" ]]; then
     while IFS= read -r comp_name; do
       [[ -z "$comp_name" ]] && continue
       reset_component_options "$comp_name"
-    done < <(jq -r '
-      .[] | .manifest | to_entries[] |
+    done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
+      $manifests[0][] | .manifest | to_entries[] |
       select(.value.component_options != null) |
       .key
-    ' <<< "$manifest_cache")
+    ' <<< 'null')
     return
   fi
 
   local default_options
-  default_options=$(jq -c --arg comp "$component" '
-    .[] | .manifest | select(has($comp)) | .[$comp].component_options // null
-  ' <<< "$manifest_cache" | head -1)
-
+  default_options=$(jq -c --arg comp "$component" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | select(has($comp)) | .[$comp].component_options // null
+  ' <<< 'null' | head -1)
   if [[ -z "$default_options" || "$default_options" == "null" ]]; then
     log d "No component_options defined in manifest for $component, nothing to reset"
     return
@@ -1197,22 +1168,16 @@ update_component_presets() {
   # New preset sections, component entries, and nested core entries are added with their default (disabled) values.
   # Existing entries are not modified.
   # USAGE: update_component_presets
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
+  
   local tmp
   tmp=$(mktemp)
-
-  jq --argjson manifests "$manifest_cache" '
+  jq --slurpfile manifests "$component_manifest_cache_file" '
     . as $conf |
-
     # Collect all preset entries from all component manifests
-    reduce ($manifests[] | .manifest | to_entries[] |
+    reduce ($manifests[0][] | .manifest | to_entries[] |
       .key as $comp_name | .value |
       select(.compatible_presets != null) |
       .compatible_presets | to_entries[] |
-
       if .value | type == "array" then
         # Non-nested: direct component preset
         {
@@ -1232,12 +1197,10 @@ update_component_presets() {
       end
     ) as $entry (
       $conf;
-
       # Ensure the preset section exists
       (if .presets[$entry.preset] == null then
         .presets[$entry.preset] = {}
       else . end) |
-
       # Apply the entry based on path depth
       if ($entry.path | length) == 1 then
         # Non-nested component
@@ -1316,22 +1279,18 @@ check_for_component_updates() {
   # Quick check if any installed components have a different version than what's recorded in the config file.
   # Returns 0 if any component needs updating, 1 if all are current.
   # USAGE: if check_for_component_updates; then run_component_updates "$version"; fi
-
-  local manifest_cache
-  manifest_cache=$(get_component_manifest_cache)
-
-  # Check all components
+  
   local mismatched
-  mismatched=$(jq -r --argjson config_versions "$(jq '.component_versions // {}' "$rd_conf")" '
-    .[] | .manifest | to_entries[] |
+  mismatched=$(jq -r --argjson config_versions "$(jq '.component_versions // {}' "$rd_conf")" \
+    --slurpfile manifests "$component_manifest_cache_file" '
+    $manifests[0][] | .manifest | to_entries[] |
     select(.key != "retrodeck") |
     .key as $component |
     (.value.component_version // "0") as $manifest_ver |
     ($config_versions[$component] // "0") as $installed_ver |
     select($manifest_ver != $installed_ver) |
     $component
-  ' <<< "$manifest_cache" | head -1)
-
+  ' <<< 'null' | head -1)
   [[ -n "$mismatched" ]]
 }
 
@@ -1339,9 +1298,9 @@ get_all_compression_targets() {
   # Gather all compression target information from component manifests.
   # Returns a JSON object keyed by format with targets and optional extensions.
   # USAGE: get_all_compression_targets
-
-  get_component_manifest_cache | jq '
-    reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
+  
+  jq --slurpfile manifests "$component_manifest_cache_file" '
+    reduce ($manifests[0][] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
       {};
       .[$entry.key] = {
         targets: ((.[$entry.key].targets // []) + ($entry.value.targets // []) | unique)
@@ -1350,7 +1309,7 @@ get_all_compression_targets() {
           .[$entry.key].extensions = ((.[$entry.key].extensions // []) + $entry.value.extensions | unique)
         else . end
     )
-  '
+  ' <<< 'null'
 }
 
 build_compression_lookups() {
