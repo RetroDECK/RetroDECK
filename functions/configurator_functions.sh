@@ -517,9 +517,18 @@ configurator_change_preset_dialog() {
 }
 
 configurator_change_preset_value_dialog() {
-  # REBUILD
   local preset="$1"
   local component="$2"
+  local current_preset_values
+  local choice
+  local rc
+  local preset_current_value
+  local component_obj
+  local parent_name
+  local current_status
+  local component_id
+  local preset_disabled_state
+  local result
 
   build_zenity_preset_value_menu_array current_preset_values "$preset" "$component"
 
@@ -532,34 +541,34 @@ configurator_change_preset_value_dialog() {
     --column "Option" \
     --column "preset_state" \
     "${current_preset_values[@]}")
-
-  local rc=$?
+  rc=$?
 
   log d "User made a choice: $choice with return code: $rc"
 
-  if [[ "$rc" == 0 && -n "$choice" ]]; then # If the user didn't hit Cancel
-    local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
-    if [[ ! "$choice" == "$preset_current_value" ]]; then
-      local component_obj=$(api_get_current_preset_state "$preset" "$component" | jq -c '.[].[]')
+  if [[ "$rc" == 0 && -n "$choice" ]]; then
+    preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
 
-      local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
-      local current_status="$(jq -r '.status' <<< $component_obj)"
-      local component_id="$component"
+    if [[ "$choice" != "$preset_current_value" ]]; then
+      component_obj=$(api_get_current_preset_state "$preset" "$component" | jq -c '.[].[]')
+      parent_name=$(jq -r '.parent_component // empty' <<< "$component_obj")
+      current_status=$(jq -r '.status' <<< "$component_obj")
+      component_id="$component"
 
       if [[ -n "$parent_name" ]]; then
         component_id="$parent_name"
       fi
 
-      local preset_disabled_state=$(jq -r --arg component "$component" --arg parent "$parent_name" --arg preset "$preset" '
-                              if $core != "" then
-                                .[$parent].compatible_presets[$component][$preset].[0] // empty
-                              else
-                                .[$component].compatible_presets[$preset].[0] // empty
-                              end
-                            ' "$rd_components/$component_id/component_manifest.json")
+      preset_disabled_state=$(jq -r --arg comp "$component_id" --arg core "$component" --arg parent "$parent_name" --arg preset "$preset" '
+        [.[] | .manifest | select(has($comp)) | .[$comp]] | first |
+        if $parent != "" then
+          .compatible_presets[$core][$preset][0] // empty
+        else
+          .compatible_presets[$preset][0] // empty
+        end
+      ' "$component_manifest_cache_file")
 
-      if [[ "$preset" =~ (cheevos|cheevos_hardcore) && ! "$choice" == "$preset_disabled_state" ]]; then
-        if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
+      if [[ "$preset" =~ (cheevos|cheevos_hardcore) && "$choice" != "$preset_disabled_state" ]]; then
+        if [[ -z "$cheevos_username" || -z "$cheevos_token" ]]; then
           log d "Cheevos not currently logged in, prompting user..."
           if cheevos_login_info=$(get_cheevos_token_dialog); then
             export cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
@@ -570,6 +579,7 @@ configurator_change_preset_value_dialog() {
           fi
         fi
       fi
+
       if ! result=$(api_set_preset_state "$component" "$preset" "$choice"); then
         configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$result</b></span>\n\nCheck the RetroDECK logs for more details."
       fi
