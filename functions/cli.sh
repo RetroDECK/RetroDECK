@@ -88,7 +88,6 @@ parse_informational_args() {
 }
 
 parse_cli_args() {
-  # REBUILD
   while [[ $# -gt 0 ]]; do
     # If the first argument is -e, -s, -m, or a valid file, attempt to launch the game
     if [ -f "$1" ] || [[ "$1" == "-e" || "$1" == "-s" || "$1" == "-m" ]]; then
@@ -103,10 +102,6 @@ parse_cli_args() {
         echo ""
         cat "$rd_conf"
         exit 0
-      ;;
-      --debug)
-        rd_logging_level="debug"
-        shift
       ;;
       --compress-one)
         cli_compress_single_game "$2"
