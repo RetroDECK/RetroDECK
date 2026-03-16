@@ -232,7 +232,7 @@ parse_cli_args() {
         elif [[ $(jq -r '.presets | keys[]' "$rd_conf") =~ "$preset" ]]; then
           if [[ "$preset" == "cheevos" &&  "$value" =~ (true|on) ]]; then # Get cheevos login information
             current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
-            if [[ "$current_system_value" == "false" || -z "$current_system_value" ]]; then
+            if [[ "$current_system_value" == "false" ]]; then
               read -r -p "Please enter your RetroAchievements username: " cheevos_username
               read -r -s -p "Please enter your RetroAchievements password: " cheevos_password
               if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
@@ -243,6 +243,8 @@ parse_cli_args() {
                 echo "RetroAchievements login failed, please try again."
                 exit 1
               fi
+            elif [[ ! -n "$current_system_value" ]]; then
+              echo "RetroAchivements are not compatible with $system."
             else
               echo "RetroAchivements for $system are already enabled."
               exit 1
@@ -255,7 +257,7 @@ parse_cli_args() {
             elif [[ "$value" =~ (false|off) && "$current_system_value" == "false" ]]; then
               echo "The preset $preset is already disabled for the system $system"
             else # Otherwise needs to be changed
-              if change_presets_cli "$preset" "$system" "$value"; then
+              if api_set_preset_state "$system" "$preset" "$value"; then
                 echo "$preset preset changes for $system are complete"
               else
                 echo "Something went wrong during the preset change, please check the logs for details."
@@ -263,12 +265,28 @@ parse_cli_args() {
               fi
             fi
           else
-            if change_presets_cli "$preset" "$system" "$value"; then
-              echo "$preset preset changes for all compatible systems are complete"
-            else
-              echo "Something went wrong during the preset change, please check the logs for details."
-              exit 1
-            fi
+            while read -r system; do
+              if api_set_preset_state "$system" "$preset" "$value"; then
+                echo "$preset preset changes for all compatible systems are complete"
+              else
+                echo "Something went wrong during the preset change, please check the logs for details."
+                exit 1
+              fi
+            done < <(api_get_component "all" | jq -r --arg preset "$preset" '
+                  [.[] |
+                  .component_name as $comp |
+                  .compatible_presets |
+                  if . == "none" then empty
+                  else to_entries[] |
+                    if .value | type == "array" then
+                      select(.key == $preset) | $comp
+                    else
+                      .key as $core | .value | to_entries[] |
+                      select(.key == $preset) | $core
+                    end
+                  end
+                  ] | unique | .[]
+                ')
           fi
         else
           echo "Preset $preset not recognized. Use --set-help for a list of valid options."
