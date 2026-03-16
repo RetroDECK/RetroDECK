@@ -154,7 +154,7 @@ parse_cli_args() {
           if [[ ${response,,} == "y" ]]; then
             version="$2"
             rd_logging_level="debug"  # Temporarily enable debug logging
-            log d "User replyed $response, testing upgrade from version $version"
+            log d "User replied $response, testing upgrade from version $version"
             shift 2
           else
             shift 2
