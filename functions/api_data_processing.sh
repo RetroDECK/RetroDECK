@@ -164,6 +164,8 @@ api_get_current_preset_state() {
         continue
       fi
 
+      local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
+
       local json_obj
       json_obj=$(jq -c --arg component "$component" \
         --argjson is_core "$is_core" \
