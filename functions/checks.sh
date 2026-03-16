@@ -121,7 +121,7 @@ check_is_steam_deck() {
   fi
 }
 
-check_for_version_update() {
+check_for_online_update() {
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
   if curl --silent --head --max-time 5 --output /dev/null "$rd_gh_api_url" 2>/dev/null; then
