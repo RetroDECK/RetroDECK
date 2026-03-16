@@ -332,7 +332,7 @@ api_get_empty_rom_folders() {
   local -A ignorable_files
   while IFS= read -r helper_filename; do
     [[ -n "$helper_filename" ]] && ignorable_files["$helper_filename"]=1
-  done < <(get_all_helper_files | jq -r '.[].filename')
+  done < <(get_helper_files "all" | jq -r '.[].filename')
   ignorable_files[".directory"]=1
   ignorable_files["systeminfo.txt"]=1
 
