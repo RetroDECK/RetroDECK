@@ -338,64 +338,51 @@ cli_open_component() {
   fi
 }
 
-change_presets_cli() {
-  # REBUILD
-  # This function will allow a user to change presets either individually or all for a preset class from the CLI.
-  # USAGE: change_presets_cli "$preset" "$system/all" "$on/off"
+cli_compress_single_game() {
+  local file="$1"
 
-  local preset="$1"
-  local system="$2"
-  local value="$3"
-  local section_results
-  section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
-  local all_emulators_in_preset="" # A CSV string containing all emulators in a preset block
-  local all_other_emulators_in_preset="" # A CSV string containing every emulator except the one provided by the user in a preset block
-
-  log d "Changing settings for preset: $preset"
-
-  while IFS= read -r config_line; do
-    # Build a list of all emulators in the preset block
-    system_name=$(get_setting_name "$config_line" "retrodeck")
-    if [[ -n $all_emulators_in_preset ]]; then
-      all_emulators_in_preset+=","
-    fi
-    all_emulators_in_preset+="$system_name" # Build a list of all emulators in case user provides "all" as the system name
-
-    if [[ "$value" =~ (false|off) && ! "$system" == "all" ]]; then # If the user is disabling a specific emulator, check for any other already enabled and keep them enabled
-      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      if [[ ! "$system_name" == "$system" && "$system_value" == "true" ]]; then
-        log d "Other system $system_name is enabled for preset $preset, retaining setting."
-        if [[ -n $all_other_emulators_in_preset ]]; then
-          all_other_emulators_in_preset+=","
-        fi
-        all_other_emulators_in_preset+="$system_name" # Build a list of all emulators that are currently enabled that aren't the one being disabled
-      fi
-    fi
-
-  done < <(printf '%s\n' "$section_results")
-
-  if [[ "$value" =~ (true|on) ]]; then # If user is enabling one or more systems in a preset
-    if [[ "$system" == "all" ]]; then
-      log d "Enabling all emualtors for preset $preset"
-      choice="$all_emulators_in_preset" # All emulators in the preset will be enabled
+  if [[ -e "$file" ]]; then
+    local compatible_compression_format=$(find_compatible_compression_format "$file")
+    if [[ ! $compatible_compression_format == "none" ]]; then
+      read -r -p "Would you like to delete the original files after they are compressed?\n\n\If you select 'n', the original files will remain. You will need to remove them manually, and this may cause duplicate games to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a backup of your files.: (y/n)" post_compression_cleanup
+      echo "Compressing $(basename "$file") to $compatible_compression_format format"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
+      echo "The compression process is complete."
     else
-      if [[ "$all_emulators_in_preset" =~ "$system" ]]; then
-        log d "Enabling preset $preset for $system"
-        choice="$system"
-      else
-        log i "Emulator $system does not support preset $preset, please check the command options and try again."
-      fi
-    fi
-  else # If user is disabling one or more systems in a preset
-    if [[ "$system" == "all" ]]; then
-      choice="" # Empty string means all systems in preset should be disabled
-    else
-      choice="$all_other_emulators_in_preset"
+      echo "The selected file does not contain any compatible compression formats."
     fi
   fi
+}
 
-  # Call make_preset_changes if the user made a selection,
-  # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
-    log d "Calling make_preset_changes with choice: $choice"
-    make_preset_changes "$preset" "$choice"
+cli_compress_all_games() {
+  compressible_games_list_file="$(mktemp)"
+  
+  api_get_compressible_games "all" | jq -c '.[]' > "$compressible_games_list_file"
+
+  if [[ -n "$(cat "$compressible_games_list_file")" ]]; then
+    log d "Found the following games to compress: ${all_compressible_games[*]}"
+  else
+    echo "No compressible files were found."
+    rm "$compressible_games_list_file"
+    return 1
+  fi
+
+  read -r -p "Would you like to delete the original files after they are compressed?\n\n\If you select 'n', the original files will remain. You will need to remove them manually, and this may cause duplicate games to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a backup of your files.: (y/n)" post_compression_cleanup
+
+  while read -r obj; do # Iterate through all returned menu objects
+    local game=$(jq -r '.game' <<< "$obj")
+    local compression_format=$(jq -r '.format' <<< "$obj")
+    
+    while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
+    sleep 0.1
+    done
+    (
+      echo "Compressing $(basename "$game") into $compression_format format."
+      compress_game "$compression_format" "$game" "$post_compression_cleanup"
+    ) &
+  done < <(cat "$compressible_games_list_file")
+
+  rm "$compressible_games_list_file"
+
+  echo "The compression process is complete!"  
 }
