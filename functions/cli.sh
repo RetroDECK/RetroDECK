@@ -187,19 +187,17 @@ parse_cli_args() {
             ] | unique | .[]
           ')
           if [[ -z "$system" ]]; then # User provided a preset but no system argument
-            preset_compatible_systems=$(echo "$preset_compatible_systems" | cut -d= -f1 | sed ':a;N;$!ba;s/\n/, /g')
-            echo "The systems that support the preset $preset are $preset_compatible_systems"
+            echo "The systems that support the preset $preset are\n$preset_compatible_systems"
           elif [[ "$system" == "all" ]]; then
-            while IFS= read -r config_line; do
-              current_system_name=$(get_setting_name "$config_line" "retrodeck")
-              current_system_value=$(get_setting_value "$rd_conf" "$current_system_name" "retrodeck" "$preset")
-              if [[ "$current_system_value" == "true" ]]; then
-                current_system_value="enabled"
-              else
+            while IFS= read -r system; do
+              current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
+              if [[ "$current_system_value" == "false" ]]; then
                 current_system_value="disabled"
+              else
+                current_system_value="enabled"
               fi
               echo "The preset $preset for the system $current_system_name is $current_system_value"
-            done < <(printf '%s\n' "$preset_compatible_systems")
+            done <<< "$preset_compatible_systems"
           elif [[ "$preset_compatible_systems" =~ "$system" ]]; then
             preset_state=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
             if [[ "$preset_state" == "true" ]]; then
