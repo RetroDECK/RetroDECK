@@ -320,7 +320,6 @@ parse_cli_args() {
 }
 
 cli_open_component() {
-  # REBUILD
   local command="$1"
   shift
 
@@ -332,7 +331,7 @@ cli_open_component() {
     local component_path=$(api_get_component "$command" | jq -r '.[] | select(.component_name != "retrodeck") | .path')
     if [[ -n "$component_path" ]]; then
       log d "Launching component '$command' with args: $@"
-      /bin/bash "$rd_components/$command/component_launcher.sh" "$@"
+      /bin/bash "$component_path/component_launcher.sh" "$@"
     else
       log e "No launcher could be found for the component: $command"
     fi
