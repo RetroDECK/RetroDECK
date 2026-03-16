@@ -21,33 +21,27 @@
         </screenshot>
         <screenshot>
             <caption>RetroDECK Logo on Steam Deck</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK Logo on Steam Deck GUI</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK ES-DE Theme C64</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on ROG</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on Laptop</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
             <caption>RetroDECK on TV</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
         </screenshot>
     </screenshots>
     <description>
@@ -105,8 +99,27 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
-        <release version="0.10.6b" date="2026-02-02">
+        <release version="0.10.7b" date="2026-03-21">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>EASTER EGG: Introduced additional holiday entries.</li>
+                    <li>TRIFORCE: The Triforce Arcade System is now supported via Dolphin.</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BORDERS: Steam Deck borders were not applied in certain scenarios when enabled via the Configurator.</li>
+                    <li>RPCS3: Firmware installation via the Configurator did not function as expected.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>DOLPHIN, PPSSPP, RPCS3, RUFFLE, SRM and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
+        <release version="0.10.6b" date="2026-03-01">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.6b/</url>
             <description>
                 <p>ADDED:</p>
                 <ul>
@@ -716,7 +729,7 @@
                 <p>We have done some changes based on community feedback</p>
                 <ul>
                     <li>Select is now a hotkey trigger while pressing it down, L4 and R4 are still triggers as well.</li>
-                    <li>The RetroArch combo of Select + Start = Quit now works on many SA‑Emulators.</li>
+                    <li>The RetroArch combo of Select + Start = Quit now works on many SA‑Emulators.</li>
                     <li>Open Menu is removed from Select.</li>
                     <li>R5 = A button (this allows for great Wii controls on the right touchpad and pressing down the R5 for A).</li>
                     <li>L5 = B button.</li>
