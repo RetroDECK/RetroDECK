@@ -12,7 +12,7 @@ show_cli_help() {
       --debug                             \t  Enable debug logging for this run of RetroDECK
       --configurator                      \t  Starts the RetroDECK Configurator
       --compress-one <file>               \t  Compresses target file to a compatible format
-      --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
+      --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"$(get_all_compression_targets | jq -r 'keys | join(", ")')\" and \"all\"
       --steam-sync [purge]                \t  Run the Steam ROM Manager sync process to update all ES-DE favorites in Steam. Add the \"purge\" argument to remove all Steam ROM Manager information from Steam.
       --repair-paths                      \t  Reconfigure broken folder locations in RetroDECK without a full reset
       --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
@@ -60,7 +60,7 @@ parse_informational_args() {
   --get-help)
     LOG_SILENT=true
     echo -e "\nUsed to check the state of all systems for a given preset.\n\nAvailable presets are:"
-    fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
+    jq -r '.presets | keys[]' "$rd_conf"
     echo -e "\nUsage: --get <preset> [system/all]"
     echo -e "\nExamples:"
     echo -e "  Get the list of all emulators that support the \"borders\" preset:"
@@ -74,7 +74,7 @@ parse_informational_args() {
   --set-help)
     LOG_SILENT=true
     echo -e "\nUsed to toggle or set a preset.\n\nAvailable presets are:"
-    fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
+    jq -r '.presets | keys[]' "$rd_conf"
     echo -e "\nUsage: --set <preset> <system/all> <value>"
     echo -e "\nExamples:"
     echo -e "  Enable borders for GBA:"
@@ -141,7 +141,7 @@ parse_cli_args() {
         component="${@:2}"
         if [ -z "$component" ]; then
           echo "You are about to reset one or more RetroDECK components or emulators."
-          echo -e "Available options are:\nall, $(prepare_component --list | tr ' ' ',' | sed 's/,/, /g')"
+          echo -e "Available options are:\nall\n$(jq -r '[.[] | .manifest | keys[]] | sort | (["retrodeck"] + [.[] | select (. != "retrodeck")]) | .[]' "$component_manifest_cache_file")"
           read -r -p "Please enter the component you would like to reset: " component
           component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
         fi
@@ -175,8 +175,22 @@ parse_cli_args() {
         if [[ -z "$preset" ]]; then
           echo "Error: No preset specified. Usage: --get <preset> [system] (use --get-help for more information)"
           exit 1
-        elif [[ $(fetch_all_presets | tr ' ' ',' | sed 's/,/, /g') =~ "$preset" ]]; then
-          preset_compatible_systems=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
+        elif [[ $(jq -r '.presets | keys[]' "$rd_conf") =~ "$preset" ]]; then
+          preset_compatible_systems=$(api_get_component "all" | jq -r --arg preset "$preset" '
+            [.[] |
+            .component_name as $comp |
+            .compatible_presets |
+            if . == "none" then empty
+            else to_entries[] |
+              if .value | type == "array" then
+                select(.key == $preset) | $comp
+              else
+                .key as $core | .value | to_entries[] |
+                select(.key == $preset) | $core
+              end
+            end
+            ] | unique | .[]
+          ')
           if [[ -z "$system" ]]; then # User provided a preset but no system argument
             preset_compatible_systems=$(echo "$preset_compatible_systems" | cut -d= -f1 | sed ':a;N;$!ba;s/\n/, /g')
             echo "The systems that support the preset $preset are $preset_compatible_systems"
@@ -222,7 +236,7 @@ parse_cli_args() {
         elif [[ -z "$value" ]]; then
           echo "Error: No value specified. Usage: --set <preset> <system/all> <value> (use --set-help for more information)"
           exit 1
-        elif [[ $(fetch_all_presets | tr ' ' ',' | sed 's/,/, /g') =~ "$preset" ]]; then
+        elif [[ $(jq -r '.presets | keys[]' "$rd_conf") =~ "$preset" ]]; then
           if [[ "$preset" == "cheevos" &&  "$value" =~ (true|on) ]]; then # Get cheevos login information
             current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
             if [[ "$current_system_value" == "false" || -z "$current_system_value" ]]; then
@@ -301,11 +315,11 @@ cli_open_component() {
 
   if [[ "$command" == "--list" ]]; then
     echo "Installed components:"
-    echo "$(api_get_component "all" | jq -r '.[] | select(.component_name != "retrodeck") | .component_name')"
+    echo "$(api_get_component "all" | jq -r --arg component "$component" '.[] | select(.component_name != "retrodeck") | .component_name')"
   else
-    if [[ -f "$rd_components/$command/component_launcher.sh" ]]; then
-      # Pass any additional arguments given to open_component on to the
-      # component's launcher script so callers can forward flags/parameters.
+    if [[ "$system"]]
+    local component_path=$(api_get_component "$command" | jq -r '.[] | select(.component_name != "retrodeck") | .path')
+    if [[ -n "$component_path" ]]; then
       log d "Launching component '$command' with args: $@"
       /bin/bash "$rd_components/$command/component_launcher.sh" "$@"
     else
