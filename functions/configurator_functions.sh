@@ -191,9 +191,9 @@ configurator_reset_dialog() {
     if [[ $? -eq 0 ]]; then
       local -a all_components=()
       mapfile -t all_components < <(jq -r \
-        --slurpfile manifests "$component_manifest_cache_file" '
-        [$manifests[0][] | .manifest | keys[]] | unique | .[]
-      ' <<< 'null')
+      '
+        [.[] | .manifest | keys[]] | unique | .[]
+      ' "$component_manifest_cache_file")
 
       local progress_pipe
       progress_pipe=$(mktemp -u)
@@ -244,10 +244,10 @@ configurator_reset_dialog() {
     # Resolve friendly names from manifest cache
     local pretty_names
     pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R \
-      --slurpfile manifests "$component_manifest_cache_file" '
+    '
       . as $component |
-      [$manifests[0][] | .manifest | select(has($component)) | .[$component].name // $component] | first
-    ')
+      [.[] | .manifest | select(has($component)) | .[$component].name // $component]
+    ' "$component_manifest_cache_file")
 
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

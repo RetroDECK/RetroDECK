@@ -253,8 +253,8 @@ build_zenity_preset_value_menu_array() {
     --arg parent "$base_component" \
     --arg preset "$preset_name" \
     --arg current "$preset_current_value" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    ([$manifests[0][] | .manifest | select(has($parent)) | .[$parent]] | first) as $manifest |
+  '
+    ([.[] | .manifest | select(has($parent)) | .[$parent]] | first) as $manifest |
     (if $parent != $comp then
       $manifest.compatible_presets[$comp][$preset]
     else
@@ -269,7 +269,7 @@ build_zenity_preset_value_menu_array() {
      ) | join(" "))
      end),
     $val
-  ' <<< 'null')
+  ' "$component_manifest_cache_file")
 }
 
 build_zenity_open_component_menu_array() {
