@@ -1164,7 +1164,7 @@ reset_component_options() {
 }
 
 update_component_presets() {
-  # Update the presets section of retrodeck.cfg with entries from all component manifests.
+  # Update the presets section of retrodeck.json with entries from all component manifests.
   # New preset sections, component entries, and nested core entries are added with their default (disabled) values.
   # Existing entries are not modified.
   # USAGE: update_component_presets
@@ -1219,7 +1219,7 @@ update_component_presets() {
     )
   ' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
 
-  log d "Component presets updated in retrodeck.cfg"
+  log d "Component presets updated in retrodeck.json"
 }
 
 remove_component_options() {
