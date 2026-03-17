@@ -362,7 +362,6 @@ compress_game() {
 }
 
 build_retrodeck_current_presets() {
-  # REBUILD
   # This function will read the presets sections of the retrodeck.json file and build the default state if it is anything other than disabled
   # This can also be used to build the "current" state post-update after adding new systems
   # USAGE: build_retrodeck_current_presets
@@ -371,7 +370,7 @@ build_retrodeck_current_presets() {
   do
     while IFS= read -r component # Iterate all system names in this preset
     do
-      if [[ ! -f "$rd_components/$component/component_manifest.json" ]]; then
+      if jq -e --arg component "$component" 'any(.[]; .manifest | has($component))' "$component_manifest_cache_file" > /dev/null 2>&1; then
         log i "Component manifest $component not found, may have been removed. Skipping preset updates."
         continue
       fi
