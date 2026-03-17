@@ -463,12 +463,13 @@ configurator_change_preset_dialog() {
         fi
 
         local preset_enabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
-                                if $core != "" then
-                                  .[$component].compatible_presets[$core][$preset].[1] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[1] // empty
-                                end
-                              ' "$rd_components/$component/component_manifest.json")
+                                        .[] | .manifest | select(has($component)) | .[$component] |
+                                        if $core != "" then
+                                          .compatible_presets[$core][$preset][1] // empty
+                                        else
+                                          .compatible_presets[$preset][1] // empty
+                                        end
+                                      ' "$component_manifest_cache_file")
 
         if [[ ! "$current_status" == "$preset_enabled_state" ]]; then
           if [[ -n "$child_component" ]]; then
@@ -521,12 +522,13 @@ configurator_change_preset_dialog() {
         fi
 
         local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
-                                if $core != "" then
-                                  .[$component].compatible_presets[$core][$preset].[0] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[0] // empty
-                                end
-                              ' "$rd_components/$component/component_manifest.json")
+                                        .[] | .manifest | select(has($component)) | .[$component] |
+                                        if $core != "" then
+                                          .compatible_presets[$core][$preset][0] // empty
+                                        else
+                                          .compatible_presets[$preset][0] // empty
+                                        end
+                                      ' "$component_manifest_cache_file")
 
         if [[ ! "$current_status" == "$preset_disabled_state" ]]; then
           if [[ -n "$child_component" ]]; then
