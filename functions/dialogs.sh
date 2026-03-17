@@ -54,11 +54,11 @@ configurator_destination_choice_dialog() {
   # This function returns one of the values: "Back" "Internal Storage"/"Home Directory" "SD Card" "Custom Location"
   log i "$2"
   if check_is_steam_deck; then
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Choosing $1 directory" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   else
-    choice=$(rd_zenity --title "RetroDECK Configurator - Moving $1 directory" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
+    choice=$(rd_zenity --title "RetroDECK Configurator - Choosing $1 directory" --info --no-wrap --ok-label="Quit" --extra-button="Home Directory" --extra-button="Custom Location" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="$2")
   fi
