@@ -58,7 +58,7 @@ set_setting_value() {
   local result
   result=$("$get_handler" "$file" "$setting" "$section")
 
-  if [[ "$result" != "$value" && ! "$result" == "blind_write" ]]; then
+  if [[ "$result" != "$value" ]]; then
     log e "Failed to set $setting=$value in $file (got: $result)"
     return 1
   else
