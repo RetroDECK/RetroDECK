@@ -237,19 +237,64 @@ configurator_browse_retrodeck_wiki_dialog() {
   xdg-open "$rd_wiki_url"
 }
 
-configurator_online_update_channel_dialog() {
-  if [[ $(get_setting_value "$rd_conf" "update_repo" retrodeck "options") == "RetroDECK" ]]; then
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Change Update Branch" \
-    --text="You are currently on the <span foreground='$purple'><b>Stable</b></span> branch of RetroDECK updates. Would you like to switch to the <span foreground='$purple'><b>Cooker</b></span> branch?\n\n\After installing a cooker build, you may need to remove the <span foreground='$purple'><b>Stable</b></span> branch install of RetroDECK to avoid overlap."
+directory_browse() {
+  # Browse for a directory and return the selected path.
+  # Returns 1 if the user exits without selecting.
+  # USAGE: selected_path=$(directory_browse "$action_text")
 
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+  local action_text="$1"
+
+  while true; do
+    local target
+    target=$(rd_zenity --file-selection --title="Choose $action_text" --directory)
+
+    if [[ -n "$target" ]]; then
+      rd_zenity --question --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --cancel-label="No" --ok-label="Yes" \
+        --text="Directory <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
+      if [[ $? -eq 0 ]]; then
+        echo "$target"
+        return 0
+      fi
+    else
+      rd_zenity --question --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --cancel-label="No" --ok-label="Yes" \
+        --text="No directory selected.\n\n<span foreground='$purple'><b>Do you want to exit the selection process?</b></span>"
+      if [[ $? -eq 0 ]]; then
+        return 1
+      fi
     fi
-  else
-    set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
-    release_selector
-  fi
+  done
+}
+
+file_browse() {
+  # This function browses for a file and returns the path chosen
+  # Returns 1 if the user exits without selecting.
+  # USAGE: file_to_be_browsed_for=$(file_browse $action_text)
+
+  local action_text="$1"
+  local file_selected=false
+
+  while true; do
+    local target
+    target="$(rd_zenity --file-selection --title="Choose $action_text")"
+    if [[ -n "$target" ]]; then
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
+      --text="File <span foreground='$purple'><b>$target</b></span> selected.\nIs this correct?"
+      if [[ $? -eq 0 ]]; then
+        echo "$target"
+        return 0
+      fi
+    else
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label="Yes" \
+      --text="No file selected. Do you want to exit the selection process?"
+      if [[ $? -eq 0 ]]; then
+        return 1
+      fi
+    fi
+  done
 }
