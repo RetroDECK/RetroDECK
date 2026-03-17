@@ -386,7 +386,7 @@ configurator_move_folder_dialog() {
       source_component_functions
       prepare_component "postmove" "all"
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
-      configurator_move_folder_dialog "$rd_dir_name"
+      configurator_nav="refresh"
     else
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No location was selected, returning to the Data Management menu."
     fi
