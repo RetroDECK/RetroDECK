@@ -52,37 +52,34 @@
         </screenshot>
     </screenshots>
     <description>
-        <p>RetroDECK is a powerful, all-in-one Retro Gaming Platform for modern Linux systems, including handheld gaming PCs like the Steam Deck, full Linux desktops, HTPC setups, and Linux-based PC consoles such as the Steam Machine.</p>
-        <p>It provides a complete retro gaming environment out of the box-no manual configuration, no custom firmware and no system modifications required.</p>
+        <p>RetroDECK is a powerful, all-in-one Retro Gaming Platform for modern Linux systems, including handheld gaming PCs like the Steam Deck, full Linux desktops, HTPC setups and Linux-based PC consoles such as the Steam Machine.</p>
+        <p>It provides a complete retro gaming environment out of the box with minimal manual configuration.</p>
         <p>By seamlessly integrating multiple components, the platform brings your entire retro game experince together in one polished and unified package.</p>
         <p>
             Why Choose RetroDECK?
         </p>
         <ul>
-            <li>True All-in-One Solution: Emulators, multi-emulator frameworks, game engines, ports, tools, clients and the frontend are all included and preconfigured.</li>
-            <li>Zero System Changes: Experience a retro gaming focused environment without replacing or modifying your existing operating system and update one app instead of many directly from your software center.</li>
-            <li>Designed for You: Optimized for Linux handhelds, gaming PCs and living-room setups and install.</li>
+            <li>True All-in-One Solution: Emulators, frameworks, engines, ports, tools, clients and the frontend are fully integrated and preconfigured.</li>
+            <li>No System Modifications: Enjoy a dedicated retro gaming environment without altering or replacing your existing operating system.</li>
+            <li>Streamlined Installation: Install and update a single application instead of multiple, directly from your software center.</li>        
         </ul>
         <p>
             What is Included?
         </p>
         <ul>
-            <li>Wide Emulator Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar, and many more.</li>
-            <li>Multi-Emulator Platforms: Unified, streamlined emulation powered by robust frameworks including RetroArch and MAME.</li>
-            <li>Native Game Engines and Clients: Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO and UZDoom.</li>
-            <li>Custom Launch Wrappers: Effortlessly run complex Doom mods using RetroDECK's streamlined .doom format, along with dedicated .bor support for OpenBOR.</li>
-            <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your game library.</li>
+            <li>Accessible for All: A clean, well-organized file structure designed for both newcomers and advanced users.</li>
+            <li>Custom Launch Wrappers: Run complex DOOM WADs and OpenBOR titles effortlessly with streamlined, dedicated formats.</li>
+            <li>ES-DE Frontend: A controller-friendly interface for browsing, organizing and launching your game library.</li>
+            <li>Multi-Emulator Platforms: Unified and built-in multi-emulation frameworks including RetroArch and MAME.</li>
+            <li>Native Game Engines: Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO and UZDoom.</li>
             <li>PortMaster Integration: Easily install and manage community-supported Linux game ports.</li>
-            <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files and more-all from a single interface.</li>
+            <li>RetroDECK Configurator: A powerful built-in multi-tool for managing component settings, presets, storage, BIOS files and more.</li>
             <li>RetroDECK Framework: A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
-            <li>RetroDECK RetroENGINE: A headless game runner designed for advanced users and developers, enabling fast and direct game launching.</li>
-            <li>Steam Input Support: Preconfigured controller layouts, radial menus, and system-specific hotkeys when integrated with Steam.</li>
+            <li>RetroENGINE: A headless game launcher tailored for power users and developers.</li>
+            <li>Steam Input Support: Preconfigured controller templates with radial menus and component-specific hotkeys via Steam.</li>
             <li>Steam Library Sync: Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
+            <li>Wide System Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more.</li>
         </ul>
-        <p>
-            Built for Power Users - Friendly for Everyone
-        </p>
-        <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture packs, mods, screenshots, and more-while keeping the underlying components safely sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided experience.</p>
         <p>
             Join the RetroDECK Community
         </p>
@@ -95,7 +92,6 @@
             <li>Reddit: https://www.reddit.com/r/retrodeck</li>
             <li>Lemmy: https://lemmy.zip/c/retrodeck</li>
             <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
-            <li>Revolt: https://rvlt.gg/StVaEc0w</li>
         </ul>
     </description>
     <branding>
