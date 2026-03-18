@@ -1,388 +1,112 @@
 #!/bin/bash
 
 show_cli_help() {
-  echo -e "
-  Usage:
-  flatpak run [FLATPAK-RUN-OPTION] net.retrodeck.retrodeck [ARGUMENTS]
+  # Display dynamically generated CLI help from component manifests.
+  # Commands are sorted by priority (if set), then alphabetically. Hidden commands are excluded.
+  # USAGE: show_cli_help
 
-  Arguments:
-      -h, --help                          \t  Print this help
-      -v, --version                       \t  Print RetroDECK version
-      --show-config                       \t  Print information about the RetroDECK configuration file and its contents
-      --debug                             \t  Enable debug logging for this run of RetroDECK
-      --configurator                      \t  Starts the RetroDECK Configurator
-      --compress-one <file>               \t  Compresses target file to a compatible format
-      --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"$(get_all_compression_targets | jq -r 'keys | join(", ")')\" and \"all\"
-      --steam-sync [purge]                \t  Run the Steam ROM Manager sync process to update all ES-DE favorites in Steam. Add the \"purge\" argument to remove all Steam ROM Manager information from Steam.
-      --repair-paths                      \t  Reconfigure broken folder locations in RetroDECK without a full reset
-      --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
-      --factory-reset                     \t  Factory Reset, triggers the initial setup WARNING: no confirmation prompt
-      --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
-      --get <preset> [system/all]         \t  Show the current status of all systems in a given preset type. Use --get-help for more information.
-      --set <preset> <system/all> <value> \t  Configure or toggle a preset. Examples: --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set-help for more information
-      --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --list for a list of available components
+  echo ""
+  echo "Usage:"
+  echo "  flatpak run [FLATPAK-RUN-OPTION] net.retrodeck.retrodeck [ARGUMENTS]"
+  echo ""
+  echo "Arguments:"
 
-  Game Launch:
-      [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
-      \t Options:
-      \t \t-e (emulator)\t Run the game with the defined emulator (optional)
-      \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
-      \t \t-m (manual)\t Manual mode: show the list of available emulator to choose from (optional)
+  jq -r '
+    [.[] | .manifest | to_entries[] | .value |
+     select(.cli_commands != null) |
+     .cli_commands | to_entries[] |
+     select(.value.hidden != true) |
+     {
+       flag: .value.flag,
+       description: .value.description,
+       params: (.value.params // []),
+       priority: (.value.priority // 50)
+     }
+    ]
+    | sort_by([.priority, (.flag | ascii_downcase)])
+    | .[]
+    | "    " + .flag +
+      (if (.params | length) > 0 then
+        " " + (.params | join(" "))
+      else "" end) +
+      "\t" + .description
+  ' "$component_manifest_cache_file" | column -t -s $'\t'
 
-  For flatpak run specific options please run: flatpak run -h
-
-  The RetroDECK Team
-  https://retrodeck.net
-  "
-}
-
-parse_informational_args() {
-  case "${1:-}" in
-  -h|--help)
-    LOG_SILENT=true
-    if [[ "$version" =~ ^[0-9] ]]; then
-      echo "RetroDECK v$version"
-    else
-      echo "RetroDECK $version"
-    fi
-    show_cli_help
-    exit 0
-    ;;
-  -v|--version)
-    LOG_SILENT=true
-    if [[ "$version" =~ ^[0-9] ]]; then
-      echo "RetroDECK v$version"
-    else
-      echo "RetroDECK $version"
-    fi
-    exit 0
-    ;;
-  --get-help)
-    LOG_SILENT=true
-    echo -e "\nUsed to check the state of all systems for a given preset.\n\nAvailable presets are:"
-    jq -r '.presets | keys[]' "$rd_conf"
-    echo -e "\nUsage: --get <preset> [system/all]"
-    echo -e "\nExamples:"
-    echo -e "  Get the list of all emulators that support the \"borders\" preset:"
-    echo -e "    --get borders"
-    echo -e "  Get the current state of the borders preset for the snes system:"
-    echo -e "    --get borders snes"
-    echo -e "  Get the current state of the borders preset for all the systems that support it:"
-    echo -e "    --get borders all"
-    exit 0
-    ;;
-  --set-help)
-    LOG_SILENT=true
-    echo -e "\nUsed to toggle or set a preset.\n\nAvailable presets are:"
-    jq -r '.presets | keys[]' "$rd_conf"
-    echo -e "\nUsage: --set <preset> <system/all> <value>"
-    echo -e "\nExamples:"
-    echo -e "  Enable borders for GBA:"
-    echo -e "    --set borders gba on"
-    echo -e "  Disable borders for all supported systems:"
-    echo -e "    --set borders all off"
-    echo -e "\nYou can also use 'true' or 'false' instead of 'on' and 'off'."
-    exit 0
-    ;;
-  esac
+  echo ""
+  echo "  Game Launch:"
+  echo "    [<options>] <game_path>          Start a game using the default emulator or"
+  echo "                                     the one defined in ES-DE for game or system"
+  echo "      Options:"
+  echo "        -e (emulator)                Run the game with the defined emulator (optional)"
+  echo "        -s (system)                  Force the game running with the defined system (optional)"
+  echo "        -m (manual)                  Show the list of available emulators to choose from (optional)"
+  echo ""
+  echo "  For flatpak run specific options please run: flatpak run -h"
+  echo ""
+  echo "  The RetroDECK Team"
+  echo "  https://retrodeck.net"
+  echo ""
 }
 
 parse_cli_args() {
+  # Parse command line arguments dynamically based on CLI command definitions in component manifests.
+  # Matches flags, resolves handlers, passes remaining args to the handler, and exits based on return code.
+  # USAGE: parse_cli_args "$@"
+
+  # Build a lookup of all CLI flags to their handler, detecting duplicates
+  local -A flag_to_handler=()
+  while IFS=$'\t' read -r flags handler component; do
+    [[ -z "$flags" || -z "$handler" ]] && continue
+    local IFS=','
+    for flag in $flags; do
+      flag=$(echo "$flag" | tr -d ' ')
+      if [[ -n "${flag_to_handler[$flag]+x}" ]]; then
+        log w "Duplicate CLI flag '$flag' from '$component' skipped, already registered by another component"
+        continue
+      fi
+      flag_to_handler["$flag"]="$handler"
+    done
+  done < <(jq -r '
+    [.[] | .manifest | to_entries[] |
+     .key as $component |
+     .value | select(.cli_commands != null) |
+     .cli_commands | to_entries[] | .value |
+     [.flag, .handler, $component]
+    ] | .[] | @tsv
+  ' "$component_manifest_cache_file")
+
   while [[ $# -gt 0 ]]; do
-    # If the first argument is -e, -s, -m, or a valid file, attempt to launch the game
-    if [ -f "$1" ] || [[ "$1" == "-e" || "$1" == "-s" || "$1" == "-m" ]]; then
-      echo "$LOG_BUFFER"
+    # Check for game launch arguments first (static)
+    if [[ -f "$1" || "$1" == "-e" || "$1" == "-s" || "$1" == "-m" ]]; then
       log i "Game start option detected: $1"
       run_game "$@"
       exit 0
     fi
 
-    case "$1" in
-      --show-config)
-        echo ""
-        cat "$rd_conf"
-        exit 0
-      ;;
-      --compress-one)
-        cli_compress_single_game "$2"
-        exit 0
-      ;;
-      --compress-all)
-        cli_compress_all_games "$2"
-        exit 0
-      ;;
-      --steam-sync)
-        if [[ -n "$2" ]]; then
-          if [[ "$2" == "purge" ]]; then
-            start::steam-rom-manager nuke
-            rm -f "$retrodeck_favorites_file"
-          else
-            echo "Unknown argument \"$2\", please check the CLI help for more information."
-          fi
+    local handler="${flag_to_handler[$1]}"
+    if [[ -n "$handler" ]]; then
+      if declare -F "$handler" > /dev/null; then
+        shift
+        "$handler" "$@"
+        local rc=$?
+        if [[ $rc -eq 255 ]]; then
+          return 0
         else
-          steam_sync
+          exit $rc
         fi
-        exit 0
-      ;;
-      --repair-paths)
-        repair_paths
-        exit 0
-      ;;
-      --configurator)
-        source /app/tools/configurator.sh
-        exit 0
-      ;;
-      --reset)
-        component="${@:2}"
-        if [ -z "$component" ]; then
-          echo "You are about to reset one or more RetroDECK components or emulators."
-          echo -e "Available options are:\nall\n$(jq -r '[.[] | .manifest | keys[]] | sort | (["retrodeck"] + [.[] | select (. != "retrodeck")]) | .[]' "$component_manifest_cache_file")"
-          read -r -p "Please enter the component you would like to reset: " component
-          component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-        fi
-        log d "Resetting component: $component"
-        prepare_component "reset" "$component"
-        exit 0
-      ;;
-      --factory-reset)
-        prepare_component "factory-reset"
-        exit 0
-      ;;
-      --test-upgrade)
-        if [[ "$2" =~ ^.+ ]]; then
-          read -r -p "You are about to test upgrading RetroDECK from version $2 to $hard_version. Enter 'y' to continue ot 'n' to start RetroDECK normally: (y/N) " response
-          if [[ ${response,,} == "y" ]]; then
-            version="$2"
-            rd_logging_level="debug"  # Temporarily enable debug logging
-            log d "User replied $response, testing upgrade from version $version"
-            shift 2
-          else
-            shift 2
-          fi
-        else
-          echo "Error: Invalid format. Usage: --test-upgrade <version>"
-          exit 1
-        fi
-      ;;
-      --get)
-        preset="$2"
-        system="$3"
-        if [[ -z "$preset" ]]; then
-          echo "Error: No preset specified. Usage: --get <preset> [system] (use --get-help for more information)"
-          exit 1
-        elif [[ $(jq -r '.presets | keys[]' "$rd_conf") =~ "$preset" ]]; then
-          preset_compatible_systems=$(api_get_component "all" | jq -r --arg preset "$preset" '
-            [.[] |
-            .component_name as $comp |
-            .compatible_presets |
-            if . == "none" then empty
-            else to_entries[] |
-              if .value | type == "array" then
-                select(.key == $preset) | $comp
-              else
-                .key as $core | .value | to_entries[] |
-                select(.key == $preset) | $core
-              end
-            end
-            ] | unique | .[]
-          ')
-          if [[ -z "$system" ]]; then # User provided a preset but no system argument
-            echo "The systems that support the preset $preset are\n$preset_compatible_systems"
-          elif [[ "$system" == "all" ]]; then
-            while IFS= read -r system; do
-              current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
-              if [[ "$current_system_value" == "false" ]]; then
-                current_system_value="disabled"
-              else
-                current_system_value="enabled"
-              fi
-              echo "The preset $preset for the system $current_system_name is $current_system_value"
-            done <<< "$preset_compatible_systems"
-          elif [[ "$preset_compatible_systems" =~ "$system" ]]; then
-            preset_state=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
-            if [[ "$preset_state" == "true" ]]; then
-              preset_state="enabled"
-            else
-              preset_state="disabled"
-            fi
-            echo "The preset $preset for the system $system is $preset_state."
-          else
-            echo "The system $system is not compatible with the preset $preset. (use --get-help for more information)"
-            exit 1
-          fi
-        else
-          echo "Preset $preset not recognized. Use --get-help for a list of valid options."
-          exit 1
-        fi
-        exit 0
-      ;;
-      --set)
-        preset="$2"
-        system="$3"
-        value="$4"
-        if [[ -z "$preset" ]]; then
-          echo "Error: No preset specified. Usage: --set <preset> <system/all> <value> (use --set-help for more information)"
-          exit 1
-        elif [[ -z "$system" ]]; then
-          echo "Error: No system specified. Usage: --set <preset> <system/all> <value> (use --set-help for more information)"
-          exit 1
-        elif [[ -z "$value" ]]; then
-          echo "Error: No value specified. Usage: --set <preset> <system/all> <value> (use --set-help for more information)"
-          exit 1
-        elif [[ $(jq -r '.presets | keys[]' "$rd_conf") =~ "$preset" ]]; then
-          if [[ "$preset" == "cheevos" &&  "$value" =~ (true|on) ]]; then # Get cheevos login information
-            current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
-            if [[ "$current_system_value" == "false" ]]; then
-              read -r -p "Please enter your RetroAchievements username: " cheevos_username
-              read -r -s -p "Please enter your RetroAchievements password: " cheevos_password
-              if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
-                cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
-                cheevos_login_timestamp=$(echo "$cheevos_info" | jq -r '.Timestamp')
-                echo "RetroAchievements login succeeded, proceeding..."
-              else # login failed
-                echo "RetroAchievements login failed, please try again."
-                exit 1
-              fi
-            elif [[ ! -n "$current_system_value" ]]; then
-              echo "RetroAchivements are not compatible with $system."
-            else
-              echo "RetroAchivements for $system are already enabled."
-              exit 1
-            fi
-          fi
-          if [[ ! "$system" == "all" ]]; then # Check if emulator is already set as requested
-            current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
-            if [[ "$value" =~ (true|on) && "$current_system_value" == "true" ]]; then
-              echo "The preset $preset is already enabled for the system $system"
-            elif [[ "$value" =~ (false|off) && "$current_system_value" == "false" ]]; then
-              echo "The preset $preset is already disabled for the system $system"
-            else # Otherwise needs to be changed
-              if api_set_preset_state "$system" "$preset" "$value"; then
-                echo "$preset preset changes for $system are complete"
-              else
-                echo "Something went wrong during the preset change, please check the logs for details."
-                exit 1
-              fi
-            fi
-          else
-            while read -r system; do
-              if api_set_preset_state "$system" "$preset" "$value"; then
-                echo "$preset preset changes for all compatible systems are complete"
-              else
-                echo "Something went wrong during the preset change, please check the logs for details."
-                exit 1
-              fi
-            done < <(api_get_component "all" | jq -r --arg preset "$preset" '
-                  [.[] |
-                  .component_name as $comp |
-                  .compatible_presets |
-                  if . == "none" then empty
-                  else to_entries[] |
-                    if .value | type == "array" then
-                      select(.key == $preset) | $comp
-                    else
-                      .key as $core | .value | to_entries[] |
-                      select(.key == $preset) | $core
-                    end
-                  end
-                  ] | unique | .[]
-                ')
-          fi
-        else
-          echo "Preset $preset not recognized. Use --set-help for a list of valid options."
-          exit 1
-        fi
-        exit 0
-      ;;
-      --open)
-        cli_open_component "${@:2}"
-        exit 0
-      ;;
-      --api)
-        retrodeck_api start
-        wait
-        exit $?
-      ;;
-      -*)
-        # Catch-all for unrecognized options starting with a dash
-        log e "Error: Unknown option '$1'"
-        echo "Error: Unrecognized option '$1'. Use -h or --help for usage information."
+      else
+        log e "Handler function $handler not found for flag $1"
+        echo "Error: Internal error - handler not found for '$1'"
         exit 1
-      ;;
-      *)
-        # If it reaches here and is an unrecognized argument, report the error
-        log e "Error: Command or file '$1' not recognized."
-        echo "Error: Command or file '$1' not recognized. Use -h or --help for usage information."
-        exit 1
-      ;;
-    esac
+      fi
+    elif [[ "$1" == -* ]]; then
+      log e "Error: Unknown option '$1'"
+      echo "Error: Unrecognized option '$1'. Use -h or --help for usage information."
+      exit 1
+    else
+      log e "Error: Command or file '$1' not recognized."
+      echo "Error: Command or file '$1' not recognized. Use -h or --help for usage information."
+      exit 1
+    fi
   done
-}
-
-cli_open_component() {
-  local command="$1"
-  shift
-
-  if [[ "$command" == "--list" ]]; then
-    echo "Installed components:"
-    echo "$(api_get_component "all" | jq -r --arg component "$component" '.[] | select(.component_name != "retrodeck") | .component_name')"
-  else
-    if [[ "$system"]]
-    local component_path=$(api_get_component "$command" | jq -r '.[] | select(.component_name != "retrodeck") | .path')
-    if [[ -n "$component_path" ]]; then
-      log d "Launching component '$command' with args: $@"
-      /bin/bash "$component_path/component_launcher.sh" "$@"
-    else
-      log e "No launcher could be found for the component: $command"
-    fi
-  fi
-}
-
-cli_compress_single_game() {
-  local file="$1"
-
-  if [[ -e "$file" ]]; then
-    local compatible_compression_format=$(find_compatible_compression_format "$file")
-    if [[ ! $compatible_compression_format == "none" ]]; then
-      read -r -p "Would you like to delete the original files after they are compressed?\n\n\If you select 'n', the original files will remain. You will need to remove them manually, and this may cause duplicate games to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a backup of your files.: (y/n)" post_compression_cleanup
-      echo "Compressing $(basename "$file") to $compatible_compression_format format"
-      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
-      echo "The compression process is complete."
-    else
-      echo "The selected file does not contain any compatible compression formats."
-    fi
-  fi
-}
-
-cli_compress_all_games() {
-  compressible_games_list_file="$(mktemp)"
-  
-  api_get_compressible_games "all" | jq -c '.[]' > "$compressible_games_list_file"
-
-  if [[ -n "$(cat "$compressible_games_list_file")" ]]; then
-    log d "Found the following games to compress: ${all_compressible_games[*]}"
-  else
-    echo "No compressible files were found."
-    rm "$compressible_games_list_file"
-    return 1
-  fi
-
-  read -r -p "Would you like to delete the original files after they are compressed?\n\n\If you select 'n', the original files will remain. You will need to remove them manually, and this may cause duplicate games to appear in the RetroDECK library.\n\n\Before enabling automatic cleanup, please ensure you have a backup of your files.: (y/n)" post_compression_cleanup
-
-  while read -r obj; do # Iterate through all returned menu objects
-    local game=$(jq -r '.game' <<< "$obj")
-    local compression_format=$(jq -r '.format' <<< "$obj")
-    
-    while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
-    sleep 0.1
-    done
-    (
-      echo "Compressing $(basename "$game") into $compression_format format."
-      compress_game "$compression_format" "$game" "$post_compression_cleanup"
-    ) &
-  done < <(cat "$compressible_games_list_file")
-
-  rm "$compressible_games_list_file"
-
-  echo "The compression process is complete!"  
 }
