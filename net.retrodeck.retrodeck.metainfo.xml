@@ -13,7 +13,14 @@
     <url type="donation">https://opencollective.com/RetroDECK</url>
     <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
     <url type="vcs-browser">https://github.com/RetroDECK/RetroDECK</url>
-    <content_rating type="oars-1.0" />
+    <content_rating type="oars-1.1" />
+    <supports>
+        <control>console</control>
+        <control>gamepad</control>
+        <control>keyboard</control>
+        <control>pointing</control>
+        <control>touch</control>
+    </supports>
     <screenshots>
         <screenshot type="default">
             <caption>RetroDECK Logo</caption>
