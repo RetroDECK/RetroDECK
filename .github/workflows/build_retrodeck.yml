@@ -149,9 +149,9 @@ jobs:
 
           # Choose build command (keep original behaviour)
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            BUILD_CMD=(/usr/bin/time -v /bin/bash ./retrodeck_builder.sh --cicd)
+            BUILD_CMD=(/bin/bash ./retrodeck_builder.sh --cicd)
           else
-            BUILD_CMD=(/usr/bin/time -v /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts)
+            BUILD_CMD=(/bin/bash ./retrodeck_builder.sh --cicd --no-artifacts)
           fi
 
           # Start the build (time -v to capture peak RSS). Run in background so we can sample system metrics.
