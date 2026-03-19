@@ -26,22 +26,88 @@ check_desktop_mode() {
 }
 
 check_low_space() {
-  # This function will verify that the drive with the $HOME path on it has at least 10% space free, so the user can be warned before it fills up
-  # USAGE: low_space_warning
+  # Check all unique filesystems used by RetroDECK paths for low disk space.
+  # Shows a warning dialog listing affected paths grouped by filesystem.
+  # USAGE: check_low_space
+  if [[ "$low_space_warning" != "true" ]]; then
+    return
+  fi
 
-  if [[ $low_space_warning == "true" ]]; then
-    local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
-    if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK"  --extra-button="Never show again" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK - Warning: Low Space" \
-      --text="Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.")
-      if [[ $choice =~ "Never show again" ]]; then
-        log i "Selected: \"Never show this again\""
-        set_setting_value "$rd_conf" "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+  local -a excluded_paths=("sdcard" "logs_path")
+  local threshold="${low_space_threshold:-90}"
+
+  # Read all path keys and values from the config, excluding exceptions
+  local -A path_entries=()
+  while IFS=$'\t' read -r key value; do
+    [[ -z "$key" || -z "$value" ]] && continue
+    [[ ! -d "$value" ]] && continue
+    local skip=false
+    for excluded in "${excluded_paths[@]}"; do
+      if [[ "$key" == "$excluded" ]]; then
+        skip=true
+        break
       fi
+    done
+    [[ "$skip" == true ]] && continue
+    path_entries["$key"]="$value"
+  done < <(jq -r '.paths | to_entries[] | [.key, .value] | @tsv' "$rd_conf")
+
+  if [[ ${#path_entries[@]} -eq 0 ]]; then
+    log d "No valid paths found to check for disk space"
+    return
+  fi
+
+  # Group path keys by mount point and check usage
+  local -A mount_to_keys=()
+  local -A mount_usage=()
+  for key in "${!path_entries[@]}"; do
+    local path="${path_entries[$key]}"
+    local mount_point
+    mount_point=$(df --output=target "$path" 2>/dev/null | tail -1)
+    [[ -z "$mount_point" ]] && continue
+
+    if [[ -z "${mount_usage[$mount_point]+x}" ]]; then
+      mount_usage["$mount_point"]=$(df --output=pcent "$path" | tail -1 | tr -d " %")
     fi
-    log i "Selected: \"OK\""
+
+    if [[ -n "${mount_to_keys[$mount_point]}" ]]; then
+      mount_to_keys["$mount_point"]+=$'\n'"$key"
+    else
+      mount_to_keys["$mount_point"]="$key"
+    fi
+  done
+
+  # Build warning message for filesystems over threshold
+  local warning_text=""
+  for mount_point in "${!mount_usage[@]}"; do
+    local usage="${mount_usage[$mount_point]}"
+    if [[ "$usage" -ge "$threshold" ]]; then
+      warning_text+="<b>Filesystem:</b> ${mount_point} (<span foreground='${purple}'>${usage}% full</span>)\n"
+      warning_text+="RetroDECK folders on this filesystem:\n"
+      while IFS= read -r key; do
+        warning_text+="  - ${key}: ${path_entries[$key]}\n"
+      done <<< "${mount_to_keys[$mount_point]}"
+      warning_text+="\n"
+    fi
+  done
+
+  if [[ -z "$warning_text" ]]; then
+    log d "All filesystems are below the ${threshold}% usage threshold"
+    return
+  fi
+
+  local choice
+  choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --ok-label="OK" --extra-button="Never show again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK - Warning: Low Space" \
+    --text="One or more drives used by RetroDECK are over <span foreground='${purple}'>${threshold}%</span> full!\n\nIf a drive fills up completely, you could lose data or experience a system crash.\n\n${warning_text}Please move some RetroDECK folders to other storage locations using the Configurator or free up some space.")
+
+  if [[ "$choice" =~ "Never show again" ]]; then
+    log i "User selected: Never show low space warning again"
+    set_setting_value "$rd_conf" "low_space_warning" "false" "retrodeck" "options"
+  else
+    log i "User acknowledged low space warning"
   fi
 }
 
@@ -55,7 +121,7 @@ check_is_steam_deck() {
   fi
 }
 
-check_for_version_update() {
+check_for_online_update() {
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
   if curl --silent --head --max-time 5 --output /dev/null "$rd_gh_api_url" 2>/dev/null; then

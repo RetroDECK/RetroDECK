@@ -191,9 +191,9 @@ configurator_reset_dialog() {
     if [[ $? -eq 0 ]]; then
       local -a all_components=()
       mapfile -t all_components < <(jq -r \
-        --slurpfile manifests "$component_manifest_cache_file" '
-        [$manifests[0][] | .manifest | keys[]] | unique | .[]
-      ' <<< 'null')
+      '
+        [.[] | .manifest | keys[]] | unique | .[]
+      ' "$component_manifest_cache_file")
 
       local progress_pipe
       progress_pipe=$(mktemp -u)
@@ -244,10 +244,10 @@ configurator_reset_dialog() {
     # Resolve friendly names from manifest cache
     local pretty_names
     pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R \
-      --slurpfile manifests "$component_manifest_cache_file" '
+    '
       . as $component |
-      [$manifests[0][] | .manifest | select(has($component)) | .[$component].name // $component] | first
-    ')
+      [.[] | .manifest | select(has($component)) | .[$component].name // $component]
+    ' "$component_manifest_cache_file")
 
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -356,7 +356,26 @@ configurator_move_folder_dialog() {
     esac
 
     if [[ -n "$dest" ]]; then
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator - Move Folder" \
+        --text="Moving RetroDECK path $rd_dir_name to $dest, please wait..." < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
       local result=$(api_do_move_retrodeck_directory "$rd_dir_name" "$dest")
+
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "$result"
     fi
   else # The folder to move was not found at the path pulled from retrodeck.json and it needs to be reconfigured manually.
@@ -367,7 +386,7 @@ configurator_move_folder_dialog() {
       source_component_functions
       prepare_component "postmove" "all"
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
-      configurator_move_folder_dialog "$rd_dir_name"
+      configurator_nav="refresh"
     else
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No location was selected, returning to the Data Management menu."
     fi
@@ -375,7 +394,6 @@ configurator_move_folder_dialog() {
 }
 
 configurator_change_preset_dialog() {
-  # REBUILD
   # This function will build a list of all systems compatible with a given preset,
   # show their current enable/disabled state and allow the user to change one or more.
   # USAGE: configurator_change_preset_dialog "$preset"
@@ -421,7 +439,18 @@ configurator_change_preset_dialog() {
         fi
       fi
 
-      (
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK - Enabling Preset $preset" \
+        --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..." < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
       while read -r component_obj; do
         local component="$(jq -r '.system_name' <<< $component_obj)"
         local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
@@ -434,12 +463,13 @@ configurator_change_preset_dialog() {
         fi
 
         local preset_enabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
-                                if $core != "" then
-                                  .[$component].compatible_presets[$core][$preset].[1] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[1] // empty
-                                end
-                              ' "$rd_components/$component/component_manifest.json")
+                                        .[] | .manifest | select(has($component)) | .[$component] |
+                                        if $core != "" then
+                                          .compatible_presets[$core][$preset][1] // empty
+                                        else
+                                          .compatible_presets[$preset][1] // empty
+                                        end
+                                      ' "$component_manifest_cache_file")
 
         if [[ ! "$current_status" == "$preset_enabled_state" ]]; then
           if [[ -n "$child_component" ]]; then
@@ -457,16 +487,29 @@ configurator_change_preset_dialog() {
           fi
         fi
       done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
-      ) |
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK - Enabling Preset $preset" \
-      --width=400 --height=200 \
-      --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..."
+      
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       configurator_nav="refresh"
     elif [[ "$choice" =~ "Disable All" ]]; then
       log d "User selected \"Disable All\""
-      (
+      
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK - Disabling Preset $preset" \
+        --text="RetroDECK is <span foreground='$purple'><b>Disabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..." < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
       while read -r component_obj; do
         local component="$(jq -r '.system_name' <<< $component_obj)"
         local parent_name="$(jq -r '.parent_component // empty' <<< $component_obj)"
@@ -479,12 +522,13 @@ configurator_change_preset_dialog() {
         fi
 
         local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
-                                if $core != "" then
-                                  .[$component].compatible_presets[$core][$preset].[0] // empty
-                                else
-                                  .[$component].compatible_presets[$preset].[0] // empty
-                                end
-                              ' "$rd_components/$component/component_manifest.json")
+                                        .[] | .manifest | select(has($component)) | .[$component] |
+                                        if $core != "" then
+                                          .compatible_presets[$core][$preset][0] // empty
+                                        else
+                                          .compatible_presets[$preset][0] // empty
+                                        end
+                                      ' "$component_manifest_cache_file")
 
         if [[ ! "$current_status" == "$preset_disabled_state" ]]; then
           if [[ -n "$child_component" ]]; then
@@ -502,12 +546,13 @@ configurator_change_preset_dialog() {
           fi
         fi
       done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
-      ) |
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK - Disabling Preset $preset" \
-      --width=400 --height=200 \
-      --text="RetroDECK is <span foreground='$purple'><b>Disabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..."
+
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       configurator_nav="refresh"
     else
       log d "User selected \"$choice\""
@@ -558,14 +603,14 @@ configurator_change_preset_value_dialog() {
         component_id="$parent_name"
       fi
 
-      preset_disabled_state=$(jq -r --arg comp "$component_id" --arg core "$component" --arg parent "$parent_name" --arg preset "$preset" '
-        [.[] | .manifest | select(has($comp)) | .[$comp]] | first |
-        if $parent != "" then
-          .compatible_presets[$core][$preset][0] // empty
-        else
-          .compatible_presets[$preset][0] // empty
-        end
-      ' "$component_manifest_cache_file")
+      local preset_disabled_state=$(jq -r --arg component "$component" --arg core "$child_component" --arg preset "$preset" '
+                                        .[] | .manifest | select(has($component)) | .[$component] |
+                                        if $core != "" then
+                                          .compatible_presets[$core][$preset][0] // empty
+                                        else
+                                          .compatible_presets[$preset][0] // empty
+                                        end
+                                      ' "$component_manifest_cache_file")
 
       if [[ "$preset" =~ (cheevos|cheevos_hardcore) && "$choice" != "$preset_disabled_state" ]]; then
         if [[ -z "$cheevos_username" || -z "$cheevos_token" ]]; then
@@ -588,31 +633,41 @@ configurator_change_preset_value_dialog() {
 }
 
 configurator_bios_checker_dialog() {
-  # REBUILD
   log d "Starting BIOS checker"
 
-  (
-    build_zenity_bios_checker_menu_array "bios_checked_list"
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
 
-    log d "Finished checking BIOS files"
-
-    rd_zenity --list --title="RetroDECK Configurator - BIOS Checker" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-      --column "BIOS File Name" \
-      --column "Systems" \
-      --column "Found" \
-      --column "Hash Matches" \
-      --column "Required" \
-      --column "Expected Path" \
-      --column "Description" \
-      --column "MD5" \
-      "${bios_checked_list[@]}"
-
-  ) |
-  rd_zenity --progress --auto-close --no-cancel --pulsate \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - BIOS Checker: Scanning" \
-    --width=400 --height=100
+    --text="RetroDECK is scanning your BIOS files.\n\nPlease wait..." < "$progress_pipe" &
+  local zenity_pid=$!
+
+  exec 3>"$progress_pipe"
+
+  build_zenity_bios_checker_menu_array "bios_checked_list"
+
+  echo "100" >&3
+
+  exec 3>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
+
+  log d "Finished checking BIOS files"
+
+  rd_zenity --list --title="RetroDECK Configurator - BIOS Checker" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column "BIOS File Name" \
+    --column "Systems" \
+    --column "Found" \
+    --column "Hash Matches" \
+    --column "Required" \
+    --column "Expected Path" \
+    --column "Description" \
+    --column "MD5" \
+    "${bios_checked_list[@]}"
 }
 
 configurator_compression_tool_dialog() {
@@ -668,20 +723,33 @@ configurator_compression_tool_dialog() {
 }
 
 configurator_compress_single_game_dialog() {
-  # REBUILD
   if file=$(file_browse "Game to compress"); then
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
-      (
-      echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
-      log i "Compressing $(basename "$file") to $compatible_compression_format format"
-      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
-      ) |
+      
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --width="800" \
-      --title "RetroDECK Configurator - Compression in Progress"
+      --title "RetroDECK Configurator - Compression in Progress" < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
+      echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
+      log i "Compressing $(basename "$file") to $compatible_compression_format format"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
+
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete."
     else
       configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The selected file does not contain any compatible compression formats."
@@ -690,17 +758,28 @@ configurator_compress_single_game_dialog() {
 }
 
 configurator_compress_multiple_games_dialog() {
-  # REBUILD
   log d "Starting to compress \"$1\""
 
   compressible_games_list_file="$(mktemp)"
 
-  (
-    api_get_compressible_games "$1" | jq -c '.[]' > "$compressible_games_list_file"
-  ) |
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - Compression Tool" --text "RetroDECK is searching for compressible games, please wait..."
+  --title "RetroDECK Configurator - Compression Tool" --text "RetroDECK is searching for compressible games, please wait..." < "$progress_pipe" &
+  local zenity_pid=$!
+
+  exec 3>"$progress_pipe"
+
+  api_get_compressible_games "$1" | jq -c '.[]' > "$compressible_games_list_file"
+  
+  echo "100" >&3
+
+  exec 3>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
 
   if [[ -n "$(cat "$compressible_games_list_file")" ]]; then
     log d "Found the following games to compress: ${all_compressible_games[*]}"
@@ -904,8 +983,24 @@ configurator_clean_empty_systems_dialog() {
   # REBUILD
   configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Before removing any identified empty system folders,\n<span foreground='$purple'><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
 
-  (
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close --pulsate \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - Clean Empty System Folders" --text "Searching for empty system folders.\n\nPlease wait..." < "$progress_pipe" &
+  local zenity_pid=$!
+
+  exec 3>"$progress_pipe"
+
   build_zenity_find_empty_rom_folders_menu_array empty_rom_folders_list
+
+  echo "100" >&3
+
+  exec 3>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
 
   if [[ -n ${empty_rom_folders_list[@]} ]]; then
     choice=$(rd_zenity --list \
@@ -936,10 +1031,6 @@ configurator_clean_empty_systems_dialog() {
   else
     configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "No empty folders found for removal."
   fi
-  ) |
-  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close --pulsate \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - Clean Empty System Folders" --text "Searching for empty system folders.\n\nPlease wait..."
 }
 
 configurator_usb_import_dialog() {
@@ -1068,12 +1159,25 @@ configurator_iconset_toggle_dialog() {
     
     if [ $? == 0 ] # User clicked "Yes"
     then
-      (
-      handle_folder_iconsets "false"
-      ) |
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress "
+            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
+      handle_folder_iconsets "false"
+
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+      
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Folder Iconsets" \
@@ -1087,12 +1191,25 @@ configurator_iconset_toggle_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      (
+      
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
+      local zenity_pid=$!
+
+      exec 3>"$progress_pipe"
+
       handle_folder_iconsets "lahrs-main"
-      ) |
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Utility - Toggle Folder Iconsets - In Progress"
+      echo "100" >&3
+
+      exec 3>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Toggle Folder Iconsets" \

@@ -82,21 +82,19 @@ get_helper_files() {
   local component="${1:-all}"
 
   if [[ "$component" == "all" ]]; then
-    jq --slurpfile manifests "$component_manifest_cache_file" '
-      [$manifests[0][] | .component_path as $component_path |
+    jq '[.[] | .component_path as $component_path |
        .manifest | .. | objects | select(has("helper_files")) |
        .helper_files | to_entries[].value |
        . + {source_path: ($component_path + "/helper_files")}]
-    ' <<< 'null'
+     ' "$component_manifest_cache_file"
   else
     jq --arg component "$component" \
-       --slurpfile manifests "$component_manifest_cache_file" '
-      [$manifests[0][] | select(.manifest | has($component)) |
+    '[.[] | select(.manifest | has($component)) |
        .component_path as $component_path |
        .manifest[$component] | select(has("helper_files")) |
        .helper_files | to_entries[].value |
        . + {source_path: ($component_path + "/helper_files")}]
-    ' <<< 'null'
+    ' "$component_manifest_cache_file"
   fi
 }
 
@@ -218,8 +216,8 @@ prepare_component() {
         fi
       fi
     done < <(jq -r --arg action "$action" \
-      --slurpfile manifests "$component_manifest_cache_file" '
-      [$manifests[0][] | .manifest | to_entries[] |
+    '
+      [.[] | .manifest | to_entries[] |
        {name: .key, priority: (
          .value.prepare_priority
          | if type == "object" then
@@ -234,7 +232,7 @@ prepare_component() {
       | .[]
       | [(.priority | tostring), .name]
       | @tsv
-    ' <<< 'null')
+    ' "$component_manifest_cache_file")
   else
     local handler="_prepare_component::${component}"
     if declare -F "$handler" > /dev/null; then
@@ -278,14 +276,14 @@ prepare_component() {
         local preset_disabled_state
         preset_disabled_state=$(jq -r --arg comp "$manifest_component" \
           --arg core "$child_component" --arg preset "$preset" \
-          --slurpfile manifests "$component_manifest_cache_file" '
-          $manifests[0][] | .manifest | select(has($comp)) | .[$comp] |
+        '
+          $.[] | .manifest | select(has($comp)) | .[$comp] |
           if $core != "" then
             .compatible_presets[$core][$preset][0] // empty
           else
             .compatible_presets[$preset][0] // empty
           end
-        ' <<< 'null')
+        ' "$component_manifest_cache_file")
 
         local preset_current_state
         preset_current_state=$(get_setting_value "$rd_conf" "$preset_component" "retrodeck" "$preset")
@@ -310,9 +308,9 @@ get_component_path() {
 
   local component="$1"
   jq -r --arg component "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | select(.manifest | has($component)) | .component_path
-  ' <<< 'null' | head -1
+  '
+    $.[] | select(.manifest | has($component)) | .component_path
+  ' "$component_manifest_cache_file"
 }
 
 get_own_component_path() {
@@ -331,12 +329,12 @@ get_all_preset_definitions() {
   # Returns a JSON object keyed by preset name with name and description.
   # USAGE: get_all_preset_definitions
   
-  jq --slurpfile manifests "$component_manifest_cache_file" '
-    reduce ($manifests[0][] | .manifest | .. | objects | select(has("preset_definitions")) | .preset_definitions | to_entries[]) as $entry (
+  jq '
+    reduce (.[] | .manifest | .. | objects | select(has("preset_definitions")) | .preset_definitions | to_entries[]) as $entry (
       {};
       if has($entry.key) then . else . + {($entry.key): $entry.value} end
     )
-  ' <<< 'null'
+  ' "$component_manifest_cache_file"
 }
 
 get_component_version() {
@@ -351,9 +349,9 @@ get_component_version() {
     return
   fi
   jq -r --arg component "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($component)) | .[$component].component_version // "0"
-  ' <<< 'null' | head -1
+  '
+    .[] | .manifest | select(has($component)) | .[$component].component_version // "0"
+  ' "$component_manifest_cache_file"
 }
 
 get_installed_component_version() {
@@ -393,15 +391,15 @@ check_component_compatibility() {
   local component="$1"
   local core_framework_version
   core_framework_version=$(jq -r \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
+  ' "$component_manifest_cache_file")
   
   local component_framework_compat
   component_framework_compat=$(jq -r --arg component "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($component)) | .[$component].core_framework_compatibility // "0"
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has($component)) | .[$component].core_framework_compatibility // "0"
+  ' "$component_manifest_cache_file")
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
     log e "Component $component requires core Framework version $component_framework_compat but current is $core_framework_version"
     return 1
@@ -502,9 +500,9 @@ validate_component_archive() {
   # Check Framework compatibility
   local core_framework_version
   core_framework_version=$(jq -r \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has("retrodeck")) | .retrodeck.core_framework_version // "0"
+  ' "$component_manifest_cache_file")
   local component_framework_compat
   component_framework_compat=$(jq -r --arg component "$component_name" '.[$component].core_framework_compatibility // "0"' "$manifest_file")
   if [[ "$component_framework_compat" != "$core_framework_version" ]]; then
@@ -739,9 +737,9 @@ check_component_for_update() {
 
   local component_manifest
   component_manifest=$(jq -c --arg component "$component_name" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($component)) | .[$component]
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has($component)) | .[$component]
+  ' "$component_manifest_cache_file")
   if [[ -z "$component_manifest" || "$component_manifest" == "null" ]]; then
     log e "Manifest not found for component $component_name"
     return 1
@@ -1058,10 +1056,10 @@ run_component_updates() {
     else
       log d "Component $component_name is up to date at version $manifest_version"
     fi
-  done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | to_entries[] |
+  done < <(jq -r '
+    .[] | .manifest | to_entries[] |
     [.key, (.value.component_version // "0")] | @tsv
-  ' <<< 'null')
+  ' "$component_manifest_cache_file")
   if [[ "$component_updated" == true ]]; then
     update_component_presets
     build_retrodeck_current_presets
@@ -1077,9 +1075,9 @@ init_component_options() {
   local component_name="$1"
   local default_options
   default_options=$(jq -c --arg component "$component_name" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($component)) | .[$component].component_options // null
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has($component)) | .[$component].component_options // null
+  ' "$component_manifest_cache_file")
   if [[ -z "$default_options" || "$default_options" == "null" ]]; then
     log d "No component_options defined in manifest for $component_name"
     return
@@ -1113,11 +1111,11 @@ update_component_options() {
   while IFS=$'\t' read -r component_name; do
     [[ -z "$component_name" ]] && continue
     init_component_options "$component_name"
-  done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | to_entries[] |
+  done < <(jq -r '
+    .[] | .manifest | to_entries[] |
     select(.value.component_options != null) |
     .key
-  ' <<< 'null')
+  ' "$component_manifest_cache_file")
   
   log d "Component options updated from manifests"
 }
@@ -1132,19 +1130,19 @@ reset_component_options() {
     while IFS= read -r comp_name; do
       [[ -z "$comp_name" ]] && continue
       reset_component_options "$comp_name"
-    done < <(jq -r --slurpfile manifests "$component_manifest_cache_file" '
-      $manifests[0][] | .manifest | to_entries[] |
+    done < <(jq -r '
+      .[] | .manifest | to_entries[] |
       select(.value.component_options != null) |
       .key
-    ' <<< 'null')
+    ' "$component_manifest_cache_file")
     return
   fi
 
   local default_options
   default_options=$(jq -c --arg comp "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($comp)) | .[$comp].component_options // null
-  ' <<< 'null' | head -1)
+  '
+    .[] | .manifest | select(has($comp)) | .[$comp].component_options // null
+  ' "$component_manifest_cache_file")
   if [[ -z "$default_options" || "$default_options" == "null" ]]; then
     log d "No component_options defined in manifest for $component, nothing to reset"
     return
@@ -1164,7 +1162,7 @@ reset_component_options() {
 }
 
 update_component_presets() {
-  # Update the presets section of retrodeck.cfg with entries from all component manifests.
+  # Update the presets section of retrodeck.json with entries from all component manifests.
   # New preset sections, component entries, and nested core entries are added with their default (disabled) values.
   # Existing entries are not modified.
   # USAGE: update_component_presets
@@ -1219,7 +1217,7 @@ update_component_presets() {
     )
   ' "$rd_conf" > "$tmp" && mv "$tmp" "$rd_conf"
 
-  log d "Component presets updated in retrodeck.cfg"
+  log d "Component presets updated in retrodeck.json"
 }
 
 remove_component_options() {
@@ -1282,15 +1280,15 @@ check_for_component_updates() {
   
   local mismatched
   mismatched=$(jq -r --argjson config_versions "$(jq '.component_versions // {}' "$rd_conf")" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | to_entries[] |
+  '
+    .[] | .manifest | to_entries[] |
     select(.key != "retrodeck") |
     .key as $component |
     (.value.component_version // "0") as $manifest_ver |
     ($config_versions[$component] // "0") as $installed_ver |
     select($manifest_ver != $installed_ver) |
     $component
-  ' <<< 'null' | head -1)
+  ' "$component_manifest_cache_file")
   [[ -n "$mismatched" ]]
 }
 
@@ -1299,8 +1297,8 @@ get_all_compression_targets() {
   # Returns a JSON object keyed by format with targets and optional extensions.
   # USAGE: get_all_compression_targets
   
-  jq --slurpfile manifests "$component_manifest_cache_file" '
-    reduce ($manifests[0][] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
+  jq '
+    reduce (.[] | .manifest | .. | objects | select(has("compression")) | .compression | to_entries[]) as $entry (
       {};
       .[$entry.key] = {
         targets: ((.[$entry.key].targets // []) + ($entry.value.targets // []) | unique)
@@ -1309,7 +1307,7 @@ get_all_compression_targets() {
           .[$entry.key].extensions = ((.[$entry.key].extensions // []) + $entry.value.extensions | unique)
         else . end
     )
-  ' <<< 'null'
+  ' "$component_manifest_cache_file"
 }
 
 build_compression_lookups() {
@@ -1384,194 +1382,4 @@ find_compatible_compression_format() {
     log e "No validation handler found for format: $format"
     echo "none"
   fi
-}
-
-compress_game() {
-  # Compress a file to its compatible format and optionally clean up source files.
-  # Dispatches to the appropriate component handler based on format.
-  # USAGE: compress_game "$format" "$full_path_to_input_file" "$cleanup_choice"
-
-  local format="$1"
-  local file="$2"
-  local post_compression_cleanup="$3"
-  local filename_no_extension="${file%.*}"
-  local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
-  local dest_file=$(dirname "$(realpath "$file")")"/${filename_no_extension##*/}"
-
-  local handler="_compress_game::${format}"
-  if ! declare -F "$handler" > /dev/null; then
-    log e "No compression handler found for format: $format"
-    return 1
-  fi
-
-  "$handler" "$source_file" "$dest_file"
-
-  if [[ "$post_compression_cleanup" == "true" && -f "${file%.*}.$format" ]]; then
-    log i "Performing post-compression file cleanup"
-    local cleanup_handler="_post_compression_cleanup::${format}"
-    if ! declare -F "$cleanup_handler" > /dev/null; then
-      log e "No compression cleanup handler found for format: $format"
-      return 1
-    fi
-
-    "$cleanup_handler" "$source_file"
-  elif [[ "$post_compression_cleanup" == "true" ]]; then
-    log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
-  fi
-}
-
-build_retrodeck_current_presets() {
-  # This function will read the presets sections of the retrodeck.json file and build the default state if it is anything other than disabled
-  # This can also be used to build the "current" state post-update after adding new systems
-  # USAGE: build_retrodeck_current_presets
-
-  local preset
-  local component
-  local child_component
-  local parent_component
-  local preset_disabled_state
-  local preset_current_state
-
-  while IFS= read -r preset; do
-    while IFS= read -r component; do
-      child_component=""
-      parent_component=$(jq -r --arg preset "$preset" --arg component "$component" '
-        .presets[$preset]
-        | paths(scalars)
-        | select(.[-1] == $component)
-        | if length > 1 then .[-2] else $preset end
-      ' "$rd_conf")
-
-      if [[ "$parent_component" != "$preset" ]]; then
-        parent_component="${parent_component%_cores}"
-        child_component="$component"
-        component="$parent_component"
-      fi
-
-      preset_disabled_state=$(jq -r --arg comp "$component" --arg core "$child_component" --arg preset "$preset" '
-        [.[] | .manifest | select(has($comp)) | .[$comp]] | first |
-        if $core != "" then
-          .compatible_presets[$core][$preset][0] // empty
-        else
-          .compatible_presets[$preset][0] // empty
-        end
-      ' "$component_manifest_cache_file")
-
-      if [[ -z "$preset_disabled_state" ]]; then
-        log w "No disabled state found for component \"$component\" core \"$child_component\" preset \"$preset\", skipping."
-        continue
-      fi
-
-      if [[ -n "$child_component" ]]; then
-        component="$child_component"
-      fi
-
-      preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
-
-      if [[ "$preset_current_state" != "$preset_disabled_state" ]]; then
-        api_set_preset_state "$component" "$preset" "$preset_current_state"
-      fi
-    done < <(jq -r --arg preset "$preset" '.presets[$preset] | to_entries[] |
-      if (.key | endswith("_cores")) then
-        .value | keys[]
-      else
-        .key
-      end' "$rd_conf")
-  done < <(jq -r '.presets | keys[]' "$rd_conf")
-}
-
-install_preset_files() {
-  # Copy files from a source to a destination for use by a preset.
-  # The destination path must be the FULL destination, even if it does not currently exist.
-  # If the destination path does not exist it will be created.
-  # USAGE: install_preset_files "$source" "$destination"
-
-  local source="$1"
-  local dest="$2"
-
-  if [[ -d "$source" ]]; then
-    [[ "$source" != */ ]] && source="${source}/"
-  elif [[ ! -f "$source" ]]; then
-    log d "Provided source $source is neither a valid file or directory"
-    return 1
-  fi
-
-  if [[ -d "$dest" ]]; then
-    [[ "$dest" != */ ]] && dest="${dest}/"
-  fi
-
-  log d "Installing files from $source to $dest"
-  rsync -rlD --mkpath "$source" "$dest"
-}
-
-remove_preset_files() {
-  # This function will remove installed preset files from a given destination.
-  # If the source (the installed file/folder from its "shipped" location) is a file and the dest a file path to wherever it was installed when enabled, it will be removed.
-  # If the source is a file and the dest is a directory (meaning the file would have been installed into a folder with other files in it), the specific file will be removed from the dest directory.
-  # If the source is a directory and the dest is also a directory (meaning multiple files were installed somewhere), the function will compare all files in the source and remove them from the dest,
-  # meaning even if multiple preset files were installed into a location containing non-preset files, only the correct ones (the ones that exist in the "shipped" location) will be removed.
-  # In all cases, if the destination contains one or more subfolders which are empty after the files have been removed, they will be pruned as well.
-  # Optionally, the mode can be set to "purge" and the dest will be removed regardless of other contents, so should only be used if there are no non-preset-related files there.
-  # USAGE: remove_preset_files "$source" "$dest" ["$mode"]
-
-  local source="$1"
-  local dest="$2"
-  local mode="${3:-}"
-
-  if [[ ! -e "$source" ]]; then
-    log d "Source location $source does not exist."
-    return 1
-  fi
-
-  local dest_root
-  if [[ -d "${dest%/}" ]]; then
-    dest_root="${dest%/}"
-  else
-    dest_root=$(dirname "$dest")
-  fi
-
-  if [[ -f "$source" && -f "$dest" ]]; then # If source and dest are both single files
-    log d "Removing preset file $(basename "$source") from location $dest_root"
-    rm -f "$dest"
-    prune_empty_parents "$dest_root" "$dest_root"
-    return 0
-  fi
-
-  if [[ -f "$source" && -d "${dest%/}" ]]; then
-    local base target
-    base=$(basename "$source")
-    target="${dest%/}/$base"
-    if [[ -f "$target" ]]; then
-      log d "Removing file $base from destination directory $dest"
-      rm -f "$target"
-      prune_empty_parents "$(dirname "$target")" "${dest%/}"
-    fi
-    prune_empty_parents "${dest%/}" "${dest%/}"
-    return 0
-  fi
-
-  if [[ -d "${source%/}" && -d "${dest%/}" ]]; then # If both source and dest are directories
-    if [[ "$mode" == "purge" ]]; then # Delete entire dest directory without checking contents
-      log d "Purging preset file location $dest"
-      rm -rf "$dest"
-    else
-      local source_dir="${source%/}"
-      local dest_dir="${dest%/}"
-
-      while IFS= read -r -d '' source_file; do
-        local relative_path="${source_file#$source_dir/}"
-        local target="$dest_dir/$relative_path"
-        if [[ -f "$target" ]]; then
-          log d "Preset file $target found, removing."
-          rm -f "$target"
-          prune_empty_parents "$(dirname "$target")" "$dest_dir"
-        fi
-      done < <(find "$source_dir" -type f -print0)
-
-      prune_empty_parents "$dest_dir" "$dest_dir"
-    fi
-    return 0
-  fi
-
-  return 1
 }

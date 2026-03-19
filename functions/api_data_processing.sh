@@ -89,8 +89,8 @@ api_get_component() {
 
   local component="$1"
   jq --arg component "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    [$manifests[0][] |
+  '
+    [.[] |
      .component_path as $path |
      .manifest | to_entries[] |
      .key as $component_name | .value as $sys |
@@ -106,7 +106,7 @@ api_get_component() {
     ]
     | [.[] | select(.component_name == "retrodeck")] +
       ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))
-  ' <<< 'null'
+  ' "$component_manifest_cache_file"
 }
 
 api_get_all_preset_names() {
@@ -155,14 +155,16 @@ api_get_current_preset_state() {
 
       local manifest_data
       manifest_data=$(jq --arg comp "$base_component" \
-        --slurpfile manifests "$component_manifest_cache_file" '
-        $manifests[0][] | select(.manifest | has($comp)) | .manifest
-      ' <<< 'null')
+      '
+        .[] | select(.manifest | has($comp)) | .manifest
+      ' "$component_manifest_cache_file")
 
       if [[ -z "$manifest_data" || "$manifest_data" == "null" ]]; then
         log e "Manifest not found for component $base_component"
         continue
       fi
+
+      local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
 
       local json_obj
       json_obj=$(jq -c --arg component "$component" \
@@ -206,15 +208,15 @@ api_get_bios_file_status() {
 
   # Merge BIOS info from cache
   jq --argjson systems "$systems_to_check" \
-    --slurpfile manifests "$component_manifest_cache_file" '
+  '
     {bios: (
-      [$manifests[0][] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
+      [.[] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
       if ($systems | length) == 0
       then .
       else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
       end
     )}
-  ' <<< 'null' | envsubst > "$tmp_bios"
+  ' "$component_manifest_cache_file" | envsubst > "$tmp_bios"
 
   # Find all files in BIOS directories
   mapfile -t files_to_check < <(
@@ -311,14 +313,14 @@ api_get_component_menu_entries() {
 
   local requested_menu="$1"
   jq --arg menu "$requested_menu" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    reduce ($manifests[0][] | .manifest | .. | objects | select(has("configurator_menus")) | .configurator_menus | to_entries[]) as $entry (
+  '
+    reduce (.[] | .manifest | .. | objects | select(has("configurator_menus")) | .configurator_menus | to_entries[]) as $entry (
       {};
       if ($menu == "all" or $entry.key == $menu) then
         .[$entry.key] = ((.[$entry.key] // []) + [$entry.value | to_entries[].value])
       else . end
     )
-  ' <<< 'null'
+  ' "$component_manifest_cache_file"
 }
 
 api_get_empty_rom_folders() {
@@ -330,7 +332,7 @@ api_get_empty_rom_folders() {
   local -A ignorable_files
   while IFS= read -r helper_filename; do
     [[ -n "$helper_filename" ]] && ignorable_files["$helper_filename"]=1
-  done < <(get_all_helper_files | jq -r '.[].filename')
+  done < <(get_helper_files "all" | jq -r '.[].filename')
   ignorable_files[".directory"]=1
   ignorable_files["systeminfo.txt"]=1
 
@@ -465,9 +467,9 @@ api_set_preset_state() {
   local tmp_manifest
   tmp_manifest=$(mktemp)
   jq --arg comp "$component" \
-    --slurpfile manifests "$component_manifest_cache_file" '
-    $manifests[0][] | .manifest | select(has($comp)) | .[$comp]
-  ' <<< 'null' | head -1 > "$tmp_manifest"
+  '
+    .[] | .manifest | select(has($comp)) | .[$comp]
+  ' "$component_manifest_cache_file" > "$tmp_manifest"
 
   if [[ ! -s "$tmp_manifest" || "$(cat "$tmp_manifest")" == "null" ]]; then
     echo "manifest not found for component $component"

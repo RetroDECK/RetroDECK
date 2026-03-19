@@ -14,8 +14,6 @@ set -- "${args[@]}"
 
 source /app/libexec/global.sh
 
-parse_informational_args "$@"
-
 parse_cli_args "$@"
 
 start_retrodeck
