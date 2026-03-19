@@ -543,10 +543,10 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
           echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_OUTPUT
 
-      - name: "[DEBUG] Listing produced artifacts"
-        run: |
-          echo "Produced artifacts:"
-          ls -lah retrodeck-artifacts/out
+      # - name: "[DEBUG] Listing produced artifacts"
+      #   run: |
+      #     echo "Produced artifacts:"
+      #     ls -lah retrodeck-artifacts/out
 
       # Publish Release
       - name: Publish release
