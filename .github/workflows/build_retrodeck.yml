@@ -80,14 +80,14 @@ jobs:
       # Clone Repository
       - name: Clone RetroDECK repo
         if: github.event_name != 'pull_request_target'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       # Clone the target branch (eg. cooker)
       - name: Clone Target Branch
         if: github.event_name == 'pull_request_target'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.base.ref }}  # Branch target
           submodules: true
@@ -292,7 +292,7 @@ jobs:
       # Upload artifacts for other jobs
       # OUT_FOLDER is initialized in the retrodeck_builder.sh script
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: retrodeck-artifacts
           include-hidden-files: true
@@ -317,11 +317,11 @@ jobs:
 
       # Clone Repository
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate a token for Rekku
         id: generate-rekku-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
@@ -329,7 +329,7 @@ jobs:
           owner: "RetroDECK"
 
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8
 
       # Getting branch name, this needs as PR should be managed in a different way
       - name: Get Branch Name
@@ -664,7 +664,7 @@ jobs:
       # Rewrite Tag (for Main Branch Only)
       - name: Clone RetroDECK repo
         if: github.ref == 'refs/heads/main'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
           
@@ -716,13 +716,13 @@ jobs:
 
       # Clone Repository
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       # Download RetroDECK Artifacts
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8
 
       # Install Dependencies
       - name: Install dependencies

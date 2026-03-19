@@ -23,7 +23,7 @@ jobs:
     steps:
 
       - name: Checkout RetroDECK repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
           
@@ -58,7 +58,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout RetroDECK repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
