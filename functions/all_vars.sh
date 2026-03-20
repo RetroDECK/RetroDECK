@@ -12,6 +12,8 @@ export hard_version="$(cat '/app/retrodeck/version')"                           
 export rd_metainfo="/app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"                                   # The shipped metainfo XML file for this version
 export folder_iconsets_dir="$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets"
 export low_space_threshold=90
+export purple="#a864fc"
+export blue="#6fbfff"
 
 # Network / Online-related variables
 
