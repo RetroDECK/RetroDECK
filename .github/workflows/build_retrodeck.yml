@@ -569,7 +569,8 @@ jobs:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
           body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-          artifacts: "$GITHUB_WORKSPACE/out/*"
+          artifacts: "out/*"
+          artifactErrorsFailBuild: true
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
