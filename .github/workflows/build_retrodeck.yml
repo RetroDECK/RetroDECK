@@ -336,6 +336,11 @@ jobs:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v8
 
+      - name: "[DEBUG] Listing GITHUB_WORKSPACE contents"
+        run: |
+          echo "${GITHUB_WORKSPACE} contents:"
+          tree $GITHUB_WORKSPACE
+
       # Getting branch name, this needs as PR should be managed in a different way
       - name: Get Branch Name
         run: |
