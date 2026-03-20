@@ -125,7 +125,7 @@ jobs:
       - name: "Build Flatpak"
         id: build-retrodeck
         run: |
-          # set -euo pipefail
+          set -euo pipefail
           # echo "[metrics] Preparing instrumented build run..."
 
           # # Disk usage (bytes) for the filesystem where workspace is mounted
@@ -264,6 +264,9 @@ jobs:
 
           # Return the original build exit code so the job fails if the build failed
           exit $build_exit_code
+
+          echo "DEBUG: OUT_FOLDER=${OUT_FOLDER}"
+          echo "$(ls -lah $OUT_FOLDER)"
 
       # - name: Generate a token for Rekku
       #   id: generate-rekku-token
@@ -545,10 +548,10 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
           echo "IS_DRAFT=$IS_DRAFT" >> $GITHUB_OUTPUT
 
-      # - name: "[DEBUG] Listing produced artifacts"
-      #   run: |
-      #     echo "Produced artifacts:"
-      #     ls -lah retrodeck-artifacts/out
+      - name: "[DEBUG] Listing produced artifacts"
+        run: |
+          echo "Produced artifacts:"
+          ls -lah retrodeck-artifacts/out
 
       # Publish Release
       - name: Publish release
