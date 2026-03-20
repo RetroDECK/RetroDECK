@@ -551,7 +551,7 @@ jobs:
       - name: "[DEBUG] Listing produced artifacts"
         run: |
           echo "Produced artifacts:"
-          ls -lah retrodeck-artifacts/out
+          ls -lah $GITHUB_WORKSPACE/retrodeck-artifacts/out
 
       # Publish Release
       - name: Publish release
@@ -561,7 +561,7 @@ jobs:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
           body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/out/*"
+          artifacts: "$GITHUB_WORKSPACE/retrodeck-artifacts/out/*"
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
