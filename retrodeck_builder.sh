@@ -250,10 +250,10 @@ construct_version_string() {
 
       case "$build_type" in
         countertop)
-          echo "branch-${sanitized_branch}-${version}-${date}-${time}-countertop"
+          echo "branch-${sanitized_branch}--${version}-${date}-${time}-countertop"
           ;;
         *)
-          echo "branch-${sanitized_branch}-${version}-${date}-${time}"
+          echo "branch-${sanitized_branch}--${version}-${date}-${time}"
           ;;
       esac
       ;;

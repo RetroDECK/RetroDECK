@@ -172,11 +172,12 @@ jobs:
             fi
           done
 
-          # Convert branch name to release tag prefix (slashes to dashes)
-          # Feature branch releases use format: branch-<sanitized-name>-<version>-<date>
-          TAG_PREFIX="branch-$(echo "$DELETED_BRANCH" | sed 's|/|-|g')"
+          # Convert branch name to release tag prefix
+          # Feature branch tags use format: branch-<sanitized-name>--<version>-<date>-<time>
+          SANITIZED=$(echo "$DELETED_BRANCH" | sed 's|/|-|g' | sed 's|\.|_|g')
+          TAG_PREFIX="branch-${SANITIZED}"
 
-          echo "Will delete all cooker releases with prefix: ${TAG_PREFIX}-"
+          echo "Will delete all cooker releases with prefix: ${TAG_PREFIX}--"
           echo "skip=false" >> $GITHUB_OUTPUT
           echo "tag_prefix=$TAG_PREFIX" >> $GITHUB_OUTPUT
 
@@ -188,10 +189,10 @@ jobs:
         run: |
           TAG_PREFIX="${{ steps.branch-delete.outputs.tag_prefix }}"
 
-          echo "Fetching releases from cooker repo with prefix: ${TAG_PREFIX}-"
+          echo "Fetching releases from cooker repo with prefix: ${TAG_PREFIX}--"
 
           RELEASES=$(gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName \
-            -q ".[] | select(.tagName | startswith(\"${TAG_PREFIX}-\")) | .tagName")
+            -q ".[] | select(.tagName | startswith(\"${TAG_PREFIX}--\")) | .tagName")
 
           COUNT=$(echo "$RELEASES" | grep -c . || true)
 
@@ -359,10 +360,11 @@ jobs:
 
               if [[ -n "$TARGET" && "$TARGET" != "cooker" ]]; then
                 # Targeting a specific feature branch
-                SPECIFIC_PREFIX="branch-$(echo "$TARGET" | sed 's|/|-|g')"
-                echo "Targeting specific branch prefix: ${SPECIFIC_PREFIX}-"
+                SANITIZED=$(echo "$TARGET" | sed 's|/|-|g' | sed 's|\.|_|g')
+                SPECIFIC_PREFIX="branch-${SANITIZED}"
+                echo "Targeting specific branch prefix: ${SPECIFIC_PREFIX}--"
 
-                BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${SPECIFIC_PREFIX}-" || true)
+                BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${SPECIFIC_PREFIX}--" || true)
                 BRANCH_COUNT=$(echo "$BRANCH_RELEASES" | grep -c . || true)
                 echo "  Found: $BRANCH_COUNT (keeping $FEATURE_KEEP)"
 
@@ -377,18 +379,18 @@ jobs:
                 fi
               else
                 # Process all feature branches
-                # Extract unique prefixes by stripping trailing -<version>-<YYYY-MM-DD>
-                # Tag format: branch-<sanitized-name>-<version>-<YYYY-MM-DD>
+                # Extract unique prefixes using -- delimiter
+                # Tag format: branch-<sanitized-name>--<version>-<date>-<time>
                 declare -A SEEN_PREFIXES
                 while IFS= read -r tag; do
                   if [[ -n "$tag" ]]; then
-                    prefix=$(echo "$tag" | sed -E 's/-[0-9]+\.[0-9]+[^-]*-[0-9]{4}-[0-9]{2}-[0-9]{2}$//')
+                    prefix=$(echo "$tag" | sed 's/--.*$//')
                     SEEN_PREFIXES["$prefix"]=1
                   fi
                 done <<< "$FEATURE_RELEASES"
 
                 for prefix in "${!SEEN_PREFIXES[@]}"; do
-                  BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${prefix}-" || true)
+                  BRANCH_RELEASES=$(echo "$FEATURE_RELEASES" | grep "^${prefix}--" || true)
                   BRANCH_COUNT=$(echo "$BRANCH_RELEASES" | grep -c . || true)
 
                   echo "  Prefix '$prefix': $BRANCH_COUNT release(s) (keeping $FEATURE_KEEP)"
