@@ -119,6 +119,7 @@
                 <ul>
                     <li>BORDERS: Steam Deck borders were not applied in certain scenarios when enabled via the Configurator.</li>
                     <li>RPCS3: Firmware installation via the Configurator did not function as expected.</li>
+                    <li>BIOS CHECKER: Some MD5 corrections by community contributor Abdess.</li>
                 </ul>
                 <p>UPDATED:</p>
                 <ul>
