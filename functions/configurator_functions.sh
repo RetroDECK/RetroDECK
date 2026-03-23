@@ -1217,3 +1217,37 @@ configurator_iconset_toggle_dialog() {
     fi
   fi
 }
+
+configurator_toggle_retroengine_event_scripts_dialog() {
+  if [[ ! $(get_compoenent_option "es-de" "esde_engine_launch_scripts") == "false" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroENGINE Event Script Processing" \
+    --text="RetroENGINE event script processing is currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to disable it?"
+    
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_compoenent_option "es-de" "esde_engine_launch_scripts" "false"
+
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroENGINE Event Script Processing" \
+      --text="RetroENGINE event script processing is now <span foreground='$purple'><b>Disabled</b></span>."
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroENGINE Event Script Processing" \
+    --text="RetroENGINE event script processing is currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable it?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_compoenent_option "es-de" "esde_engine_launch_scripts" "true"
+
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroENGINE Event Script Processing" \
+      --text="RetroENGINE event script processing is now <span foreground='$purple'><b>Enabled</b></span>."
+    fi
+  fi
+}
