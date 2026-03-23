@@ -80,14 +80,14 @@ jobs:
       # Clone Repository
       - name: Clone RetroDECK repo
         if: github.event_name != 'pull_request_target'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       # Clone the target branch (eg. cooker)
       - name: Clone Target Branch
         if: github.event_name == 'pull_request_target'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.base.ref }}  # Branch target
           submodules: true
@@ -126,139 +126,141 @@ jobs:
         id: build-retrodeck
         run: |
           set -euo pipefail
-          echo "[metrics] Preparing instrumented build run..."
+          # echo "[metrics] Preparing instrumented build run..."
 
-          # Disk usage (bytes) for the filesystem where workspace is mounted
-          disk_used_before=$(df --output=used -B1 . | tail -n1 | tr -d '[:space:]')
+          # # Disk usage (bytes) for the filesystem where workspace is mounted
+          # disk_used_before=$(df --output=used -B1 . | tail -n1 | tr -d '[:space:]')
 
-          # Timestamp start
-          start_ts=$(date +%s.%N)
+          # # Timestamp start
+          # start_ts=$(date +%s.%N)
 
-          # Prepare temp files
-          monitor_log=$(mktemp)
-          time_stderr=$(mktemp)
-          build_stdout=$(mktemp)
+          # # Prepare temp files
+          # monitor_log=$(mktemp)
+          # time_stderr=$(mktemp)
+          # build_stdout=$(mktemp)
 
-          # Read initial CPU counters
-          read -r cpu_prev_total cpu_prev_idle < <(awk '/^cpu /{idle=$5; s=0; for(i=2;i<=NF;i++) s+=$i; print s, idle}' /proc/stat)
-          sum_cpu=0
-          samples=0
-          max_cpu=0
-          max_mem_bytes=0
-          sum_mem=0
+          # # Read initial CPU counters
+          # read -r cpu_prev_total cpu_prev_idle < <(awk '/^cpu /{idle=$5; s=0; for(i=2;i<=NF;i++) s+=$i; print s, idle}' /proc/stat)
+          # sum_cpu=0
+          # samples=0
+          # max_cpu=0
+          # max_mem_bytes=0
+          # sum_mem=0
 
           # Choose build command (keep original behaviour)
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            BUILD_CMD=(/usr/bin/time -v /bin/bash ./retrodeck_builder.sh --cicd)
+            BUILD_CMD=(/bin/bash ./retrodeck_builder.sh --cicd)
           else
-            BUILD_CMD=(/usr/bin/time -v /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts)
+            BUILD_CMD=(/bin/bash ./retrodeck_builder.sh --cicd --no-artifacts)
           fi
 
-          # Start the build (time -v to capture peak RSS). Run in background so we can sample system metrics.
-          echo "[metrics] Starting build command: ${BUILD_CMD[*]}"
-          "${BUILD_CMD[@]}" 1>"$build_stdout" 2>"$time_stderr" &
-          BUILD_PID=$!
+          # # Start the build (time -v to capture peak RSS). Run in background so we can sample system metrics.
+          # echo "[metrics] Starting build command: ${BUILD_CMD[*]}"
+          # "${BUILD_CMD[@]}" 1>"$build_stdout" 2>"$time_stderr" &
+          # BUILD_PID=$!
 
-          # Background sampler: sample system CPU (%) and memory (bytes) every second while the build runs
-          (
-            while kill -0 "$BUILD_PID" 2>/dev/null; do
-              read -r cpu_total cpu_idle < <(awk '/^cpu /{idle=$5; s=0; for(i=2;i<=NF;i++) s+=$i; print s, idle}' /proc/stat)
-              delta_total=$((cpu_total - cpu_prev_total))
-              delta_idle=$((cpu_idle - cpu_prev_idle))
-              if [ "$delta_total" -gt 0 ]; then
-                cpu_pct=$(awk "BEGIN {printf \"%.2f\", 100 * ($delta_total - $delta_idle) / $delta_total}")
-              else
-                cpu_pct="0.00"
-              fi
-              cpu_prev_total=$cpu_total; cpu_prev_idle=$cpu_idle
+          "${BUILD_CMD[@]}"
 
-              mem_used_bytes=$(awk '/MemTotal/ {t=$2} /MemAvailable/ {a=$2} END {print (t-a)*1024}' /proc/meminfo)
+          # # Background sampler: sample system CPU (%) and memory (bytes) every second while the build runs
+          # (
+          #   while kill -0 "$BUILD_PID" 2>/dev/null; do
+          #     read -r cpu_total cpu_idle < <(awk '/^cpu /{idle=$5; s=0; for(i=2;i<=NF;i++) s+=$i; print s, idle}' /proc/stat)
+          #     delta_total=$((cpu_total - cpu_prev_total))
+          #     delta_idle=$((cpu_idle - cpu_prev_idle))
+          #     if [ "$delta_total" -gt 0 ]; then
+          #       cpu_pct=$(awk "BEGIN {printf \"%.2f\", 100 * ($delta_total - $delta_idle) / $delta_total}")
+          #     else
+          #       cpu_pct="0.00"
+          #     fi
+          #     cpu_prev_total=$cpu_total; cpu_prev_idle=$cpu_idle
 
-              sum_cpu=$(awk "BEGIN{print $sum_cpu + $cpu_pct}")
-              sum_mem=$(awk "BEGIN{print $sum_mem + $mem_used_bytes}")
-              samples=$((samples+1))
-              max_cpu=$(awk "BEGIN{print ($cpu_pct > $max_cpu) ? $cpu_pct : $max_cpu}")
-              if [ "$mem_used_bytes" -gt "$max_mem_bytes" ]; then max_mem_bytes=$mem_used_bytes; fi
+          #     mem_used_bytes=$(awk '/MemTotal/ {t=$2} /MemAvailable/ {a=$2} END {print (t-a)*1024}' /proc/meminfo)
 
-              echo "$(date +%s) $cpu_pct $mem_used_bytes" >> "$monitor_log"
-              sleep 1
-            done
+          #     sum_cpu=$(awk "BEGIN{print $sum_cpu + $cpu_pct}")
+          #     sum_mem=$(awk "BEGIN{print $sum_mem + $mem_used_bytes}")
+          #     samples=$((samples+1))
+          #     max_cpu=$(awk "BEGIN{print ($cpu_pct > $max_cpu) ? $cpu_pct : $max_cpu}")
+          #     if [ "$mem_used_bytes" -gt "$max_mem_bytes" ]; then max_mem_bytes=$mem_used_bytes; fi
 
-            # Save summary
-            echo "$samples $sum_cpu $max_cpu $max_mem_bytes $sum_mem" > "${monitor_log}.summary"
-          ) &
-          MONITOR_PID=$!
+          #     echo "$(date +%s) $cpu_pct $mem_used_bytes" >> "$monitor_log"
+          #     sleep 1
+          #   done
 
-          # Wait for the build to finish and capture its exit code
-          wait "$BUILD_PID" || true
+          #   # Save summary
+          #   echo "$samples $sum_cpu $max_cpu $max_mem_bytes $sum_mem" > "${monitor_log}.summary"
+          # ) &
+          # MONITOR_PID=$!
+
+          # # Wait for the build to finish and capture its exit code
+          # wait "$BUILD_PID" || true
           build_exit_code=$?
 
-          # Wait for the sampler to finish (it should exit once the build process is gone)
-          wait "$MONITOR_PID" || true
+          # # Wait for the sampler to finish (it should exit once the build process is gone)
+          # wait "$MONITOR_PID" || true
 
-          end_ts=$(date +%s.%N)
-          duration_seconds=$(awk "BEGIN{printf \"%.2f\", $end_ts - $start_ts}")
+          # end_ts=$(date +%s.%N)
+          # duration_seconds=$(awk "BEGIN{printf \"%.2f\", $end_ts - $start_ts}")
 
           # Read monitor summary (compute averages)
-          if [ -f "${monitor_log}.summary" ]; then
-            read samples sum_cpu max_cpu max_mem_bytes sum_mem < <(cat "${monitor_log}.summary")
-            if [ "$samples" -gt 0 ]; then
-              avg_cpu=$(awk "BEGIN{printf \"%.2f\", $sum_cpu / $samples}")
-              avg_mem_bytes=$(awk "BEGIN{printf \"%d\", $sum_mem / $samples}")
-            else
-              avg_cpu="0.00"
-              avg_mem_bytes=0
-            fi
-          else
-            avg_cpu="0.00"
-            max_cpu=0
-            avg_mem_bytes=0
-            max_mem_bytes=0
-          fi
+          # if [ -f "${monitor_log}.summary" ]; then
+          #   read samples sum_cpu max_cpu max_mem_bytes sum_mem < <(cat "${monitor_log}.summary")
+          #   if [ "$samples" -gt 0 ]; then
+          #     avg_cpu=$(awk "BEGIN{printf \"%.2f\", $sum_cpu / $samples}")
+          #     avg_mem_bytes=$(awk "BEGIN{printf \"%d\", $sum_mem / $samples}")
+          #   else
+          #     avg_cpu="0.00"
+          #     avg_mem_bytes=0
+          #   fi
+          # else
+          #   avg_cpu="0.00"
+          #   max_cpu=0
+          #   avg_mem_bytes=0
+          #   max_mem_bytes=0
+          # fi
 
-          # Try to extract process peak RSS from /usr/bin/time output (kbytes)
-          ram_peak_kb=$(awk -F: '/Maximum resident set size/ {gsub(/[^0-9]/,"",$2); print $2}' "$time_stderr" | tail -n1 || true)
-          if [ -z "$ram_peak_kb" ]; then
-            if [ -n "$max_mem_bytes" ]; then
-              ram_peak_kb=$((max_mem_bytes/1024))
-            else
-              ram_peak_kb=0
-            fi
-          fi
+          # # Try to extract process peak RSS from /usr/bin/time output (kbytes)
+          # ram_peak_kb=$(awk -F: '/Maximum resident set size/ {gsub(/[^0-9]/,"",$2); print $2}' "$time_stderr" | tail -n1 || true)
+          # if [ -z "$ram_peak_kb" ]; then
+          #   if [ -n "$max_mem_bytes" ]; then
+          #     ram_peak_kb=$((max_mem_bytes/1024))
+          #   else
+          #     ram_peak_kb=0
+          #   fi
+          # fi
 
-          # Disk after
-          disk_used_after=$(df --output=used -B1 . | tail -n1 | tr -d '[:space:]')
-          disk_delta=$((disk_used_after - disk_used_before))
+          # # Disk after
+          # disk_used_after=$(df --output=used -B1 . | tail -n1 | tr -d '[:space:]')
+          # disk_delta=$((disk_used_after - disk_used_before))
 
-          # OUT_FOLDER size (if set by the builder it will be available in environment for later steps; attempt to detect)
-          if [ -n "${OUT_FOLDER:-}" ] && [ -d "${OUT_FOLDER}" ]; then
-            out_size_bytes=$(du -sb "${OUT_FOLDER}" | cut -f1)
-          elif [ -d ./out ]; then
-            out_size_bytes=$(du -sb ./out | cut -f1)
-          else
-            out_size_bytes=0
-          fi
+          # # OUT_FOLDER size (if set by the builder it will be available in environment for later steps; attempt to detect)
+          # if [ -n "${OUT_FOLDER:-}" ] && [ -d "${OUT_FOLDER}" ]; then
+          #   out_size_bytes=$(du -sb "${OUT_FOLDER}" | cut -f1)
+          # elif [ -d ./out ]; then
+          #   out_size_bytes=$(du -sb ./out | cut -f1)
+          # else
+          #   out_size_bytes=0
+          # fi
 
-          # human-readable helper
-          hr() { if command -v numfmt >/dev/null 2>&1; then numfmt --to=iec-i --suffix=B --format="%.2f" "$1"; else awk 'function hr(x){ split("B KiB MiB GiB TiB",u); for(i=1;x>=1024 && i<5;i++) x/=1024; printf "%.2f %s", x, u[i]; } END{hr('$1')}' ; fi }
+          # # human-readable helper
+          # hr() { if command -v numfmt >/dev/null 2>&1; then numfmt --to=iec-i --suffix=B --format="%.2f" "$1"; else awk 'function hr(x){ split("B KiB MiB GiB TiB",u); for(i=1;x>=1024 && i<5;i++) x/=1024; printf "%.2f %s", x, u[i]; } END{hr('$1')}' ; fi }
 
-          # Export metrics as step outputs for other jobs
-          echo "BUILD_DURATION=${duration_seconds}s" >> $GITHUB_OUTPUT
-          echo "DISK_USED_BEFORE=${disk_used_before}" >> $GITHUB_OUTPUT
-          echo "DISK_USED_AFTER=${disk_used_after}" >> $GITHUB_OUTPUT
-          echo "DISK_DELTA=${disk_delta}" >> $GITHUB_OUTPUT
-          echo "OUT_FOLDER_SIZE=${out_size_bytes}" >> $GITHUB_OUTPUT
-          echo "CPU_AVG_PCT=${avg_cpu}" >> $GITHUB_OUTPUT
-          echo "CPU_PEAK_PCT=${max_cpu}" >> $GITHUB_OUTPUT
-          echo "RAM_PEAK_KB=${ram_peak_kb}" >> $GITHUB_OUTPUT
-          echo "RAM_AVG_BYTES=${avg_mem_bytes}" >> $GITHUB_OUTPUT
+          # # Export metrics as step outputs for other jobs
+          # echo "BUILD_DURATION=${duration_seconds}s" >> $GITHUB_OUTPUT
+          # echo "DISK_USED_BEFORE=${disk_used_before}" >> $GITHUB_OUTPUT
+          # echo "DISK_USED_AFTER=${disk_used_after}" >> $GITHUB_OUTPUT
+          # echo "DISK_DELTA=${disk_delta}" >> $GITHUB_OUTPUT
+          # echo "OUT_FOLDER_SIZE=${out_size_bytes}" >> $GITHUB_OUTPUT
+          # echo "CPU_AVG_PCT=${avg_cpu}" >> $GITHUB_OUTPUT
+          # echo "CPU_PEAK_PCT=${max_cpu}" >> $GITHUB_OUTPUT
+          # echo "RAM_PEAK_KB=${ram_peak_kb}" >> $GITHUB_OUTPUT
+          # echo "RAM_AVG_BYTES=${avg_mem_bytes}" >> $GITHUB_OUTPUT
 
-          # Print a concise console summary
-          echo "[metrics] Build duration: ${duration_seconds}s"
-          echo "[metrics] Disk before: $(hr $disk_used_before)  after: $(hr $disk_used_after)  delta: $(hr $disk_delta)"
-          echo "[metrics] OUT_FOLDER size: $(hr $out_size_bytes)"
-          echo "[metrics] CPU avg: ${avg_cpu}%  peak: ${max_cpu}%"
-          echo "[metrics] RAM avg: $(hr $avg_mem_bytes)  peak (process RSS): ${ram_peak_kb} KB"
+          # # Print a concise console summary
+          # echo "[metrics] Build duration: ${duration_seconds}s"
+          # echo "[metrics] Disk before: $(hr $disk_used_before)  after: $(hr $disk_used_after)  delta: $(hr $disk_delta)"
+          # echo "[metrics] OUT_FOLDER size: $(hr $out_size_bytes)"
+          # echo "[metrics] CPU avg: ${avg_cpu}%  peak: ${max_cpu}%"
+          # echo "[metrics] RAM avg: $(hr $avg_mem_bytes)  peak (process RSS): ${ram_peak_kb} KB"
 
           # Return the original build exit code so the job fails if the build failed
           exit $build_exit_code
@@ -274,6 +276,9 @@ jobs:
 
       - name: Split artifacts
         run: |
+          echo "DEBUG: OUT_FOLDER contents pre-split:"
+          tree "${OUT_FOLDER}"
+        
           for file in "${OUT_FOLDER}"/*; do
             if [ -f "$file" ]; then
               size_bytes=$(stat -c%s "$file")
@@ -289,10 +294,13 @@ jobs:
             fi
           done
 
+          echo "DEBUG: OUT_FOLDER contents post-split:"
+          tree "${OUT_FOLDER}"
+
       # Upload artifacts for other jobs
       # OUT_FOLDER is initialized in the retrodeck_builder.sh script
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: retrodeck-artifacts
           include-hidden-files: true
@@ -317,11 +325,11 @@ jobs:
 
       # Clone Repository
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate a token for Rekku
         id: generate-rekku-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
@@ -329,7 +337,12 @@ jobs:
           owner: "RetroDECK"
 
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8
+
+      - name: "[DEBUG] Listing GITHUB_WORKSPACE contents"
+        run: |
+          echo "${GITHUB_WORKSPACE} contents:"
+          tree $GITHUB_WORKSPACE
 
       # Getting branch name, this needs as PR should be managed in a different way
       - name: Get Branch Name
@@ -427,10 +440,10 @@ jobs:
           echo "" >> $RELEASE_BODY_FILE
 
           # Add components version information at the top
-          if [ -f retrodeck-artifacts/components/components-version ]; then
-            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
-            if [ -f retrodeck-artifacts/components/components-release-url ]; then
-              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+          if [ -f components/components-version ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f components/components-release-url ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
             else
               COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
             fi
@@ -514,8 +527,8 @@ jobs:
           echo "" >> $RELEASE_BODY_FILE
 
           # Append components version list (detailed)
-          if [ -f retrodeck-artifacts/components/components_version_list.md ]; then
-            cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
+          if [ -f components/components_version_list.md ]; then
+            cat components/components_version_list.md >> $RELEASE_BODY_FILE
           else
             echo "WARNING: components_version_list.md not found." >> $RELEASE_BODY_FILE
           fi
@@ -546,7 +559,7 @@ jobs:
       - name: "[DEBUG] Listing produced artifacts"
         run: |
           echo "Produced artifacts:"
-          ls -lah retrodeck-artifacts/out
+          ls -lah $GITHUB_WORKSPACE/out
 
       # Publish Release
       - name: Publish release
@@ -556,7 +569,8 @@ jobs:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
           body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/out/*"
+          artifacts: "out/*"
+          artifactErrorsFailBuild: true
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
@@ -573,10 +587,10 @@ jobs:
           COMPONENTS_VERSION=""
           COMPONENTS_URL=""
           REQUESTED_TAG=""
-          if [ -f "retrodeck-artifacts/components/components-version" ]; then
-            COMPONENTS_VERSION=$(cat retrodeck-artifacts/components/components-version)
-            if [ -f "retrodeck-artifacts/components/components-release-url" ]; then
-              COMPONENTS_URL=$(cat retrodeck-artifacts/components/components-release-url)
+          if [ -f "components/components-version" ]; then
+            COMPONENTS_VERSION=$(cat components/components-version)
+            if [ -f "components/components-release-url" ]; then
+              COMPONENTS_URL=$(cat components/components-release-url)
             else
               COMPONENTS_URL="https://github.com/RetroDECK/components/releases/tag/$COMPONENTS_VERSION"
             fi
@@ -621,11 +635,11 @@ jobs:
           fi
           
           # Add components information if available
-          if [ -f "retrodeck-artifacts/components/components_version_list.md" ]; then
+          if [ -f "components/components_version_list.md" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## Components Used" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            cat retrodeck-artifacts/components/components_version_list.md >> $GITHUB_STEP_SUMMARY
+            cat components/components_version_list.md >> $GITHUB_STEP_SUMMARY
           elif [ -f "components/components_version_list.md" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## Components Used" >> $GITHUB_STEP_SUMMARY
@@ -664,7 +678,7 @@ jobs:
       # Rewrite Tag (for Main Branch Only)
       - name: Clone RetroDECK repo
         if: github.ref == 'refs/heads/main'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
           
@@ -716,13 +730,13 @@ jobs:
 
       # Clone Repository
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       # Download RetroDECK Artifacts
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8
 
       # Install Dependencies
       - name: Install dependencies
@@ -750,4 +764,3 @@ jobs:
         if: ${{ github.runner_environment == 'self-hosted' }}
         run: |
           flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
-

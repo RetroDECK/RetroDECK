@@ -4,7 +4,7 @@
     <id>net.retrodeck.retrodeck</id>
     <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
     <name>RetroDECK</name>
-    <summary>RetroDECK an all-in-one Retro Gaming Platform</summary>
+    <summary>All-in-one Retro Gaming Platform</summary>
     <developer_name>RetroDECK Team</developer_name>
     <url type="homepage">https://retrodeck.net</url>
     <url type="help">https://retrodeck.readthedocs.io</url>
@@ -13,89 +13,85 @@
     <url type="donation">https://opencollective.com/RetroDECK</url>
     <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
     <url type="vcs-browser">https://github.com/RetroDECK/RetroDECK</url>
-    <content_rating type="oars-1.0" />
+    <content_rating type="oars-1.1" />
+    <supports>
+        <control>console</control>
+        <control>gamepad</control>
+        <control>keyboard</control>
+        <control>pointing</control>
+        <control>touch</control>
+    </supports>
     <screenshots>
         <screenshot type="default">
             <caption>RetroDECK Logo</caption>
             <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK Logo on Steam Deck</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
+            <caption>RetroDECK Device Concept: Steam Deck</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK Logo on Steam Deck GUI</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
+            <caption>RetroDECK ES-DE Theme: Systems Overview</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK ES-DE Theme C64</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
+            <caption>RetroDECK ES-DE Theme: OpenBor Menu</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK on ROG</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+            <caption>RetroDECK Device Concept: ROG Ally</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK on Laptop</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+            <caption>RetroDECK Device Concept: Laptop</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
         </screenshot>
         <screenshot>
-            <caption>RetroDECK on TV</caption>
-            <image>
-                https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
+            <caption>RetroDECK Device Concept: TV</caption>
+            <image> https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
         </screenshot>
     </screenshots>
     <description>
-        <p>RetroDECK is a powerful, all-in-one Retro Gaming Platform for modern Linux systems, including handheld gaming PCs like the Steam Deck, full Linux desktops, HTPC setups, and Linux-based PC consoles such as the Steam Machine.</p>
-        <p>Delivered as a fully self-contained Flatpak application, RetroDECK provides a complete retro gaming environment out of the box-no manual configuration, no custom firmware, and no system modifications required. Everything is bundled, organized, and ready to play.</p>
-        <p>By seamlessly integrating components: emulators, multi-emulators, native game engines, ports, clients and powerful management tools, RetroDECK brings your entire retro game experince together in one polished, unified package.</p>
+        <p>RetroDECK is a powerful, all-in-one Retro Gaming Platform for modern Linux systems, including handheld gaming PCs like the Steam Deck, full Linux desktops, HTPC setups and Linux-based PC consoles such as the Steam Machine.</p>
+        <p>It provides a complete retro gaming environment out of the box with minimal manual configuration.</p>
+        <p>By seamlessly integrating multiple components, the platform brings your entire retro game experince together in one polished and unified package.</p>
         <p>
-            Why Choose RetroDECK?
+            **Why Choose RetroDECK?**
         </p>
         <ul>
-            <li>True All-in-One Solution: Emulators, multi-emulator frameworks, game engines, ports, tools, clients, and the frontend are all included and preconfigured.</li>
-            <li>Zero System Changes: Experience a retro gaming–focused environment without replacing or modifying your existing operating system.</li>
-            <li>Effortless Maintenance: Install, update, and remove RetroDECK directly from your software center, just like any other Flatpak application.</li>
-            <li>Designed for You: Optimized for Linux handhelds, gaming PCs, and living-room setups, with excellent gamepad support and deep Steam Input integration.</li>
+            <li>**True All-in-One Solution:** Emulators, frameworks, engines, ports, tools, clients and the frontend are fully integrated and preconfigured.</li>
+            <li>**No System Modifications:** Enjoy a dedicated retro gaming environment without altering or replacing your existing operating system.</li>
+            <li>**Streamlined Installation:** Install and update a single application instead of multiple, directly from your software center.</li>
         </ul>
         <p>
-            What is Included?
+            **What is Included?**
         </p>
         <ul>
-            <li>Wide Emulator Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar, and many more. Supporting an extensive range of classic and modern systems.</li>
-            <li>Multi-Emulator Platforms: Unified, streamlined emulation powered by robust frameworks including RetroArch and MAME.</li>
-            <li>Native Game Engines and Clients: Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO, and GZDoom.</li>
-            <li>Custom Launch Wrappers: Effortlessly run complex Doom mods using RetroDECK’s streamlined .doom format, along with dedicated .bor support for OpenBOR.</li>
-            <li>ES-DE Frontend: A modern, controller-friendly interface for browsing, organizing, and launching your game library.</li>
-            <li>PortMaster Integration: Easily install and manage community-supported Linux game ports.</li>
-            <li>RetroDECK Configurator: A powerful built-in multi-tool for managing system settings, presets, storage, BIOS files, and more-all from a single interface.</li>
-            <li>RetroDECK Framework: A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
-            <li>RetroDECK RetroENGINE: A headless game runner designed for advanced users and developers, enabling fast and direct game launching.</li>
-            <li>Steam Input Support: Preconfigured controller layouts, radial menus, and system-specific hotkeys when integrated with Steam.</li>
-            <li>Steam Library Sync: Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
+            <li>**Accessible for All:** A clean, well-organized file structure designed for both newcomers and advanced users.</li>
+            <li>**Custom Launch Wrappers:** Run complex DOOM WADs and OpenBOR titles effortlessly with streamlined, dedicated formats.</li>
+            <li>**ES-DE Frontend:** A controller-friendly interface for browsing, organizing and launching your game library.</li>
+            <li>**Multi-Emulator Platforms:** Unified and built-in multi-emulation frameworks including RetroArch and MAME.</li>
+            <li>**Native Game Engines:** Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO and UZDoom.</li>
+            <li>**PortMaster Integration:** Easily install and manage community-supported Linux game ports.</li>
+            <li>**RetroDECK Configurator:** A powerful built-in multi-tool for managing component settings, presets, storage, BIOS files and more.</li>
+            <li>**RetroDECK Framework:** A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
+            <li>**RetroENGINE:** A headless game launcher tailored for power users and developers.</li>
+            <li>**Steam Input Support:** Preconfigured controller templates with radial menus and component-specific hotkeys via Steam.</li>
+            <li>**Steam Library Sync:** Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
+            <li>**Wide System Coverage:** Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more.</li>
         </ul>
         <p>
-            Built for Power Users - Friendly for Everyone
-        </p>
-        <p>RetroDECK exposes clean, organized user folders for ROMs, saves, states, shaders, texture packs, mods, screenshots, and more-while keeping the underlying components safely sandboxed. Advanced users gain fine-grained control, while newcomers enjoy a smooth, guided experience.</p>
-        <p>
-            Join the RetroDECK Community
+            **Join the RetroDECK Community**
         </p>
         <ul>
-            <li>Website: https://retrodeck.net</li>
-            <li>Wiki and Documentation: https://retrodeck.readthedocs.io/</li>
-            <li>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
-            <li>Discord: https://discord.gg/WDc5C9YWMx</li>
-            <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
-            <li>Reddit: https://www.reddit.com/r/retrodeck</li>
-            <li>Lemmy: https://lemmy.zip/c/retrodeck</li>
-            <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
-            <li>Revolt: https://rvlt.gg/StVaEc0w</li>
+            <li>**Website:** https://retrodeck.net</li>
+            <li>**RetroDECK Blog:** https://retrodeck.readthedocs.io/en/latest/blog/</li>
+            <li>**Wiki and Documentation:** https://retrodeck.readthedocs.io/</li>
+            <li>**Bluesky:** https://bsky.app/profile/retrodeck.net</li>
+            <li>**Reddit:** https://www.reddit.com/r/retrodeck</li>
+            <li>**Lemmy:** https://lemmy.zip/c/retrodeck</li>
+            <li>**Discord:** https://discord.gg/WDc5C9YWMx</li>
+            <li>**Matrix:** https://matrix.to/#/#retrodeck:matrix.org</li>
         </ul>
     </description>
     <branding>
@@ -105,8 +101,33 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
-        <release version="0.10.6b" date="2026-02-02">
+        <release version="0.10.7b" date="2026-03-24">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>EASTER EGG: Introduced additional holiday entries.</li>
+                    <li>TRIFORCE: The Triforce Arcade System is now supported via Dolphin.</li>
+                    <li>ES-DE THEME: Added art for PrimeHack and empty folders.</li>
+                </ul>
+                <p>CHANGED:</p>
+                <ul>
+                    <li>DOLPHIN, PPSSPP, RPCS3: Have done significant configuration changes, requiring a reset of the config.</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BORDERS: Steam Deck borders were not applied in certain scenarios when enabled via the Configurator.</li>
+                    <li>RPCS3: Firmware installation via the Configurator did not function as expected.</li>
+                    <li>BIOS CHECKER: Some MD5 corrections by community contributor Abdess.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>DOLPHIN, PPSSPP, RPCS3, RUFFLE, SRM and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
+        <release version="0.10.6b" date="2026-03-01">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.6b/</url>
             <description>
                 <p>ADDED:</p>
                 <ul>
@@ -716,7 +737,7 @@
                 <p>We have done some changes based on community feedback</p>
                 <ul>
                     <li>Select is now a hotkey trigger while pressing it down, L4 and R4 are still triggers as well.</li>
-                    <li>The RetroArch combo of Select + Start = Quit now works on many SA‑Emulators.</li>
+                    <li>The RetroArch combo of Select + Start = Quit now works on many SA‑Emulators.</li>
                     <li>Open Menu is removed from Select.</li>
                     <li>R5 = A button (this allows for great Wii controls on the right touchpad and pressing down the R5 for A).</li>
                     <li>L5 = B button.</li>

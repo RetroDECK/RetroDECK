@@ -7,5 +7,6 @@ Icon=net.retrodeck.retrodeck.configurator
 Exec=/bin/bash /app/tools/configurator.sh
 Terminal=false
 StartupNotify=false
-Keywords=multi;engine;emulator;standalone;steam;deck
-Categories=Game;Emulator;
+Keywords=arcade;classic;client;console;emulator;engine;gaming;handheld;multi;retro;steamdeck;tool;vintage
+Categories=Emulator;Game;PackageManager
+
