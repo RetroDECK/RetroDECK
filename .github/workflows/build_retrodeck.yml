@@ -76,7 +76,7 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      
+
       # Clone Repository
       - name: Clone RetroDECK repo
         if: github.event_name != 'pull_request_target'
