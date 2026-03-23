@@ -277,7 +277,7 @@ prepare_component() {
         preset_disabled_state=$(jq -r --arg comp "$manifest_component" \
           --arg core "$child_component" --arg preset "$preset" \
         '
-          $.[] | .manifest | select(has($comp)) | .[$comp] |
+          .[] | .manifest | select(has($comp)) | .[$comp] |
           if $core != "" then
             .compatible_presets[$core][$preset][0] // empty
           else
@@ -309,7 +309,7 @@ get_component_path() {
   local component="$1"
   jq -r --arg component "$component" \
   '
-    $.[] | select(.manifest | has($component)) | .component_path
+    .[] | select(.manifest | has($component)) | .component_path
   ' "$component_manifest_cache_file"
 }
 
