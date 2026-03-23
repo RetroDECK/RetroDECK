@@ -821,96 +821,87 @@ update_rd_conf() {
 }
 
 merge_directories() {
-  # This function will take 2 or more "source" folders and create a new "merged" folder combining all the source files and subfolders using symlinks
-  # Every time the function is run, it will check for the existance of all the files in all the source folders and ensure the "merged" folder is up to date, adding and removing symlinks as needed
+  # Create a merged directory combining files from multiple source directories using symlinks.
+  # Each run ensures the merged directory is up to date, adding and removing symlinks as needed.
+  # Later source directories take priority over earlier ones for conflicting paths.
   # USAGE: merge_directories "$merged_dir" "$source_dir_1" "$source_dir_2" ("$more_source_dirs")
-
+  
   if [[ $# -lt 2 ]]; then
-      log e "Usage: merge_directories merged_dir source_dir1 [source_dir2...]"
-      return 1
+    log e "Usage: merge_directories merged_dir source_dir1 [source_dir2...]"
+    return 1
   fi
 
   local merged_dir="$1"
-  shift  # Remove merged_dir from arguments, leaving only source dirs
+  shift
   local source_dirs=("$@")
 
   mkdir -p "$merged_dir"
-
   log i "Merging ${#source_dirs[@]} locations into $merged_dir"
 
-  for source_dir in "${source_dirs[@]}"; do # First scan all source directories to build the complete folder structure
+  # Build directory structure from all sources
+  for source_dir in "${source_dirs[@]}"; do
     if [[ ! -d "$source_dir" ]]; then
-      log d "Warning: Source directory $source_dir doesn't exist. Skipping."
+      log d "Source directory $source_dir doesn't exist, skipping"
       continue
     fi
-
-    find "$source_dir" -type d | while read -r dir; do # Find all subdirectories in this source
-      if [[ "$dir" == "$src_dir" ]]; then # This is the source directory itself, skip it
-        continue
-      else
-        relative_path=$(realpath --relative-to="$source_dir" "$dir")
-      fi
-
+    while IFS= read -r -d '' dir; do
+      local relative_path
+      relative_path=$(realpath --relative-to="$source_dir" "$dir")
+      [[ "$relative_path" == "." ]] && continue
       mkdir -p "$merged_dir/$relative_path"
-    done
+    done < <(find "$source_dir" -type d -print0)
   done
 
-  local valid_files_tmp=$(mktemp) # Create a temporary file to track all valid files
+  # Track valid merged paths for stale symlink detection
+  local -A valid_files=()
 
   log i "Creating symlinks for files..."
-  for source_dir in "${source_dirs[@]}"; do # Process files from all source directories
+  for source_dir in "${source_dirs[@]}"; do
     if [[ ! -d "$source_dir" ]]; then
-      log d "$source_dir does not exist, skipping..."
-      continue  # Skip non-existent directories
+      log d "$source_dir does not exist, skipping"
+      continue
     fi
+    while IFS= read -r -d '' file; do
+      local relative_path merged_file
+      relative_path=$(realpath --relative-to="$source_dir" "$file")
+      merged_file="$merged_dir/$relative_path"
+      valid_files["$merged_file"]=1
 
-    find "$source_dir" -type f | while read -r file; do
-      relative_path=$(realpath --relative-to="$source_dir" "$file") # Get path relative to the source dir
-      merged_file="$merged_dir/$relative_path" # Path in the merged directory
-
-      echo "$merged_file" >> "$valid_files_tmp"
-
-      if [[ -L "$merged_file" ]]; then # If file already exists in merged location, check if it's the correct symlink
+      if [[ -L "$merged_file" ]]; then
+        local target
         target=$(readlink "$merged_file")
-
-        if [[ "$target" = "$file" ]]; then # If symlink already points to this file, skip
-          log d "Existing symlink for $file already exists, skipping..."
+        if [[ "$target" == "$file" ]]; then
           continue
         fi
-
-        if [[ -f "$target" ]]; then # Otherwise, it points to a different file, only replace if current target doesn't exist
-          log d "New target for $file exists at $target, keeping existing symlink"
-          continue  # Keep the existing symlink
+        if [[ -f "$target" ]]; then
+          log d "Keeping existing symlink at $merged_file (target $target still exists)"
+          continue
         fi
-
         log d "Removing stale symlink $merged_file"
-        rm "$merged_file" # Remove the stale symlink
-      fi
-
-      if [[ -f "$merged_file" ]] && [[ ! -L "$merged_file" ]]; then # Skip if a real file already exists (not a symlink)
-        log w "Warning: Real file exists at $merged_file. Skipping symlink creation."
+        rm "$merged_file"
+      elif [[ -f "$merged_file" ]]; then
+        log w "Real file exists at $merged_file, skipping symlink creation"
         continue
       fi
 
       mkdir -p "$(dirname "$merged_file")"
-      log d "Creating new symlink for $file at $merged_file"
+      log d "Creating symlink: $merged_file -> $file"
       ln -sf "$file" "$merged_file"
-    done
+    done < <(find "$source_dir" -type f -print0)
   done
 
   log i "Removing stale symlinks..."
-  find "$merged_dir" -type l | while read -r symlink; do # Find and remove stale symlinks
-    if ! grep -q "^$symlink$" "$valid_files_tmp"; then # Check if this symlink is in our list of valid files
-      if [[ ! -e "$(readlink "$symlink")" ]]; then # Also verify the target doesn't exist
-        log d "Removing stale symlink: $symlink"
-        rm "$symlink"
-      fi
+  while IFS= read -r -d '' symlink; do
+    if [[ -z "${valid_files[$symlink]+x}" ]] && [[ ! -e "$(readlink "$symlink")" ]]; then
+      log d "Removing stale symlink: $symlink"
+      rm "$symlink"
     fi
-  done
+  done < <(find "$merged_dir" -type l -print0)
 
-  rm "$valid_files_tmp"
+  # Clean up empty directories left behind
+  find "$merged_dir" -mindepth 1 -type d -empty -delete 2>/dev/null
 
-  log i "Merge complete!"
+  log i "Merge complete"
 }
 
 launch_command() {
