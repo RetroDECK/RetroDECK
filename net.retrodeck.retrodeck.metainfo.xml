@@ -101,7 +101,7 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
-        <release version="0.10.7b" date="2026-03-21">
+        <release version="0.10.7b" date="2026-03-24">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
             <description>
                 <p>ADDED:</p>
@@ -112,8 +112,7 @@
                 </ul>
                 <p>CHANGED:</p>
                 <ul>
-                    <li>PPSSPP: Have done significant configuration changes, requiring a reset of the config.</li>
-                    <li>DOLPHIN: GameCube controller settings were reset to accommodate additional Triforce input mappings on Port 1.</li>
+                    <li>DOLPHIN, PPSSPP, RPCS3: Have done significant configuration changes, requiring a reset of the config.</li>
                 </ul>
                 <p>FIXED:</p>
                 <ul>
