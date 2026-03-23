@@ -46,6 +46,25 @@ get_default_command() {
   echo "$command"
 }
 
+get_system_fullname() {
+  # Looks up the human-readable <fullname> for a system in es_systems.xml.
+  # USAGE: get_system_fullname "$system_name"
+
+  local system_name="$1"
+  local fullname
+
+  fullname=$(xmllint --recover --xpath \
+    "string(//system[name='$system_name']/fullname)" \
+    "$es_systems" 2>/dev/null)
+
+  if [[ -z "$fullname" ]]; then
+    log d "No fullname found for system: $system_name"
+    return 1
+  fi
+
+  echo "$fullname"
+}
+
 resolve_emulator_path() {
   # Resolves an emulator name (e.g. "RETROARCH", "MAME") to its actual binary path by searching es_find_rules.xml.
   # USAGE: resolve_emulator_path "$emulator_name"
@@ -605,7 +624,6 @@ process_startdir() {
     before="${BASH_REMATCH[1]}"
     start_dir="${BASH_REMATCH[2]}"
     after="${BASH_REMATCH[3]}"
- 
   else
     log e "Could not parse %STARTDIR% directive"
     return 1
@@ -691,9 +709,53 @@ process_inject() {
   echo "$cmd"
 }
 
+run_event_scripts() {
+  # Executes all Bash scripts found in $es_scripts_dir/<event_name>/.
+  # Each script receives four positional arguments matching the ES-DE convention:
+  #   $1 - ROM path (absolute path to the game file)
+  #   $2 - Game name (ROM filename without extension)
+  #   $3 - System name (short name, e.g. "snes")
+  #   $4 - System full name (display name, e.g. "Nintendo SNES (Super Nintendo)")
+  # USAGE: run_event_scripts "$event_name" "$rom_path" "$game_name" "$system_name" "$system_fullname"
+
+  local event_name="$1"
+  local rom_path="$2"
+  local game_name="$3"
+  local system_name="$4"
+  local system_fullname="$5"
+
+  local scripts_dir="$es_scripts_dir/$event_name"
+
+  if [[ ! -d "$scripts_dir" ]]; then
+    log d "No scripts directory for event: $event_name"
+    return 0
+  fi
+
+  local script_count=0
+  local script
+
+  for script in "$scripts_dir"/*.sh; do
+    [[ ! -f "$script" ]] && continue
+
+    if [[ ! -x "$script" ]]; then
+      log w "Skipping non-executable script: $script"
+      continue
+    fi
+
+    log i "Executing $event_name script: $script"
+    bash "$script" "$rom_path" "$game_name" "$system_name" "$system_fullname" &
+    script_count=$((script_count + 1))
+  done
+
+  if [[ "$script_count" -gt 0 ]]; then
+    log i "Launched $script_count script(s) for event: $event_name"
+  fi
+}
+
 launch_desktop_file() {
   # Handles launching games packaged as .desktop files. Extracts the Exec= line and runs it directly.
   # USAGE: launch_desktop_file "$desktop_file_path"
+
   local desktop_file="$1"
 
   # Extract the Exec= line, stripping the key prefix
@@ -756,19 +818,19 @@ run_game() {
   done
 
   # Validate that a game path was provided
-  if [[ -z "${1:-}" ]]; then
+  if [[ -z "$game_arg" ]]; then
     log e "Game path is required"
     log i "$usage"
     return 1
   fi
 
   # Handle .desktop files
-  if [[ "$1" == *.desktop ]]; then
-    launch_desktop_file "$1"
+  if [[ "$game_arg" == *.desktop ]]; then
+    launch_desktop_file "$game_arg"
   fi
 
   local game
-  game=$(realpath "$1" 2>/dev/null) || true
+  game=$(realpath "$game_arg" 2>/dev/null) || true
 
   # Handle "directory as a file"
   if [[ -d "$game" ]]; then
@@ -783,8 +845,8 @@ run_game() {
       --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Run Game" \
-      --text="File: <span foreground='$purple'><b>\"${game:-$1}\"</b></span> not found.\n\nMake sure RetroDECK's Flatpak has permission to access the specified path.\n\nIf needed, add the path in Flatseal or terminal and try again."
-    log e "File not found: ${game:-$1}"
+      --text="File: <span foreground='$purple'><b>\"${game:-$game_arg}\"</b></span> not found.\n\nMake sure RetroDECK's Flatpak has permission to access the specified path.\n\nIf needed, add the path in Flatseal or terminal and try again."
+    log e "File not found: ${game:-$game_arg}"
     return 1
   fi
 
@@ -800,6 +862,13 @@ run_game() {
   fi
   log d "system=$system"
 
+  # Derive event script arguments from resolved game and system info.
+  local game_name
+  game_name=$(basename "$game")
+  game_name="${game_name%%.*}"
+  local system_fullname
+  system_fullname=$(get_system_fullname "$system") || system_fullname="$system"
+
   # Resolve command template
   local command_template
   if ! command_template=$(resolve_command_template "$system" "$game_basename" "$emulator" "$manual_mode"); then
@@ -814,6 +883,9 @@ run_game() {
     return 1
   fi
 
+  # Determine if event script should be used
+  local event_scripts_enabled=$(get_compoenent_option "es-de" "esde_engine_launch_scripts")
+
   # Execute
   log d "Launching with command: $final_command"
 
@@ -822,7 +894,17 @@ run_game() {
   log i " Game path: $game"
   log i " Recognized system: $system"
   log i " Command template: $command_template"
+  log i " Event scripts enabled: $event_scripts_enabled"
   log i "==========================================="
 
+  if [[ "$event_scripts_enabled" == "true" ]]; then
+    run_event_scripts "game-start" "$game" "$game_name" "$system" "$system_fullname"
+  fi
+
+  log i "Launching with command: $final_command"
   eval "$final_command"
+
+  if [[ "$event_scripts_enabled" == "true" ]]; then
+    run_event_scripts "game-end" "$game" "$game_name" "$system" "$system_fullname"
+  fi
 }
