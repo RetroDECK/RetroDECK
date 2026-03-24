@@ -140,7 +140,8 @@ else
 fi
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
-components_release_name=$(curl -s "https://api.github.com/repos/$components_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
+# components_release_name=$(curl -s "https://api.github.com/repos/$components_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
+components_release_name=$(gh release list --repo RetroDECK/components --limit 100 --json tagName -q "[.[] | select(.tagName | startswith (\"main-\"))] | .[0].tagName")
 if [ -z "$components_release_name" ]; then
     components_release_name=$(curl -s https://api.github.com/repos/$components_repo/releases/latest | jq -r .tag_name)
 fi
