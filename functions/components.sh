@@ -1383,3 +1383,71 @@ find_compatible_compression_format() {
     echo "none"
   fi
 }
+
+resolve_manifest_path() {
+  # Resolves variables in a manifest path string using envsubst
+  # Returns the resolved path, or returns 1 if any variables remain unresolved
+  # USAGE: resolve_manifest_path "$path_string"
+
+  local path_string="$1"
+
+  local resolved
+  resolved=$(envsubst <<< "$path_string")
+
+  if [[ "$resolved" =~ \$ ]]; then
+    log e "Unresolved variables in path: $path_string -> $resolved"
+    return 1
+  fi
+
+  printf '%s' "$resolved"
+}
+
+resolve_component_placeholders() {
+  # Resolves component-specific placeholders in a string value
+  # USAGE: resolve_component_placeholders "$component" "$string"
+
+  local component="$1"
+  local input_string="$2"
+
+  if [[ "$input_string" != *"%"* ]]; then
+    printf '%s' "$input_string"
+    return 0
+  fi
+
+  local resolved="$input_string"
+
+  if [[ "$resolved" == *"%COMPONENT_PATH%"* ]]; then
+    local component_path
+    component_path=$(jq -r --arg component "$component" \
+      '.[] | select(.manifest | has($component)) | .component_path' \
+      "$component_manifest_cache_file")
+
+    if [[ -z "$component_path" || "$component_path" == "null" ]]; then
+      log e "Could not resolve component_path for component \"$component\""
+      return 1
+    fi
+
+    resolved="${resolved//%COMPONENT_PATH%/$component_path}"
+  fi
+
+  if [[ "$resolved" == *"%"* ]]; then
+    log w "Unresolved placeholders may remain in: $resolved"
+  fi
+
+  printf '%s' "$resolved"
+}
+
+resolve_path() {
+  # Resolves component placeholders first, then environment variables in a given string
+  # Returns the fully resolved path, or returns 1 on failure
+  # USAGE: resolve_path "$component" "$path_string"
+
+  local component="$1"
+  local path_string="$2"
+
+  local resolved
+  resolved=$(resolve_component_placeholders "$component" "$path_string") || return 1
+  resolved=$(resolve_manifest_path "$resolved") || return 1
+
+  printf '%s' "$resolved"
+}
