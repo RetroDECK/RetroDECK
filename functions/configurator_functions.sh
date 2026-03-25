@@ -1036,7 +1036,6 @@ configurator_retrodeck_backup_dialog() {
 }
 
 configurator_clean_empty_systems_dialog() {
-  # REBUILD
   configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Before removing any identified empty system folders,\n<span foreground='$purple'><b>please ensure that your game collection is backed up to prevent data loss.</b></span>"
 
   local progress_pipe
@@ -1078,9 +1077,9 @@ configurator_clean_empty_systems_dialog() {
       done
       configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
     elif [[ ! -z $choice ]]; then # User clicked "Remove All"
-      for folder in "${all_empty_folders[@]}"; do
-        log i "Removing empty folder $folder"
-        rm -rf "$folder"
+      for ((i = 2; i < ${#empty_rom_folders_list[@]}; i += 3)); do
+        log i "Removing empty folder ${empty_rom_folders_list[i]}"
+        rm -rf "${empty_rom_folders_list[i]}"
       done
       configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
     fi
