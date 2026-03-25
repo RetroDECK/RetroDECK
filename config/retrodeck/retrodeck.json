@@ -33,9 +33,6 @@
     "ask_default_user": "true",
     "default_user": "",
     "developer_options": "false",
-    "sound_effects": "true",
-    "volume_effects": "10",
-    "font": "1",
     "rd_logging_level": "info",
     "iconset": "lahrs-main"
   },
