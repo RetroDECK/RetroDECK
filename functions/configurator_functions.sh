@@ -908,7 +908,8 @@ configurator_change_rd_logging_level_dialog() {
 }
 
 configurator_retrodeck_backup_dialog() {
-  # REBUILD
+  local "backup_choice" "result"
+  local -a choices=()
   configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single .tar file.\n\n<span foreground='$purple'><b>Please note that this process may take several minutes.</b></span>\n\nThe resulting .tar file will be located in:\n<span foreground='$purple'><b>$backups_path.</b></span>"
 
   choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
@@ -917,44 +918,67 @@ configurator_retrodeck_backup_dialog() {
   case $choice in
     "Core Backup" )
       log i "User chose to backup core userdata."
-      backup_retrodeck_userdata "core"
+      backup_choice="core"
     ;;
     "Custom Backup" )
       log i "User chose to backup custom userdata."
-      while read -r config_path; do
-        local path_var=$(echo "$config_path" | jq -r '.key')
-        local path_value=$(echo "$config_path" | jq -r '.value')
-        log d "Adding $path_value to compressible paths."
-        compressible_paths+=( "false" "$path_var" "$path_value")
-      done < <(jq -c '.paths | to_entries[] | select(.key != "rd_home_path" and .key != "backups_path" and .key != "logs_path" and .key != "sdcard")' "$rd_conf")
 
-      # Add static paths not defined in retrodeck.json
-      if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
-        compressible_paths+=( "false" "ES-DE collections" "$rd_home_path/ES-DE/collections")
-      else
-        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE collections folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/collections</b></span>.\nSomething may be wrong with your RetroDECK installation."
-        fi
-        log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
-      fi
+      local -a compressible_paths=()
+      declare -A path_components
 
-      if [[ -e "$rd_home_path/ES-DE/gamelists" ]]; then
-        compressible_paths+=( "false" "ES-DE gamelists" "$rd_home_path/ES-DE/gamelists")
-      else
-        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE gamelists folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/gamelists</b></span>.\nSomething may be wrong with your RetroDECK installation."
+      while IFS=$'\t' read -r component_name raw_path; do
+        local resolved_path
+        resolved_path=$(echo "$raw_path" | envsubst)
+        if [[ -z "$resolved_path" ]]; then
+          continue
         fi
-        log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
-      fi
+        if [[ -n "${path_components[$resolved_path]}" ]]; then
+          path_components["$resolved_path"]="${path_components[$resolved_path]}, $component_name"
+        else
+          path_components["$resolved_path"]="$component_name"
+        fi
+      done < <(
+        jq -r '
+          [.[] | .manifest | to_entries[] |
+          .value.name as $name |
+          (.value.backup_data // {} | (.core // [])[], (.complete // [])[]) |
+          [$name, .]] | unique[] | @tsv
+        ' "$component_manifest_cache_file"
+      )
 
-      if [[ -e "$rd_home_path/ES-DE/custom_systems" ]]; then
-        compressible_paths+=( "false" "ES-DE custom_systems" "$rd_home_path/ES-DE/custom_systems")
-      else
-        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-          configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The ES-DE custom_systems folder was not found at its expected location: <span foreground='$purple'><b>$rd_home_path/ES-DE/custom_systems</b></span>.\nSomething may be wrong with your RetroDECK installation."
+      # Ensure "RetroDECK" appears first within any multi-component entry
+      for resolved_path in "${!path_components[@]}"; do
+        local components="${path_components[$resolved_path]}"
+        if [[ "$components" == *", "* && "$components" == *"RetroDECK"* ]]; then
+          local -a parts=()
+          IFS=', ' read -ra parts <<< "$components"
+          local -a others=()
+          for part in "${parts[@]}"; do
+            [[ -n "$part" && "$part" != "RetroDECK" ]] && others+=("$part")
+          done
+          IFS=', ' eval 'local sorted_others="${others[*]}"'
+          path_components["$resolved_path"]="RetroDECK, $sorted_others"
         fi
-        log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
-      fi
+      done
+
+      # Sort paths: RetroDECK entries first, then alphabetically by component name
+      local -a sorted_paths=()
+      mapfile -t sorted_paths < <(
+        for resolved_path in "${!path_components[@]}"; do
+          printf '%s\t%s\n' "${path_components[$resolved_path]}" "$resolved_path"
+        done | sort -t$'\t' -k1,1 | awk -F'\t' '
+          /^RetroDECK/ { print; next }
+          { rest[NR] = $0 }
+          END { for (i in rest) print rest[i] }
+        '
+      )
+
+      for line in "${sorted_paths[@]}"; do
+        local component_name="${line%%$'\t'*}"
+        local resolved_path="${line#*$'\t'}"
+        log d "Adding $resolved_path to compressible paths ($component_name)"
+        compressible_paths+=("false" "$component_name" "$resolved_path")
+      done
 
       choice=$(rd_zenity \
       --list --width=1200 --height=720 \
@@ -967,16 +991,48 @@ configurator_retrodeck_backup_dialog() {
       --column "Path" \
       "${compressible_paths[@]}")
 
-      choices=() # Expand choice string into passable array
-      IFS='^' read -ra choices <<< "$choice"
-
-      backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+      if [[ -n "$choice" ]]; then
+        log i "User chose custom paths to backup."
+        backup_choice="custom"
+        IFS='^' read -ra choices <<< "$choice"
+      fi
     ;;
     "Complete Backup" )
       log i "User chose to backup all userdata."
-      backup_retrodeck_userdata "complete"
+      backup_choice="complete"
     ;;
   esac
+
+  if [[ -n "$backup_choice" ]]; then
+    local progress_pipe
+    progress_pipe=$(mktemp -u)
+    mkfifo "$progress_pipe"
+
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --width="800" \
+    --title "RetroDECK Configurator - Backup in Progress" < "$progress_pipe" &
+    local zenity_pid=$!
+
+    exec 3>"$progress_pipe"
+
+    log i "Starting $backup_choice backup process"
+    echo "# Starting $backup_choice backup process, please wait..."
+    result=$(api_do_backup_retrodeck_userdata "$backup_choice" "${choices[@]}")
+    local rc=$?
+
+    echo "100" >&3
+
+    exec 3>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
+
+    if [[ "$rc" == 0 ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The \"$backup_choice\" backup process is complete,\nthe backup file is located at $result"
+    else
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The \"$backup_choice\" backup process could not be completed.\n\n$result"
+    fi
+  fi
 }
 
 configurator_clean_empty_systems_dialog() {

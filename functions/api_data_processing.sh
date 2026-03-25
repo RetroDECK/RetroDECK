@@ -953,3 +953,130 @@ api_do_move_retrodeck_directory() {
     return 1
   fi
 }
+
+api_do_backup_retrodeck_userdata() {
+  local backup_type="$1"
+  shift
+
+  if [[ -z "$backup_type" || ! "$backup_type" =~ ^(complete|core|custom)$ ]]; then
+    echo "Invalid backup type. Valid options: complete, core, custom"
+    return 1
+  fi
+
+  create_dir "$backups_path"
+
+  local backup_date
+  backup_date=$(date +"%0m%0d_%H%M")
+  local backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
+  local backup_file="$backups_path/retrodeck_${backup_date}_${backup_type}.tar.gz"
+
+  local -a raw_paths=()
+  local -a resolved_paths=()
+  local -a valid_paths=()
+
+  # Collect raw paths based on backup type
+  if [[ "$backup_type" == "complete" || "$backup_type" == "core" ]]; then
+    mapfile -t raw_paths < <(
+      jq -r --arg type "$backup_type" \
+        '[.[].backup_data // {} | .[$type] // [] | .[]] | unique[]' \
+        "$component_manifest_cache_file"
+    )
+    if [[ ${#raw_paths[@]} -eq 0 ]]; then
+      echo "No backup paths defined in component manifests for type: $backup_type"
+      return 1
+    fi
+    # Resolve variable references via envsubst
+    mapfile -t resolved_paths < <(printf '%s\n' "${raw_paths[@]}" | envsubst)
+
+  elif [[ "$backup_type" == "custom" ]]; then
+    if [[ "$#" -eq 0 ]]; then
+      echo "No paths specified for custom backup"
+      return 1
+    fi
+    for arg in "$@"; do
+      if [[ "$arg" == /* ]]; then
+        resolved_paths+=("$arg")
+      elif [[ "$arg" == \$* ]]; then
+        resolved_paths+=("$(echo "$arg" | envsubst)")
+      else
+        local config_value
+        config_value=$(jq -r --arg key "$arg" '.paths[$key] // empty' "$rd_conf")
+        if [[ -n "$config_value" ]]; then
+          resolved_paths+=("$config_value")
+        else
+          echo "Unknown path or key: $arg"
+          return 1
+        fi
+      fi
+    done
+  fi
+
+  # Deduplicate resolved paths
+  mapfile -t resolved_paths < <(printf '%s\n' "${resolved_paths[@]}" | sort -u)
+
+  # Validate paths exist
+  for path in "${resolved_paths[@]}"; do
+    if [[ -z "$path" ]]; then
+      continue
+    fi
+    if [[ -e "$path" ]]; then
+      valid_paths+=("$path")
+      log i "Adding to backup: $path"
+    else
+      log w "Path does not exist, skipping: $path"
+    fi
+  done
+
+  if [[ ${#valid_paths[@]} -eq 0 ]]; then
+    echo "No valid paths found to backup"
+    return 1
+  fi
+
+  # Calculate total size of backup data
+  log i "Calculating size of backup data..."
+  local total_size=0
+  for path in "${valid_paths[@]}"; do
+    local path_size_kb
+    path_size_kb=$(du -sk "$path" 2>/dev/null | cut -f1)
+    total_size=$((total_size + (path_size_kb * 1024)))
+  done
+
+  # Check available space at destination
+  local available_space
+  available_space=$(df -B1 "$backups_path" | awk 'NR==2 {print $4}')
+
+  log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B "$total_size")"
+  log i "Available space at destination: $(numfmt --to=iec-i --suffix=B "$available_space")"
+
+  if [[ "$available_space" -lt "$total_size" ]]; then
+    echo "Not enough free space. Need $(numfmt --to=iec-i --suffix=B "$total_size"), have $(numfmt --to=iec-i --suffix=B "$available_space")"
+    return 1
+  fi
+
+  # Create backup
+  log i "Starting $backup_type backup..."
+  if tar -czhf "$backup_file" "${valid_paths[@]}" >> "$backup_log_file" 2>&1; then
+    if [[ ! -s "$backup_log_file" ]]; then
+      rm -f "$backup_log_file"
+    fi
+
+    # Rotate old backups
+    local max_backups
+    max_backups=$(jq -r '.options.max_backups // 3' "$rd_conf")
+    local -a old_backups=()
+    mapfile -t old_backups < <(ls -t "$backups_path"/retrodeck_*_"${backup_type}".tar.gz 2>/dev/null | tail -n +"$((max_backups + 1))")
+    if [[ ${#old_backups[@]} -gt 0 ]]; then
+      rm -f "${old_backups[@]}"
+      log i "Rotated backups: removed ${#old_backups[@]} old backup(s), keeping latest $max_backups of type $backup_type"
+    fi
+
+    local final_size
+    final_size=$(du -h "$backup_file" | cut -f1)
+    log i "Backup completed: $backup_file ($final_size)"
+    echo "$backup_file"
+    return 0
+  else
+    echo "Backup failed. See log: $backup_log_file"
+    return 1
+  fi
+}
