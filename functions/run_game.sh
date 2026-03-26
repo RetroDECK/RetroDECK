@@ -782,8 +782,6 @@ launch_desktop_file() {
 }
 
 run_game() {
-  # USAGE: run_game [-e emulator] [-s system] [-m] <game_path>
-
   local emulator=""
   local system=""
   local manual_mode=false
@@ -884,7 +882,7 @@ run_game() {
   fi
 
   # Determine if event script should be used
-  local event_scripts_enabled=$(get_compoenent_option "es-de" "esde_engine_launch_scripts")
+  local event_scripts_enabled=$(get_component_option "es-de" "esde_engine_launch_scripts")
 
   # Execute
   log d "Launching with command: $final_command"
