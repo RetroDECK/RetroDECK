@@ -542,7 +542,7 @@ api_set_preset_state() {
 
         # Check if the conflicting preset has an entry for this component
         local conflicting_state
-        conflicting_state=$(get_setting_value "$rd_conf" "$config_component" "retrodeck" "$conflicting_preset")
+        conflicting_state=$(jq -r --arg section "$conflicting_preset" --arg setting "$config_component" '.presets[$section] | .. | objects | select(has($setting)) | .[$setting] // empty' "$rd_conf")
 
         if [[ -n "$conflicting_state" ]]; then
           local conflicting_disabled_state
