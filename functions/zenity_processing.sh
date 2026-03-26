@@ -28,11 +28,11 @@ build_zenity_menu_array() {
 
     mapfile -t dest_array < <(
       api_get_all_preset_names | jq -r --argjson defs "$preset_definitions" '
-        [.[] | .preset_name as $pn | {
-          name: ($defs[$pn].name // $pn),
-          description: ($defs[$pn].description // ""),
-          command: ("configurator_change_preset_dialog " + $pn),
-          priority: ($defs[$pn].priority // null)
+        [.[] | .preset_name as $preset_name | {
+          name: ($defs[$preset_name].name // $preset_name),
+          description: ($defs[$preset_name].desc // ""),
+          command: ("configurator_change_preset_dialog " + $preset_name),
+          priority: ($defs[$preset_name].priority // null)
         }]
         | (map(select(.priority != null)) | sort_by(.priority, .name))
           + (map(select(.priority == null)) | sort_by(.name))
