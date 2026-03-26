@@ -57,8 +57,8 @@ parse_cli_args() {
   local -A flag_to_handler=()
   while IFS=$'\t' read -r flags handler component; do
     [[ -z "$flags" || -z "$handler" ]] && continue
-    local IFS=','
-    for flag in $flags; do
+    IFS=',' read -ra flag_array <<< "$flags"
+    for flag in "${flag_array[@]}"; do
       flag=$(echo "$flag" | tr -d ' ')
       if [[ -n "${flag_to_handler[$flag]+x}" ]]; then
         log w "Duplicate CLI flag '$flag' from '$component' skipped, already registered by another component"
