@@ -970,23 +970,35 @@ api_do_backup_retrodeck_userdata() {
   local backup_log_file="$logs_path/${backup_date}_${backup_type}_backup_log.log"
   local backup_file="$backups_path/retrodeck_${backup_date}_${backup_type}.tar.gz"
 
-  local -a raw_paths=()
   local -a resolved_paths=()
-  local -a valid_paths=()
+  declare -A path_symlink_flags
 
-  # Collect raw paths based on backup type
   if [[ "$backup_type" == "complete" || "$backup_type" == "core" ]]; then
-    mapfile -t raw_paths < <(
-      jq -r --arg type "$backup_type" \
-        '[.[].backup_data // {} | .[$type] // [] | .[]] | unique[]' \
-        "$component_manifest_cache_file"
+    while IFS=$'\t' read -r raw_path follow_symlinks; do
+      local resolved_path
+      resolved_path=$(echo "$raw_path" | envsubst)
+      if [[ -z "$resolved_path" ]]; then
+        continue
+      fi
+      # If a path appears in multiple manifests, follow_symlinks=true wins
+      if [[ -z "${path_symlink_flags[$resolved_path]}" ]]; then
+        resolved_paths+=("$resolved_path")
+        path_symlink_flags["$resolved_path"]="$follow_symlinks"
+      elif [[ "$follow_symlinks" == "true" ]]; then
+        path_symlink_flags["$resolved_path"]="true"
+      fi
+    done < <(
+      jq -r --arg type "$backup_type" '
+        [to_entries[] |
+         .value.backup_data // {} | .[$type] // [] | .[] |
+         [.path, (.follow_symlinks // false | tostring)]] | unique[] | @tsv
+      ' "$component_manifest_cache_file"
     )
-    if [[ ${#raw_paths[@]} -eq 0 ]]; then
+
+    if [[ ${#resolved_paths[@]} -eq 0 ]]; then
       echo "No backup paths defined in component manifests for type: $backup_type"
       return 1
     fi
-    # Resolve variable references via envsubst
-    mapfile -t resolved_paths < <(printf '%s\n' "${raw_paths[@]}" | envsubst)
 
   elif [[ "$backup_type" == "custom" ]]; then
     if [[ "$#" -eq 0 ]]; then
@@ -994,34 +1006,31 @@ api_do_backup_retrodeck_userdata() {
       return 1
     fi
     for arg in "$@"; do
+      local resolved_path=""
       if [[ "$arg" == /* ]]; then
-        resolved_paths+=("$arg")
+        resolved_path="$arg"
       elif [[ "$arg" == \$* ]]; then
-        resolved_paths+=("$(echo "$arg" | envsubst)")
+        resolved_path=$(echo "$arg" | envsubst)
       else
-        local config_value
-        config_value=$(jq -r --arg key "$arg" '.paths[$key] // empty' "$rd_conf")
-        if [[ -n "$config_value" ]]; then
-          resolved_paths+=("$config_value")
-        else
+        resolved_path=$(jq -r --arg key "$arg" '.paths[$key] // empty' "$rd_conf")
+        if [[ -z "$resolved_path" ]]; then
           echo "Unknown path or key: $arg"
           return 1
         fi
       fi
+      if [[ -z "${path_symlink_flags[$resolved_path]}" ]]; then
+        resolved_paths+=("$resolved_path")
+        path_symlink_flags["$resolved_path"]="false"
+      fi
     done
   fi
 
-  # Deduplicate resolved paths
-  mapfile -t resolved_paths < <(printf '%s\n' "${resolved_paths[@]}" | sort -u)
-
   # Validate paths exist
+  local -a valid_paths=()
   for path in "${resolved_paths[@]}"; do
-    if [[ -z "$path" ]]; then
-      continue
-    fi
     if [[ -e "$path" ]]; then
       valid_paths+=("$path")
-      log i "Adding to backup: $path"
+      log i "Adding to backup: $path (follow_symlinks=${path_symlink_flags[$path]})"
     else
       log w "Path does not exist, skipping: $path"
     fi
@@ -1036,47 +1045,74 @@ api_do_backup_retrodeck_userdata() {
   log i "Calculating size of backup data..."
   local total_size=0
   for path in "${valid_paths[@]}"; do
+    local du_flags="-sk"
+    if [[ "${path_symlink_flags[$path]}" == "true" ]]; then
+      du_flags="-sLk" # -L dereferences symlinks for accurate size
+    fi
     local path_size_kb
-    path_size_kb=$(du -sk "$path" 2>/dev/null | cut -f1)
+    path_size_kb=$(du $du_flags "$path" 2>/dev/null | cut -f1)
     total_size=$((total_size + (path_size_kb * 1024)))
   done
 
-  # Check available space at destination
   local available_space
   available_space=$(df -B1 "$backups_path" | awk 'NR==2 {print $4}')
 
+  local required_space=$((total_size * 2))
+
   log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B "$total_size")"
+  log i "Required free space (with compression overhead): $(numfmt --to=iec-i --suffix=B "$required_space")"
   log i "Available space at destination: $(numfmt --to=iec-i --suffix=B "$available_space")"
 
-  if [[ "$available_space" -lt "$total_size" ]]; then
-    echo "Not enough free space. Need $(numfmt --to=iec-i --suffix=B "$total_size"), have $(numfmt --to=iec-i --suffix=B "$available_space")"
+  if [[ "$available_space" -lt "$required_space" ]]; then
+    echo "Not enough free space. Need $(numfmt --to=iec-i --suffix=B "$required_space"), have $(numfmt --to=iec-i --suffix=B "$available_space")"
     return 1
   fi
 
-  # Create backup
+  # Iterate paths to build archive
   log i "Starting $backup_type backup..."
-  if tar -czhf "$backup_file" "${valid_paths[@]}" >> "$backup_log_file" 2>&1; then
-    if [[ ! -s "$backup_log_file" ]]; then
-      rm -f "$backup_log_file"
-    fi
+  local tar_file="${backup_file%.gz}"
 
-    # Rotate old backups
-    local max_backups
-    max_backups=$(jq -r '.options.max_backups // 3' "$rd_conf")
-    local -a old_backups=()
-    mapfile -t old_backups < <(ls -t "$backups_path"/retrodeck_*_"${backup_type}".tar.gz 2>/dev/null | tail -n +"$((max_backups + 1))")
-    if [[ ${#old_backups[@]} -gt 0 ]]; then
-      rm -f "${old_backups[@]}"
-      log i "Rotated backups: removed ${#old_backups[@]} old backup(s), keeping latest $max_backups of type $backup_type"
+  for path in "${valid_paths[@]}"; do
+    local tar_opts
+    if [[ -e "$tar_file" ]]; then
+      tar_opts="-rf"
+    else
+      tar_opts="-cf" # First path creates the archive
     fi
+    if [[ "${path_symlink_flags[$path]}" == "true" ]]; then
+      tar_opts="${tar_opts/f/hf}"
+    fi
+    if ! tar "$tar_opts" "$tar_file" "$path" >> "$backup_log_file" 2>&1; then
+      echo "Backup failed while adding: $path. See log: $backup_log_file"
+      rm -f "$tar_file"
+      return 1
+    fi
+    log i "Added to archive: $path (follow_symlinks=${path_symlink_flags[$path]})"
+  done
 
-    local final_size
-    final_size=$(du -h "$backup_file" | cut -f1)
-    log i "Backup completed: $backup_file ($final_size)"
-    echo "$backup_file"
-    return 0
-  else
-    echo "Backup failed. See log: $backup_log_file"
+  if ! gzip "$tar_file"; then
+    echo "Backup failed during compression. See log: $backup_log_file"
+    rm -f "$tar_file"
     return 1
   fi
+
+  if [[ ! -s "$backup_log_file" ]]; then
+    rm -f "$backup_log_file"
+  fi
+
+  # Rotate old backups
+  local max_backups
+  max_backups=$(jq -r '.options.max_backups // 3' "$rd_conf")
+  local -a old_backups=()
+  mapfile -t old_backups < <(ls -t "$backups_path"/retrodeck_*_"${backup_type}".tar.gz 2>/dev/null | tail -n +"$((max_backups + 1))")
+  if [[ ${#old_backups[@]} -gt 0 ]]; then
+    rm -f "${old_backups[@]}"
+    log i "Rotated backups: removed ${#old_backups[@]} old backup(s), keeping latest $max_backups of type $backup_type"
+  fi
+
+  local final_size
+  final_size=$(du -h "$backup_file" | cut -f1)
+  log i "Backup completed: $backup_file ($final_size)"
+  echo "$backup_file"
+  return 0
 }

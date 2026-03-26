@@ -925,8 +925,9 @@ configurator_retrodeck_backup_dialog() {
 
       local -a compressible_paths=()
       declare -A path_components
+      declare -A path_symlink_flags
 
-      while IFS=$'\t' read -r component_name raw_path; do
+      while IFS=$'\t' read -r component_name raw_path follow_symlinks; do
         local resolved_path
         resolved_path=$(echo "$raw_path" | envsubst)
         if [[ -z "$resolved_path" ]]; then
@@ -934,15 +935,19 @@ configurator_retrodeck_backup_dialog() {
         fi
         if [[ -n "${path_components[$resolved_path]}" ]]; then
           path_components["$resolved_path"]="${path_components[$resolved_path]}, $component_name"
+          if [[ "$follow_symlinks" == "true" ]]; then
+            path_symlink_flags["$resolved_path"]="true"
+          fi
         else
           path_components["$resolved_path"]="$component_name"
+          path_symlink_flags["$resolved_path"]="$follow_symlinks"
         fi
       done < <(
         jq -r '
-          [.[] | .manifest | to_entries[] |
+          [to_entries[] |
           .value.name as $name |
           (.value.backup_data // {} | (.core // [])[], (.complete // [])[]) |
-          [$name, .]] | unique[] | @tsv
+          [$name, .path, (.follow_symlinks // false | tostring)]] | unique[] | @tsv
         ' "$component_manifest_cache_file"
       )
 
