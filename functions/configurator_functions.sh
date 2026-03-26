@@ -10,15 +10,18 @@ configurator_navigation() {
 
   while [[ ${#nav_stack[@]} -gt 0 ]]; do
     local current="${nav_stack[-1]}"
-    local func_name="${current%% *}"
-
+    
+    read -ra current_parts <<< "$current"
+    local func_name="${current_parts[0]}"
+    
     if ! declare -F "$func_name" > /dev/null; then
       log e "Dialog function not found: $func_name"
       break
     fi
 
     configurator_nav=""
-    $current
+    read -ra current_parts <<< "$current"
+    "${current_parts[0]}" "${current_parts[@]:1}"
 
     case "$configurator_nav" in
 
