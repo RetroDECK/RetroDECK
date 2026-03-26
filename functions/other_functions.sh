@@ -2,12 +2,42 @@
 
 verify_space() {
   # Function used for verifying adequate space before moving directories around
-  # USAGE: verify_space $source_dir $dest_dir
-  # Function returns "true" if there is enough space, "false" if there is not
+  # USAGE: verify_space $source_dir $dest_dir [$visibility]
+  local source_dir="$1"
+  local dest_dir="$2"
+  local visibility=${3:-}
+
+  if [[ ! -n "$source_dir" || ! -n "$dest_dir" ]]; then
+    log e "Missing source or dest directory to validate."
+    return 1
+  fi
+
+  if [[ "$visibility" == "zenity" ]]; then
+    local progress_pipe
+    progress_pipe=$(mktemp -u)
+    mkfifo "$progress_pipe"
+
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --width="800" \
+    --title "RetroDECK Configurator - Space Validation" < "$progress_pipe" &
+    local zenity_pid=$!
+
+    exec 3>"$progress_pipe"
+    echo "# Validating adequate free space in $dest_dir, please wait..."
+  fi
 
   source_size=$(du -sk "$1" | awk '{print $1}')
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
   dest_avail=$(df -k --output=avail "$2" | tail -1)
+
+  if [[ "$visibility" == "zenity" ]]; then
+    echo "100" >&3
+
+    exec 3>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
+  fi
 
   if [[ $source_size -ge $dest_avail ]]; then
     return 1
