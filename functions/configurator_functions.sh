@@ -1094,7 +1094,6 @@ configurator_clean_empty_systems_dialog() {
 }
 
 configurator_usb_import_dialog() {
-  # REBUILD
   choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Import" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
@@ -1106,104 +1105,72 @@ configurator_usb_import_dialog() {
   "Prepare USB device" )
     log i "Configurator: opening \"$choice\" menu"
 
-    external_devices=()
+    local external_devices=()
+    get_external_usb_devices external_devices
 
-    while read -r size device_path; do
-      device_name=$(basename "$device_path")
-      external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
-    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
+    if [[ "${#external_devices[@]}" -eq 0 ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - USB Import" "<span foreground='$purple'><b>No USB devices were found.</b></span>"
+      configurator_nav="refresh"
+      return
+    fi
 
-    if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may appear in this list but may not be suitable for USB import.\n\n<span foreground='$purple'><b>Please select your desired drive carefully.</b></span>"
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-      --hide-column=3 --print-column=3 \
-      --column "Device Name" \
-      --column "Device Size" \
-      --column "path" \
-      "${external_devices[@]}")
+    configurator_generic_dialog "RetroDECK Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may appear in this list but may not be suitable for USB import.\n\n<span foreground='$purple'><b>Please select your desired drive carefully.</b></span>"
+    choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --hide-column=3 --print-column=3 \
+    --column "Device Name" \
+    --column "Device Size" \
+    --column "path" \
+    "${external_devices[@]}")
 
-      if [[ ! -z "$choice" ]]; then
-        create_dir "$choice/RetroDECK Import"
-        es-de --home "$choice/RetroDECK Import" --create-system-dirs
-        rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
-
-
-        # Prepare default BIOS folder subfolders
-        create_dir "$choice/RetroDECK Import/BIOS/np2kai"
-        create_dir "$choice/RetroDECK Import/BIOS/dc"
-        create_dir "$choice/RetroDECK Import/BIOS/Mupen64plus"
-        create_dir "$choice/RetroDECK Import/BIOS/quasi88"
-        create_dir "$choice/RetroDECK Import/BIOS/fbneo/samples"
-        create_dir "$choice/RetroDECK Import/BIOS/fbneo/cheats"
-        create_dir "$choice/RetroDECK Import/BIOS/fbneo/blend"
-        create_dir "$choice/RetroDECK Import/BIOS/fbneo/patched"
-        create_dir "$choice/RetroDECK Import/BIOS/citra/sysdata"
-        create_dir "$choice/RetroDECK Import/BIOS/cemu"
-        create_dir "$choice/RetroDECK Import/BIOS/pico-8/carts"
-        create_dir "$choice/RetroDECK Import/BIOS/pico-8/cdata"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd0"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd1"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash2"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash3"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_bdvd"
-        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_usb000"
-        create_dir "$choice/RetroDECK Import/BIOS/Vita3K/"
-        create_dir "$choice/RetroDECK Import/BIOS/mame-sa/samples"
-        create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
-      fi
-    else
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "<span foreground='$purple'><b>No USB devices were found.</b></span>"
+    if [[ -n "$choice" ]]; then
+      local import_dir="$choice/RetroDECK Import"
+      create_dir "$import_dir"
+      start::es-de --home "$import_dir" --create-system-dirs
+      rm -rf "$import_dir/ES-DE"
+      rsync -a --copy-dirlinks --include='*/' --exclude='*' "$bios_path/" "$import_dir/BIOS/"
     fi
     configurator_nav="refresh"
   ;;
 
   "Import from USB" )
     log i "Configurator: opening \"$choice\" menu"
-    external_devices=()
 
-    while read -r size device_path; do
-      if [[ -d "$device_path/RetroDECK Import/ROMs" ]]; then
-        device_name=$(basename "$device_path")
-        external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
-      fi
-    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
+    local external_devices=()
+    get_external_usb_devices external_devices "--with-import-folder"
 
-    if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-      --hide-column=3 --print-column=3 \
-      --column "Device Name" \
-      --column "Device Size" \
-      --column "path" \
-      "${external_devices[@]}")
+    if [[ "${#external_devices[@]}" -eq 0 ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - USB Import" "<span foreground='$purple'><b>No USB devices with an importable folder were found.</b></span>"
+      configurator_nav="refresh"
+      return
+    fi
 
-      if [[ ! -z "$choice" ]]; then
-        if verify_space "$choice/RetroDECK Import/ROMs" "$roms_path" || verify_space "$choice/RetroDECK Import/BIOS" "$bios_path"; then
-          if configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?"; then
-            (
-            rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_path"
-            rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_path"
-            ) |
-            rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - USB Import In Progress"
-            configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
-          fi
-        else
-          (
-          rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_path"
-          rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_path"
-          ) |
-          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator - USB Import In Progress"
-          configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
+    choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --hide-column=3 --print-column=3 \
+    --column "Device Name" \
+    --column "Device Size" \
+    --column "path" \
+    "${external_devices[@]}")
+
+    if [[ -n "$choice" ]]; then
+      local import_dir="$choice/RetroDECK Import"
+
+      if ! verify_space "$import_dir/ROMs" "$roms_path" "zenity" || ! verify_space "$import_dir/BIOS" "$bios_path" "zenity"; then
+        if ! configurator_generic_question_dialog "RetroDECK Configurator - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?"; then
+          configurator_nav="refresh"
+          return
         fi
       fi
-    else
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "<span foreground='$purple'><b>No USB devices with an importable folder were found.</b></span>"
+
+      (
+      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/ROMs/"* "$roms_path"
+      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/BIOS/"* "$bios_path"
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - USB Import In Progress"
+      configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
     fi
     configurator_nav="refresh"
   ;;
