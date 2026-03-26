@@ -728,3 +728,21 @@ set_build_options() {
     set_setting_value "$rd_conf" "rd_logging_level" "info" retrodeck "options"
   fi
 }
+
+get_external_usb_devices() {
+  # USAGE: get_external_usb_devices "array_name" ["--with-import-folder"]
+
+  declare -n devices="$1"
+  local filter="$2"
+
+  devices=()
+
+  while read -r size device_path; do
+    if [[ "$filter" == "--with-import-folder" && ! -d "$device_path/RetroDECK Import" ]]; then
+      continue
+    fi
+    local device_name
+    device_name=$(basename "$device_path")
+    devices+=("$device_name" "$size" "$device_path")
+  done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
+}
