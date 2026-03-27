@@ -285,6 +285,29 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
 
+  # -------------------------------------------------------------------------
+  # socat - UNIX IPC utility.
+  # -------------------------------------------------------------------------
+
+  - name: socat
+    config-opts:
+      - --disable-openssl
+      - --disable-readline
+      - --disable-libwrap
+      - --disable-socks4
+      - --disable-socks4a
+      - --disable-proxy
+      - --disable-tun
+      - --disable-sctp
+    sources:
+      - type: archive
+        url: http://www.dest-unreach.org/socat/download/socat-1.8.1.1.tar.gz
+        sha256: f68b602c80e94b4b7498d74ec408785536fe33534b39467977a82ab2f7f01ddb
+        x-checker-data:
+          - type: anitya
+            project-id: 4848
+            url-template: http://www.dest-unreach.org/socat/download/socat-$version.tar.gz
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                     RetroDECK: Internal Modules
