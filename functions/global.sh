@@ -107,12 +107,6 @@ build_component_manifest_cache
 # Source framework functions for early use
 source_component_functions "framework"
 
-# Initialize directories
-if [[ ! -d "$rd_api_dir" ]]; then
-  log d "Creating RetroDECK API directory at $rd_api_dir"
-  create_dir "$rd_api_dir"
-fi
-
 # Legacy config conversion
 if [[ -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg" && ! -f "$XDG_CONFIG_HOME/retrodeck/retrodeck.json" ]]; then
   log i "Old-style RetroDECK config file found, converting"

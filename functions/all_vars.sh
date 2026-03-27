@@ -28,13 +28,6 @@ export rd_repo_url="https://github.com/$git_organization_name/$main_repository_n
 export rd_wiki_url="https://retrodeck.readthedocs.io"
 export rd_gh_api_url="https://api.github.com/repos/$git_organization_name/$main_repository_name/releases/latest"
 
-# RetroDECK API-related variables
-
-export rd_api_dir="$XDG_CONFIG_HOME/retrodeck/api"
-export REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
-export PID_FILE="$rd_api_dir/retrodeck_api_server.pid"
-export rd_api_socket="$rd_api_dir/retrodeck_api_server.sock"
-
 # Components-related variables
 
 export rd_components="/app/retrodeck/components"
