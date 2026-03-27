@@ -56,6 +56,8 @@ find_component_files() {
 build_component_manifest_cache() {
   # Build the component manifest cache from all installed component manifests.
   # Should be called once during application startup. Cache remains valid for the session.
+  # The cache is sorted with the "retrodeck-api" component first to ensure API endpoints
+  # take priority over component-provided endpoints in case of duplicate endpoint keys.
   # USAGE: build_component_manifest_cache
 
   local -a manifest_files=()
@@ -70,7 +72,7 @@ build_component_manifest_cache() {
   for manifest_file in "${manifest_files[@]}"; do
     jq -c --arg path "$(dirname "$manifest_file")" \
       '{component_path: $path, manifest: .}' "$manifest_file"
-  done | jq -s '.' > "$component_manifest_cache_file"
+  done | jq -s 'sort_by(if .manifest.component_name == "retrodeck-api" then 0 else 1 end)' > "$component_manifest_cache_file"
 }
 
 get_helper_files() {
