@@ -1116,3 +1116,75 @@ api_do_backup_retrodeck_userdata() {
   echo "$backup_file"
   return 0
 }
+
+api_do_compress_games() {
+  # Compress a set of games into their specified formats.
+  # Receives a JSON array of game objects and an optional cleanup flag.
+  # Sends per-game progress updates to the client via api_send_progress.
+  # USAGE: api_do_compress_games "$game_objects_json" "[$post_compression_cleanup]"
+
+  local game_objects="$1"
+  local post_compression_cleanup="${2:-false}"
+ 
+  # Validate game_objects is a JSON array
+  if ! jq -e 'type == "array"' <<< "$game_objects" > /dev/null 2>&1; then
+    echo "game_objects must be a JSON array"
+    return 1
+  fi
+ 
+  local total
+  total=$(jq -r 'length' <<< "$game_objects")
+ 
+  if [[ "$total" -eq 0 ]]; then
+    echo "No games provided for compression"
+    return 1
+  fi
+ 
+  local current=0
+  local success_count=0
+  local fail_count=0
+  local -a failed_games=()
+ 
+  while IFS= read -r game_path; do
+    [[ -z "$game_path" ]] && continue
+    current=$((current + 1))
+ 
+    local compression_format
+    compression_format=$(jq -r --arg game_path "$game_path" \
+      '.[] | select(.game == $game_path) | .format' <<< "$game_objects")
+ 
+    local game_basename
+    game_basename=$(basename "$game_path")
+ 
+    # Send progress update to client
+    api_send_progress "$current" "$total" "Compressing $game_basename into $compression_format format"
+ 
+    # Call the core compression function
+    if compress_game "$compression_format" "$game_path" "$post_compression_cleanup"; then
+      success_count=$((success_count + 1))
+    else
+      fail_count=$((fail_count + 1))
+      failed_games+=("$game_path")
+    fi
+  done < <(jq -r '.[].game' <<< "$game_objects")
+ 
+  # Build result summary
+  local result
+  if [[ ${#failed_games[@]} -gt 0 ]]; then
+    local failed_json
+    failed_json=$(printf '%s\n' "${failed_games[@]}" | jq -R -s 'split("\n") | map(select(length > 0))')
+    result=$(jq -c -n \
+      --argjson total "$total" \
+      --argjson success "$success_count" \
+      --argjson failed "$fail_count" \
+      --argjson failed_games "$failed_json" \
+      '{total: $total, successful: $success, failed: $failed, failed_games: $failed_games}')
+  else
+    result=$(jq -c -n \
+      --argjson total "$total" \
+      --argjson success "$success_count" \
+      '{total: $total, successful: $success, failed: 0}')
+  fi
+ 
+  echo "$result"
+}
