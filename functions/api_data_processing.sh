@@ -3,6 +3,10 @@
 # This is the main data processing hub for the RetroDECK API.
 # It will handle the direct demands of the API requests by leveraging the rest of the RetroDECK functions.
 
+api_get_retrodeck_settings() {
+  jq -c . "$rd_conf"
+}
+
 api_get_compressible_games() {
   # Find all games that can be compressed, optionally filtered to a specific format.
   # Returns a sorted JSON array of objects with game path and compatible format.
