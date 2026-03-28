@@ -72,7 +72,7 @@ build_component_manifest_cache() {
   for manifest_file in "${manifest_files[@]}"; do
     jq -c --arg path "$(dirname "$manifest_file")" \
       '{component_path: $path, manifest: .}' "$manifest_file"
-  done | jq -s 'sort_by(if .manifest.component_name == "retrodeck-api" then 0 else 1 end)' > "$component_manifest_cache_file"
+  done | jq -s 'sort_by(if .manifest | keys[] | test("retrodeck-api") then 0 else 1 end)' > "$component_manifest_cache_file" > "$component_manifest_cache_file"
 }
 
 get_helper_files() {
