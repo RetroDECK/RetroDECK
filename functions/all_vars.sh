@@ -36,3 +36,4 @@ export rd_shared_libs_kde_path="/app/retrodeck/components/shared-libs/org.kde.Pl
 export rd_shared_libs_gnome_path="/app/retrodeck/components/shared-libs/org.gnome.Platform"
 export rd_shared_libs_freedesktop_path="/app/retrodeck/components/shared-libs/org.freedesktop.Platform"
 export DEFAULT_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+export component_manifest_cache_file="$XDG_CONFIG_HOME/retrodeck/retrodeck_manifest_cache.json"

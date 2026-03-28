@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Set up component cache temp file and cleanup
-export component_manifest_cache_file=$(mktemp)
-
-cleanup_component_manifest_cache() {
-  rm -f "$component_manifest_cache_file"
-}
-register_cleanup cleanup_component_manifest_cache
-
 find_component_files() {
   # Find files of a given name across all component directories, with external components taking precedence over internal ones when both exist.
   # Returns a newline-separated list of file paths where the requested file was found.
