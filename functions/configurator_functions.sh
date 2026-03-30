@@ -640,8 +640,34 @@ configurator_change_preset_value_dialog() {
   fi
 }
 
+configurator_bios_system_selection_dialog() {
+
+  build_zenity_bios_systems_menu_array "bios_system_list"
+
+  choice=$(rd_zenity --list --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - BIOS Checker: System Selection" \
+    --checklist --width=1200 --height=720 \
+    --print-column=2 --separator="^" \
+    --ok-label="Select" --extra-button="Check All" \
+    --column "Check?" \
+    --column "System" \
+    --column "Associated Components" \
+    "${bios_system_list[@]}")
+
+  if [[ -n "$choice" ]]; then
+    if [[ ! "$choice" == "Check All" ]]; then
+      selected_systems=$(echo "$choice" | tr '^' '\n' | jq -R . | jq -s .)
+      configurator_bios_checker_dialog "$selected_systems"
+    else
+      configurator_bios_checker_dialog
+    fi
+  fi
+}
+
 configurator_bios_checker_dialog() {
   log d "Starting BIOS checker"
+
+  local system_selection="${1:-}"
 
   local progress_pipe
   progress_pipe=$(mktemp -u)
@@ -656,7 +682,7 @@ configurator_bios_checker_dialog() {
   local progress_fd
   exec {progress_fd}>"$progress_pipe"
 
-  build_zenity_bios_checker_menu_array "bios_checked_list"
+  build_zenity_bios_checker_menu_array "bios_checked_list" "$system_selection"
 
   echo "100" >&$progress_fd
 

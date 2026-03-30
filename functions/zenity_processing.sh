@@ -241,3 +241,23 @@ build_zenity_compression_menu_array() {
     "Compress one or more games into the \($upper) format."
   ' "$component_manifest_cache_file")
 }
+
+build_zenity_bios_systems_menu_array() {
+  # Build a Bash array of BIOS system entries with checkboxes for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: checkbox_state, system, components.
+  # USAGE: build_zenity_bios_systems_menu_array "$dest_array_name"
+  
+  local -n dest_array="$1"
+  local bios_systems
+  bios_systems=$(api_get_bios_file_status '["list-systems"]')
+  if [[ -z "$bios_systems" || "$bios_systems" == "[]" ]]; then
+    dest_array=()
+    return
+  fi
+  mapfile -t dest_array < <(jq -r '
+    .[] |
+    "FALSE",
+    .system,
+    (.component | join(", "))
+  ' <<< "$bios_systems")
+}

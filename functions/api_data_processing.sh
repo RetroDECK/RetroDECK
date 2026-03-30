@@ -207,6 +207,27 @@ api_get_bios_file_status() {
   # USAGE: api_get_bios_file_status ["$systems_json_array"]
 
   local systems_to_check="${1:-[]}"
+
+  # Handle list-systems request
+  if [[ $(echo "$systems_to_check" | jq -r 'if length == 1 and .[0] == "list-systems" then "true" else "false" end') == "true" ]]; then
+    jq '
+      [.[] | .manifest | to_entries[] |
+        .value as $comp |
+        ($comp.name // .key) as $comp_name |
+        [$comp | .. | objects | select(has("bios")) | .bios] | flatten | .[] |
+        (.system | if type == "array" then .[] else . end) as $sys |
+        {system: $sys, component: $comp_name}
+      ]
+      | group_by(.system)
+      | map({
+          system: .[0].system,
+          component: [.[].component] | unique
+        })
+      | sort_by(.system)
+    ' "$component_manifest_cache_file"
+    return
+  fi
+
   local tmp_bios
   tmp_bios=$(mktemp)
 
