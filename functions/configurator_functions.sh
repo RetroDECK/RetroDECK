@@ -208,11 +208,12 @@ configurator_reset_dialog() {
         --text="Resetting all components\n\nPlease wait while the process finishes..." < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       # Framework first
-      echo "0" >&3
-      echo "# Resetting framework..." >&3
+      echo "0" >&$progress_fd
+      echo "# Resetting framework..." >&$progress_fd
       prepare_component "reset" "retrodeck"
 
       local remaining=()
@@ -226,14 +227,14 @@ configurator_reset_dialog() {
       for component in "${remaining[@]}"; do
         idx=$((idx + 1))
         local progress=$((99 * idx / total))
-        echo "$progress" >&3
-        echo "# Resetting $component..." >&3
+        echo "$progress" >&$progress_fd
+        echo "# Resetting $component..." >&$progress_fd
         prepare_component "reset" "$component"
       done
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -267,21 +268,22 @@ configurator_reset_dialog() {
         --text="Resetting selected components.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>" < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       local total_choices=${#choices[@]}
       local choice_idx=0
       for component_to_reset in "${choices[@]}"; do
         choice_idx=$((choice_idx + 1))
         local progress=$((99 * choice_idx / total_choices))
-        echo "$progress" >&3
-        echo "# Resetting $component_to_reset..." >&3
+        echo "$progress" >&$progress_fd
+        echo "# Resetting $component_to_reset..." >&$progress_fd
         prepare_component "reset" "$component_to_reset"
       done
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -369,13 +371,14 @@ configurator_move_folder_dialog() {
         --text="Moving RetroDECK path $rd_dir_name to $dest, please wait..." < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       local result=$(api_do_move_retrodeck_directory "$rd_dir_name" "$dest")
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -452,7 +455,8 @@ configurator_change_preset_dialog() {
         --text="RetroDECK is <span foreground='$purple'><b>Enabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..." < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       while read -r component_obj; do
         local component="$(jq -r '.system_name' <<< $component_obj)"
@@ -491,9 +495,9 @@ configurator_change_preset_dialog() {
         fi
       done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
       
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -511,7 +515,8 @@ configurator_change_preset_dialog() {
         --text="RetroDECK is <span foreground='$purple'><b>Disabling</b></span> the preset <span foreground='$purple'><b>$preset</b></span> for all compatible systems.\n\nPlease wait..." < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       while read -r component_obj; do
         local component="$(jq -r '.system_name' <<< $component_obj)"
@@ -550,9 +555,9 @@ configurator_change_preset_dialog() {
         fi
       done < <(api_get_current_preset_state "$preset" | jq -c '.[].[]')
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -648,13 +653,14 @@ configurator_bios_checker_dialog() {
     --text="RetroDECK is scanning your BIOS files.\n\nPlease wait..." < "$progress_pipe" &
   local zenity_pid=$!
 
-  exec 3>"$progress_pipe"
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
 
   build_zenity_bios_checker_menu_array "bios_checked_list"
 
-  echo "100" >&3
+  echo "100" >&$progress_fd
 
-  exec 3>&-
+  exec {progress_fd}>&-
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
 
@@ -741,15 +747,16 @@ configurator_compress_single_game_dialog() {
       --title "RetroDECK Configurator - Compression in Progress" < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
       compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup"
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 
@@ -774,13 +781,14 @@ configurator_compress_multiple_games_dialog() {
   --title "RetroDECK Configurator - Compression Tool" --text "RetroDECK is searching for compressible games, please wait..." < "$progress_pipe" &
   local zenity_pid=$!
 
-  exec 3>"$progress_pipe"
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
 
   api_get_compressible_games "$1" | jq -c '.[]' > "$compressible_games_list_file"
   
-  echo "100" >&3
+  echo "100" >&$progress_fd
 
-  exec 3>&-
+  exec {progress_fd}>&-
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
 
@@ -844,30 +852,41 @@ configurator_compress_multiple_games_dialog() {
   local total_games=${#games_to_compress[@]}
   local games_left=$total_games
 
-  (
-    for game_line in "${games_to_compress[@]}"; do
-      while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
-      sleep 0.1
-      done
-      (
-        IFS="^" read -r game compression_format <<< "$game_line"
-        log i "Compressing $(basename "$game") into $compression_format format"
-        echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
 
-        compress_game "$compression_format" "$game" "$post_compression_cleanup"
-
-        games_left=$(( games_left - 1 ))
-        local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
-        echo "$progress" # Update Zenity dialog progress bar
-      ) &
-    done
-    wait # wait for background tasks to finish
-    echo "100" # Close Zenity progress dialog when finished
-  ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator - Compression in Progress"
+    --title "RetroDECK Configurator - Compression in Progress" < "$progress_pipe" &
+  local zenity_pid=$!
+
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
+
+  for game_line in "${games_to_compress[@]}"; do
+    while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
+    sleep 0.1
+    done
+    (
+      IFS="^" read -r game compression_format <<< "$game_line"
+      log i "Compressing $(basename "$game") into $compression_format format"
+      echo "# Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." >&$progress_fd
+
+      compress_game "$compression_format" "$game" "$post_compression_cleanup"
+
+      games_left=$(( games_left - 1 ))
+      local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
+      echo "$progress" >&$progress_fd
+    ) &
+  done
+  wait # wait for background tasks to finish
+  echo "100" >&$progress_fd
+
+  exec {progress_fd}>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
 
   configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
 }
@@ -1022,16 +1041,17 @@ configurator_retrodeck_backup_dialog() {
     --title "RetroDECK Configurator - Backup in Progress" < "$progress_pipe" &
     local zenity_pid=$!
 
-    exec 3>"$progress_pipe"
+    local progress_fd
+    exec {progress_fd}>"$progress_pipe"
 
     log i "Starting $backup_choice backup process"
     echo "# Starting $backup_choice backup process, please wait..."
     result=$(api_do_backup_retrodeck_userdata "$backup_choice" "${choices[@]}")
     local rc=$?
 
-    echo "100" >&3
+    echo "100" >&$progress_fd
 
-    exec 3>&-
+    exec {progress_fd}>&-
     wait "$zenity_pid" 2>/dev/null
     rm -f "$progress_pipe"
 
@@ -1055,13 +1075,14 @@ configurator_clean_empty_systems_dialog() {
   --title "RetroDECK Configurator - Clean Empty System Folders" --text "Searching for empty system folders.\n\nPlease wait..." < "$progress_pipe" &
   local zenity_pid=$!
 
-  exec 3>"$progress_pipe"
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
 
   build_zenity_find_empty_rom_folders_menu_array empty_rom_folders_list
 
-  echo "100" >&3
+  echo "100" >&$progress_fd
 
-  exec 3>&-
+  exec {progress_fd}>&-
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
 
@@ -1166,13 +1187,27 @@ configurator_usb_import_dialog() {
         fi
       fi
 
-      (
-      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/ROMs/"* "$roms_path"
-      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/BIOS/"* "$bios_path"
-      ) |
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - USB Import In Progress"
+      --title "RetroDECK Configurator - USB Import In Progress" < "$progress_pipe" &
+      local zenity_pid=$!
+
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"      
+
+      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/ROMs/"* "$roms_path"
+      rsync -a --ignore-existing --keep-dirlinks --mkpath "$import_dir/BIOS/"* "$bios_path"
+      
+      echo "100" >&$progress_fd
+
+      exec {progress_fd}>&-
+      wait "$zenity_pid" 2>/dev/null
+      rm -f "$progress_pipe"
+
       configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
     fi
     configurator_nav="refresh"
@@ -1198,13 +1233,14 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       handle_folder_iconsets "false"
 
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
       
@@ -1231,12 +1267,13 @@ configurator_iconset_toggle_dialog() {
             --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
       local zenity_pid=$!
 
-      exec 3>"$progress_pipe"
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
 
       handle_folder_iconsets "lahrs-main"
-      echo "100" >&3
+      echo "100" >&$progress_fd
 
-      exec 3>&-
+      exec {progress_fd}>&-
       wait "$zenity_pid" 2>/dev/null
       rm -f "$progress_pipe"
 

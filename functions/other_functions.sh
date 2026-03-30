@@ -20,11 +20,13 @@ verify_space() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator - Space Validation" < "$progress_pipe" &
+    --title "RetroDECK Configurator - Space Validation"
     local zenity_pid=$!
 
-    exec 3>"$progress_pipe"
-    echo "# Validating adequate free space in $dest_dir, please wait..."
+    local progress_fd
+    exec {progress_fd}>"$progress_pipe"
+
+    echo "# Validating adequate free space in $dest_dir, please wait..." >&$progress_fd
   fi
 
   source_size=$(du -sk "$1" | awk '{print $1}')
@@ -32,9 +34,9 @@ verify_space() {
   dest_avail=$(df -k --output=avail "$2" | tail -1)
 
   if [[ "$visibility" == "zenity" ]]; then
-    echo "100" >&3
+    echo "100" >&$progress_fd
 
-    exec 3>&-
+    exec {progress_fd}>&-
     wait "$zenity_pid" 2>/dev/null
     rm -f "$progress_pipe"
   fi
@@ -55,14 +57,27 @@ move() {
 
   log d "Moving \"$source_dir\" to \"$dest_dir\""
 
-  (
-    rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
-    find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
-  ) |
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - Move in Progress" \
-  --text="Moving directory:\n<span foreground='$purple'><b>$(basename "$1")</b></span>\n\nTo its new location:\n<span foreground='$purple'><b>$2</b></span>.\n\n<span foreground='$purple'><b>Please wait while the process finishes</b></span>.\nThis might take a while..."
+  --text="Moving directory:\n<span foreground='$purple'><b>$(basename "$1")</b></span>\n\nTo its new location:\n<span foreground='$purple'><b>$2</b></span>.\n\n<span foreground='$purple'><b>Please wait while the process finishes</b></span>.\nThis might take a while..." < "$progress_pipe" &
+  local zenity_pid=$!
+
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
+
+  rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
+  find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
+
+  echo "100" >&$progress_fd
+
+  exec {progress_fd}>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -107,14 +122,27 @@ download_file() {
   local dest="$2"
   local name="$3"
 
-  (
-    curl --silent --location --output "$dest" "$source"
-  ) |
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
   rd_zenity --progress \
     --title="Downloading File" \
     --text="Downloading <span foreground='$purple'><b>$name</b></span>..." \
     --pulsate \
-    --auto-close
+    --auto-close < "$progress_pipe" &
+  local zenity_pid=$!
+
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
+
+  curl --silent --location --output "$dest" "$source"
+
+  echo "100" >&$progress_fd
+
+  exec {progress_fd}>&-
+  wait "$zenity_pid" 2>/dev/null
+  rm -f "$progress_pipe"  
 }
 
 conf_read() {
@@ -359,25 +387,26 @@ finit() {
   local zenity_pid=$!
 
   # Open the pipe for writing
-  exec 3>"$progress_pipe"
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
 
   # Set up framework paths and write initial config
   prepare_component "reset" "retrodeck"
-  echo "# Setting up RetroDECK core..." >&3
+  echo "# Setting up RetroDECK core..." >&$progress_fd
 
   # Source component functions now that config paths are loaded
   source_component_functions
 
-  echo "# Initializing component settings in main config..." >&3
+  echo "# Initializing component settings in main config..." >&$progress_fd
   reset_component_options "all"
 
-  echo "# Setting up components for the first time..." >&3
+  echo "# Setting up components for the first time..." >&$progress_fd
   prepare_component "reset" "all-installed"
 
-  echo "# Applying presets..." >&3
+  echo "# Applying presets..." >&$progress_fd
   update_component_presets
 
-  echo "# Deploying helper files..." >&3
+  echo "# Deploying helper files..." >&$progress_fd
   deploy_helper_files
 
   # Gather finit options from component manifests
@@ -402,17 +431,17 @@ finit() {
     for choice in "${finit_choices[@]}"; do
       choice_idx=$((choice_idx + 1))
       local progress=$((70 + (30 * choice_idx / total_choices)))
-      echo "$progress" >&3
-      echo "# Processing: $choice..." >&3
+      echo "$progress" >&$progress_fd
+      echo "# Processing: $choice..." >&$progress_fd
       log d "Processing finit user choice $choice"
       launch_command "$choice"
     done
   else
-    echo "100" >&3
+    echo "100" >&$progress_fd
   fi
 
   # Close the pipe and clean up
-  exec 3>&-
+  exec {progress_fd}>&-
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
 
