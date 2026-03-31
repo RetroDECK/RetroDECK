@@ -146,7 +146,7 @@ download_file() {
 }
 
 conf_read() {
-  # Read the RetroDECK JSON config file and load version, paths, and options into global variables.
+  # Read the RetroDECK JSON config file and load version, paths, options, and component paths into global variables.
   # USAGE: conf_read
 
   while IFS=$'\t' read -r name value; do
@@ -157,6 +157,8 @@ conf_read() {
     ({ version: .version }
     + (.paths   // {})
     + (.options // {})
+    + (reduce (.component_paths // {} | to_entries[] | .value | to_entries[]) as $entry
+        ({}; . + {($entry.key): ($entry.value | tostring)}))
     )
     | to_entries[]
     | [.key, (.value | tostring)]
