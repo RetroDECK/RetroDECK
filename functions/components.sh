@@ -624,7 +624,8 @@ install_external_component() {
     source "$component_path/component_functions.sh"
   fi
 
-  # Initialize component options from manifest defaults
+  # Initialize component options and paths from manifest defaults
+  init_component_paths "$component_name"
   init_component_options "$component_name"
 
   # Update presets for the new component
@@ -1038,6 +1039,7 @@ run_component_updates() {
     installed_version=$(get_installed_component_version "$component_name")
 
     if [[ "$manifest_version" != "$installed_version" ]]; then
+      init_component_paths "$component_name"
       init_component_options "$component_name"
       local handler="_post_update::${component_name}"
       if declare -F "$handler" > /dev/null; then

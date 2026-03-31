@@ -395,8 +395,9 @@ finit() {
   # Set up framework paths and write initial config
   prepare_component "reset" "retrodeck"
   echo "# Setting up RetroDECK core..." >&$progress_fd
-
-  # Source component functions now that config paths are loaded
+  echo "# Initializing component paths in main config..." >&$progress_fd
+  init_component_paths
+  conf_read
   source_component_functions
 
   echo "# Initializing component settings in main config..." >&$progress_fd
