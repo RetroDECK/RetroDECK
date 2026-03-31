@@ -1060,6 +1060,85 @@ run_component_updates() {
   fi
 }
 
+init_component_paths() {
+  # Initialize component paths in the config file from the component's manifest defaults.
+  # Only adds paths that don't already exist, preserving any existing values.
+  # Manifest paths containing variable references are resolved via envsubst.
+  # USAGE: init_component_paths "$component_name"
+  
+  local component_name="$1"
+  local manifest_paths
+  manifest_paths=$(jq -c --arg component "$component_name" \
+  '
+    .[] | .manifest | select(has($component)) | .[$component].component_paths // null
+  ' "$component_manifest_cache_file")
+
+  if [[ -z "$manifest_paths" || "$manifest_paths" == "null" ]]; then
+    log d "No component_paths defined in manifest for $component_name"
+    return
+  fi
+
+  # Extract just the path values from manifest objects that have a path key, and resolve variables
+  local resolved_paths
+  resolved_paths=$(echo "$manifest_paths" | jq -c '
+    with_entries(select(.value | has("path"))) | with_entries(.value = .value.path)
+  ' | envsubst)
+
+  if [[ -z "$resolved_paths" || "$resolved_paths" == "null" ]]; then
+    log d "component_paths defined in manifest for $component_name do not have any path keys"
+    return
+  fi
+
+  # Ensure the component_paths section exists
+  if ! jq -e '.component_paths' "$rd_conf" > /dev/null 2>&1; then
+    jq '. + {component_paths: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+  fi
+
+  # Merge defaults without overwriting existing values
+  jq --arg component "$component_name" --argjson defaults "$resolved_paths" '
+    .component_paths[$component] = (
+      ($defaults) as $d |
+      (.component_paths[$component] // {}) as $existing |
+      reduce ($d | to_entries[]) as $entry (
+        $existing;
+        if has($entry.key) then . else . + {($entry.key): $entry.value} end
+      )
+    )
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log d "Component paths initialized for $component_name"
+}
+
+migrate_path_to_component_paths() {
+  # Migrate a single path from the core "paths" block to the "component_paths" block, optionally renaming the key in the process.
+  # USAGE: migrate_path_to_component_paths "$component_name" "$source_key" "$destination_key"
+
+  local component_name="$1"
+  local source_key="$2"
+  local destination_key="$3"
+
+  # Ensure the component_paths section exists
+  if ! jq -e '.component_paths' "$rd_conf" > /dev/null 2>&1; then
+    jq '. + {component_paths: {}}' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+  fi
+
+  local current_value
+  current_value=$(jq -r --arg key "$source_key" '.paths[$key] // empty' "$rd_conf")
+
+  if [[ -z "$current_value" ]]; then
+    log w "Path key $source_key not found in paths block, skipping migration"
+    return
+  fi
+
+  # Add to component_paths under the new key name and remove from paths
+  jq --arg component "$component_name" --arg src "$source_key" --arg dest "$destination_key" --arg value "$current_value" '
+    .component_paths[$component][$dest] = $value |
+    del(.paths[$src])
+  ' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+  log i "Migrated $source_key to component_paths.$component_name.$destination_key"
+}
+
 init_component_options() {
   # Initialize component options in the config file from the component's manifest defaults.
   # Only adds settings that don't already exist, preserving any existing values.
