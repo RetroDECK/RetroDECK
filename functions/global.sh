@@ -101,9 +101,6 @@ for file in /app/libexec/*.sh; do
   source "$file"
 done
 
-# Build component manifest cache
-build_component_manifest_cache
-
 # Source framework functions for early use
 source_component_functions "framework"
 
@@ -154,11 +151,14 @@ if [[ ! -f "$rd_conf" ]]; then
   set_build_options
 
   log i "RetroDECK config file initialized, proceeding to finit"
+  
   finit
 else
   log i "Loading RetroDECK config file from $rd_conf"
 
   conf_read
+
+  build_component_manifest_cache
 
   # If the defined rd_home_path doesn't exist, meaning it may have been moved manually
   if [[ ! -d "$rd_home_path" && ! -L "$rd_home_path" ]]; then
@@ -174,9 +174,9 @@ else
       quit_retrodeck
     fi
   fi
-fi
 
-set_build_options
+  set_build_options
+fi
 
 # Source component functions for further use
 source_component_functions

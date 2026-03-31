@@ -393,11 +393,17 @@ finit() {
   exec {progress_fd}>"$progress_pipe"
 
   # Set up framework paths and write initial config
-  prepare_component "reset" "retrodeck"
   echo "# Setting up RetroDECK core..." >&$progress_fd
+  prepare_component "reset" "retrodeck"
+  
+  echo "# Building component manifest cache..." >&$progress_fd
+  build_component_manifest_cache
+
   echo "# Initializing component paths in main config..." >&$progress_fd
   init_component_paths
   conf_read
+
+  echo "# Loading component functions..." >&$progress_fd
   source_component_functions
 
   echo "# Initializing component settings in main config..." >&$progress_fd
