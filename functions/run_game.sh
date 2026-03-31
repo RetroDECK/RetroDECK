@@ -175,7 +175,7 @@ get_altemulator_label() {
 
   local system="$1"
   local game_basename="$2"
-  local gamelist="$rd_home_path/ES-DE/gamelists/$system/gamelist.xml"
+  local gamelist="$esde_gamelists_path/$system/gamelist.xml"
 
   if [[ ! -f "$gamelist" ]]; then
     log d "No gamelist found at $gamelist"
@@ -211,7 +211,7 @@ get_alternative_emulator_label() {
   # USAGE: get_alternative_emulator_label "$system"
 
   local system="$1"
-  local gamelist="$rd_home_path/ES-DE/gamelists/$system/gamelist.xml"
+  local gamelist="$esde_gamelists_path/$system/gamelist.xml"
 
   if [[ ! -f "$gamelist" ]]; then
     log d "No gamelist found at $gamelist"
@@ -710,7 +710,7 @@ process_inject() {
 }
 
 run_event_scripts() {
-  # Executes all Bash scripts found in $es_scripts_dir/<event_name>/.
+  # Executes all Bash scripts found in $esde_scripts_dir/<event_name>/.
   # Each script receives four positional arguments matching the ES-DE convention:
   #   $1 - ROM path (absolute path to the game file)
   #   $2 - Game name (ROM filename without extension)
@@ -724,7 +724,7 @@ run_event_scripts() {
   local system_name="$4"
   local system_fullname="$5"
 
-  local scripts_dir="$es_scripts_dir/$event_name"
+  local scripts_dir="$esde_scripts_dir/$event_name"
 
   if [[ ! -d "$scripts_dir" ]]; then
     log d "No scripts directory for event: $event_name"
