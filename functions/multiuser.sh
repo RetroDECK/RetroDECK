@@ -438,3 +438,622 @@ multi_user_manual_selection_dialog() {
 
   echo "$selected"
 }
+
+configurator_multi_user_toggle_dialog() {
+  # Entry point for enabling or disabling multi-user mode from the Configurator
+  # USAGE: configurator_multi_user_toggle_dialog
+  
+  if [[ "${multi_user_enabled:-false}" == "true" ]]; then
+    if configurator_generic_question_dialog "RetroDECK - Disable Multi-User Mode" "Disabling multi-user mode will revert to single-user operation.\n\nThe primary user's data will remain unchanged.\nOther user profiles will be preserved but inactive.\n\nDisable multi-user mode?"; then
+      jq '.multi_user_enabled = false' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+        && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+      multi_user_enabled="false"
+      export multi_user_enabled
+      log i "Multi-user mode disabled"
+      configurator_generic_dialog "RetroDECK - Multi-User Mode" "Multi-user mode has been disabled.\nThe application will operate as single-user on next launch."
+    fi
+  else
+    configurator_multi_user_enable_dialog
+  fi
+}
+
+configurator_multi_user_enable_dialog() {
+  # Walk the user through enabling multi-user mode for the first time, or re-enabling it if the config already exists
+  # USAGE: configurator_multi_user_enable_dialog
+
+  # Check for existing config from a previous enablement
+  if [[ -f "$rd_multi_user_conf" ]]; then
+    rd_zenity --icon-name=net.retrodeck.retrodeck --question \
+      --title="RetroDECK Multi-User - Re-enable Multi-User Mode" \
+      --text="A previous multi-user configuration was found.\n\nWould you like to restore the previous configuration,\nor start fresh with a new setup?" \
+      --ok-label="Restore Previous" \
+      --cancel-label="Start Fresh"
+
+    if [[ $? -eq 0 ]]; then
+      # Restore: just flip the enabled flag
+      jq '.multi_user_enabled = true' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+        && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+      multi_user_enabled="true"
+      export multi_user_enabled
+      log i "Multi-user mode re-enabled with previous configuration"
+      rd_zenity --info --title="Multi-User Mode" \
+        --text="Multi-user mode has been re-enabled with your previous settings." \
+        --width=400 --height=150
+      return
+    fi
+    # Start fresh: continue with the full setup flow below
+    multi_user_cleanup_stale_data
+  fi
+
+  if configurator_generic_question_dialog "RetroDECK Multi-User - Enable Multi-User Mode" "Multi-user mode allows multiple people to have separate saves, settings, and game progress on this device.\n\nYour current data will be preserved as the primary user.\nAdditional users can be added after setup.\n\nContinue with setup?"; then
+    log d "Multi-user enablement cancelled by user"
+    return
+  fi
+
+  # Set up User 1 identity
+  local user_1_display_name=""
+  local -a user_1_identities=()
+
+  if ! multi_user_setup_identity "user_1_display_name" "user_1_identities"; then
+    log d "Multi-user enablement cancelled during identity setup"
+    return
+  fi
+
+  # Configure path scopes
+  local path_scopes_json=""
+
+  if ! multi_user_setup_path_scopes "path_scopes_json"; then
+    log d "Multi-user enablement cancelled during path scope setup"
+    return
+  fi
+
+  # Read resolver defaults from framework manifest
+  local resolver_defaults
+  resolver_defaults=$(jq -c '
+    .[] | .manifest | select(has("framework")) | .framework.identity_resolvers // []
+  ' "$component_manifest_cache_file")
+
+  if [[ -z "$resolver_defaults" || "$resolver_defaults" == "null" ]]; then
+    resolver_defaults="[]"
+  fi
+
+  # Convert manifest resolver format to config format
+  local resolvers_json
+  resolvers_json=$(echo "$resolver_defaults" | jq -c '
+    [.[] | {type: .type, enabled: .default_enabled, priority: .default_priority}]
+  ')
+
+  # Build and write the config file
+  local identities_json
+  identities_json=$(printf '%s\n' "${user_1_identities[@]}" | jq -s '.')
+
+  jq -n \
+    --arg display_name "$user_1_display_name" \
+    --argjson identities "$identities_json" \
+    --argjson path_scopes "$path_scopes_json" \
+    --argjson resolvers "$resolvers_json" \
+    '{
+      multi_user_enabled: true,
+      default_user: null,
+      identity_resolvers: $resolvers,
+      users: {
+        user_1: {
+          display_name: $display_name,
+          is_primary: true,
+          initialized: true,
+          identities: $identities
+        }
+      },
+      path_scopes: $path_scopes
+    }' > "$rd_multi_user_conf"
+
+  # Update in-memory values
+  multi_user_enabled="true"
+  multi_user_current_user="user_1"
+  multi_user_is_primary="true"
+  multi_user_current_display_name="$user_1_display_name"
+  export multi_user_enabled multi_user_current_user multi_user_is_primary multi_user_current_display_name
+
+  log i "Multi-user mode enabled, primary user: $user_1_display_name"
+
+  configurator_generic_dialog "RetroDECK Multi-User - Multi-User Mode Enabled" "Multi-user mode is now active.\n\nYou are set up as the primary user: $user_1_display_name\n\nYou can add additional users from the Multi-User section of the Configurator."
+}
+
+multi_user_setup_identity() {
+  # Present identity source options built from manifest-declared resolvers, plus a manual option. Capture the users display name and identity mappings
+  # USAGE: multi_user_setup_identity "display_name_var" "identities_array_var"
+
+  local -n display_name="$1"
+  local -n identities="$2"
+
+  # Read resolver definitions from framework manifest, sorted by priority
+  local resolvers_json
+  resolvers_json=$(jq -c '
+    [
+      .[] | .manifest | select(has("framework")) | .framework.identity_resolvers // [] | .[]
+    ] | sort_by(.default_priority)
+  ' "$component_manifest_cache_file")
+
+  if [[ -z "$resolvers_json" || "$resolvers_json" == "[]" ]]; then
+    resolvers_json="[]"
+  fi
+
+  # Build dialog entries from resolvers
+  local -a dialog_args=()
+  local resolver_count
+  resolver_count=$(echo "$resolvers_json" | jq 'length')
+
+  for ((i=0; i<resolver_count; i++)); do
+    local resolver_type resolver_description
+    resolver_type=$(echo "$resolvers_json" | jq -r ".[$i].type")
+    resolver_description=$(echo "$resolvers_json" | jq -r ".[$i].description // .[$i].type")
+    dialog_args+=("$resolver_type" "$resolver_description")
+  done
+
+  # Always add manual as fallback option
+  dialog_args+=("manual" "Configure manually")
+
+  local identity_source
+  identity_source=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --title="RetroDECK Multi-User - User Identity Setup" \
+    --text="How would you like to set up your user profile?" \
+    --column="ID" \
+    --column="Method" \
+    --hide-column=1 \
+    --print-column=1 \
+    --width=500 \
+    --height=300 \
+    "${dialog_args[@]}")
+
+  if [[ -z "$identity_source" ]]; then
+    return 1
+  fi
+
+  # Route to the appropriate setup handler
+  local handler_func="multi_user_identity_handler::${identity_source}"
+
+  if ! declare -f "$handler_func" > /dev/null 2>&1; then
+    log e "No identity setup function found for type: $identity_source"
+    return 1
+  fi
+
+  if ! "$handler_func" "setup" "display_name" "identities"; then
+    # Handler failed (e.g., Steam not found), let user choose again
+    multi_user_setup_identity "display_name" "identities"
+    return $?
+  fi
+}
+
+multi_user_setup_path_scopes() {
+  # Present all configurable paths from framework and component manifests, allowing the user to choose which are per-user vs shared
+  # Paths are shown with their recommended defaults pre-selected
+  # USAGE: multi_user_setup_path_scopes "result_var"
+
+  local -n result="$1"
+
+  # Gather all paths with scope metadata from all manifests
+  local all_paths_json
+  all_paths_json=$(jq -c '
+    [
+      .[] | .manifest | to_entries[] |
+      .value.component_paths // {} | to_entries[] |
+      {
+        key: .key,
+        recommended_scope: .value.recommended_scope,
+        description: (.value.description // .key)
+      }
+    ]
+  ' "$component_manifest_cache_file")
+
+  if [[ -z "$all_paths_json" || "$all_paths_json" == "[]" ]]; then
+    log w "No configurable paths found in manifests, using empty scope list"
+    result="{}"
+    return 0
+  fi
+
+  # Build the Zenity checklist arguments
+  local -a dialog_args=()
+  local path_count
+  path_count=$(echo "$all_paths_json" | jq 'length')
+
+  for ((i=0; i<path_count; i++)); do
+    local key description recommended
+    key=$(echo "$all_paths_json" | jq -r ".[$i].key")
+    description=$(echo "$all_paths_json" | jq -r ".[$i].description")
+    recommended=$(echo "$all_paths_json" | jq -r ".[$i].recommended_scope")
+
+    if [[ "$recommended" == "per-user" ]]; then
+      dialog_args+=("TRUE" "$key" "$description")
+    else
+      dialog_args+=("FALSE" "$key" "$description")
+    fi
+  done
+
+  local selected
+  selected=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --title="RetroDECK Multi-User - Multi-User Path Configuration" \
+    --text="Select which data should be separate for each user (checked = per-user, unchecked = shared between all users):" \
+    --checklist \
+    --column="Per-User" \
+    --column="Path" \
+    --column="Description" \
+    --hide-column=2 \
+    --print-column=2 \
+    --separator="^" \
+    --width=600 \
+    --height=500 \
+    "${dialog_args[@]}")
+  local rc=$?
+
+  if [[ $rc -ne 0 ]]; then
+    log d "Path scope selection cancelled by user"
+    return 1
+  fi
+
+  local scope_object="{}"
+  local -a per_user_paths=()
+  if [[ -n "$selected" ]]; then
+    IFS='^' read -ra per_user_paths <<< "$selected"
+  fi
+
+  for ((i=0; i<path_count; i++)); do
+    local key
+    key=$(echo "$all_paths_json" | jq -r ".[$i].key")
+    local scope="shared"
+
+    for per_user_key in "${per_user_paths[@]}"; do
+      if [[ "$per_user_key" == "$key" ]]; then
+        scope="per-user"
+        break
+      fi
+    done
+
+    scope_object=$(echo "$scope_object" | jq --arg key "$key" --arg scope "$scope" '. + {($key): $scope}')
+  done
+
+  result="$scope_object"
+  log d "Path scopes configured: $scope_object"
+}
+
+multi_user_cleanup_stale_data() {
+  # Check for existing per-user data from a previous multi-user configuration and offer to clean up or archive it
+  # USAGE: multi_user_cleanup_stale_data
+
+  local rd_users_xdg_base="/var/config/rd_users"
+  local rd_users_data_base="$rd_home_path/users"
+
+  local -a stale_dirs=()
+
+  # Check both XDG and data locations for leftover user directories
+  if [[ -d "$rd_users_xdg_base" ]]; then
+    while IFS= read -r dir; do
+      stale_dirs+=("$dir")
+    done < <(find "$rd_users_xdg_base" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+  fi
+
+  if [[ -d "$rd_users_data_base" ]]; then
+    while IFS= read -r dir; do
+      stale_dirs+=("$dir")
+    done < <(find "$rd_users_data_base" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+  fi
+
+  if [[ ${#stale_dirs[@]} -eq 0 ]]; then
+    log d "No stale multi-user data found"
+    return
+  fi
+
+  local action
+  action=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --title="RetroDECK Multi-User - Existing User Data Found" \
+    --text="Data from a previous multi-user configuration was found.\n\nWhat would you like to do with it?" \
+    --column="ID" \
+    --column="Action" \
+    --hide-column=1 \
+    --print-column=1 \
+    --width=500 \
+    --height=250 \
+    "keep" "Keep existing data in place" \
+    "archive" "Archive data to backups and remove" \
+    "delete" "Delete existing data permanently")
+  local dialog_rc=$?
+
+  if [[ $dialog_rc -ne 0 || -z "$action" ]]; then
+    log d "Stale data cleanup skipped by user"
+    return
+  fi
+
+  case "$action" in
+
+    keep)
+      log i "Keeping existing multi-user data in place"
+      ;;
+
+    archive)
+      local timestamp
+      timestamp=$(date +%Y%m%d_%H%M%S)
+      local archive_path="$backups_path/multi_user_backup_${timestamp}.tar.gz"
+
+      log i "Archiving stale multi-user data to $archive_path"
+
+      local -a tar_args=()
+      for dir in "${stale_dirs[@]}"; do
+        if [[ -d "$dir" ]]; then
+          tar_args+=("-C" "$(dirname "$dir")" "$(basename "$dir")")
+        fi
+      done
+
+      if tar czf "$archive_path" "${tar_args[@]}" 2>/dev/null; then
+        log i "Archive created: $archive_path"
+
+        # Remove archived directories
+        for dir in "${stale_dirs[@]}"; do
+          if [[ -d "$dir" ]]; then
+            rm -rf "$dir"
+            log d "Removed: $dir"
+          fi
+        done
+
+        configurator_generic_dialog "RetroDECK Multi-User - Data Archived" "Previous user data has been archived to:\n$archive_path"
+      else
+        log e "Failed to create archive at $archive_path"
+        rd_zenity --icon-name=net.retrodeck.retrodeck --error --title="RetroDECK Multi-User - Archive Failed" \
+          --text="Failed to archive user data.\nExisting data has been left in place." \
+          --width=400 --height=150
+      fi
+      ;;
+
+    delete)
+      if configurator_generic_question_dialog "RetroDECK Multi-User - Confirm Deletion" "This will permanently delete all previous user data.\nThis cannot be undone.\n\nAre you sure?"; then
+        for dir in "${stale_dirs[@]}"; do
+          if [[ -d "$dir" ]]; then
+            rm -rf "$dir"
+            log d "Deleted: $dir"
+          fi
+        done
+        log i "Stale multi-user data deleted"
+      else
+        log d "Deletion cancelled by user"
+      fi
+      ;;
+
+  esac
+}
+
+get_per_user_relative_path() {
+  # Derive the intended relative path tree for a given path key by extracting the variable reference from the default value, 
+  # resolving it against the default core config, and finding the longest matching core path prefix
+  # USAGE: relative=$(get_per_user_relative_path "$path_key")
+  
+  local path_key="$1"
+
+  # Get the default value for this path key
+  local default_value=""
+
+  # First check the default core config paths block
+  default_value=$(jq -r --arg key "$path_key" '.paths[$key] // empty' "$rd_defaults")
+
+  # If not found in core defaults, check component manifests
+  if [[ -z "$default_value" ]]; then
+    default_value=$(jq -r --arg key "$path_key" '
+      .[] | .manifest | to_entries[] |
+      .value.component_paths // {} |
+      .[$key].path // empty
+    ' "$component_manifest_cache_file" | head -1)
+  fi
+
+  if [[ -z "$default_value" ]]; then
+    log w "No default path found for $path_key"
+    return 1
+  fi
+
+  # Extract the leading variable name and the remainder of the path
+  local var_name="${default_value%%/*}"
+  var_name="${var_name#\$}"
+  local remainder="${default_value#\$${var_name}}"
+  remainder="${remainder#/}"
+
+  # Look up the extracted variable name in the default core config paths block
+  local var_resolved
+  var_resolved=$(jq -r --arg key "$var_name" '.paths[$key] // empty' "$rd_defaults")
+
+  if [[ -z "$var_resolved" ]]; then
+    # Variable not found in core paths block
+    if [[ -n "$remainder" ]]; then
+      # Use the remainder as the relative tree
+      log d "Path $path_key: variable $var_name not in core paths, using remainder: $remainder"
+      echo "$remainder"
+      return 0
+    else
+      # Variable is the entire path and not in core paths
+      # Resolve from current environment as last resort, use basename
+      local env_resolved="${!var_name:-}"
+      if [[ -z "$env_resolved" ]]; then
+        log e "Path $path_key: variable $var_name could not be resolved from core paths or environment"
+        return 1
+      fi
+
+      local base
+      base=$(basename "$env_resolved")
+
+      # Validate no conflict with existing per-user relative paths
+      # by checking if this basename already exists as a relative tree for another path
+      log w "Path $path_key: resolved to basename '$base' from unrecognized variable $var_name. Verify for conflicts"
+      echo "$base"
+      return 0
+    fi
+  fi
+
+  # Variable found in core paths, build the fully resolved path
+  local resolved_path
+  if [[ -n "$remainder" ]]; then
+    resolved_path="$var_resolved/$remainder"
+  else
+    resolved_path="$var_resolved"
+  fi
+
+  # Collect all core paths from defaults, sorted by length descending so we match the most specific prefix first
+  local -a core_paths=()
+  mapfile -t core_paths < <(jq -r '.paths | to_entries[] | .value' "$rd_defaults" | \
+    awk '{ print length, $0 }' | sort -rn | cut -d' ' -f2-)
+
+  # Find the longest matching core path prefix
+  local best_match=""
+  for core_path in "${core_paths[@]}"; do
+    if [[ "$resolved_path" == "$core_path/"* ]]; then
+      best_match="$core_path"
+      break
+    fi
+  done
+
+  if [[ -n "$best_match" ]]; then
+    local relative="${resolved_path#$best_match/}"
+    log d "Path $path_key: resolved=$resolved_path, matched prefix=$best_match, relative=$relative"
+    echo "$relative"
+    return 0
+  fi
+
+  # No core path matched as a prefix, use basename
+  local base
+  base=$(basename "$resolved_path")
+  log d "Path $path_key: resolved=$resolved_path is a core path itself, using basename: $base"
+  echo "$base"
+}
+
+multi_user_create() {
+  # Create a new multi-user profile
+  # Sets up identity, per-user directories, XDG symlinks, and a default core config
+  # USAGE: multi_user_create
+  
+  # Determine next user ID
+  local highest_id
+  highest_id=$(jq -r '.users | keys[]' "$rd_multi_user_conf" | \
+    sed 's/user_//' | sort -n | tail -1)
+  local next_num=$((highest_id + 1))
+  local new_user_id="user_${next_num}"
+
+  log i "Creating new user: $new_user_id"
+
+  # Identity setup
+  local new_display_name=""
+  local -a new_identities=()
+
+  if ! multi_user_setup_identity "new_display_name" "new_identities"; then
+    log d "User creation cancelled during identity setup"
+    return
+  fi
+
+  # Create per-user data directories for paths scoped as per-user
+  local rd_users_data_base="$rd_home_path/users/$new_user_id"
+  local per_user_paths
+  per_user_paths=$(jq -r '.path_scopes | to_entries[] | select(.value == "per-user") | .key' "$rd_multi_user_conf")
+
+  while IFS= read -r path_key; do
+    [[ -z "$path_key" ]] && continue
+
+    local relative_tree
+    if ! relative_tree=$(get_per_user_relative_path "$path_key"); then
+      log w "Could not determine relative path for $path_key, skipping"
+      continue
+    fi
+
+    local new_user_path="$rd_users_data_base/$relative_tree"
+    create_dir "$new_user_path"
+
+    log d "Created per-user directory: $new_user_path"
+  done <<< "$per_user_paths"
+
+  # Create per-user XDG directories with symlinks from Flatpak-static paths
+  local rd_users_xdg_base="/var/config/rd_users/$new_user_id"
+
+  dir_prep "$rd_users_data_base/config" "$rd_users_xdg_base/config"
+  dir_prep "$rd_users_data_base/data" "$rd_users_xdg_base/data"
+  dir_prep "$rd_users_data_base/cache" "$rd_users_xdg_base/cache"
+
+  # Copy default core config and rewrite per-user paths
+  local new_user_conf_dir="$rd_users_data_base/config/retrodeck"
+  create_dir "$new_user_conf_dir"
+
+  local new_user_conf="$new_user_conf_dir/retrodeck.json"
+  cp "$rd_defaults" "$new_user_conf"
+
+  # Build the paths block: shared paths from the current install, per-user paths rewritten
+  local current_paths
+  current_paths=$(jq -c '.paths' "$rd_conf")
+  local updated_paths="$current_paths"
+
+  while IFS= read -r path_key; do
+    [[ -z "$path_key" ]] && continue
+
+    local relative_tree
+    if ! relative_tree=$(get_per_user_relative_path "$path_key"); then
+      continue
+    fi
+
+    local new_path="$rd_users_data_base/$relative_tree"
+    updated_paths=$(echo "$updated_paths" | jq --arg key "$path_key" --arg path "$new_path" \
+      'if has($key) then .[$key] = $path else . end')
+  done <<< "$per_user_paths"
+
+  jq --argjson paths "$updated_paths" '.paths = $paths' "$new_user_conf" > "${new_user_conf}.tmp" \
+    && mv "${new_user_conf}.tmp" "$new_user_conf"
+
+  # Build the component_paths block with per-user paths rewritten
+  local current_component_paths
+  current_component_paths=$(jq -c '.component_paths // {}' "$rd_conf")
+
+  local updated_component_paths="$current_component_paths"
+  local component_names
+  component_names=$(echo "$current_component_paths" | jq -r 'keys[]')
+
+  while IFS= read -r comp_name; do
+    [[ -z "$comp_name" ]] && continue
+
+    local comp_path_keys
+    comp_path_keys=$(echo "$current_component_paths" | jq -r --arg comp "$comp_name" '.[$comp] | keys[]')
+
+    while IFS= read -r comp_path_key; do
+      [[ -z "$comp_path_key" ]] && continue
+
+      local scope
+      scope=$(jq -r --arg key "$comp_path_key" '.path_scopes[$key] // "shared"' "$rd_multi_user_conf")
+
+      if [[ "$scope" == "per-user" ]]; then
+        local relative_tree
+        if relative_tree=$(get_per_user_relative_path "$comp_path_key"); then
+          local new_comp_path="$rd_users_data_base/$relative_tree"
+          updated_component_paths=$(echo "$updated_component_paths" | \
+            jq --arg comp "$comp_name" --arg key "$comp_path_key" --arg path "$new_comp_path" \
+            '.[$comp][$key] = $path')
+        fi
+      fi
+    done <<< "$comp_path_keys"
+  done <<< "$component_names"
+
+  jq --argjson comp_paths "$updated_component_paths" '.component_paths = $comp_paths' "$new_user_conf" > "${new_user_conf}.tmp" \
+    && mv "${new_user_conf}.tmp" "$new_user_conf"
+
+  log i "Core config created for $new_user_id at $new_user_conf"
+
+  # Add user entry to multi-user config
+  local identities_json
+  if [[ ${#new_identities[@]} -gt 0 ]]; then
+    identities_json=$(printf '%s\n' "${new_identities[@]}" | jq -s '.')
+  else
+    identities_json="[]"
+  fi
+
+  jq --arg uid "$new_user_id" --arg name "$new_display_name" --argjson idents "$identities_json" '
+    .users[$uid] = {
+      display_name: $name,
+      is_primary: false,
+      initialized: false,
+      identities: $idents
+    }
+  ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+    && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+  log i "User $new_user_id ($new_display_name) added to multi-user config"
+
+  # Prompt for restart
+  configurator_generic_dialog "RetroDECK Multi-User - User Created" "User profile '$new_display_name' has been created.\n\nOn next launch, log in as '$new_display_name' to complete setup."
+}
