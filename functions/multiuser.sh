@@ -148,9 +148,8 @@ multi_user_identity_handler::steam() {
       steam_id=$(get_active_steam_user_id)
 
       if [[ -z "$steam_id" ]]; then
-        rd_zenity --warning --title="Steam Not Found" \
-          --text="Could not detect an active Steam user.\nPlease make sure Steam is running and try again,\nor choose a different identity method." \
-          --width=400 --height=180
+        rd_zenity --icon-name=net.retrodeck.retrodeck --warning --title="Steam Not Found" \
+          --text="Could not detect an active Steam user.\nPlease make sure Steam is installed and try again,\nor choose a different identity method."
         return 1
       fi
 
@@ -274,7 +273,7 @@ multi_user_identity_handler::manual() {
       local -n identities="$3"
 
       local entered_name
-      entered_name=$(rd_zenity --entry \
+      entered_name=$(rd_zenity --icon-name=net.retrodeck.retrodeck --entry \
         --title="User Profile" \
         --text="Enter a display name for your user profile:" \
         --entry-text="Player" \
@@ -421,7 +420,7 @@ multi_user_manual_selection_dialog() {
   done
 
   local selected
-  selected=$(rd_zenity --list \
+  selected=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
     --title="Select User" \
     --text="Select which user profile to load:" \
     --column="ID" \
