@@ -141,8 +141,8 @@ multi_user_identity_handler::steam() {
   case "$mode" in
 
     setup)
-      local -n _display_name="$2"
-      local -n _identities="$3"
+      local -n display_name="$2"
+      local -n identities="$3"
 
       local steam_id
       steam_id=$(get_active_steam_user_id)
@@ -154,7 +154,7 @@ multi_user_identity_handler::steam() {
         return 1
       fi
 
-      local persona_name=""
+      local user_name=""
       local steam_paths=(
         "$HOME/.steam/steam"
         "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam"
@@ -163,24 +163,24 @@ multi_user_identity_handler::steam() {
       for steam_path in "${steam_paths[@]}"; do
         local loginusers="$steam_path/config/loginusers.vdf"
         if [[ -f "$loginusers" ]]; then
-          persona_name=$(awk -v steam_id="$steam_id" '
+          user_name=$(awk -v steam_id="$steam_id" '
             $0 ~ steam_id { flag=1 }
             flag && /"PersonaName"/ { gsub(/"/, "", $2); print $2; exit }
           ' "$loginusers")
-          if [[ -n "$persona_name" ]]; then
+          if [[ -n "$user_name" ]]; then
             break
           fi
         fi
       done
 
-      if [[ -z "$persona_name" ]]; then
-        persona_name="Player"
+      if [[ -z "$user_name" ]]; then
+        user_name="Player"
       fi
 
-      _display_name="$persona_name"
-      _identities=("{\"type\": \"steam\", \"value\": \"$steam_id\"}")
+      display_name="$user_name"
+      identities=("{\"type\": \"steam\", \"value\": \"$steam_id\"}")
 
-      log i "Steam identity imported: $persona_name (ID: $steam_id)"
+      log i "Steam identity imported: $user_name (ID: $steam_id)"
       ;;
 
     resolve)
@@ -222,14 +222,14 @@ multi_user_identity_handler::system() {
   case "$mode" in
 
     setup)
-      local -n _display_name="$2"
-      local -n _identities="$3"
+      local -n display_name="$2"
+      local -n identities="$3"
 
       local system_user
       system_user=$(whoami)
 
-      _display_name="$system_user"
-      _identities=("{\"type\": \"system\", \"value\": \"$system_user\"}")
+      display_name="$system_user"
+      identities=("{\"type\": \"system\", \"value\": \"$system_user\"}")
 
       log i "System identity imported: $system_user"
       ;;
@@ -270,8 +270,8 @@ multi_user_identity_handler::manual() {
   case "$mode" in
 
     setup)
-      local -n _display_name="$2"
-      local -n _identities="$3"
+      local -n display_name="$2"
+      local -n identities="$3"
 
       local entered_name
       entered_name=$(rd_zenity --entry \
@@ -285,8 +285,8 @@ multi_user_identity_handler::manual() {
         return 1
       fi
 
-      _display_name="$entered_name"
-      _identities=()
+      display_name="$entered_name"
+      identities=()
 
       log i "Manual identity configured: $entered_name"
       ;;
