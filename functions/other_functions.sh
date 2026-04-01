@@ -814,3 +814,72 @@ get_external_usb_devices() {
     devices+=("$device_name" "$size" "$device_path")
   done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 }
+
+detect_host() {
+  # Detect system information: GPU
+  system_gpu_info=""
+  for drmdev in /sys/class/drm/*; do
+    devdir="$drmdev/device"
+    if [[ -d "$devdir" ]]; then
+      vendor_id=""
+      device_id=""
+      driver=""
+      [[ -r "$devdir/vendor" ]] && vendor_id=$(cat "$devdir/vendor" 2>/dev/null || true)
+      [[ -r "$devdir/device" ]] && device_id=$(cat "$devdir/device" 2>/dev/null || true)
+      [[ -r "$devdir/uevent" ]] && driver=$(grep -i '^DRIVER=' "$devdir/uevent" 2>/dev/null | cut -d'=' -f2 || true)
+      if [[ -n "$driver" ]]; then
+        system_gpu_info="$driver"
+        [[ -n "$vendor_id" || -n "$device_id" ]] && system_gpu_info+=" (${vendor_id:-unknown}:${device_id:-unknown})"
+        break
+      fi
+    fi
+  done
+  if [[ -z "$system_gpu_info" ]]; then
+    for drmdev in /sys/class/drm/*/device/modalias; do
+      if [[ -r "$drmdev" ]]; then
+        modalias=$(cat "$drmdev" 2>/dev/null || true)
+        if [[ -n "$modalias" ]]; then
+          system_gpu_info="$modalias"
+          break
+        fi
+      fi
+    done
+  fi
+  : "${system_gpu_info:=unknown}"
+
+  # Detect system information: Display
+  system_display_width=""
+  system_display_height=""
+  drm_modes=$(grep -h --binary-files=without-match -oE '[0-9]+x[0-9]+' /sys/class/drm/*/modes 2>/dev/null || true)
+  if [[ -n "$drm_modes" ]]; then
+    mode=$(echo "$drm_modes" | head -n1)
+    system_display_width="${mode%%x*}"
+    system_display_height="${mode##*x}"
+  fi
+
+  # Check for Steam Deck native resolution
+  if [[ -n "$system_display_width" && -n "$system_display_height" && "$system_display_width" -eq 1280 && "$system_display_height" -eq 800 ]]; then
+    sd_native_resolution=true
+  else
+    sd_native_resolution=false
+  fi
+
+  # Detect system information: OS and CPU
+  system_distro_name=$(grep '^ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' || true)
+  system_distro_version=$(grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' || true)
+  system_cpu_info=$(grep -m1 'model name' /proc/cpuinfo | cut -d':' -f2 | xargs || true)
+  system_cpu_cores=$(nproc)
+  system_cpu_max_threads=$(( system_cpu_cores / 2 ))
+
+  export system_gpu_info system_display_width system_display_height sd_native_resolution
+  export system_distro_name system_distro_version system_cpu_info system_cpu_cores system_cpu_max_threads
+
+  log d "Debug mode enabled"
+  log i "Initializing RetroDECK"
+  log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $system_distro_name $system_distro_version"
+  [[ -n "${container:-}" ]] && log i "Running inside $container environment"
+  log i "CPU: Using $system_cpu_info, $system_cpu_max_threads out of $system_cpu_cores available CPU cores for multi-threaded operations"
+  log i "GPU: $system_gpu_info"
+  log i "Resolution: ${system_display_width:-unknown} x ${system_display_height:-unknown}"
+  [[ "$sd_native_resolution" == true ]] && log i "Steam Deck native resolution detected"
+}
