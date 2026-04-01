@@ -149,6 +149,7 @@ multi_user_identity_handler::steam() {
 
       if [[ -z "$steam_id" ]]; then
         rd_zenity --icon-name=net.retrodeck.retrodeck --warning --title="RetroDECK Multi-User - Steam Not Found" \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --text="Could not detect an active Steam user.\nPlease make sure Steam is installed and try again,\nor choose a different identity method."
         return 1
       fi
@@ -274,6 +275,7 @@ multi_user_identity_handler::manual() {
 
       local entered_name
       entered_name=$(rd_zenity --icon-name=net.retrodeck.retrodeck --entry \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title="RetroDECK Multi-User - User Profile" \
         --text="Enter a display name for your user profile:" \
         --entry-text="Player" \
@@ -421,6 +423,7 @@ multi_user_manual_selection_dialog() {
 
   local selected
   selected=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title="RetroDECK Multi-user - Select User" \
     --text="Select which user profile to load:" \
     --column="ID" \
@@ -464,6 +467,7 @@ configurator_multi_user_enable_dialog() {
   # Check for existing config from a previous enablement
   if [[ -f "$rd_multi_user_conf" ]]; then
     rd_zenity --icon-name=net.retrodeck.retrodeck --question \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title="RetroDECK Multi-User - Re-enable Multi-User Mode" \
       --text="A previous multi-user configuration was found.\n\nWould you like to restore the previous configuration,\nor start fresh with a new setup?" \
       --ok-label="Restore Previous" \
@@ -595,6 +599,7 @@ multi_user_setup_identity() {
 
   local identity_source
   identity_source=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title="RetroDECK Multi-User - User Identity Setup" \
     --text="How would you like to set up your user profile?" \
     --column="ID" \
@@ -671,6 +676,7 @@ multi_user_setup_path_scopes() {
 
   local selected
   selected=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title="RetroDECK Multi-User - Multi-User Path Configuration" \
     --text="Select which data should be separate for each user (checked = per-user, unchecked = shared between all users):" \
     --checklist \
@@ -744,6 +750,7 @@ multi_user_cleanup_stale_data() {
 
   local action
   action=$(rd_zenity --icon-name=net.retrodeck.retrodeck --list \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title="RetroDECK Multi-User - Existing User Data Found" \
     --text="Data from a previous multi-user configuration was found.\n\nWhat would you like to do with it?" \
     --column="ID" \
@@ -797,6 +804,7 @@ multi_user_cleanup_stale_data() {
       else
         log e "Failed to create archive at $archive_path"
         rd_zenity --icon-name=net.retrodeck.retrodeck --error --title="RetroDECK Multi-User - Archive Failed" \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --text="Failed to archive user data.\nExisting data has been left in place." \
           --width=400 --height=150
       fi
