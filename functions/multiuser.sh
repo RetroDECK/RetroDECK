@@ -1065,3 +1065,166 @@ multi_user_create() {
   # Prompt for restart
   configurator_generic_dialog "RetroDECK Multi-User - User Created" "User profile '$new_display_name' has been created.\n\nOn next launch, log in as '$new_display_name' to complete setup."
 }
+
+configurator_multi_user_resolvers() {
+  # Configure identity resolver priorities and enabled state.
+  # Allows reordering resolvers and toggling them on/off.
+  # USAGE: configurator_multi_user_resolvers
+  
+  local resolvers
+  resolvers=$(jq -c '[.identity_resolvers // [] | .[] | .]' "$rd_multi_user_conf")
+
+  local resolver_count
+  resolver_count=$(echo "$resolvers" | jq 'length')
+
+  if [[ "$resolver_count" -eq 0 ]]; then
+    configurator_generic_dialog "RetroDECK Configurator: Configure Identity Resolvers" "No identity resolvers are configured."
+    return
+  fi
+
+  # Build the list dialog with current state
+  local -a dialog_args=()
+  for ((i=0; i<resolver_count; i++)); do
+    local rtype enabled priority description
+    rtype=$(echo "$resolvers" | jq -r ".[$i].type")
+    enabled=$(echo "$resolvers" | jq -r ".[$i].enabled")
+    priority=$(echo "$resolvers" | jq -r ".[$i].priority")
+
+    # Look up description from framework manifest
+    description=$(jq -r --arg t "$rtype" '
+      .[] | .manifest | select(has("framework")) |
+      .framework.identity_resolvers // [] | .[] |
+      select(.type == $t) | .description // .type
+    ' "$component_manifest_cache_file")
+
+    if [[ -z "$description" ]]; then
+      description="$rtype"
+    fi
+
+    local enabled_display="Enabled"
+    if [[ "$enabled" != "true" ]]; then
+      enabled_display="Disabled"
+    fi
+
+    dialog_args+=("$rtype" "$priority" "$description" "$enabled_display")
+  done
+
+  local selected
+  selected=$(rd_zenity --list --icon-name=net.retrodeck.retrodeck \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="RetroDECK Configurator: Multi-User Identity Resolver Settings" \
+    --text="Select a resolver to configure.\n\nResolvers are checked in priority order (lowest number = highest priority).\nThe first resolver to identify the current user wins." \
+    --column="Type" \
+    --column="Priority" \
+    --column="Description" \
+    --column="Status" \
+    --hide-column=1 \
+    --print-column=1 \
+    --width=600 \
+    --height=350 \
+    "${dialog_args[@]}")
+  local dialog_rc=$?
+
+  if [[ $dialog_rc -ne 0 || -z "$selected" ]]; then
+    return
+  fi
+
+  configurator_nav="configurator_multi_user_resolver_edit $selected"
+}
+
+configurator_multi_user_resolver_edit() {
+  # Edit settings for a specific identity resolver.
+  # USAGE: configurator_multi_user_resolver_edit "$resolver_type"
+  
+  local resolver_type="$1"
+
+  local current_enabled current_priority
+  current_enabled=$(jq -r --arg t "$resolver_type" \
+    '[.identity_resolvers[] | select(.type == $t)][0].enabled' "$rd_multi_user_conf")
+  current_priority=$(jq -r --arg t "$resolver_type" \
+    '[.identity_resolvers[] | select(.type == $t)][0].priority' "$rd_multi_user_conf")
+
+  local action
+  action=$(rd_zenity --list --icon-name=net.retrodeck.retrodeck \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="Configure: $resolver_type" \
+    --text="Current settings:\n  Priority: $current_priority\n  Status: $([ "$current_enabled" == "true" ] && echo "Enabled" || echo "Disabled")" \
+    --column="ID" \
+    --column="Action" \
+    --hide-column=1 \
+    --print-column=1 \
+    --width=450 \
+    --height=300 \
+    "toggle" "$([ "$current_enabled" == "true" ] && echo "Disable" || echo "Enable") this resolver" \
+    "priority" "Change priority" \
+    "back" "Go back")
+  local rc=$?
+
+  if [[ $rc -ne 0 || -z "$action" ]]; then
+    return
+  fi
+
+  case "$action" in
+
+    toggle)
+      local new_enabled
+      if [[ "$current_enabled" == "true" ]]; then
+        new_enabled="false"
+      else
+        new_enabled="true"
+      fi
+
+      jq --arg t "$resolver_type" --argjson e "$new_enabled" '
+        .identity_resolvers = [
+          .identity_resolvers[] |
+          if .type == $t then .enabled = $e else . end
+        ]
+      ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+        && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+      log i "Resolver $resolver_type enabled=$new_enabled"
+
+      configurator_nav="refresh"
+      ;;
+
+    priority)
+      local new_priority
+      new_priority=$(rd_zenity --entry --icon-name=net.retrodeck.retrodeck \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title="Set Priority" \
+        --text="Enter new priority for $resolver_type.\n\nLower numbers are checked first (1 = highest priority).\nCurrent priority: $current_priority" \
+        --entry-text="$current_priority" \
+        --width=400 \
+        --height=180)
+      local entry_rc=$?
+
+      if [[ $entry_rc -ne 0 || -z "$new_priority" ]]; then
+        configurator_nav="refresh"
+        return
+      fi
+
+      # Validate numeric input
+      if ! [[ "$new_priority" =~ ^[0-9]+$ ]]; then
+        rd_zenity --icon-name=net.retrodeck.retrodeck --warning --title="Invalid Input" \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --text="Priority must be a positive number." \
+          --width=300 --height=120
+        configurator_nav="refresh"
+        return
+      fi
+
+      jq --arg t "$resolver_type" --argjson p "$new_priority" '
+        .identity_resolvers = [
+          .identity_resolvers[] |
+          if .type == $t then .priority = $p else . end
+        ]
+      ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+        && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+      log i "Resolver $resolver_type priority=$new_priority"
+
+      configurator_nav="refresh"
+      ;;
+
+  esac
+}
