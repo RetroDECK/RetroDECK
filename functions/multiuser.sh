@@ -96,6 +96,10 @@ multi_user_determine_current() {
   # Manual selection dialog
   if [[ -z "$resolved_user" ]]; then
     resolved_user=$(multi_user_manual_selection_dialog)
+    if [[ -z "$resolved_user" ]]; then
+      log e "Current user could not be determined by any means, exiting..."
+      exit 1
+    fi
     log i "Current user set by manual selection: $resolved_user"
   fi
 
