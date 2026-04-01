@@ -90,12 +90,16 @@ log i "GPU: $system_gpu_info"
 log i "Resolution: ${system_display_width:-unknown} x ${system_display_height:-unknown}"
 [[ "$sd_native_resolution" == true ]] && log i "Steam Deck native resolution detected"
 
+# Load and process multi-user environment if needed
+source /app/libexec/multiuser.sh
+multi_user_boot "$@"
+
 # Load static variables and core functions
 source /app/libexec/all_vars.sh
 
 for file in /app/libexec/*.sh; do
   case "$(basename "$file")" in
-    global.sh|cleanup.sh|logger.sh|all_vars.sh|launcher_functions.sh) continue ;;
+    all_vars.sh|cleanup.sh|global.sh|launcher_functions.sh|logger.sh|multiuser.sh) continue ;;
   esac
   log d "Sourcing $file"
   source "$file"
