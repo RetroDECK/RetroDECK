@@ -853,7 +853,6 @@ api_set_preset_state() {
 }
 
 api_do_install_retrodeck_package() {
-
   local package_name="$1"
 
   case "$package_name" in

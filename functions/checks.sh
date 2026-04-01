@@ -29,6 +29,7 @@ check_low_space() {
   # Check all unique filesystems used by RetroDECK paths for low disk space.
   # Shows a warning dialog listing affected paths grouped by filesystem.
   # USAGE: check_low_space
+  
   if [[ "$low_space_warning" != "true" ]]; then
     return
   fi
