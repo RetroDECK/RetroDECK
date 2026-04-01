@@ -21,7 +21,7 @@ get_multi_user_cli_override() {
 }
 
 multi_user_conf_read() {
-  # Read the multi-user config file and export key values as global variables.
+  # Read the multi-user config file and export key values as global variables
   # USAGE: multi_user_conf_read
   
   if [[ ! -f "$rd_multi_user_conf" ]]; then
@@ -111,8 +111,7 @@ multi_user_determine_current() {
 }
 
 multi_user_resolve_identity() {
-  # Route to a specific identity resolver function.
-  # Each resolver checks an external source and returns the matching user ID, or fails.
+  # Route to a specific identity resolver function
   # USAGE: multi_user_resolve_identity "$resolver_type"
 
   local resolver_type="$1"
@@ -297,7 +296,7 @@ multi_user_identity_handler::manual() {
 }
 
 get_active_steam_user_id() {
-  # Detect the currently logged-in Steam user ID by checking loginusers.vdf for the most recent active user. Checks both native and Flatpak Steam locations.
+  # Detect the currently logged-in Steam user ID by checking loginusers.vdf for the most recent active user. Checks both native and Flatpak Steam locations
   # USAGE: steam_id=$(get_active_steam_user_id)
 
   local steam_paths=(
@@ -337,7 +336,7 @@ get_active_steam_user_id() {
 }
 
 multi_user_remap_xdg() {
-  # Remap XDG environment variables to per-user paths for non-primary users.
+  # Remap XDG environment variables to per-user paths for non-primary users
   # USAGE: multi_user_remap_xdg "$user_id"
 
   local user_id="$1"
@@ -354,7 +353,7 @@ multi_user_remap_xdg() {
 }
 
 multi_user_boot() {
-  # Reads the multi-user config, determines the current user, remaps XDG if needed and triggers first-login initialization for new users.
+  # Reads the multi-user config, determines the current user, remaps XDG if needed and triggers first-login initialization for new users
   # USAGE: multi_user_boot "$@"
   
   multi_user_conf_read
@@ -384,8 +383,8 @@ multi_user_boot() {
 }
 
 multi_user_first_login_init() {
-  # Run first-login initialization for a newly created user.
-  # Resets all installed components to generate configs and symlinks against the user's per-user paths, then marks the user as initialized.
+  # Run first-login initialization for a newly created user
+  # Resets all installed components to generate configs and symlinks against the user's per-user paths, then marks the user as initialized
   # USAGE: multi_user_first_login_init "$user_id"
   
   local user_id="$1"
@@ -404,7 +403,7 @@ multi_user_first_login_init() {
 }
 
 multi_user_manual_selection_dialog() {
-  # Present a dialog for manual user selection when identity cannot be auto-determined.
+  # Present a dialog for manual user selection when identity cannot be auto-determined
   # USAGE: selected_user=$(multi_user_manual_selection)
 
   local -a dialog_args=()
