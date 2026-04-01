@@ -480,9 +480,7 @@ configurator_multi_user_enable_dialog() {
       multi_user_enabled="true"
       export multi_user_enabled
       log i "Multi-user mode re-enabled with previous configuration"
-      rd_zenity --info --title="Multi-User Mode" \
-        --text="Multi-user mode has been re-enabled with your previous settings." \
-        --width=400 --height=150
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "Multi-user mode has been re-enabled with your previous settings."
       return
     fi
     # Start fresh: continue with the full setup flow below
