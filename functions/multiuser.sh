@@ -383,6 +383,8 @@ multi_user_boot() {
     '.users[$uid].initialized // false' "$rd_multi_user_conf")
 
   if [[ "$initialized" != "true" ]]; then
+    # Early read of current user retrodeck.json so the paths can be used in component preparation
+    conf_read
     multi_user_first_login_init "$multi_user_current_user"
   fi
 }
