@@ -16,8 +16,6 @@ source /app/libexec/logger.sh
 export rd_logging_level rd_xdg_config_logs_path
 rotate_logs
 
-detect_host
-
 # Load and process multi-user environment if needed
 source /app/libexec/multiuser.sh
 multi_user_boot "$@"
@@ -32,6 +30,9 @@ for file in /app/libexec/*.sh; do
   log d "Sourcing $file"
   source "$file"
 done
+
+# Detect host details
+detect_host
 
 # Source framework functions for early use
 source_component_functions "framework"
