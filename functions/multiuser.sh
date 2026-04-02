@@ -567,9 +567,6 @@ multi_user_setup_identity() {
   # Present identity source options built from manifest-declared resolvers, plus a manual option. Capture the users display name and identity mappings
   # USAGE: multi_user_setup_identity "display_name_var" "identities_array_var"
 
-  local -n display_name="$1"
-  local -n identities="$2"
-
   # Read resolver definitions from framework manifest, sorted by priority
   local resolvers_json
   resolvers_json=$(jq -c '
@@ -622,9 +619,9 @@ multi_user_setup_identity() {
     return 1
   fi
 
-  if ! "$handler_func" "setup" "display_name" "identities"; then
+  if ! "$handler_func" "setup" "$1" "$2"; then
     # Handler failed (e.g., Steam not found), let user choose again
-    multi_user_setup_identity "display_name" "identities"
+    multi_user_setup_identity "$1" "$2"
     return $?
   fi
 }
