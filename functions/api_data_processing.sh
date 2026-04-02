@@ -952,7 +952,9 @@ api_do_move_retrodeck_directory() {
             set_setting_value "$rd_conf" "$rd_dir_name" "$dest_root/$dirname_to_move" "retrodeck" "paths" # Set the new path for that folder variable in retrodeck.json
 
             # Multi-user: propagate shared path changes to all other users
-            if [[ "${multi_user_enabled:-false}" == "true" ]]; then
+            if [[ "$rd_dir_name" == "rd_home_path" ]]; then
+              propagate_rd_home_path_update
+            elif [[ "${multi_user_enabled:-false}" == "true" ]]; then
               load_path_scope_cache
               local scope="${path_scope_cache[$rd_dir_name]:-shared}"
               if [[ "$scope" == "shared" ]]; then
