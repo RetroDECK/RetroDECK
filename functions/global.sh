@@ -20,16 +20,19 @@ rotate_logs
 source /app/libexec/multiuser.sh
 multi_user_boot "$@"
 
-# Load static variables and core functions
-source /app/libexec/all_vars.sh
+# Load application static variables
+source /app/libexec/static_vars.sh
 
+# Load core libraries
 for file in /app/libexec/*.sh; do
   case "$(basename "$file")" in
-    all_vars.sh|cleanup.sh|global.sh|launcher_functions.sh|logger.sh|multiuser.sh) continue ;;
+    cleanup.sh|dyn_vars.sh|global.sh|launcher_functions.sh|logger.sh|static_vars.sh) continue ;;
   esac
   log d "Sourcing $file"
   source "$file"
 done
+# Load per-session variables
+source /app/libexec/dyn_vars.sh
 
 # Detect host details
 detect_host
