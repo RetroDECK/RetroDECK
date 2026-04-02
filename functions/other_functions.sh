@@ -400,7 +400,7 @@ finit() {
   build_component_manifest_cache
 
   echo "# Initializing component paths in main config..." >&$progress_fd
-  init_component_paths
+  init_all_component_paths
   conf_read
 
   echo "# Loading component functions..." >&$progress_fd
