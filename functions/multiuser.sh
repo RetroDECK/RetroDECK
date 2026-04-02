@@ -368,8 +368,15 @@ multi_user_boot() {
     '.users[$uid].initialized // false' "$rd_multi_user_conf")
 
   if [[ "$initialized" != "true" ]]; then
+    # Load per-session variables early for new user init
+    log d "Sourcing /app/libexec/dyn_vars.sh post-XDG remap"
+    source /app/libexec/dyn_vars.sh
+
+    build_component_manifest_cache
+
     # Early read of current user retrodeck.json so the paths can be used in component preparation
     conf_read
+    source_component_functions
     multi_user_first_login_init "$multi_user_current_user"
   fi
 }
