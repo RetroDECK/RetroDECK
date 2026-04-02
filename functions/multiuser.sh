@@ -1277,3 +1277,102 @@ multi_user_path_is_active() {
 
   [[ "$scope" == "per-user" ]]
 }
+
+multi_user_propagate_path_change() {
+  # Update a path value in all other users' core config files, used when a shared path is moved by one user and all users need the update
+  # Also flags non-current users as needing a postmove on next login
+  # USAGE: multi_user_propagate_path_change "$path_key" "$new_value"
+  
+  local path_key="$1"
+  local new_value="$2"
+
+  local user_ids
+  mapfile -t user_ids < <(jq -r '.users | keys[]' "$rd_multi_user_conf")
+
+  for user_id in "${user_ids[@]}"; do
+    # Skip the current user as their config is already updated
+    if [[ "$user_id" == "$multi_user_current_user" ]]; then
+      continue
+    fi
+
+    local is_primary
+    is_primary=$(jq -r --arg uid "$user_id" '.users[$uid].is_primary // false' "$rd_multi_user_conf")
+
+    local user_conf=""
+    if [[ "$is_primary" == "true" ]]; then
+      # Primary user's config is at the default location
+      user_conf="/var/config/retrodeck/retrodeck.json"
+    else
+      user_conf="/var/config/rd_users/$user_id/config/retrodeck/retrodeck.json"
+    fi
+
+    if [[ ! -f "$user_conf" ]]; then
+      log w "Config file not found for $user_id at $user_conf, skipping"
+      continue
+    fi
+
+    # Update the path in the user's config
+    # Check both .paths and .component_paths for the key
+    local updated="false"
+
+    if jq -e --arg key "$path_key" '.paths | has($key)' "$user_conf" > /dev/null 2>&1; then
+      jq --arg key "$path_key" --arg val "$new_value" \
+        '.paths[$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+        && mv "${user_conf}.tmp" "$user_conf"
+      updated="true"
+    else
+      # Check component_paths blocks
+      local comp_name
+      comp_name=$(jq -r --arg key "$path_key" '
+        .component_paths | to_entries[] |
+        select(.value | has($key)) | .key
+      ' "$user_conf")
+
+      if [[ -n "$comp_name" ]]; then
+        jq --arg comp "$comp_name" --arg key "$path_key" --arg val "$new_value" \
+          '.component_paths[$comp][$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+          && mv "${user_conf}.tmp" "$user_conf"
+        updated="true"
+      fi
+    fi
+
+    if [[ "$updated" == "true" ]]; then
+      log i "Updated $path_key to $new_value in config for $user_id"
+    else
+      log w "Path key $path_key not found in config for $user_id"
+    fi
+
+    # Flag this user as needing a postmove on next login
+    jq --arg uid "$user_id" '
+      .users[$uid].pending_postmove = true
+    ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+      && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+    log d "Flagged $user_id for pending postmove"
+  done
+}
+
+multi_user_check_pending_postmove() {
+  # Check if the current user has a pending postmove from a shared path being moved by another user, and run it if needed.
+  # USAGE: multi_user_check_pending_postmove
+  
+  local pending
+  pending=$(jq -r --arg uid "$multi_user_current_user" \
+    '.users[$uid].pending_postmove // false' "$rd_multi_user_conf")
+
+  if [[ "$pending" != "true" ]]; then
+    return
+  fi
+
+  log i "Running pending postmove for $multi_user_current_user"
+
+  prepare_component "postmove" "all"
+
+  # Clear the flag
+  jq --arg uid "$multi_user_current_user" '
+    .users[$uid].pending_postmove = false
+  ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+    && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+  log i "Pending postmove complete for $multi_user_current_user"
+}
