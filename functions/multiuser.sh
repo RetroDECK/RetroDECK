@@ -851,49 +851,55 @@ get_per_user_relative_path() {
     return 1
   fi
 
-  # Extract the leading variable name and the remainder of the path
-  local var_name="${default_value%%/*}"
-  var_name="${var_name#\$}"
-  local remainder="${default_value#\$${var_name}}"
-  remainder="${remainder#/}"
+  local resolved_path=""
 
-  # Look up the extracted variable name in the default core config paths block
-  local var_resolved
-  var_resolved=$(jq -r --arg key "$var_name" '.paths[$key] // empty' "$rd_defaults")
+  if [[ "$default_value" == \$* ]]; then
+    # Path contains a variable reference — extract and resolve it
+    local var_name="${default_value%%/*}"
+    var_name="${var_name#\$}"
+    local remainder="${default_value#\$${var_name}}"
+    remainder="${remainder#/}"
 
-  if [[ -z "$var_resolved" ]]; then
-    # Variable not found in core paths block
-    if [[ -n "$remainder" ]]; then
-      # Use the remainder as the relative tree
-      log d "Path $path_key: variable $var_name not in core paths, using remainder: $remainder"
-      echo "$remainder"
-      return 0
-    else
-      # Variable is the entire path and not in core paths
-      # Resolve from current environment as last resort, use basename
-      local env_resolved="${!var_name:-}"
-      if [[ -z "$env_resolved" ]]; then
-        log e "Path $path_key: variable $var_name could not be resolved from core paths or environment"
-        return 1
+    # Look up the extracted variable name in the default core config paths block
+    local var_resolved
+    var_resolved=$(jq -r --arg key "$var_name" '.paths[$key] // empty' "$rd_defaults")
+
+    if [[ -z "$var_resolved" ]]; then
+      # Variable not found in core paths block
+      if [[ -n "$remainder" ]]; then
+        # Use the remainder as the relative tree
+        log d "Path $path_key: variable $var_name not in core paths, using remainder: $remainder"
+        echo "$remainder"
+        return 0
+      else
+        # Variable is the entire path and not in core paths
+        # Resolve from current environment as last resort, use basename
+        local env_resolved="${!var_name:-}"
+        if [[ -z "$env_resolved" ]]; then
+          log e "Path $path_key: variable $var_name could not be resolved from core paths or environment"
+          return 1
+        fi
+
+        local base
+        base=$(basename "$env_resolved")
+
+        # Validate no conflict with existing per-user relative paths
+        # by checking if this basename already exists as a relative tree for another path
+        log w "Path $path_key: resolved to basename '$base' from unrecognized variable $var_name. Verify for conflicts"
+        echo "$base"
+        return 0
       fi
-
-      local base
-      base=$(basename "$env_resolved")
-
-      # Validate no conflict with existing per-user relative paths
-      # by checking if this basename already exists as a relative tree for another path
-      log w "Path $path_key: resolved to basename '$base' from unrecognized variable $var_name. Verify for conflicts"
-      echo "$base"
-      return 0
     fi
-  fi
 
-  # Variable found in core paths, build the fully resolved path
-  local resolved_path
-  if [[ -n "$remainder" ]]; then
-    resolved_path="$var_resolved/$remainder"
+    # Variable found in core paths, build the fully resolved path
+    if [[ -n "$remainder" ]]; then
+      resolved_path="$var_resolved/$remainder"
+    else
+      resolved_path="$var_resolved"
+    fi
   else
-    resolved_path="$var_resolved"
+    # Path is already absolute, use it directly for prefix matching
+    resolved_path="$default_value"
   fi
 
   # Collect all core paths from defaults, sorted by length descending so we match the most specific prefix first
