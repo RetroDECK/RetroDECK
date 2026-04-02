@@ -846,7 +846,7 @@ get_per_user_relative_path() {
   local resolved_path=""
 
   if [[ "$default_value" == \$* ]]; then
-    # Path contains a variable reference — extract and resolve it
+    # Path contains a variable reference, extract and resolve it
     local var_name="${default_value%%/*}"
     var_name="${var_name#\$}"
     local remainder="${default_value#\$${var_name}}"
@@ -1222,4 +1222,32 @@ configurator_multi_user_resolver_edit() {
       ;;
 
   esac
+}
+
+load_path_scope_cache() {
+  # Load path scopes from the multi-user config into an associative array cache.
+  # USAGE: load_path_scope_cache
+
+  if [[ ${#path_scope_cache[@]} -gt 0 ]]; then
+    return
+  fi
+
+  if [[ ! -f "$rd_multi_user_conf" ]]; then
+    return
+  fi
+
+  while IFS=$'\t' read -r key scope; do
+    [[ -z "$key" ]] && continue
+    path_scope_cache["$key"]="$scope"
+  done < <(jq -r '.path_scopes | to_entries[] | [.key, .value] | @tsv' "$rd_multi_user_conf")
+
+  log d "Path scope cache loaded: ${#path_scope_cache[@]} entries"
+}
+
+clear_path_scope_cache() {
+  # Clear the path scope cache, forcing a reload on next multi_user_path_is_active call
+  # Use after path scopes are modified mid-session
+  # USAGE: clear_path_scope_cache
+  
+  path_scope_cache=()
 }
