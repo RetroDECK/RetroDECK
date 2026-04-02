@@ -205,6 +205,7 @@ prepare_component() {
         "$handler" "$action"
         if [[ "$action" == "reset" ]]; then
           set_installed_component_version "$component_name" "$(get_component_version "$component_name")"
+          init_component_paths "$component_name"
           reset_component_options "$component_name"
           deploy_helper_files "$component_name"
         fi
