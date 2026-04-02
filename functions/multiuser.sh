@@ -1376,3 +1376,173 @@ multi_user_check_pending_postmove() {
 
   log i "Pending postmove complete for $multi_user_current_user"
 }
+
+propagate_rd_home_path_update() {
+  # After rd_home_path has been moved, update all child paths in the current user's config that came along with the move
+  # Also propagates changes to all other users' configs if multi-user is enabled.
+  # USAGE: propagate_rd_home_path_update
+  
+  local -a updated_keys=()
+  local -a updated_values=()
+
+  # Update core paths in the current user's config
+  while IFS=$'\t' read -r setting_name setting_value; do
+    [[ -z "$setting_name" ]] && continue
+    [[ "$setting_name" =~ ^(rd_home_path|sdcard)$ ]] && continue
+    local new_path="$rd_home_path/${setting_value#*retrodeck/}"
+    if [[ -d "$new_path" ]]; then
+      set_setting_value "$rd_conf" "$setting_name" "$new_path" "retrodeck" "paths"
+      updated_keys+=("$setting_name")
+      updated_values+=("$new_path")
+      log d "Propagated $setting_name to $new_path"
+    fi
+  done < <(jq -r '.paths | to_entries[] | [.key, (.value | tostring)] | @tsv' "$rd_conf")
+
+  # Update component_paths in the current user's config
+  while IFS=$'\t' read -r comp_name path_key path_value; do
+    [[ -z "$path_key" ]] && continue
+    local new_path="$rd_home_path/${path_value#*retrodeck/}"
+    if [[ -d "$new_path" ]]; then
+      jq --arg c "$comp_name" --arg k "$path_key" --arg v "$new_path" \
+        '.component_paths[$c][$k] = $v' "$rd_conf" > "${rd_conf}.tmp" \
+        && mv "${rd_conf}.tmp" "$rd_conf"
+      updated_keys+=("$path_key")
+      updated_values+=("$new_path")
+      log d "Propagated component path $comp_name.$path_key to $new_path"
+    fi
+  done < <(jq -r '
+    .component_paths // {} | to_entries[] |
+    .key as $comp |
+    .value | to_entries[] |
+    [$comp, .key, (.value | tostring)] | @tsv
+  ' "$rd_conf")
+
+  # Multi-user: propagate all updated paths to other users
+  if [[ "${multi_user_enabled:-false}" == "true" ]]; then
+    local user_ids
+    mapfile -t user_ids < <(jq -r '.users | keys[]' "$rd_multi_user_conf")
+
+    for user_id in "${user_ids[@]}"; do
+      if [[ "$user_id" == "$multi_user_current_user" ]]; then
+        continue
+      fi
+
+      local is_primary
+      is_primary=$(jq -r --arg uid "$user_id" '.users[$uid].is_primary // false' "$rd_multi_user_conf")
+
+      local user_conf=""
+      if [[ "$is_primary" == "true" ]]; then
+        user_conf="/var/config/retrodeck/retrodeck.json"
+      else
+        user_conf="/var/config/rd_users/$user_id/config/retrodeck/retrodeck.json"
+      fi
+
+      if [[ ! -f "$user_conf" ]]; then
+        log w "Config file not found for $user_id at $user_conf, skipping"
+        continue
+      fi
+
+      # Update rd_home_path itself in the other user's config
+      jq --arg path "$rd_home_path" '.paths.rd_home_path = $path' "$user_conf" > "${user_conf}.tmp" \
+        && mv "${user_conf}.tmp" "$user_conf"
+
+      # Propagate shared paths: check each path's scope
+      load_path_scope_cache
+
+      while IFS=$'\t' read -r setting_name setting_value; do
+        [[ -z "$setting_name" ]] && continue
+        [[ "$setting_name" =~ ^(rd_home_path|sdcard)$ ]] && continue
+
+        local scope="${path_scope_cache[$setting_name]:-shared}"
+
+        if [[ "$scope" == "shared" ]]; then
+          # Shared path: update to the same new location as current user
+          local new_path="$rd_home_path/${setting_value#*retrodeck/}"
+          if [[ -d "$new_path" ]]; then
+            jq --arg key "$setting_name" --arg val "$new_path" \
+              '.paths[$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+              && mv "${user_conf}.tmp" "$user_conf"
+            log d "Propagated shared path $setting_name to $new_path for $user_id"
+          fi
+        elif [[ "$scope" == "per-user" ]]; then
+          # Per-user path: update the base to reflect the new rd_home_path
+          # The per-user tree lives under rd_home_path/users/<user_id>/
+          local old_value
+          old_value=$(jq -r --arg key "$setting_name" '.paths[$key] // empty' "$user_conf")
+          if [[ -n "$old_value" ]]; then
+            # Extract the portion after the old rd_home_path
+            local old_rd_home
+            old_rd_home=$(jq -r '.paths.rd_home_path // empty' "$user_conf")
+            if [[ -n "$old_rd_home" && "$old_value" == "$old_rd_home"* ]]; then
+              local suffix="${old_value#$old_rd_home}"
+              local new_path="${rd_home_path}${suffix}"
+              jq --arg key "$setting_name" --arg val "$new_path" \
+                '.paths[$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+                && mv "${user_conf}.tmp" "$user_conf"
+              log d "Propagated per-user path $setting_name to $new_path for $user_id"
+            fi
+          fi
+        fi
+      done < <(jq -r '.paths | to_entries[] | [.key, (.value | tostring)] | @tsv' "$user_conf")
+
+      # Propagate component_paths for other users
+      while IFS=$'\t' read -r comp_name path_key path_value; do
+        [[ -z "$path_key" ]] && continue
+
+        local scope="${path_scope_cache[$path_key]:-shared}"
+
+        if [[ "$scope" == "shared" ]]; then
+          local new_path="$rd_home_path/${path_value#*retrodeck/}"
+          if [[ -d "$new_path" ]]; then
+            jq --arg comp "$comp_name" --arg key "$path_key" --arg val "$new_path" \
+              '.component_paths[$comp][$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+              && mv "${user_conf}.tmp" "$user_conf"
+            log d "Propagated shared component path $path_key to $new_path for $user_id"
+          fi
+        elif [[ "$scope" == "per-user" ]]; then
+          local old_rd_home
+          old_rd_home=$(jq -r '.paths.rd_home_path // empty' "$user_conf")
+          if [[ -n "$old_rd_home" && "$path_value" == "$old_rd_home"* ]]; then
+            local suffix="${path_value#$old_rd_home}"
+            local new_path="${rd_home_path}${suffix}"
+            jq --arg comp "$comp_name" --arg key "$path_key" --arg val "$new_path" \
+              '.component_paths[$comp][$key] = $val' "$user_conf" > "${user_conf}.tmp" \
+              && mv "${user_conf}.tmp" "$user_conf"
+            log d "Propagated per-user component path $path_key to $new_path for $user_id"
+          fi
+        fi
+      done < <(jq -r '
+        .component_paths // {} | to_entries[] |
+        .key as $comp |
+        .value | to_entries[] |
+        [$comp, .key, (.value | tostring)] | @tsv
+      ' "$user_conf")
+
+      # Flag for postmove
+      jq --arg uid "$user_id" '
+        .users[$uid].pending_postmove = true
+      ' "$rd_multi_user_conf" > "${rd_multi_user_conf}.tmp" \
+        && mv "${rd_multi_user_conf}.tmp" "$rd_multi_user_conf"
+
+      log i "Propagated rd_home_path changes for $user_id"
+    done
+
+    # Update the per-user XDG symlinks to point to new locations
+    mapfile -t user_ids < <(jq -r '
+      .users | to_entries[] | select(.value.is_primary == false) | .key
+    ' "$rd_multi_user_conf")
+
+    for user_id in "${user_ids[@]}"; do
+      local rd_users_xdg_base="/var/config/rd_users/$user_id"
+      local rd_users_data_base="$rd_home_path/users/$user_id"
+
+      dir_prep "$rd_users_data_base/config" "$rd_users_xdg_base/config"
+      dir_prep "$rd_users_data_base/data" "$rd_users_xdg_base/data"
+      dir_prep "$rd_users_data_base/cache" "$rd_users_xdg_base/cache"
+
+      log d "Updated XDG symlinks for $user_id"
+    done
+  fi
+
+  log i "rd_home_path propagation complete"
+}
