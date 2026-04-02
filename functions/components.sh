@@ -1196,10 +1196,10 @@ init_component_options() {
   log d "Component options initialized for $component_name"
 }
 
-update_all_component_options() {
+init_all_component_options() {
   # Update component_options in the config file with any new defaults from component manifests.
   # Existing values are not modified.
-  # USAGE: update_all_component_options
+  # USAGE: init_all_component_options
   
   while IFS=$'\t' read -r component_name; do
     [[ -z "$component_name" ]] && continue
@@ -1210,7 +1210,7 @@ update_all_component_options() {
     .key
   ' "$component_manifest_cache_file")
   
-  log d "Component options updated from manifests"
+  log d "Component options updated from all manifests"
 }
 
 reset_component_options() {
