@@ -950,6 +950,16 @@ api_do_move_retrodeck_directory() {
           move "$dir_to_move" "$dest_root/$dirname_to_move"
           if [[ -d "$dest_root/$dirname_to_move" ]]; then # If the move succeeded
             set_setting_value "$rd_conf" "$rd_dir_name" "$dest_root/$dirname_to_move" "retrodeck" "paths" # Set the new path for that folder variable in retrodeck.json
+
+            # Multi-user: propagate shared path changes to all other users
+            if [[ "${multi_user_enabled:-false}" == "true" ]]; then
+              load_path_scope_cache
+              local scope="${path_scope_cache[$rd_dir_name]:-shared}"
+              if [[ "$scope" == "shared" ]]; then
+                multi_user_propagate_path_change "$rd_dir_name" "$dest_root/$dirname_to_move"
+              fi
+            fi
+
             source_component_functions
             prepare_component "postmove" "all" # Update all the appropriate emulator path settings
             log i "directory $rd_dir_name successfully moved to $dest_root/$dirname_to_move"
