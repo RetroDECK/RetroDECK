@@ -1251,3 +1251,29 @@ clear_path_scope_cache() {
   
   path_scope_cache=()
 }
+
+multi_user_path_is_active() {
+  # Check if actions for a given path should be executed in the current context
+  # If multi-user is disabled or the current user is primary, always returns 0
+  # If the current user is non-primary, returns 0 only for per-user scoped paths
+  # USAGE: if multi_user_path_is_active "saves_path"; then dir_prep ...; fi
+  
+  local path_key="$1"
+
+  # If multi-user is not enabled, all paths are active
+  if [[ "${multi_user_enabled:-false}" != "true" ]]; then
+    return 0
+  fi
+
+  # Primary user owns the default layout, all paths are active
+  if [[ "${multi_user_is_primary:-false}" == "true" ]]; then
+    return 0
+  fi
+
+  # Non-primary user, check scope
+  load_path_scope_cache
+
+  local scope="${path_scope_cache[$path_key]:-per-user}"
+
+  [[ "$scope" == "per-user" ]]
+}
