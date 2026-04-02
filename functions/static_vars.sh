@@ -2,15 +2,12 @@
 
 # Static variables
 
-export rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.json"                                                      # RetroDECK config file path
 export rd_core_files="/app/retrodeck/config/retrodeck"                                                          # Folder with RetroDECK reference and helper files
 export rd_defaults="$rd_core_files/retrodeck.json"                                                              # A default RetroDECK config file
 export input_validation="$rd_core_files/reference_lists/input_validation.cfg"                                   # A config file listing valid CLI inputs
-export rd_lockfile="$XDG_CONFIG_HOME/retrodeck/.lock"                                                           # Where the lockfile is located
 export sdcard_default_path="/run/media/mmcblk0p1"                                                               # Steam Deck SD default path
 export hard_version="$(cat '/app/retrodeck/version')"                                                           # hardcoded version (in the readonly filesystem)
 export rd_metainfo="/app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"                                   # The shipped metainfo XML file for this version
-export folder_iconsets_dir="$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets"
 export low_space_threshold=90
 export purple="#a864fc"
 export blue="#6fbfff"
@@ -36,4 +33,3 @@ export rd_shared_libs_kde_path="/app/retrodeck/components/shared-libs/org.kde.Pl
 export rd_shared_libs_gnome_path="/app/retrodeck/components/shared-libs/org.gnome.Platform"
 export rd_shared_libs_freedesktop_path="/app/retrodeck/components/shared-libs/org.freedesktop.Platform"
 export DEFAULT_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-export component_manifest_cache_file="$XDG_CONFIG_HOME/retrodeck/retrodeck_manifest_cache.json"
