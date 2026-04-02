@@ -514,7 +514,7 @@ configurator_multi_user_enable_dialog() {
   # Read resolver defaults from framework manifest
   local resolver_defaults
   resolver_defaults=$(jq -c '
-    .[] | .manifest | select(has("framework")) | .framework.identity_resolvers // []
+    .[] | .manifest | select(has("retrodeck")) | .retrodeck.identity_resolvers // []
   ' "$component_manifest_cache_file")
 
   if [[ -z "$resolver_defaults" || "$resolver_defaults" == "null" ]]; then
@@ -574,7 +574,7 @@ multi_user_setup_identity() {
   local resolvers_json
   resolvers_json=$(jq -c '
     [
-      .[] | .manifest | select(has("framework")) | .framework.identity_resolvers // [] | .[]
+      .[] | .manifest | select(has("retrodeck")) | .retrodeck.identity_resolvers // [] | .[]
     ] | sort_by(.default_priority)
   ' "$component_manifest_cache_file")
 
@@ -1092,8 +1092,8 @@ configurator_multi_user_resolvers() {
 
     # Look up description from framework manifest
     description=$(jq -r --arg t "$rtype" '
-      .[] | .manifest | select(has("framework")) |
-      .framework.identity_resolvers // [] | .[] |
+      .[] | .manifest | select(has("retrodeck")) |
+      .retrodeck.identity_resolvers // [] | .[] |
       select(.type == $t) | .description // .type
     ' "$component_manifest_cache_file")
 
