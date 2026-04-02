@@ -353,7 +353,6 @@ multi_user_boot() {
     return
   fi
 
-  get_multi_user_cli_override "$@"
   multi_user_determine_current
 
   if [[ "$multi_user_is_primary" == "true" ]]; then
