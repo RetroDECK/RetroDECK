@@ -16,9 +16,18 @@ source /app/libexec/logger.sh
 export rd_logging_level rd_xdg_config_logs_path
 rotate_logs
 
-# Load and process multi-user environment if needed
-source /app/libexec/multiuser.sh
-multi_user_boot "$@"
+# Handle early multi-user login override
+args=()
+for ((i=1; i<=$#; i++)); do
+  if [[ "${!i}" == "--user" ]]; then
+    next=$((i + 1))
+    export multi_user_cli_override="${!next}"
+    i=$((i + 1))
+  else
+    args+=("${!i}")
+  fi
+done
+set -- "${args[@]}"
 
 # Load application static variables
 source /app/libexec/static_vars.sh
