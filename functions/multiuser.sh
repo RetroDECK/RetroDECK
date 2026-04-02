@@ -489,7 +489,7 @@ configurator_multi_user_enable_dialog() {
     multi_user_cleanup_stale_data
   fi
 
-  if configurator_generic_question_dialog "RetroDECK Multi-User - Enable Multi-User Mode" "Multi-user mode allows multiple people to have separate saves, settings, and game progress on this device.\n\nYour current data will be preserved as the primary user.\nAdditional users can be added after setup.\n\nContinue with setup?"; then
+  if ! configurator_generic_question_dialog "RetroDECK Multi-User - Enable Multi-User Mode" "Multi-user mode allows multiple people to have separate saves, settings, and game progress on this device.\n\nYour current data will be preserved as the primary user.\nAdditional users can be added after setup.\n\nContinue with setup?"; then
     log d "Multi-user enablement cancelled by user"
     return
   fi
