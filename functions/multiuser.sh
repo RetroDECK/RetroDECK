@@ -3,22 +3,8 @@
 # Define multi-user config file location prior to XDG remap
 export rd_multi_user_conf="/var/config/retrodeck/rd_multi_user.json"
 
-get_multi_user_cli_override() {
-  # Check for an early --user flag in the application arguments.
-  # Must be called before general argument parsing.
-  # Sets multi_user_cli_override if found.
-  # USAGE: get_multi_user_cli_override "$@"
-  
-  local args=("$@")
-  for ((i=0; i<${#args[@]}; i++)); do
-    if [[ "${args[$i]}" == "--user" && -n "${args[$((i+1))]:-}" ]]; then
-      multi_user_cli_override="${args[$((i+1))]}"
-      export multi_user_cli_override
-      log d "CLI user override: $multi_user_cli_override"
-      return
-    fi
-  done
-}
+# Declare path scope cache
+declare -gA path_scope_cache=()
 
 multi_user_conf_read() {
   # Read the multi-user config file and export key values as global variables
