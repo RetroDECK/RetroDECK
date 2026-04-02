@@ -40,6 +40,10 @@ for file in /app/libexec/*.sh; do
   log d "Sourcing $file"
   source "$file"
 done
+
+# Load and process multi-user environment if needed
+multi_user_boot
+
 # Load per-session variables
 source /app/libexec/dyn_vars.sh
 
@@ -128,3 +132,6 @@ source_component_functions
 
 # Build runtime caches that depend on component functions
 build_compression_lookups
+
+# Check for pending multi-user post-move actions
+multi_user_check_pending_postmove
