@@ -1112,6 +1112,23 @@ init_component_paths() {
   log d "Component paths initialized for $component_name"
 }
 
+init_all_component_paths() {
+  # Update component_options in the config file with any new defaults from component manifests.
+  # Existing values are not modified.
+  # USAGE: init_all_component_paths
+  
+  while IFS=$'\t' read -r component_name; do
+    [[ -z "$component_name" ]] && continue
+    init_component_paths "$component_name"
+  done < <(jq -r '
+    .[] | .manifest | to_entries[] |
+    select(.value.component_paths != null) |
+    .key
+  ' "$component_manifest_cache_file")
+  
+  log d "Component paths updated from all manifests"
+}
+
 migrate_path_to_component_paths() {
   # Migrate a single path from the core "paths" block to the "component_paths" block, optionally renaming the key in the process.
   # USAGE: migrate_path_to_component_paths "$component_name" "$source_key" "$destination_key"
