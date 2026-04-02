@@ -392,12 +392,12 @@ finit() {
   local progress_fd
   exec {progress_fd}>"$progress_pipe"
 
+  echo "# Building component manifest cache..." >&$progress_fd
+  build_component_manifest_cache
+
   # Set up framework paths and write initial config
   echo "# Setting up RetroDECK core..." >&$progress_fd
   prepare_component "reset" "retrodeck"
-  
-  echo "# Building component manifest cache..." >&$progress_fd
-  build_component_manifest_cache
 
   echo "# Initializing component paths in main config..." >&$progress_fd
   init_all_component_paths
