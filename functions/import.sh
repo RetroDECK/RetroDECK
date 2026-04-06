@@ -101,3 +101,56 @@ get_import_source() {
     .import_options[$source] // empty
   ' "$component_manifest_cache_file"
 }
+
+reset_rollback_state() {
+  # Clear all rollback tracking arrays
+  # USAGE: reset_rollback_state
+
+  import_rollback_config_backups=()
+  import_rollback_symlinks=()
+  import_rollback_preset_changes=()
+}
+
+rollback_import() {
+  # Attempt to undo completed import operations after a failure
+  # Restores config backups, removes symlinks, and reverts preset changes
+  # USAGE: rollback_import
+
+  log w "Rolling back import operations"
+
+  # Restore config backups
+  local pair
+  for pair in "${import_rollback_config_backups[@]}"; do
+    local dest="${pair%%|*}"
+    local backup="${pair#*|}"
+    if [[ -f "$backup" ]]; then
+      log d "Restoring config backup: $backup -> $dest"
+      mv -f "$backup" "$dest"
+    fi
+  done
+
+  # Remove created symlinks
+  local sym
+  for sym in "${import_rollback_symlinks[@]}"; do
+    if [[ -L "$sym" ]]; then
+      log d "Removing symlink: $sym"
+      unlink "$sym"
+    fi
+  done
+
+  # Revert preset changes
+  local entry
+  for entry in "${import_rollback_preset_changes[@]}"; do
+    local IFS='|'
+    local parts
+    read -ra parts <<< "$entry"
+    local setting_file="${parts[0]}"
+    local setting="${parts[1]}"
+    local old_value="${parts[2]}"
+    local section="${parts[3]:-}"
+    log d "Reverting preset: $setting -> $old_value"
+    set_setting_value "$setting_file" "$setting" "$old_value" "retrodeck" "$section"
+  done
+
+  log w "Rollback complete"
+}
