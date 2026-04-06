@@ -154,3 +154,263 @@ rollback_import() {
 
   log w "Rollback complete"
 }
+
+select_import_source() {
+  # Present the user with a list of discovered import sources to choose from
+  # Sources are validated for existence and tagged accordingly
+  # USAGE: select_import_source "$sources_json"
+
+  local sources_json="$1"
+  local entry_count
+  entry_count=$(jq -r 'length' <<< "$sources_json")
+ 
+  if [[ "$entry_count" -eq 0 ]]; then
+    log i "No import sources found in component manifests"
+    configurator_generic_dialog "RetroDECK Import" "No import sources are defined in any component manifests."
+    return 1
+  fi
+ 
+  # Build Zenity list arguments and validate each source
+  local -a zenity_args=()
+  local -a validated=()
+ 
+  while IFS= read -r source_entry; do
+    local source_key description component default_root resolved_root status
+    source_key=$(jq -r '.source_key' <<< "$source_entry")
+    description=$(jq -r '.description' <<< "$source_entry")
+    component=$(jq -r '.component' <<< "$source_entry")
+    default_root=$(jq -r '.default_root' <<< "$source_entry")
+    resolved_root=$(envsubst <<< "$default_root")
+ 
+    if [[ -d "$resolved_root" ]]; then
+      status="Found"
+    else
+      status="Not found"
+    fi
+ 
+    zenity_args+=("$source_key" "$description" "$component" "$status")
+    validated+=("$(jq -nc --arg source_key "$source_key" --arg comp "$component" \
+      --arg desc "$description" --arg root "$resolved_root" --arg stat "$status" \
+      '{source_key: $source_key, component: $comp, description: $desc, resolved_root: $root, status: $stat}')")
+  done < <(echo "$sources_json" | jq -c '.[]')
+ 
+  local selected
+  selected=$(rd_zenity --list \
+    --title="RetroDECK Import - Select Source" \
+    --text="Select a project to import data from:" \
+    --column="Key" --column="Description" --column="Component" --column="Status" \
+    --hide-column=1 --print-column=1 \
+    --width=700 --height=400 \
+    "${zenity_args[@]}")
+ 
+  if [[ -z "$selected" ]]; then
+    log i "User cancelled import source selection"
+    return 1
+  fi
+ 
+  # Return the validated entry for the selected project
+  local entry
+  for entry in "${validated[@]}"; do
+    if [[ "$(echo "$entry" | jq -r '.source_key')" == "$selected" ]]; then
+      echo "$entry"
+      return 0
+    fi
+  done
+ 
+  log e "Selected project key '$selected' not found in validated list"
+  return 1
+}
+
+resolve_import_root() {
+  # Ensure the import root path exists, prompting the user to browse if not found
+  # USAGE: resolve_import_root "$resolved_root" "$description"
+
+  local resolved_root="$1"
+  local description="$2"
+
+  if [[ -d "$resolved_root" ]]; then
+    echo "$resolved_root"
+    return 0
+  fi
+
+  log i "Default root not found at $resolved_root, prompting user"
+  configurator_generic_dialog "RetroDECK Import" "The default location for $description was not found at:\n$resolved_root\n\nPlease browse to the correct location."
+
+  local browsed_path
+  browsed_path=$(directory_browse)
+  if [[ $? -ne 0 || -z "$browsed_path" ]]; then
+    log i "User cancelled directory browse for import root"
+    return 1
+  fi
+
+  if [[ ! -d "$browsed_path" ]]; then
+    log e "Browsed path does not exist: $browsed_path"
+    return 1
+  fi
+
+  echo "$browsed_path"
+  return 0
+}
+
+select_optional_entries() {
+  # Present a Zenity checklist of optional import entries for the user to include or exclude
+  # USAGE: select_optional_entries "$all_entries_json"
+
+  local all_entries="$1"
+ 
+  local optional_entries
+  optional_entries=$(jq '[to_entries[] | select(.value.optional == true)]' <<< "$all_entries")
+  local opt_count
+  opt_count=$(jq 'length' <<< "$optional_entries")
+ 
+  if [[ "$opt_count" -eq 0 ]]; then
+    log d "No optional entries to present"
+    echo "$all_entries" | jq '[to_entries[].key]'
+    return 0
+  fi
+ 
+  local -a zenity_args=()
+
+  mapfile -t zenity_args < <(echo "$optional_entries" | jq -r '
+    .[] |
+    "TRUE",
+    (.key | tostring),
+    .value.description,
+    .value.entry_type
+  ')
+ 
+  local selected
+  selected=$(rd_zenity --list --checklist \
+    --title="RetroDECK Import - Optional Items" \
+    --text="Select which optional items to import:" \
+    --column="Import" --column="Index" --column="Description" --column="Type" \
+    --hide-column=2 --print-column=2 \
+    --separator="^" \
+    --width=700 --height=400 \
+    "${zenity_args[@]}")
+ 
+  if [[ $? -ne 0 ]]; then
+    log i "User cancelled optional entry selection"
+    return 1
+  fi
+ 
+  local non_optional_entries
+  non_optional_entries=$(jq '[to_entries[] | select(.value.optional != true) | .key]' <<< "$all_entries")
+ 
+  local selected_optional_entries="[]"
+  if [[ -n "$selected" ]]; then
+    local -a selected_arr
+    IFS='^' read -ra selected_arr <<< "$selected"
+    selected_optional_entries=$(printf '%s\n' "${selected_arr[@]}" | jq -R 'tonumber' | jq -s '.')
+  fi
+ 
+  # Merge non-optional and selected optional entries
+  echo "$non_optional_entries" "$selected_optional_entries" | jq -s 'add | sort | unique'
+  return 0
+}
+
+select_data_methods() {
+  # Present a Zenity checklist for optional data entries to choose copy (checked) or symlink (unchecked)
+  # USAGE: select_data_methods "$optional_data_entries_json"
+
+  local data_entries="$1"
+  local entry_count
+  entry_count=$(jq 'length' <<< "$data_entries")
+ 
+  if [[ "$entry_count" -eq 0 ]]; then
+    log d "No optional data entries for method selection"
+    echo "[]"
+    return 0
+  fi
+ 
+  local -a zenity_args=()
+
+  mapfile -t zenity_args < <(echo "$data_entries" | jq -r '
+    .[] |
+    (if .default_method == "copy" then "TRUE" else "FALSE" end),
+    .entry,
+    .description
+  ')
+ 
+  local selected
+  selected=$(rd_zenity --list --checklist \
+    --title="RetroDECK Import - Import Method" \
+    --text="Select import method per item.\nChecked = Copy data, Unchecked = Create symlink:" \
+    --column="Copy" --column="Index" --column="Description" \
+    --hide-column=2 --print-column=2 \
+    --separator="^" \
+    --width=700 --height=400 \
+    "${zenity_args[@]}")
+ 
+  if [[ $? -ne 0 ]]; then
+    log i "User cancelled data method selection"
+    return 1
+  fi
+ 
+  local copy_choices_json="[]"
+  if [[ -n "$selected" ]]; then
+    local -a copy_arr
+    IFS='^' read -ra copy_arr <<< "$selected"
+    copy_choices_json=$(printf '%s\n' "${copy_arr[@]}" | jq -R '.' | jq -s '.')
+  fi
+ 
+  echo "$data_entries" | jq --argjson copies "$copy_choices_json" '
+    [.[] | .resolved_method = (if (.entry | IN($copies[])) then "copy" else "symlink" end)]
+  '
+  return 0
+}
+
+select_symlink_directions() {
+  # For each data entry using the symlink method, let the user choose where real data lives
+  # Checked = store real data in RetroDECK (dest), Unchecked = keep real data at source
+  # USAGE: select_symlink_directions "$symlink_entries_json"
+
+  local symlink_entries="$1"
+  local entry_count
+  entry_count=$(jq 'length' <<< "$symlink_entries")
+ 
+  if [[ "$entry_count" -eq 0 ]]; then
+    log d "No symlink entries for direction selection"
+    echo "[]"
+    return 0
+  fi
+ 
+  local -a zenity_args=()
+
+  mapfile -t zenity_args < <(echo "$symlink_entries" | jq -r '
+    .[] |
+    "FALSE",
+    .entry,
+    .description,
+    .resolved_source,
+    .resolved_dest
+  ')
+ 
+  local selected
+  selected=$(rd_zenity --list --checklist \
+    --title="RetroDECK Import - Symlink Data Location" \
+    --text="Choose where the real data should be stored for symlinked items.\nChecked = Move data into RetroDECK, Unchecked = Keep data at source location:" \
+    --column="Move" --column="Index" --column="Description" --column="Source" --column="Destination" \
+    --hide-column=2 --print-column=2 \
+    --separator="^" \
+    --width=900 --height=400 \
+    "${zenity_args[@]}")
+ 
+  if [[ $? -ne 0 ]]; then
+    log i "User cancelled symlink direction selection"
+    return 1
+  fi
+ 
+  # Convert selected move indices to JSON array and annotate all entries in a single jq pass
+  local move_indices_json="[]"
+  if [[ -n "$selected" ]]; then
+    local -a move_arr
+    IFS='^' read -ra move_arr <<< "$selected"
+    move_indices_json=$(printf '%s\n' "${move_arr[@]}" | jq -R '.' | jq -s '.')
+  fi
+ 
+  echo "$symlink_entries" | jq --argjson moves "$move_indices_json" '
+    [.[] | .real_data_at = (if (.entry | IN($moves[])) then "dest" else "source" end)]
+  '
+  return 0
+}
