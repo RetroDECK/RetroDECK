@@ -414,3 +414,253 @@ select_symlink_directions() {
   '
   return 0
 }
+
+show_import_summary() {
+  # Display an informational summary of all non-optional import actions before execution
+  # USAGE: show_import_summary "$import_plan_json"
+
+  local import_plan="$1"
+ 
+  local summary="The following mandatory actions will be performed:\n\n"
+ 
+  # Non-optional config entries
+  local mandatory_config_descs
+  mandatory_config_descs=$(jq -r '[.config_entries[] | select(.optional != true) | .description] | .[]' <<< "$import_plan")
+  if [[ -n "$mandatory_config_descs" ]]; then
+    summary+="Configuration files to import:\n"
+    while IFS= read -r desc; do
+      summary+="  - $desc\n"
+    done <<< "$mandatory_config_descs"
+    summary+="\n"
+  fi
+ 
+  # Non-optional data entries
+  local mandatory_data
+  mandatory_data=$(jq -c '[.data_entries[] | select(.optional != true)] | .[]' <<< "$import_plan")
+  if [[ -n "$mandatory_data" ]]; then
+    summary+="Data to import:\n"
+    while IFS= read -r data_entry; do
+      local desc method
+      desc=$(jq -r '.description' <<< "$data_entry")
+      method=$(jq -r '.resolved_method' <<< "$data_entry")
+      summary+="  - $desc ($method)\n"
+    done <<< "$mandatory_data"
+    summary+="\n"
+  fi
+ 
+  # Preset cleanup
+  local component
+  component=$(jq -r '.component' <<< "$import_plan")
+  summary+="Presets for $component will be set to their default (disabled) state.\n"
+ 
+  configurator_generic_question_dialog "RetroDECK Import - Confirm" "$summary\nProceed with import?" 
+  return $?
+}
+
+backup_config() {
+  # Create a timestamped backup of an existing config file.
+  # USAGE: backup_config "$filepath"
+
+  local filepath="$1"
+  if [[ ! -f "$filepath" ]]; then
+    log d "No existing file to back up at $filepath"
+    return 0
+  fi
+
+  local timestamp
+  timestamp=$(date +%Y%m%d_%H%M%S)
+  local backup_path="${filepath}.rd_backup_${timestamp}"
+  cp -a "$filepath" "$backup_path"
+  log i "Backed up $filepath -> $backup_path"
+  echo "$backup_path"
+  return 0
+}
+
+import_data_entries() {
+  # Process all data import entries from the import plan
+  # USAGE: import_data_entries "$import_plan_json"
+
+  local import_plan="$1"
+  local data_entries
+  data_entries=$(jq -c '.data_entries[]' <<< "$import_plan")
+ 
+  if [[ -z "$data_entries" ]]; then
+    log d "No data entries to import"
+    return 0
+  fi
+ 
+  while IFS= read -r entry; do
+    local description source dest method
+    description=$(jq -r '.description' <<< "$entry")
+    source=$(jq -r '.resolved_source' <<< "$entry")
+    dest=$(jq -r '.resolved_dest' <<< "$entry")
+    method=$(jq -r '.resolved_method' <<< "$entry")
+ 
+    log i "Importing data: $description ($method)"
+ 
+    if [[ ! -e "$source" ]]; then
+      log e "Source path does not exist: $source"
+      return 1
+    fi
+ 
+    if [[ "$method" == "copy" ]]; then
+      create_dir "$dest"
+      if [[ -d "$source" ]]; then
+        rsync -a "${source%/}/" "${dest%/}/"
+      else
+        rsync -a "$source" "$dest"
+      fi
+      if [[ $? -ne 0 ]]; then
+        log e "Failed to copy data from $source to $dest"
+        return 1
+      fi
+      log i "Copied $source -> $dest"
+ 
+    elif [[ "$method" == "symlink" ]]; then
+      local real_data_at
+      real_data_at=$(jq -r '.real_data_at' <<< "$entry")
+ 
+      if [[ "$real_data_at" == "source" ]]; then
+        # Real data stays at source, symlink at dest
+        dir_prep "$source" "$dest"
+        import_rollback_symlinks+=("$dest")
+      else
+        # Real data moves into dest, symlink at source
+        dir_prep "$dest" "$source"
+        import_rollback_symlinks+=("$source")
+      fi
+ 
+      if [[ $? -ne 0 ]]; then
+        log e "Failed to create symlink for $description"
+        return 1
+      fi
+    fi
+  done <<< "$data_entries"
+ 
+  return 0
+}
+
+import_config_entries() {
+  # Process all config import entries: backup existing, copy source to dest, run actions
+  # USAGE: import_config_entries "$import_plan_json"
+
+  local import_plan="$1"
+  local component
+  component=$(jq -r '.component' <<< "$import_plan")
+  local config_entries
+  config_entries=$(jq -c '.config_entries[]' <<< "$import_plan")
+ 
+  if [[ -z "$config_entries" ]]; then
+    log d "No config entries to import"
+    return 0
+  fi
+ 
+  while IFS= read -r entry; do
+    local description source dest
+    description=$(jq -r '.description' <<< "$entry")
+    source=$(jq -r '.resolved_source' <<< "$entry")
+    dest=$(jq -r '.resolved_dest' <<< "$entry")
+ 
+    log i "Importing config: $description"
+ 
+    if [[ ! -f "$source" ]]; then
+      log e "Source config file does not exist: $source"
+      return 1
+    fi
+ 
+    # Backup existing config if present
+    local backup_path
+    backup_path=$(backup_config "$dest")
+    if [[ -n "$backup_path" ]]; then
+      import_rollback_config_backups+=("${dest}|${backup_path}")
+    fi
+ 
+    # Copy source config to dest
+    create_dir "$(dirname "$dest")"
+    cp -a "$source" "$dest"
+    if [[ $? -ne 0 ]]; then
+      log e "Failed to copy config from $source to $dest"
+      return 1
+    fi
+    log i "Copied config $source -> $dest"
+ 
+    # Apply actions
+    while IFS= read -r action; do
+      local action_type setting value section
+      action_type=$(jq -r '.type // "set_setting_value"' <<< "$action")
+      setting=$(jq -r '.setting' <<< "$action")
+      value=$(jq -r '.value' <<< "$action")
+      section=$(jq -r '.section // empty' <<< "$action")
+ 
+      # Resolve any variables in the value
+      value=$(envsubst <<< "$value")
+ 
+      case "$action_type" in
+        set_setting_value)
+          log d "Setting: $setting = $value (section: ${section:-none})"
+          set_setting_value "$dest" "$setting" "$value" "$component" "$section"
+          if [[ $? -ne 0 ]]; then
+            log e "Failed to set $setting in $dest"
+            return 1
+          fi
+          ;;
+        *)
+          log w "Unknown action type: $action_type, skipping"
+          ;;
+      esac
+    done < <(jq -c '(.actions // [])[]' <<< "$entry")
+  done <<< "$config_entries"
+ 
+  return 0
+}
+
+cleanup_component_presets() {
+  # Set all presets for a given component to their disabled state
+  # USAGE: cleanup_component_presets "$component"
+
+  local component="$1"
+ 
+  local -a preset_names
+  mapfile -t preset_names < <(jq -r '.presets | keys[]' "$rd_conf" 2>/dev/null)
+ 
+  if [[ ${#preset_names[@]} -eq 0 ]]; then
+    log d "No presets found in core config"
+    return 0
+  fi
+ 
+  local preset
+  for preset in "${preset_names[@]}"; do
+    local current_value
+    current_value=$(jq -r --arg preset "$preset" --arg comp "$component" \
+      '.presets[$preset] | to_entries[] | select(.key == $comp) | .value // empty' \
+      "$rd_conf" 2>/dev/null)
+ 
+    if [[ -z "$current_value" ]]; then
+      continue
+    fi
+ 
+    local disabled_state
+    disabled_state=$(jq -r --arg comp "$component" --arg preset "$preset" \
+      '.[] | .manifest | select(has($comp)) | .[$comp] |
+       .compatible_presets[$preset][0] // empty' \
+      "$component_manifest_cache_file")
+ 
+    if [[ -z "$disabled_state" ]]; then
+      log w "Could not determine disabled state for preset $preset on component $component"
+      continue
+    fi
+ 
+    if [[ "$current_value" == "$disabled_state" ]]; then
+      log d "Preset $preset for $component is already in disabled state"
+      continue
+    fi
+ 
+    # Store old value for rollback
+    import_rollback_preset_changes+=("${rd_conf}|presets.${preset}.${component}|${current_value}|")
+ 
+    log i "Setting preset $preset for $component to disabled state: $disabled_state"
+    set_setting_value "$rd_conf" "presets.${preset}.${component}" "$disabled_state" "retrodeck"
+  done
+ 
+  return 0
+}
