@@ -664,3 +664,242 @@ cleanup_component_presets() {
  
   return 0
 }
+
+run_import() {
+  # Main entry point for the source import process
+  # USAGE: run_import
+
+  reset_rollback_state
+ 
+  log i "Discovering import sources from manifests"
+  local sources_json
+  sources_json=$(jq -r '
+    [
+      .[] | .manifest | to_entries[] |
+      select(.value | type == "object" and has("import_options")) |
+      .key as $component |
+      .value.import_options | to_entries[] |
+      {
+        project_key: .key,
+        component: $component,
+        description: (.value.description // .key),
+        default_root: .value.default_root
+      }
+    ]
+  ' "$component_manifest_cache_file")
+ 
+  # Validation and source selection
+  local selected_source
+  selected_source=$(select_import_source "$sources_json")
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+ 
+  local source_key component description resolved_root
+  source_key=$(jq -r '.source_key' <<< "$selected_project")
+  component=$(jq -r '.component' <<< "$selected_project")
+  description=$(jq -r '.description' <<< "$selected_project")
+  resolved_root=$(jq -r '.resolved_root' <<< "$selected_project")
+ 
+  log i "Selected import source: $description ($source_key) for component $component"
+ 
+  # Root resolution
+  resolved_root=$(resolve_import_root "$resolved_root" "$description")
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+  log i "Resolved import root: $resolved_root"
+ 
+  # Fetch the full source definition from the manifest
+  local source_def
+  source_def=$(get_import_source "$component" "$source_key")
+  if [[ -z "$source_def" ]]; then
+    log e "Could not retrieve import definition for $source_key from $component manifest"
+    return 1
+  fi
+ 
+  # Determine sub-roots
+  local config_root data_root
+  config_root=$(jq -r '.config.root // empty' <<< "$source_def")
+  data_root=$(jq -r '.data.root // empty' <<< "$source_def")
+  if [[ -n "$config_root" ]]; then
+    config_root=$(envsubst <<< "$config_root")
+  fi
+  if [[ -n "$data_root" ]]; then
+    data_root=$(envsubst <<< "$data_root")
+  fi
+ 
+  # Build a unified entry list with resolved paths and type annotations
+  local all_entries
+  all_entries=$(jq '
+    [
+      (.config.entries // [] | to_entries[] | .value + {
+        entry_type: "config",
+        entry: ("c" + (.key | tostring))
+      }),
+      (.data.entries // [] | to_entries[] | .value + {
+        entry_type: "data",
+        entry: ("d" + (.key | tostring))
+      })
+    ]
+  ' <<< "$source_def")
+ 
+  # Resolve source and dest paths for all entries
+  local -a resolved_entries=()
+  while IFS= read -r entry; do
+    local entry_type source dest sub_root resolved_source resolved_dest
+    entry_type=$(jq -r '.entry_type' <<< "$entry")
+    source=$(jq -r '.source' <<< "$entry")
+    dest=$(jq -r '.dest' <<< "$entry")
+ 
+    if [[ "$entry_type" == "config" ]]; then
+      sub_root="$config_root"
+    else
+      sub_root="$data_root"
+    fi
+ 
+    resolved_source=$(resolve_entry_source "$source" "$sub_root" "$resolved_root")
+    resolved_dest=$(envsubst <<< "$dest")
+ 
+    resolved_entries+=("$(echo "$entry" | jq -c --arg src "$resolved_source" --arg dst "$resolved_dest" \
+      '. + {resolved_source: $src, resolved_dest: $dst}')")
+  done < <(jq -c '.[]' <<< "$all_entries")
+ 
+  # Reassemble into a JSON array
+  all_entries=$(printf '%s\n' "${resolved_entries[@]}" | jq -s '.')
+ 
+  # Optional entry selection
+  local selected_optional_entries
+  selected_optional_entries=$(select_optional_entries "$all_entries")
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+ 
+  # Filter to only selected entries
+  local selected_entries
+  selected_entries=$(echo "$all_entries" | jq --argjson entries "$selected_optional_entries" \
+    '[to_entries[] | select(.key as $key | $entries | index($key)) | .value]')
+ 
+  # Split into config and data entries
+  local config_entries data_entries
+  config_entries=$(jq '[.[] | select(.entry_type == "config")]' <<< "$selected_entries")
+  data_entries=$(jq '[.[] | select(.entry_type == "data")]' <<< "$selected_entries")
+ 
+  # Method selection for optional data entries
+  local optional_data
+  optional_data=$(jq '[.[] | select(.optional == true)]' <<< "$data_entries")
+  optional_data=$(select_data_methods "$optional_data")
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+ 
+  # Apply resolved methods: non-optional entries use default_method, optional entries get their user-selected method merged
+  data_entries=$(jq --argjson opts "$optional_data" '
+    ($opts | map({(.entry): .resolved_method}) | add // {}) as $method_map |
+    [.[] | .resolved_method = (
+      if .optional != true then .default_method
+      else ($method_map[.entry] // .default_method) end
+    )]
+  ' <<< "$data_entries")
+ 
+  # Symlink direction selection
+  local symlink_entries
+  symlink_entries=$(jq '[.[] | select(.resolved_method == "symlink")]' <<< "$data_entries")
+  symlink_entries=$(select_symlink_directions "$symlink_entries")
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+ 
+  # Merge symlink directions back into data_entries via a single jq pass
+  data_entries=$(jq --argjson syms "$symlink_entries" '
+    ($syms | map({(.idx): .real_data_at}) | add // {}) as $dir_map |
+    [.[] | if .resolved_method == "symlink" then .real_data_at = ($dir_map[.idx] // "source") else . end]
+  ' <<< "$data_entries")
+ 
+  # Build the full import plan
+  local import_plan
+  import_plan=$(jq -nc \
+    --arg key "$source_key" \
+    --arg comp "$component" \
+    --arg desc "$description" \
+    --arg root "$resolved_root" \
+    --argjson config "$config_entries" \
+    --argjson data "$data_entries" \
+    '{
+      source_key: $key,
+      component: $comp,
+      description: $desc,
+      resolved_root: $root,
+      config_entries: $config,
+      data_entries: $data
+    }')
+ 
+  # Non-optional summary and confirmation
+  show_import_summary "$import_plan"
+  if [[ $? -ne 0 ]]; then
+    log i "User cancelled import at confirmation"
+    return 1
+  fi
+ 
+  # Space verification for copy operations and inbound symlinks
+  log i "Verifying available disk space"
+  local copy_plan
+  copy_plan=$(jq '
+    [
+      (.data_entries[] | select(
+        .resolved_method == "copy" or
+        (.resolved_method == "symlink" and .real_data_at == "dest")
+      ) | {source: .resolved_source, dest: .resolved_dest})
+    ]
+  ' <<< "$import_plan")
+ 
+  verify_import_space "$copy_plan"
+  if [[ $? -ne 0 ]]; then
+    log e "Insufficient disk space for import"
+    rd_zenity --error --title="RetroDECK Import" \
+      --text="There is not enough free disk space to complete this import.\nPlease free up space and try again." \
+      --width=400
+    return 1
+  fi
+ 
+  # Import data entries
+  log i "Importing data entries"
+  import_data_entries "$import_plan"
+  if [[ $? -ne 0 ]]; then
+    log e "Data import failed, initiating rollback"
+    rollback_import
+    rd_zenity --error --title="RetroDECK Import" \
+      --text="Data import failed. Changes have been rolled back where possible.\nCheck the log for details." \
+      --width=400
+    return 1
+  fi
+ 
+  # Import config entries and apply actions
+  log i "Importing config entries"
+  import_config_entries "$import_plan"
+  if [[ $? -ne 0 ]]; then
+    log e "Config import failed, initiating rollback"
+    rollback_import
+    rd_zenity --error --title="RetroDECK Import" \
+      --text="Config import failed. Changes have been rolled back where possible.\nCheck the log for details." \
+      --width=400
+    return 1
+  fi
+ 
+  # Preset cleanup
+  log i "Cleaning up component presets"
+  cleanup_component_presets "$component"
+  if [[ $? -ne 0 ]]; then
+    log e "Preset cleanup failed, initiating rollback"
+    rollback_import
+    rd_zenity --error --title="RetroDECK Import" \
+      --text="Preset cleanup failed. Changes have been rolled back where possible.\nCheck the log for details." \
+      --width=400
+    return 1
+  fi
+ 
+  log i "Import of $description into $component completed successfully"
+  configurator_generic_dialog "RetroDECK Import" "Import of $description completed successfully."
+
+  return 0
+}
