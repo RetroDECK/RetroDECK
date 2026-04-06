@@ -163,7 +163,7 @@ source_component_functions() {
 
 prepare_component() {
   # Perform one of several actions on one or more components.
-  # Actions include "reset" (initialize component), "postmove" (update paths after folder move), and "startup" (run startup actions).
+  # Actions include "reset" (initialize component), "postmove" (update paths after folder move), "startup" (run application startup actions) and "shutdown" (run application shutdown actions).
   # A component can be called by name or "all" to perform the action on all components starting with the core framework.
   # The option "all-installed" can also be used, where all components *except* the core framework will be acted upon.
   # USAGE: prepare_component "$action" "$component"
