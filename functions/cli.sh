@@ -11,11 +11,12 @@ show_cli_help() {
   echo ""
   echo "Arguments:"
 
-  jq -r '
+  jq -r --arg dev "$developer_options" '
     [.[] | .manifest | to_entries[] | .value |
      select(.cli_commands != null) |
      .cli_commands | to_entries[] |
      select(.value.hidden != true) |
+     select(.value.dev_tool != true or $dev == "true") |
      {
        flag: .value.flag,
        description: .value.description,
