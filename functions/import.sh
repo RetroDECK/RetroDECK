@@ -812,8 +812,8 @@ run_import() {
  
   # Merge symlink directions back into data_entries via a single jq pass
   data_entries=$(jq --argjson syms "$symlink_entries" '
-    ($syms | map({(.idx): .real_data_at}) | add // {}) as $dir_map |
-    [.[] | if .resolved_method == "symlink" then .real_data_at = ($dir_map[.idx] // "source") else . end]
+    ($syms | map({(.entry): .real_data_at}) | add // {}) as $dir_map |
+    [.[] | if .resolved_method == "symlink" then .real_data_at = ($dir_map[.entry] // "source") else . end]
   ' <<< "$data_entries")
  
   # Build the full import plan
