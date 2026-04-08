@@ -1193,7 +1193,9 @@ api_do_compress_games() {
     game_basename=$(basename "$game_path")
  
     # Send progress update to client
-    api_send_progress "$current" "$total" "Compressing $game_basename into $compression_format format"
+    if [[ $(get_component_option "retrodeck-api" "rd_api_enabled") == "true" ]]; then
+      api_send_progress::retrodeck-api "$current" "$total" "Compressing $game_basename into $compression_format format"
+    fi
  
     # Call the core compression function
     if compress_game "$compression_format" "$game_path" "$post_compression_cleanup"; then
