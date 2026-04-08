@@ -190,9 +190,9 @@ prepare_component() {
   if [[ "$component" == "all" || "$component" == "all-installed" ]]; then
     if [[ "$component" == "all" ]]; then
       # Framework always runs first
-      local framework_handler="_prepare_component::framework"
+      local framework_handler="_prepare_component::retrodeck"
       if declare -F "$framework_handler" > /dev/null; then
-        log d "Running $action prepare handler for framework"
+        log d "Running $action prepare handler for RetroDECK"
         "$framework_handler" "$action"
       fi
     fi
