@@ -12,7 +12,7 @@ show_cli_help() {
   echo "Arguments:"
 
   jq -r --arg dev "$developer_options" '
-    [.[] | .manifest | to_entries[] | .value |
+    [.[] | .manifest[] |
      select(.cli_commands != null) |
      .cli_commands | to_entries[] |
      select(.value.hidden != true) |
@@ -71,7 +71,7 @@ parse_cli_args() {
     [.[] | .manifest | to_entries[] |
      .key as $component |
      .value | select(.cli_commands != null) |
-     .cli_commands | to_entries[] | .value |
+     .cli_commands[] |
      [.flag, .handler, $component]
     ] | .[] | @tsv
   ' "$component_manifest_cache_file")
