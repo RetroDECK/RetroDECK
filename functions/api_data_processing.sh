@@ -342,7 +342,7 @@ api_get_component_menu_entries() {
     reduce (.[] | .manifest | .. | objects | select(has("configurator_menus")) | .configurator_menus | to_entries[]) as $entry (
       {};
       if ($menu == "all" or $entry.key == $menu) then
-        .[$entry.key] = ((.[$entry.key] // []) + [$entry.value | to_entries[].value])
+        .[$entry.key] = ((.[$entry.key] // []) + [$entry.value[]])
       else . end
     )
   ' "$component_manifest_cache_file"
