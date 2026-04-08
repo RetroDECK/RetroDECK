@@ -261,3 +261,36 @@ build_zenity_bios_systems_menu_array() {
     (.component | join(", "))
   ' <<< "$bios_systems")
 }
+
+build_zenity_component_paths_menu_array() {
+  # Build a Bash array of component path entries for use in a Zenity dialog.
+  # Each entry consists of three consecutive elements: "<Component Name>: <path_key>", description, current_path
+  # The first row is always rd_home_path (the root of all RetroDECK user data), which is read from the core config's "paths" block.
+  # Remaining entries are collected from the component_paths block of every component manifest and joined against the core config.
+  # The "retrodeck" component's current paths come from "paths"; all others come from "component_paths.<component_id>".
+  # Entries whose path key is not present in the core config are skipped.
+  # The "retrodeck" component is listed first; all other components follow in alphabetical order.
+  # USAGE: build_zenity_component_paths_menu_array "$dest_array_name"
+
+  local -n dest_array="$1"
+  dest_array=()
+  dest_array+=("RetroDECK: rd_home_path" "Root of all RetroDECK user data" "$rd_home_path")
+
+  mapfile -t -O "${#dest_array[@]}" dest_array < <(jq -r --slurpfile rd_conf "$rd_conf" '
+    ($rd_conf[0].paths // {}) as $paths |
+    ($rd_conf[0].component_paths // {}) as $cpaths |
+    [ .[] | .manifest | to_entries[]
+      | select(.value.component_paths)
+      | {id: .key, name: .value.name, paths: .value.component_paths}
+    ]
+    | sort_by(if .id == "retrodeck" then "" else "1_" + .id end)
+    | .[]
+    | . as $comp
+    | (if $comp.id == "retrodeck" then $paths else ($cpaths[$comp.id] // {}) end) as $current
+    | $comp.paths | to_entries[]
+    | select($current[.key] != null)
+    | "\($comp.name): \(.key)",
+      (.value.description // ""),
+      $current[.key]
+  ' "$component_manifest_cache_file")
+}
