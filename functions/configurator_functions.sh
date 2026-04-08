@@ -345,8 +345,22 @@ configurator_move_folder_dialog() {
   # USAGE: configurator_move_folder_dialog "folder_variable_name"
   log i "Showing a configurator_move_folder_dialog for $1"
   local rd_dir_name="$1" # The folder variable name from retrodeck.json
-  local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")"
-  local dest
+  local dir_to_move dest
+
+  if jq -e --arg key "$rd_dir_name" '.paths | has($key)' "$rd_conf" > /dev/null 2>&1; then
+    config_section="paths"
+    dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")"
+  else
+    local owning_component
+    owning_component=$(jq -r --arg key "$rd_dir_name" '
+      [.component_paths // {} | to_entries[] | select(.value | has($key)) | .key] | first // empty
+    ' "$rd_conf")
+    if [[ -n "$owning_component" ]]; then
+      config_section="component_paths.$owning_component"
+      dir_to_move=$(jq -r --arg comp "$owning_component" --arg key "$rd_dir_name" \
+        '.component_paths[$comp][$key]' "$rd_conf")
+    fi
+  fi
 
   if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.json
     choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename "$dir_to_move") folder.")
@@ -401,7 +415,7 @@ configurator_move_folder_dialog() {
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     
     if dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location"); then
-      set_setting_value "$rd_conf" "$rd_dir_name" "$dir_to_move" "retrodeck" "paths"
+      set_setting_value "$rd_conf" "$rd_dir_name" "$dir_to_move" "retrodeck" "$config_section"
       source_component_functions
       prepare_component "postmove" "all"
       configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK <span foreground='$purple'><b>$(basename "$dir_to_move")</b></span> folder now configured at\n<span foreground='$purple'><b>$dir_to_move</b></span>."
