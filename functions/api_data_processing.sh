@@ -900,7 +900,26 @@ api_do_cheevos_login() {
 api_do_move_retrodeck_directory() {
   local rd_dir_name="$1" # The folder variable name from retrodeck.json
   local dest="$2"
-  local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")" # The path of that folder variable
+  local dir_to_move=""
+  local config_section=""
+
+  # Determine which section of the core config owns this path key.
+  # Check the .paths block first, then scan .component_paths.* sub-objects.
+  if jq -e --arg key "$rd_dir_name" '.paths | has($key)' "$rd_conf" > /dev/null 2>&1; then
+    config_section="paths"
+    dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")"
+  else
+    local owning_component
+    owning_component=$(jq -r --arg key "$rd_dir_name" '
+      [.component_paths // {} | to_entries[] | select(.value | has($key)) | .key] | first // empty
+    ' "$rd_conf")
+    if [[ -n "$owning_component" ]]; then
+      config_section="component_paths.$owning_component"
+      dir_to_move=$(jq -r --arg comp "$owning_component" --arg key "$rd_dir_name" \
+        '.component_paths[$comp][$key]' "$rd_conf")
+    fi
+  fi
+
   local dirname_to_move="$(basename "$dir_to_move")"
   local dest_root=""
 
@@ -949,7 +968,7 @@ api_do_move_retrodeck_directory() {
           fi
           move "$dir_to_move" "$dest_root/$dirname_to_move"
           if [[ -d "$dest_root/$dirname_to_move" ]]; then # If the move succeeded
-            set_setting_value "$rd_conf" "$rd_dir_name" "$dest_root/$dirname_to_move" "retrodeck" "paths" # Set the new path for that folder variable in retrodeck.json
+            set_setting_value "$rd_conf" "$rd_dir_name" "$dest_root/$dirname_to_move" "retrodeck" "$config_section" # Set the new path for that folder variable in retrodeck.json
 
             # Multi-user: propagate shared path changes to all other users
             if [[ "$rd_dir_name" == "rd_home_path" ]]; then
