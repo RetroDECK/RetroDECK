@@ -327,6 +327,19 @@ configurator_developer_dialog() {
   fi
 }
 
+configurator_move_folder_choice_dialog() {
+  build_zenity_component_paths_menu_array "paths_to_choose"
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Move Folder" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column="Folder" --column="Description" --column="Current Location" --column="path_key" --print-column=4 --hide-column=4 \
+    "${paths_to_choose[@]}")
+
+  if [[ -n "$choice" ]]l then
+    configurator_move_folder_dialog "$choice"
+  fi
+}
+
 configurator_move_folder_dialog() {
   # This dialog will take a folder variable name from retrodeck.json and move it to a new location. The variable will be updated in retrodeck.json as well as any emulator configs where it occurs.
   # USAGE: configurator_move_folder_dialog "folder_variable_name"
@@ -1342,18 +1355,5 @@ configurator_toggle_retroengine_event_scripts_dialog() {
       --title "RetroDECK Configurator - RetroENGINE Event Script Processing" \
       --text="RetroENGINE event script processing is now <span foreground='$purple'><b>Enabled</b></span>."
     fi
-  fi
-}
-
-configurator_move_folder_choice_dialog() {
-  build_zenity_component_paths_menu_array "paths_to_choose"
-
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Move Folder" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --column="Folder" --column="Description" --column="Current Location" --column="path_key" --print-column=4 --hide-column=4 \
-    "${paths_to_choose[@]}")
-
-  if [[ -n "$choice" ]]l then
-    configurator_move_folder_dialog "$choice"
   fi
 }
