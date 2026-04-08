@@ -105,7 +105,7 @@ multi_user_resolve_identity() {
   # USAGE: multi_user_resolve_identity "$resolver_type"
 
   local resolver_type="$1"
-  local resolver_func="multi_user_identity_handler::${resolver_type}"
+  local resolver_func="_multi_user_identity_handler::${resolver_type}"
 
   if ! declare -f "$resolver_func" > /dev/null 2>&1; then
     log w "No resolver function found for type: $resolver_type"
@@ -433,7 +433,7 @@ multi_user_setup_identity() {
   fi
 
   # Route to the appropriate setup handler
-  local handler_func="multi_user_identity_handler::${identity_source}"
+  local handler_func="_multi_user_identity_handler::${identity_source}"
 
   if ! declare -f "$handler_func" > /dev/null 2>&1; then
     log e "No identity setup function found for type: $identity_source"
