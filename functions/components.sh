@@ -78,16 +78,14 @@ get_helper_files() {
   if [[ "$component" == "all" ]]; then
     jq '[.[] | .component_path as $component_path |
        .manifest | .. | objects | select(has("helper_files")) |
-       .helper_files | to_entries[].value |
-       . + {source_path: ($component_path + "/helper_files")}]
+       .helper_files[] | . + {source_path: ($component_path + "/helper_files")}]
      ' "$component_manifest_cache_file"
   else
     jq --arg component "$component" \
     '[.[] | select(.manifest | has($component)) |
        .component_path as $component_path |
        .manifest[$component] | select(has("helper_files")) |
-       .helper_files | to_entries[].value |
-       . + {source_path: ($component_path + "/helper_files")}]
+       .helper_files[] | . + {source_path: ($component_path + "/helper_files")}]
     ' "$component_manifest_cache_file"
   fi
 }
