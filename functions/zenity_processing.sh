@@ -291,6 +291,7 @@ build_zenity_component_paths_menu_array() {
     | select($current[.key] != null)
     | "\($comp.name): \(.key)",
       (.value.description // ""),
-      $current[.key]
+      $current[.key],
+      .key
   ' "$component_manifest_cache_file")
 }
