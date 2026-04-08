@@ -335,7 +335,7 @@ configurator_move_folder_choice_dialog() {
     --column="Folder" --column="Description" --column="Current Location" --column="path_key" --print-column=4 --hide-column=4 \
     "${paths_to_choose[@]}")
 
-  if [[ -n "$choice" ]]l then
+  if [[ -n "$choice" ]]; then
     configurator_move_folder_dialog "$choice"
   fi
 }
