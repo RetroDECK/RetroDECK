@@ -69,13 +69,13 @@ build_zenity_preset_menu_array() {
   mapfile -t dest_array < <(jq -r --arg preset "$preset_name" \
     --slurpfile manifests "$component_manifest_cache_file" '
     .[$preset] // [] | .[] |
-    .system_name as $sn |
-    .parent_component as $parent |
-    (if $parent != "" then $parent else $sn end) as $comp |
+    .system_name as $name |
+    (.parent_component // "") as $parent |
+    (if $parent != "" then $parent else $name end) as $comp |
     # Find the disabled state from the manifest cache
     ([$manifests[0][] | .manifest | select(has($comp)) | .[$comp]] | first) as $manifest |
     (if $parent != "" then
-      $manifest.compatible_presets[$sn][$preset][0] // ""
+      $manifest.compatible_presets[$name][$preset][0] // ""
     else
       $manifest.compatible_presets[$preset][0] // ""
     end) as $disabled_state |
@@ -87,12 +87,12 @@ build_zenity_preset_menu_array() {
      ) | join(" "))
      end) as $display_status |
     # Resolve emulated system friendly name
-    (.emulated_system_friendly_name | if type == "array" then join(", ") else . end // "") as $emu_name |
+    ((.emulated_system_friendly_name // "") | if type == "array" then join(", ") else . end) as $emu_name |
     $display_status,
     (.system_friendly_name // ""),
     $emu_name,
     (.description // ""),
-    $sn
+    $name
   ' <<< "$current_preset_states")
 }
 
