@@ -274,7 +274,7 @@ build_zenity_component_paths_menu_array() {
 
   local -n dest_array="$1"
   dest_array=()
-  dest_array+=("RetroDECK: rd_home_path" "Root of all RetroDECK user data" "$rd_home_path")
+  dest_array+=("RetroDECK: rd_home_path" "Root of all RetroDECK user data" "$rd_home_path" "rd_home_path")
 
   mapfile -t -O "${#dest_array[@]}" dest_array < <(jq -r --slurpfile rd_conf "$rd_conf" '
     ($rd_conf[0].paths // {}) as $paths |
