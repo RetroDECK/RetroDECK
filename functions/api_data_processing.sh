@@ -915,8 +915,7 @@ api_do_move_retrodeck_directory() {
     ' "$rd_conf")
     if [[ -n "$owning_component" ]]; then
       config_section="component_paths.$owning_component"
-      dir_to_move=$(jq -r --arg comp "$owning_component" --arg key "$rd_dir_name" \
-        '.component_paths[$comp][$key]' "$rd_conf")
+      dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "$config_section")"
     fi
   fi
 
