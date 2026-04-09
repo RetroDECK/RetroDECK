@@ -301,7 +301,7 @@ prepare_component() {
 }
 
 get_component_path() {
-  # Return the installation path for a given component, resolving internal vs external automatically.
+  # Return the installation path for a given component
   # USAGE: get_component_path "$component_name"
 
   local component="$1"
@@ -365,7 +365,7 @@ get_installed_component_version() {
 }
 
 set_installed_component_version() {
-  # Record a component's current version in the config file after successful update.
+  # Record a component's current version in the config file
   # USAGE: set_installed_component_version "$component_name" "$version"
 
   local component="$1"
@@ -383,7 +383,7 @@ set_installed_component_version() {
 }
 
 check_component_compatibility() {
-  # Check if a component is compatible with the current core API version.
+  # Check if a component is compatible with the current core framework version.
   # USAGE: check_component_compatibility "$component_name"
 
   local component="$1"
@@ -408,7 +408,6 @@ check_component_compatibility() {
 
 validate_component_archive() {
   # Validate that a component archive contains the required files and a well-formed manifest.
-  # Returns 0 if valid, 1 if not. Logs specific issues found.
   # USAGE: validate_component_archive "$archive_path"
 
   local archive="$1"
@@ -728,7 +727,6 @@ check_component_for_update() {
   # Check if an external component has an update available.
   # Supports GitHub, GitLab, and Codeberg/Gitea release checking via update_url in the manifest, or a custom check function.
   # The update_url can be either a direct API URL or a repository URL (platform will be auto-detected).
-  # Returns 0 if update available, 1 if not or unable to check.
   # Echoes the download URL if an update is available.
   # USAGE: check_component_for_update "$component_name"
 
@@ -1219,7 +1217,7 @@ init_all_component_options() {
 reset_component_options() {
   # Reset a component's options in the config file to their manifest defaults.
   # If "all" is specified, resets options for all components that have them.
-  # USAGE: reset_component_options "$component_name_or_all"
+  # USAGE: reset_component_options "<$component_name | all>"
 
   local component="${1:-all}"
   if [[ "$component" == "all" ]]; then
