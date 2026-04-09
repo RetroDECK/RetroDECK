@@ -982,7 +982,7 @@ api_do_move_retrodeck_directory() {
             fi
 
             source_component_functions
-            prepare_component "postmove" "all" # Update all the appropriate emulator path settings
+            prepare_component "postmove" "all" 1> /dev/null # Update all the appropriate emulator path settings
             log i "directory $rd_dir_name successfully moved to $dest_root/$dirname_to_move"
             echo "directory $rd_dir_name successfully moved to $dest_root/$dirname_to_move"
             return 0
