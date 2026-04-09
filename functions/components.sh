@@ -1088,7 +1088,7 @@ init_component_paths() {
     with_entries(select(.value | has("path"))) | with_entries(.value = .value.path)
   ' | envsubst)
 
-  if [[ -z "$resolved_paths" || "$resolved_paths" == "null" ]]; then
+  if [[ -z "$resolved_paths" || "$resolved_paths" == "null" || "$resolved_paths" == "{}" ]]; then
     log d "component_paths defined in manifest for $component_name do not have any path keys"
     return
   fi
