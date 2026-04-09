@@ -234,9 +234,11 @@ prepare_component() {
     if declare -F "$handler" > /dev/null; then
       log d "Running $action prepare handler for $component"
       "$handler" "$action"
-      if [[ "$action" == "reset" ]]; then
-        set_installed_component_version "$component" "$(get_component_version "$component")"
-        reset_component_options "$component"
+      if [[ "$action" == "reset"]]; then
+        if [[ "$component" != "retrodeck" ]]; then
+          set_installed_component_version "$component" "$(get_component_version "$component")"
+          reset_component_options "$component"
+        fi
         deploy_helper_files "$component"
       fi
     else
