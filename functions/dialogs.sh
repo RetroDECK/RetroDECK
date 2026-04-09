@@ -106,6 +106,7 @@ get_cheevos_token_dialog() {
     --text="Enter your RetroAchievements username:")
 
   if [[ -z "$cheevos_username" ]]; then
+    echo "Username not entered, cannot proceed."
     return 1
   fi
 
@@ -115,6 +116,7 @@ get_cheevos_token_dialog() {
     --text="Enter your password for $cheevos_username:")
 
   if [[ -z "$cheevos_password" ]]; then
+    echo "Password not entered, cannot proceed."
     return 1
   fi
 
