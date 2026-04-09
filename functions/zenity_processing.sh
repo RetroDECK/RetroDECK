@@ -198,7 +198,7 @@ build_zenity_find_empty_rom_folders_menu_array() {
 
   mapfile -t dest_array < <(jq -r '
     .[] |
-    "TRUE",
+    "FALSE",
     .system,
     .path
   ' <<< "$empty_folders")
