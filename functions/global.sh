@@ -134,4 +134,6 @@ source_component_functions
 build_compression_lookups
 
 # Check for pending multi-user post-move actions
-multi_user_check_pending_postmove
+if [[ "$multi_user_enabled" == "true" ]]; then
+  multi_user_check_pending_postmove
+fi
