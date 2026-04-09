@@ -432,8 +432,8 @@ validate_component_archive() {
     valid="false"
   fi
 
-  if ! grep -q 'component_launcher.sh$' <<< "$archive_contents"; then
-    log e "Archive missing required file: component_launcher.sh"
+  if ! grep -q 'component_functions.sh$' <<< "$archive_contents"; then
+    log e "Archive missing required file: component_functions.sh"
     valid="false"
   fi
 
@@ -510,7 +510,7 @@ validate_component_archive() {
 
   # Lint shell scripts
   local lint_failed=false
-  for script_name in component_launcher.sh component_functions.sh; do
+  for script_name in component_functions.sh component_functions.sh; do
     tar -xzf "$archive" -C "$tmp_dir" --wildcards "*/$script_name" 2>/dev/null \
       || tar -xzf "$archive" -C "$tmp_dir" "$script_name" 2>/dev/null
     local script_file
