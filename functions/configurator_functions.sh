@@ -247,16 +247,16 @@ configurator_reset_dialog() {
 
     # Resolve friendly names from manifest cache
     local pretty_names
-    pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R \
-    '
-      . as $component |
-      [.[] | .manifest | select(has($component)) | .[$component].name // $component]
-    ' "$component_manifest_cache_file")
+    pretty_names=$(printf '%s\n' "${choices[@]}" | jq -R --slurpfile cache "$component_manifest_cache_file" -r '
+      . as $component
+      | ($cache[0] | map(.manifest) | add) as $manifests
+      | $manifests[$component].name // $component
+    ')
 
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Reset Components" \
-      --text="You selected the following components to be reset:\n\n$(echo "$pretty_names" | jq -r '.')\n\nDo you want to continue?"
+      --text="You selected the following components to be reset:\n\n$pretty_names\n\nDo you want to continue?"
     if [[ $? -eq 0 ]]; then
       local progress_pipe
       progress_pipe=$(mktemp -u)
