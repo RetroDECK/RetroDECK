@@ -783,12 +783,14 @@ set_build_options() {
   # If this is a pre-production build
   if [[ ! "$hard_version" =~ ^[0-9] && ! "$hard_version" =~ ^(epicure) ]]; then
     log d "Pre-production version $hard_version detected, setting debugging values in retrodeck.json"
+    set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options"
     set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
     set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
     set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
   else
     log d "Production version $hard_version detected, resetting debugging values in retrodeck.json"
+    set_setting_value "$rd_conf" "power_user_warning" "true" retrodeck "options"
     set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
     set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
     set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
