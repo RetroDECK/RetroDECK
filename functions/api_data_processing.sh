@@ -1043,7 +1043,7 @@ api_do_backup_retrodeck_userdata() {
       fi
     done < <(
       jq -r --arg type "$backup_type" '
-        [to_entries[] |
+        [.[] | .manifest | to_entries[] |
          .value.backup_data // {} | .[$type] // [] | .[] |
          [.path, (.follow_symlinks // false | tostring)]] | unique[] | @tsv
       ' "$component_manifest_cache_file"

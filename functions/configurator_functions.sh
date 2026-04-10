@@ -1019,7 +1019,7 @@ configurator_retrodeck_backup_dialog() {
         fi
       done < <(
         jq -r '
-          [to_entries[] |
+          [.[] | .manifest | to_entries[] |
           .value.name as $name |
           (.value.backup_data // {} | (.core // [])[], (.complete // [])[]) |
           [$name, .path, (.follow_symlinks // false | tostring)]] | unique[] | @tsv
