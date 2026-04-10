@@ -123,8 +123,6 @@ else
       quit_retrodeck
     fi
   fi
-
-  set_build_options
 fi
 
 # Source component functions for further use
