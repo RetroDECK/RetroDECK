@@ -101,6 +101,27 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.10.8b" date="2026-04-15">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.8b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>ICONS: Added some new icons. </li>
+                </ul>
+                <p>CHANGED:</p>
+                <ul>
+                    <li>TODO.</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Some more MD5 corrections by community contributor Abdess.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>ES-DE, MAME, RPCS3, RUFFLE, SOLARUS and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.7b" date="2026-03-24">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
             <description>
