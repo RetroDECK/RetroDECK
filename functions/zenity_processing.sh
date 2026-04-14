@@ -157,6 +157,7 @@ build_zenity_open_component_menu_array() {
     sort_by(.component_name)
     | .[]
     | select(.component_name != null and .component_name != "retrodeck")
+    | select(.capabilities // [] | contains(["open"]))
     | .component_friendly_name,
       .description,
       .path
@@ -174,6 +175,7 @@ build_zenity_reset_component_menu_array() {
     sort_by(.component_name)
     | .[]
     | select(.component_name != null and .component_name != "retrodeck")
+    | select(.capabilities // [] | contains(["reset"]))
     | "FALSE",
       .component_name,
       .component_friendly_name,
