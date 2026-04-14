@@ -1021,8 +1021,19 @@ configurator_retrodeck_backup_dialog() {
         jq -r '
           [.[] | .manifest | to_entries[] |
           .value.name as $name |
-          (.value.backup_data // {} | (.core // [])[], (.complete // [])[]) |
-          [$name, .path, (.follow_symlinks // false | tostring)]] | unique[] | @tsv
+          .value.backup_data // {} as $backup_data |
+          (($backup_data.core // []) + ($backup_data.complete // [])) | .[] |
+          {name: $name, path: .path, follow_symlinks: (.follow_symlinks // false)}
+          ]
+          | reduce .[] as $entry ({};
+              .[$entry.name + "\u0000" + $entry.path] = $entry
+            )
+          | to_entries
+          | map(.value)
+          | sort_by(.name, .path)
+          | .[]
+          | [.name, .path, (.follow_symlinks | tostring)]
+          | @tsv
         ' "$component_manifest_cache_file"
       )
 
