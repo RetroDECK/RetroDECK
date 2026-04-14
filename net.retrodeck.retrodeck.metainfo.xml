@@ -56,42 +56,42 @@
         <p>It provides a complete retro gaming environment out of the box with minimal manual configuration.</p>
         <p>By seamlessly integrating multiple components, the platform brings your entire retro game experince together in one polished and unified package.</p>
         <p>
-            **Why Choose RetroDECK?**
+            Why Choose RetroDECK?
         </p>
         <ul>
-            <li>**True All-in-One Solution:** Emulators, frameworks, engines, ports, tools, clients and the frontend are fully integrated and preconfigured.</li>
-            <li>**No System Modifications:** Enjoy a dedicated retro gaming environment without altering or replacing your existing operating system.</li>
-            <li>**Streamlined Installation:** Install and update a single application instead of multiple, directly from your software center.</li>
+            <li>True All-in-One Solution: Emulators, frameworks, engines, ports, tools, clients and the frontend are fully integrated and preconfigured.</li>
+            <li>No System Modifications: Enjoy a dedicated retro gaming environment without altering or replacing your existing operating system.</li>
+            <li>Streamlined Installation: Install and update a single application instead of multiple, directly from your software center.</li>
         </ul>
         <p>
-            **What is Included?**
+            What is Included?
         </p>
         <ul>
-            <li>**Accessible for All:** A clean, well-organized file structure designed for both newcomers and advanced users.</li>
-            <li>**Custom Launch Wrappers:** Run complex DOOM WADs and OpenBOR titles effortlessly with streamlined, dedicated formats.</li>
-            <li>**ES-DE Frontend:** A controller-friendly interface for browsing, organizing and launching your game library.</li>
-            <li>**Multi-Emulator Platforms:** Unified and built-in multi-emulation frameworks including RetroArch and MAME.</li>
-            <li>**Native Game Engines:** Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO and UZDoom.</li>
-            <li>**PortMaster Integration:** Easily install and manage community-supported Linux game ports.</li>
-            <li>**RetroDECK Configurator:** A powerful built-in multi-tool for managing component settings, presets, storage, BIOS files and more.</li>
-            <li>**RetroDECK Framework:** A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
-            <li>**RetroENGINE:** A headless game launcher tailored for power users and developers.</li>
-            <li>**Steam Input Support:** Preconfigured controller templates with radial menus and component-specific hotkeys via Steam.</li>
-            <li>**Steam Library Sync:** Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
-            <li>**Wide System Coverage:** Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more.</li>
+            <li>Accessible for All: A clean, well-organized file structure designed for both newcomers and advanced users.</li>
+            <li>Custom Launch Wrappers: Run complex DOOM WADs and OpenBOR titles effortlessly with streamlined, dedicated formats.</li>
+            <li>ES-DE Frontend: A controller-friendly interface for browsing, organizing and launching your game library.</li>
+            <li>Multi-Emulator Platforms: Unified and built-in multi-emulation frameworks including RetroArch and MAME.</li>
+            <li>Native Game Engines: Seamlessly play engine-based titles with full native support for Solarus, OpenBOR, IkemenGO and UZDoom.</li>
+            <li>PortMaster Integration: Easily install and manage community-supported Linux game ports.</li>
+            <li>RetroDECK Configurator: A powerful built-in multi-tool for managing component settings, presets, storage, BIOS files and more.</li>
+            <li>RetroDECK Framework: A unique component-based backend that isolates and layers software to ensure maximum stability and flexibility.</li>
+            <li>RetroENGINE: A headless game launcher tailored for power users and developers.</li>
+            <li>Steam Input Support: Preconfigured controller templates with radial menus and component-specific hotkeys via Steam.</li>
+            <li>Steam Library Sync: Automatically add and synchronize your favorite games with Steam using the built-in Steam ROM Manager integration.</li>
+            <li>Wide System Coverage: Enjoy broad compatibility with leading emulators such as Dolphin, PCSX2, PPSSPP, Vita3K, xemu, XRoar and many more.</li>
         </ul>
         <p>
-            **Join the RetroDECK Community**
+            Join the RetroDECK Community
         </p>
         <ul>
-            <li>**Website:** https://retrodeck.net</li>
-            <li>**RetroDECK Blog:** https://retrodeck.readthedocs.io/en/latest/blog/</li>
-            <li>**Wiki and Documentation:** https://retrodeck.readthedocs.io/</li>
-            <li>**Bluesky:** https://bsky.app/profile/retrodeck.net</li>
-            <li>**Reddit:** https://www.reddit.com/r/retrodeck</li>
-            <li>**Lemmy:** https://lemmy.zip/c/retrodeck</li>
-            <li>**Discord:** https://discord.gg/WDc5C9YWMx</li>
-            <li>**Matrix:** https://matrix.to/#/#retrodeck:matrix.org</li>
+            <li>Website: https://retrodeck.net</li>
+            <li>RetroDECK Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
+            <li>Wiki and Documentation: https://retrodeck.readthedocs.io/</li>
+            <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
+            <li>Reddit: https://www.reddit.com/r/retrodeck</li>
+            <li>Lemmy: https://lemmy.zip/c/retrodeck</li>
+            <li>Discord: https://discord.gg/WDc5C9YWMx</li>
+            <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
         </ul>
     </description>
     <branding>
@@ -101,6 +101,24 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.10.8b" date="2026-04-15">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.8b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>ICONS: Added some new icons.</li>
+                    <li>STEAM INPUT: Added test templates for the following: 8BitDo Ultimate, DualSense Edge, HORIPAD Steam, Legion GO S, ROG Ally and Xbox Elite Wireless.</li>   
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Some more MD5 corrections by community contributor Abdess.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>ES-DE, MAME, RPCS3, RUFFLE, SOLARUS and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.7b" date="2026-03-24">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
             <description>

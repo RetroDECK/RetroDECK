@@ -12,36 +12,50 @@
 =========================================================================
 
 ▶ XARGONWAN
-   • Founder – RetroDECK & Co‑founder of AmberELEC
-   • Primary Backend Architect (Framework, RetroENGINE, Configurator)
 
-▶ LAZORNE
-   • Community Manager & Outreach Lead
-   • Testing Coordinator
-   • Wiki Author & Maintainer
-   • Component‑Configuration Specialist
-   •  Steam Input & Miscellaneous Input Integrations
+Primary founder and driving force behind RetroDECK also one founding member of AmberELEC.
 
-▶ JIANNAZZONE
-   • Web Development & Site Maintenance
-   • Godot Programming & UI/UX Design
-   • Community Outreach & Engagement
-   • Art & Asset Creation
+   • Component Wrappers
+   • Initial concept
+   • Initial concept       
 
 ▶ ICENINE451
-   • Lead Technical Architect
-   • Creator of RetroDECK Configurator & Framework
-   • Backend Development & API Design
 
-▶ WALLK
-   • Godot Development Specialist
+Lead Technical Architect: Creator and primary architect of the RetroDECK ecosystem. Including the RetroDECK Framework and RetroDECK Configurator, alongside additional cool things.
+
+   • Backend Development & API Design
+   • Creator of RetroDECK Configurator & Framework
+   • 
+
+▶ LAZORNE
+
+Orchestrates community engagement, technical coordination and project governance to ensure the ecosystem's stability and growth.
+
+   • Community Manager & Outreach Lead
+   • Component‑Configuration Specialist
+   • Steam Input & Miscellaneous Input Integrations
+   • Testing Coordinator
+   • Wiki Author & Maintainer 
 
 ▶ LAHRS
+
+Arcade Veteran & Retro Specialist
+
+Deeply knowledgeable in retro gaming history and architecture. 
+
+Serving as a vital link between technical development and the user base also got expertise in artistic direction and iconography.
+
    • Arcade Veteran & Retro Knowledge Authority
-   • Component Configurations
+   • Component‑Configuration Specialist
    • Community Management & Support
    • Feature Requests & Issue Handling
    • Testing, Art & Assets, Wiki Documentation
+
+▶ WALLK
+
+Specializes in the design, implementation and optimization of the Godot game engine parts in RetroDECK.
+
+   • Godot Development Specialist
 
 =========================================================================
 
@@ -80,6 +94,11 @@ RetroDECK Alumni are former members of the RetroDECK Team that have moved on to 
 
 ▶ MonkeyX
    • Did Godot and other improvements.
+
+▶ JIANNAZZONE
+   • Web Development & Site Maintenance
+   • Art & Asset Creation
+
 
 =========================================================================
 
