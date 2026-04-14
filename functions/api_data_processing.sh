@@ -304,7 +304,8 @@ api_get_bios_file_status() {
     )
     | sort_by([
         (.systems | sub(".*/";"") | test("^[0-9]") | not),
-        (.systems | sub(".*/";""))
+        (.systems | sub(".*/";"")),
+        .filename
       ])
   ' "$tmp_bios")
   
