@@ -498,45 +498,48 @@ convert_to_markdown() {
 }
 
 repair_paths() {
-  # This function will verify that all folders defined in the [paths] section of retrodeck.json exist
-  # If a folder doesn't exist and is defined outside of rd_home_path, it will check in rd_home_path first and have the user browse for them manually if it isn't there either
+  # Verify that all folders defined in the [paths] and [component_paths] sections of retrodeck.json exist.
+  # If a folder doesn't exist at its configured location, the user is prompted to browse to its new location.
   # USAGE: repair_paths
-
-  invalid_path_found="false"
-
+  
+  local invalid_path_found="false"
+  local section path_name path_value new_path
   log i "Checking that all RetroDECK paths are valid"
-  while IFS= read -r path_name; do
-    if [[ ! $path_name =~ (rd_home_path|sdcard) ]]; then # Ignore these locations
-      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
-      if [[ ! -d "$path_value" ]]; then # If the folder doesn't exist as defined
-        log i "$path_name does not exist as defined, config is incorrect"
-        if [[ ! -d "$rd_home_path/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rd_home_path path
-          if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
-            log i "$path_name cannot be found at any expected location, having user locate it manually"
-            configurator_generic_dialog "RetroDECK Configurator - Path Repair" "The RetroDECK <span foreground='$purple'><b>$path_name</b></span> was not found in the expected location.\nThis may occur if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>$path_name</b></span>."
-            if new_path=$(directory_browse "RetroDECK $path_name location"); then
-              set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
-              invalid_path_found="true"
-            else
-              configurator_generic_dialog "RetroDECK Configurator - Path Repair" "No path for $path_name chosen, cannot repair."
-            fi
-          else # Folder does exist within defined sdcard path, update accordingly
-            log i "$path_name found in $sdcard/retrodeck, correcting path config"
-            new_path="$sdcard/retrodeck/${path_value#*retrodeck/}"
-            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
-            invalid_path_found="true"
-          fi
-        else # Folder does exist within defined rd_home_path path, update accordingly
-          log i "$path_name found in $rd_home_path, correcting path config"
-          new_path="$rd_home_path/${path_value#*retrodeck/}"
-          set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
-          invalid_path_found="true"
-        fi
-      fi
-    fi
-  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
-  if [[ $invalid_path_found == "true" ]]; then
+  while IFS=$'\t' read -r section path_name path_value; do
+    if [[ -d "$path_value" ]]; then
+      continue
+    fi
+
+    log i "$path_name does not exist as defined, having user locate it manually"
+    configurator_generic_dialog "RetroDECK Configurator - Path Repair" \
+      "The RetroDECK <span foreground='$purple'><b>$path_name</b></span> was not found in the expected location.\nThis may occur if the folder was moved manually.\n\nPlease browse to the current location of the <span foreground='$purple'><b>$path_name</b></span>."
+
+    if new_path=$(directory_browse "RetroDECK $path_name location"); then
+      set_setting_value "$rd_conf" "$path_name" "$new_path" "retrodeck" "$section"
+      invalid_path_found="true"
+    else
+      configurator_generic_dialog "RetroDECK Configurator - Path Repair" "No path for $path_name chosen, cannot repair."
+    fi
+  done < <(jq -r '
+    (
+      (.paths // {})
+      | to_entries[]
+      | select(.key | test("^(rd_home_path|sdcard)$") | not)
+      | ["paths", .key, .value]
+    ),
+    (
+      (.component_paths // {})
+      | to_entries[]
+      | .key as $component
+      | .value
+      | to_entries[]
+      | ["component_paths." + $component, .key, .value]
+    )
+    | @tsv
+  ' "$rd_conf")
+
+  if [[ "$invalid_path_found" == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
     prepare_component "postmove" "all"
     configurator_generic_dialog "RetroDECK Configurator - Path Repair" "<span foreground='$purple'><b>One or more incorrectly configured paths were repaired.</b></span>"
