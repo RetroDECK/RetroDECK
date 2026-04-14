@@ -101,11 +101,12 @@ api_get_component() {
      select($component == "all" or $component_name == $component) |
      {
        component_name: $component_name,
-       component_friendly_name: ($sys.name // ""),
+       component_friendly_name: ($sys.name // []),
        description: ($sys.description // ""),
-       emulated_system: ($sys.system // "none"),
+       emulated_system: ($sys.system // [] ),
        path: $path,
-       compatible_presets: ($sys.compatible_presets // "none")
+       capabilities: ($sys.capabilities // []),
+       compatible_presets: ($sys.compatible_presets // [])
      }
     ]
     | [.[] | select(.component_name == "retrodeck")] +
