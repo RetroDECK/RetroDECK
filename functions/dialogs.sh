@@ -120,13 +120,40 @@ get_cheevos_token_dialog() {
     return 1
   fi
 
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
+
+  rd_zenity --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - Logging in to RetroAchievements" \
+  --text="RetroDECK is attempting to log into RetroAchievements with your credentials.\n\n<span foreground='$purple'><b>Please wait...</b></span>" < "$progress_pipe" &
+  local zenity_pid=$!
+  
+  local progress_fd
+  exec {progress_fd}>"$progress_pipe"
+
   local cheevos_info
   if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
     log d "Cheevos login succeeded"
+
+    echo "100" >&$progress_fd
+
+    exec {progress_fd}>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
+
     echo "$cheevos_info"
   else
     log d "Cheevos login failed"
     echo "RetroAchievements login failed, check your username and password."
+
+    echo "100" >&$progress_fd
+
+    exec {progress_fd}>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
+
     return 1
   fi
 }
