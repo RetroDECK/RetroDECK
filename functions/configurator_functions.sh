@@ -1247,7 +1247,7 @@ configurator_usb_import_dialog() {
     choice=$(rd_zenity --list --title="RetroDECK Configurator - USB Migration Tool" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --hide-column=3 --print-column=3 \
-    --column "Device Name" \
+    --column "Device Label" \
     --column "Device Size" \
     --column "path" \
     "${external_devices[@]}")
@@ -1255,9 +1255,8 @@ configurator_usb_import_dialog() {
     if [[ -n "$choice" ]]; then
       local import_dir="$choice/RetroDECK Import"
       create_dir "$import_dir"
-      start::es-de --home "$import_dir" --create-system-dirs
-      rm -rf "$import_dir/ES-DE"
       rsync -a --copy-dirlinks --include='*/' --exclude='*' "$bios_path/" "$import_dir/BIOS/"
+      rsync -a --copy-dirlinks --include='*/' --exclude='*' "$roms_path/" "$import_dir/ROMs/"
     fi
     configurator_nav="refresh"
   ;;
