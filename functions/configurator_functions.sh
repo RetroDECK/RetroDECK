@@ -1150,7 +1150,7 @@ configurator_clean_empty_systems_dialog() {
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
 
-  if [[ -n ${empty_rom_folders_list[@]} ]]; then
+  if [[ -n $empty_rom_folders_list ]]; then
     choice=$(rd_zenity --list \
     --width=1200 --height=720 --title "RetroDECK Configurator - Clean Empty System Folders" \
     --checklist --ok-label="Remove Selected" --extra-button="Remove All" \
