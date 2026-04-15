@@ -929,39 +929,55 @@ configurator_compress_multiple_games_dialog() {
 
   local total_games=${#games_to_compress[@]}
   local games_left=$total_games
+  local game_index=0
+  local pids=()
+  local -A pid_to_game=()
+  local progress_pipe progress_fd zenity_pid finished_pid
+  local game game_line compression_format new_pid pid
+  local active_names joined progress new_pids
 
-  local progress_pipe
   progress_pipe=$(mktemp -u)
   mkfifo "$progress_pipe"
-
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
     --width="800" \
     --title "RetroDECK Configurator - Compression in Progress" < "$progress_pipe" &
-  local zenity_pid=$!
-
-  local progress_fd
+  zenity_pid=$!
   exec {progress_fd}>"$progress_pipe"
 
-  for game_line in "${games_to_compress[@]}"; do
-    while (( $(jobs -p | wc -l) >=  $system_cpu_max_threads )); do
-    sleep 0.1
-    done
-    (
+  while (( games_left > 0 )); do
+    while (( ${#pids[@]} < system_cpu_max_threads && game_index < total_games )); do
+      game_line="${games_to_compress[$game_index]}"
       IFS="^" read -r game compression_format <<< "$game_line"
       log i "Compressing $(basename "$game") into $compression_format format"
-      echo "# Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." >&$progress_fd
+      ( compress_game "$compression_format" "$game" "$post_compression_cleanup" ) &
+      new_pid=$!
+      pids+=("$new_pid")
+      pid_to_game[$new_pid]=$(basename "$game")
+      game_index=$(( game_index + 1 ))
+    done
 
-      compress_game "$compression_format" "$game" "$post_compression_cleanup"
+    active_names=()
+    for pid in "${pids[@]}"; do
+      active_names+=("${pid_to_game[$pid]}")
+    done
+    joined=$(printf '  %s\\n' "${active_names[@]}")
+    progress=$(( 100 - (100 * games_left / total_games) ))
+    printf '# %d games left. Currently compressing:\\n%s\n%d\n' \
+      "$games_left" "$joined" "$progress" >&$progress_fd
 
-      games_left=$(( games_left - 1 ))
-      local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
-      echo "$progress" >&$progress_fd
-    ) &
+    wait -n -p finished_pid "${pids[@]}"
+
+    new_pids=()
+    for pid in "${pids[@]}"; do
+      [[ "$pid" != "$finished_pid" ]] && new_pids+=("$pid")
+    done
+    pids=("${new_pids[@]}")
+    unset 'pid_to_game[$finished_pid]'
+    games_left=$(( games_left - 1 ))
   done
-  wait # wait for background tasks to finish
-  echo "100" >&$progress_fd
 
+  echo "100" >&$progress_fd
   exec {progress_fd}>&-
   wait "$zenity_pid" 2>/dev/null
   rm -f "$progress_pipe"
