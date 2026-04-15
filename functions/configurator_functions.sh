@@ -660,8 +660,33 @@ configurator_change_preset_value_dialog() {
         fi
       fi
 
+      local progress_pipe
+      progress_pipe=$(mktemp -u)
+      mkfifo "$progress_pipe"
+
+      rd_zenity --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - Change Preset $preset Progress" \
+      --text="RetroDECK is changing the $component preset $preset to $choice.\n\n<span foreground='$purple'><b>Please wait while the process finishes...</b></span>" < "$progress_pipe" &
+      local zenity_pid=$!
+      
+      local progress_fd
+      exec {progress_fd}>"$progress_pipe"
+
       if ! result=$(api_set_preset_state "$component" "$preset" "$choice"); then
+        echo "100" >&$progress_fd
+
+        exec {progress_fd}>&-
+        wait "$zenity_pid" 2>/dev/null
+        rm -f "$progress_pipe"
+
         configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$result</b></span>\n\nCheck the RetroDECK logs for more details."
+      else
+        echo "100" >&$progress_fd
+
+        exec {progress_fd}>&-
+        wait "$zenity_pid" 2>/dev/null
+        rm -f "$progress_pipe"
       fi
     fi
   fi
