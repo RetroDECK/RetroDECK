@@ -20,7 +20,7 @@ verify_space() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator - Space Validation"
+    --title "RetroDECK Configurator - Space Validation" < "$progress_pipe" &
     local zenity_pid=$!
 
     local progress_fd
