@@ -177,19 +177,6 @@ modules:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   # -------------------------------------------------------------------------
-  # rclone - manage files on cloud storage.
-  # -------------------------------------------------------------------------
-
-  - name: rclone
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 rclone "${FLATPAK_DEST}/bin/rclone"
-    sources:
-      - type: archive
-        url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
-        sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
-
-  # -------------------------------------------------------------------------
   # rsync - utility for transferring and synchronizing files.
   # -------------------------------------------------------------------------
 
