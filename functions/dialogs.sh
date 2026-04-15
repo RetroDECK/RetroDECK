@@ -80,6 +80,8 @@ changelog_dialog() {
       echo "" >> "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
     done
 
+    convert_to_markdown "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
+
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
