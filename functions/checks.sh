@@ -306,22 +306,22 @@ check_for_updates() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Upgrade Process" \
       --width=400 --height=200 \
-      --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>" \
+      --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes..." \
       < "$progress_pipe" &
     local zenity_pid=$!
 
     local progress_fd
     exec {progress_fd}>"$progress_pipe"
 
-    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nRunning RetroDECK core updates..." >&$progress_fd
+    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nRunning RetroDECK core updates..." >&$progress_fd
     local framework_handler="_post_update::retrodeck"
     if declare -F "$framework_handler" > /dev/null; then
-      log d "Running post-update handler for framework"
+      log d "Running post-update handler for RetroDECK"
       "$framework_handler" "$version_being_updated"
     fi
-    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nDeploying helper files..." >&$progress_fd
+    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nDeploying helper files..." >&$progress_fd
     deploy_helper_files "retrodeck"
-    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nApplying RetroDECK icons..." >&$progress_fd
+    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nApplying RetroDECK icons..." >&$progress_fd
     rsync -rlD --delete --mkpath "/app/retrodeck/graphics/folder-iconsets/" "$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets/"
     handle_folder_iconsets "$iconset"
   
@@ -356,14 +356,14 @@ check_for_updates() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK - Upgrade Process" \
       --width=400 --height=200 \
-      --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>" \
+      --text="RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes..." \
       < "$progress_pipe" &
     local zenity_pid=$!
 
     local progress_fd
     exec {progress_fd}>"$progress_pipe"
 
-    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\n<span foreground='$purple'><b>Please wait while the setup process completes...</b></span>\n\nUpdating installed components..." >&$progress_fd
+    echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nUpdating installed components..." >&$progress_fd
     run_component_updates "$version_being_updated"
 
     echo "100" >&$progress_fd
