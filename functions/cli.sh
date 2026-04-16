@@ -78,7 +78,7 @@ parse_cli_args() {
 
   while [[ $# -gt 0 ]]; do
     # Check for game launch arguments first (static)
-    if [[ -f "$1" || "$1" == "--emulator" || "$1" == "--system" || "$1" == "--manual" ]]; then
+    if [[ -f "$1" || "$1" =~ ("--emulator"|"-e"|"--system"|"-s"|"--manual"|"-m") ]]; then
       log i "Game start option detected: $1"
       run_game "$@"
       exit 0
