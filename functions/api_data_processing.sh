@@ -199,6 +199,10 @@ api_get_current_preset_state() {
     ' "$rd_conf")
   done < <(jq -r '.presets | keys[]' "$rd_conf")
 
+  preset_settings=$(jq '
+    with_entries(.value |= sort_by(.system_name))
+  ' <<< "$preset_settings")
+  
   echo "$preset_settings"
 }
 
