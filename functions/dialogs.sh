@@ -147,14 +147,14 @@ get_cheevos_token_dialog() {
 
     echo "$cheevos_info"
   else
-    log d "Cheevos login failed"
-    echo "RetroAchievements login failed, check your username and password."
-
     echo "100" >&$progress_fd
 
     exec {progress_fd}>&-
     wait "$zenity_pid" 2>/dev/null
     rm -f "$progress_pipe"
+
+    log d "Cheevos login failed"
+    echo "RetroAchievements login failed, check your username and password."
 
     return 1
   fi
