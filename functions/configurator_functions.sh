@@ -656,6 +656,7 @@ configurator_change_preset_value_dialog() {
             export cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
           else
             configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n<span foreground='$purple'><b>$cheevos_login_info</b></span>\n\nCheck the RetroDECK logs for more details."
+            return 1
           fi
         fi
       fi
