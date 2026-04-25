@@ -225,8 +225,8 @@ modules:
       - --disable-static
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.tar.xz
-        sha256: 78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07
+        url: https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.9.tar.xz
+        sha256: a2c9ae7b770da34860050c309f903221c67830c86e4a7e760692b803df95143a
     cleanup:
     - /compat/xmlstarlet/include
     - /compat/xmlstarlet/lib/pkgconfig
