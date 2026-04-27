@@ -5,3 +5,4 @@
 
 source /app/libexec/cleanup.sh
 source /app/libexec/logger.sh
+source /app/libexec/zenity_processing.sh
