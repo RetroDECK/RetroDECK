@@ -62,6 +62,10 @@ parse_args() {
         download_components_tag="$2"
         shift 2
         ;;
+      --help | -h)
+        call_help
+        exit 0
+        ;;
       *)
         echo "Error: Unknown argument '$1'"
         exit 1
@@ -72,18 +76,28 @@ parse_args() {
   # Validate required arguments
   if [[ -z "$build_type" ]]; then
     echo "Error: --build-flatpak <type> is required"
-    exit 1
+    echo "Would you like to build \"full\"? [y/n] "
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+      build_type="full"
+    else
+      echo "No build type specified, exiting"
+      call_help
+      exit 1
+    fi
   fi
 
   # Validate build type
   if [[ ! "$build_type" =~ ^(full|epicure|countertop)$ ]]; then
     echo "Error: Invalid build type '$build_type'. Must be one of: full, epicure, countertop"
+    call_help
     exit 1
   fi
 
   # Enforce mutual exclusivity
   if [[ "$no_bundle" == true && "$dry_run" == true ]]; then
     echo "Error: --no-bundle and --dry-run cannot be used together"
+    call_help
     exit 1
   fi
 
@@ -93,6 +107,24 @@ parse_args() {
   DRY_RUN="$dry_run"
   EXTRA_BUILDER_ARGS="$extra_builder_args"
   DOWNLOAD_COMPONENTS_TAG="$download_components_tag"
+}
+
+call_help() {
+    echo "Usage: $0 --build-flatpak <type> [options] <component-sources.json>"
+    echo ""
+    echo "Options:"
+    echo "  --build-flatpak <type>       Specify the build type (full, epicure, countertop)"
+    echo "  --ccache                    Enable ccache for faster rebuilds"
+    echo "  --no-bundle                 Skip bundle creation step"
+    echo "  --dry-run                   Print build commands without executing"
+    echo "  --flatpak-builder-args <args> Extra arguments to pass to flatpak-builder"
+    echo "  --download-components <tag|latest> Download component-sources.json from specified GitHub release tag"
+    echo ""
+    echo "Component path:"
+    echo "  By default, component sources are read from ./components-sources.json"
+    echo "  If missing, provide it manually in the repository root or use --download-components <tag|latest>"
+    echo ""
+    echo "  -h, --help                   Show this help message"
 }
 
 # =============================================================================
@@ -485,7 +517,7 @@ main() {
 
   if [[ ! -f "$components_path" ]]; then
     echo "Error: $COMPONENT_SOURCES_FILE not found at $components_path"
-    echo "Provide the file manually or use --download-components <tag|latest> to download it"
+    echo -e "Provide the file manually or use --download-components <tag|latest> to download it.\n\nCheck --help for more information."
     exit 1
   fi
 
