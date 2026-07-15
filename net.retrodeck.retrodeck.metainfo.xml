@@ -105,6 +105,80 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.11.0" date="2026-12-31">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.11.0/0.11.0/</url>
+            <description>
+                <p>FIXED/CHANGED:</p>
+                <ul>
+                    <li>A MILLION THINGS</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>THE WHOLE THING</li>
+                </ul>
+            </description>
+        </release>
+        <release version="0.10.9b" date="2026-05-30">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.9b/</url>
+            <description>
+                <p>FIXED/CHANGED:</p>
+                <ul>
+                    <li>RETROARCH: Fixed LRPS2 directory mappings to align with RetroDeck core directories (saves, textures, shaders, bios).</li>
+                    <li>RETROARCH: Readded missing retroarch screenshot folder in retrodeck/screenshots that was gone in some installations.</li>
+                    <li>RETROARCH: Added missing bios asset folders for: cannonball, dinothar, DirkSimple, dolphin-emu (core), nxengine, pcsx2 (LRPS2), ppsspp (core), qemu, and xrick in bios.</li>
+                    <li>RETROARCH: Added missing assets files: ecwolf.pk3 and prboom.wad in bios.</li>
+                    <li>RPCS3: Changed build source from Flathub Flatpak to AppImage due to recurring issues with the Flathub package.</li>
+                    <li>VITA3K: Due to a major emulator overhaul, configuration files were reset to ensure compatibility with the new changes.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>XEMU, RPCS3, RUFFLE, AZAHAR, PPSSPP and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
+        <release version="0.10.8b" date="2026-04-15">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.8b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>ICONS: Added some new icons.</li>
+                    <li>STEAM INPUT: Added test templates for the following: 8BitDo Ultimate, DualSense Edge, HORIPAD Steam, Legion GO S, ROG Ally and Xbox Elite Wireless.</li>   
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Some more MD5 corrections by community contributor Abdess.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>ES-DE, MAME, RPCS3, RUFFLE, SOLARUS and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
+        <release version="0.10.7b" date="2026-03-24">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>EASTER EGG: Introduced additional holiday entries.</li>
+                    <li>TRIFORCE: The Triforce Arcade System is now supported via Dolphin.</li>
+                    <li>ES-DE THEME: Added art for PrimeHack and empty folders.</li>
+                </ul>
+                <p>CHANGED:</p>
+                <ul>
+                    <li>DOLPHIN, PPSSPP, RPCS3: Have done significant configuration changes, requiring a reset of the config.</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>BORDERS: Steam Deck borders were not applied in certain scenarios when enabled via the Configurator.</li>
+                    <li>RPCS3: Firmware installation via the Configurator did not function as expected.</li>
+                    <li>BIOS CHECKER: Some MD5 corrections by community contributor Abdess.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>DOLPHIN, PPSSPP, RPCS3, RUFFLE, SRM and VITA3K to their latest versions.</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.6b" date="2026-02-02">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.7b/</url>
             <description>
