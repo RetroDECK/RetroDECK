@@ -204,12 +204,12 @@ prepare_component() {
       if declare -F "$handler" > /dev/null; then
         log d "Running $action prepare handler for $component_name (priority: $priority)"
         "$handler" "$action"
-        if [[ "$action" == "reset" ]]; then
-          set_installed_component_version "$component_name" "$(get_component_version "$component_name")"
-          init_component_paths "$component_name"
-          reset_component_options "$component_name"
-          deploy_helper_files "$component_name"
-        fi
+      fi
+      if [[ "$action" == "reset" ]]; then
+        set_installed_component_version "$component_name" "$(get_component_version "$component_name")"
+        init_component_paths "$component_name"
+        reset_component_options "$component_name"
+        deploy_helper_files "$component_name"
       fi
     done < <(jq -r --arg action "$action" \
     '
@@ -234,16 +234,15 @@ prepare_component() {
     if declare -F "$handler" > /dev/null; then
       log d "Running $action prepare handler for $component"
       "$handler" "$action"
-      if [[ "$action" == "reset" ]]; then
-        if [[ "$component" != "retrodeck" ]]; then
-          set_installed_component_version "$component" "$(get_component_version "$component")"
-          reset_component_options "$component"
-        fi
-        deploy_helper_files "$component"
-      fi
     else
-      log e "No prepare handler found for component $component"
-      return 1
+      log d "No prepare handler found for component $component"
+    fi
+    if [[ "$action" == "reset" ]]; then
+      if [[ "$component" != "retrodeck" ]]; then
+        set_installed_component_version "$component" "$(get_component_version "$component")"
+        reset_component_options "$component"
+      fi
+      deploy_helper_files "$component"
     fi
   fi
 
