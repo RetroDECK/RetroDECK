@@ -406,17 +406,11 @@ finit() {
   echo "# Loading component functions..." >&$progress_fd
   source_component_functions
 
-  echo "# Initializing component settings in main config..." >&$progress_fd
-  reset_component_options "all"
-
   echo "# Setting up components for the first time..." >&$progress_fd
   prepare_component "reset" "all-installed"
 
   echo "# Applying presets..." >&$progress_fd
   update_component_presets
-
-  echo "# Deploying helper files..." >&$progress_fd
-  deploy_helper_files
 
   # Gather finit options from component manifests
   local -a finit_choices=()
