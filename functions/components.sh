@@ -1060,6 +1060,7 @@ run_component_updates() {
   if [[ "$component_updated" == true ]]; then
     update_component_presets
     build_retrodeck_current_presets
+    prepare_component "component_change" "all-installed"
   fi
 }
 
