@@ -660,6 +660,50 @@ jobs:
           ASSET_COUNT=$(ls release-assets/ | wc -l)
           echo "asset_count=$ASSET_COUNT" >> $GITHUB_OUTPUT
 
+      - name: Split oversized release assets
+        if: needs.configure.outputs.is_dry_run == 'false'
+        id: split
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y p7zip-full
+
+          # GitHub rejects release assets at or near 2 GiB. Anything at or above this threshold is repacked into a multi-volume 7z archive.
+          VOLUME_SIZE_MB=1800
+          THRESHOLD=$((VOLUME_SIZE_MB * 1024 * 1024))
+
+          SPLIT_ANY="false"
+
+          for bundle in release-assets/*.flatpak; do
+            [[ -e "$bundle" ]] || continue
+
+            SIZE=$(stat -c%s "$bundle")
+            NAME=$(basename "$bundle")
+
+            if [[ "$SIZE" -lt "$THRESHOLD" ]]; then
+              echo "$NAME: $((SIZE / 1024 / 1024)) MiB - under threshold, leaving intact"
+              continue
+            fi
+
+            echo "$NAME: $((SIZE / 1024 / 1024)) MiB - exceeds ${VOLUME_SIZE_MB} MiB, repacking"
+
+            ( cd release-assets && 7z a -mx0 -v${VOLUME_SIZE_MB}m "${NAME}.7z" "$NAME" )
+
+            VOLUMES=( "release-assets/${NAME}.7z."[0-9][0-9][0-9] )
+
+            # Per-volume checksums
+            ( cd release-assets && sha256sum "${NAME}.7z."[0-9][0-9][0-9] > "${NAME}.7z.sha256" )
+
+            rm -f "$bundle"
+
+            echo "  Repacked into ${#VOLUMES[@]} volume(s)"
+            SPLIT_ANY="true"
+          done
+
+          echo "split_any=$SPLIT_ANY" >> $GITHUB_OUTPUT
+
+          echo "Final release assets:"
+          ls -lh release-assets/
+
       - name: Determine release parameters
         id: release
         run: |
