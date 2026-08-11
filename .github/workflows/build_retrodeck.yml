@@ -1012,6 +1012,25 @@ jobs:
             echo "" >> release_notes.md
           fi
 
+          if [[ "${{ steps.split.outputs.split_any }}" == "true" ]]; then
+            cat >> release_notes.md <<'EOF'
+          ### Split bundle
+
+          This bundle is larger than the 2 GiB limit for a single GitHub release asset,
+          so it is published as a multi-volume archive.
+
+          1. Download every numbered volume (`.7z.001`, `.7z.002`, and so on) into the
+             same folder, keeping the filenames unchanged.
+          2. Open the `.7z.001` file with your archive manager and extract it. The
+             remaining volumes are picked up automatically.
+          3. Install the extracted `.flatpak` file as usual.
+
+          You will need roughly twice the download size in free space, since the
+          extracted bundle sits alongside the volumes until you delete them.
+
+          EOF
+          fi
+
           # Asset list
           echo "### Assets" >> release_notes.md
           echo "" >> release_notes.md
