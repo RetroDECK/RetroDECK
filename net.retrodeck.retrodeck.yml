@@ -394,8 +394,17 @@ modules:
           ;;
         esac
 
-      # Fix for Dolphin
+# -------------------------------------------------------------------------
+# Special Fixes - Component-specific symlinks or oddities
+# -------------------------------------------------------------------------
+
+      # Dolphin
       - ln -s "/app/retrodeck/components/dolphin/share/dolphin-emu" "/app/share/dolphin-emu"
+
+      # Gargoyle
+      - ln -s "/app/retrodeck/components/gargoyle/share/gargoyle" "/app/share/gargoyle"
+      - ln -s "/app/retrodeck/components/gargoyle/libexec/gargoyle" "/app/libexec/gargoyle"
+
     sources:
       - application-sources.json
 
