@@ -1042,6 +1042,10 @@ jobs:
               echo "- **${ASSET_NAME}** (${ASSET_SIZE}) - Flatpak bundle" >> release_notes.md
             elif [[ "$ASSET_NAME" == *.sha ]]; then
               echo "- **${ASSET_NAME}** - SHA256 checksum" >> release_notes.md
+            elif [[ "$ASSET_NAME" == *.7z.[0-9][0-9][0-9] ]]; then
+              echo "- **${ASSET_NAME}** (${ASSET_SIZE}) - Flatpak bundle volume" >> release_notes.md
+            elif [[ "$ASSET_NAME" == *.7z.sha256 ]]; then
+              echo "- **${ASSET_NAME}** - SHA256 checksums for bundle volumes" >> release_notes.md
             fi
           done
 
