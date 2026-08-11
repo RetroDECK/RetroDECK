@@ -405,6 +405,11 @@ modules:
       - ln -s "/app/retrodeck/components/gargoyle/share/gargoyle" "/app/share/gargoyle"
       - ln -s "/app/retrodeck/components/gargoyle/libexec/gargoyle" "/app/libexec/gargoyle"
 
+      # ScummVM
+      - ln -s "/app/retrodeck/components/scummvm/share/scummvm" "/app/share/scummvm"
+      - ln -s "/app/retrodeck/components/scummvm/share/soundfonts" "/app/share/soundfonts"
+
+
     sources:
       - application-sources.json
 
