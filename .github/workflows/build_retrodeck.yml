@@ -651,7 +651,7 @@ jobs:
           mkdir -p release-assets
 
           find downloaded-artifacts/ -type f | while read -r file; do
-            cp "$file" release-assets/
+            mv "$file" release-assets/
           done
 
           echo "Release assets:"
