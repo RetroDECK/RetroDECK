@@ -108,13 +108,23 @@
         <release version="0.11.0" date="2026-12-31">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.11.0/0.11.0/</url>
             <description>
-                <p>FIXED/CHANGED:</p>
+                <p>ADDED:</p>
                 <ul>
                     <li>A MILLION THINGS</li>
+                    <li> As far as a retro gaming platform goes, it can take the form of a million things. To do retro gaming, you don't have to be a doctor working in the slums for free, or become a social worker. Your position in life and what you do doesn't matter as much as how you do what you do.</li>
+                </ul>
+                <p>CHANGED:</p>
+                <ul>
+                    <li>It is not that we have a short time to live, but that we waste a lot of it on commit changes.</li>
+                </ul>
+                <p>FIXED:</p>
+                <ul>
+                    <li>It is not death that a man should fear, but he should fear never beginning to live and framework bugs.</li>
                 </ul>
                 <p>UPDATED:</p>
                 <ul>
                     <li>THE WHOLE THING</li>
+                    <li>The purpose of life is to discover your gift. The work of life is to develop it. The meaning of life is to give your gift away in form of a flatpak.</li>
                 </ul>
             </description>
         </release>
