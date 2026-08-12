@@ -189,6 +189,9 @@ jobs:
         run: |
           TAG_PREFIX="${{ steps.branch-delete.outputs.tag_prefix }}"
 
+          : > summary_branch_deleted.txt
+          : > summary_branch_failed.txt
+
           echo "Fetching releases from cooker repo with prefix: ${TAG_PREFIX}--"
 
           RELEASES=$(gh release list --repo "$COOKER_REPO" --limit 1000 --json tagName \
@@ -211,9 +214,11 @@ jobs:
               echo "Deleting: $release"
               if gh release delete "$release" --repo "$COOKER_REPO" --yes --cleanup-tag; then
                 SUCCESS=$((SUCCESS + 1))
+                echo "$release" >> summary_branch_deleted.txt
               else
                 echo "Failed to delete: $release"
                 FAILED=$((FAILED + 1))
+                echo "$release" >> summary_branch_failed.txt
               fi
             fi
           done <<< "$RELEASES"
@@ -237,6 +242,9 @@ jobs:
         run: |
           EPICURE_KEEP="${{ steps.config.outputs.epicure_keep }}"
           DRY_RUN="${{ steps.config.outputs.dry_run }}"
+
+          : > summary_flatpak_deleted.txt
+          : > summary_flatpak_failed.txt
 
           echo "Fetching epicure releases from RetroDECK repo..."
 
@@ -263,6 +271,7 @@ jobs:
             while IFS= read -r release; do
               echo "  - $release"
             done <<< "$TO_DELETE"
+            printf '%s\n' "$TO_DELETE" | sed '/^$/d' > summary_flatpak_deleted.txt
             echo "delete_count=$DELETE_COUNT" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -275,9 +284,11 @@ jobs:
               echo "Deleting: $release"
               if gh release delete "$release" --yes --cleanup-tag; then
                 SUCCESS=$((SUCCESS + 1))
+                echo "$release" >> summary_flatpak_deleted.txt
               else
                 echo "Failed to delete: $release"
                 FAILED=$((FAILED + 1))
+                echo "$release" >> summary_flatpak_failed.txt
               fi
             fi
           done <<< "$TO_DELETE"
@@ -316,6 +327,8 @@ jobs:
 
           # Collect all releases to delete across types
           > cooker_to_delete.txt
+          : > summary_cooker_deleted.txt
+          : > summary_cooker_failed.txt
 
           # --- Cooker branch releases (prefix: cooker-) ---
           if [[ -z "$TARGET" || "$TARGET" == "cooker" ]]; then
@@ -427,6 +440,7 @@ jobs:
             while IFS= read -r release; do
               echo "  - $release"
             done < cooker_to_delete.txt
+            cp cooker_to_delete.txt summary_cooker_deleted.txt
             echo "delete_count=$DELETE_TOTAL" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -439,9 +453,11 @@ jobs:
               echo "Deleting: $release"
               if gh release delete "$release" --repo "$COOKER_REPO" --yes --cleanup-tag; then
                 SUCCESS=$((SUCCESS + 1))
+                echo "$release" >> summary_cooker_deleted.txt
               else
                 echo "Failed to delete: $release"
                 FAILED=$((FAILED + 1))
+                echo "$release" >> summary_cooker_failed.txt
               fi
             fi
           done < cooker_to_delete.txt
@@ -465,6 +481,47 @@ jobs:
           EVENT="${{ github.event_name }}"
           DRY_RUN="${{ steps.config.outputs.dry_run }}"
 
+          if [[ "$DRY_RUN" == "true" ]]; then
+            DELETED_LABEL="Would be deleted"
+          else
+            DELETED_LABEL="Deleted"
+          fi
+
+          # USAGE: render_list "$heading" "$file"
+          render_list() {
+            local heading="$1"
+            local file="$2"
+            local count
+            local release
+
+            if [[ ! -s "$file" ]]; then
+              return 0
+            fi
+
+            count=$(grep -c . "$file" || true)
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            if [[ "$count" -gt 15 ]]; then
+              echo "<details><summary>${heading} (${count})</summary>" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "**${heading} (${count})**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            while IFS= read -r release; do
+              if [[ -n "$release" ]]; then
+                echo "- \`${release}\`" >> $GITHUB_STEP_SUMMARY
+              fi
+            done < "$file"
+
+            if [[ "$count" -gt 15 ]]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "</details>" >> $GITHUB_STEP_SUMMARY
+            fi
+          }
+
           echo "## Cleanup Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Trigger:** $EVENT" >> $GITHUB_STEP_SUMMARY
@@ -480,6 +537,8 @@ jobs:
               echo "Protected branch deletion - no action taken" >> $GITHUB_STEP_SUMMARY
             else
               echo "Deleted all cooker releases for branch prefix: \`${{ steps.branch-delete.outputs.tag_prefix }}\`" >> $GITHUB_STEP_SUMMARY
+              render_list "$DELETED_LABEL" summary_branch_deleted.txt
+              render_list "Failed" summary_branch_failed.txt
             fi
           else
             FLATPAK_COUNT="${{ steps.prune-flatpak.outputs.delete_count }}"
@@ -492,6 +551,9 @@ jobs:
               echo "Releases cleaned up: $FLATPAK_COUNT" >> $GITHUB_STEP_SUMMARY
             fi
 
+            render_list "$DELETED_LABEL" summary_flatpak_deleted.txt
+            render_list "Failed" summary_flatpak_failed.txt
+
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Cooker Repo" >> $GITHUB_STEP_SUMMARY
             if [[ "${COOKER_COUNT:-0}" -eq 0 ]]; then
@@ -499,6 +561,9 @@ jobs:
             else
               echo "Releases cleaned up: $COOKER_COUNT" >> $GITHUB_STEP_SUMMARY
             fi
+
+            render_list "$DELETED_LABEL" summary_cooker_deleted.txt
+            render_list "Failed" summary_cooker_failed.txt
 
             if [[ "$DRY_RUN" == "true" ]]; then
               echo "" >> $GITHUB_STEP_SUMMARY
