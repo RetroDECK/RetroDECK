@@ -79,7 +79,24 @@ configurator_global_presets_and_settings_dialog() {
   log i "Configurator: opening Presets And Settings dialog"
   build_zenity_menu_array choices settings # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator - Global: Presets and Settings" --cancel-label="Back" --ok-label="OK" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - Settings and Presets" --cancel-label="Back" --ok-label="OK" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
+
+  local rc="$?"
+
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
+    log d "choice: $choice"
+    configurator_nav="$choice"
+  fi
+}
+
+configurator_es_de_entries_dialog() {
+  log i "Configurator: opening ES-DE Entries dialog"
+  build_zenity_menu_array choices es_de_entries # Build Zenity bash array for given menu type
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator - ES-DE Entries" --cancel-label="Back" --ok-label="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
