@@ -631,6 +631,8 @@ jobs:
     name: Create Release
     needs: [check-trigger, configure, build]
     runs-on: ubuntu-latest
+    outputs:
+      release_url: ${{ steps.create.outputs.release_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -1078,17 +1080,24 @@ jobs:
           echo "  Tag:        $RELEASE_TAG"
           echo "  Title:      $TITLE"
 
-          gh release create "$RELEASE_TAG" \
+          RELEASE_URL=$(gh release create "$RELEASE_TAG" \
             --repo "$RELEASE_REPO" \
             --title "$TITLE" \
             --notes-file release_notes.md \
             $FLAGS \
-            release-assets/*
+            release-assets/*)
+
+          # Fall back to the constructed URL if gh printed nothing
+          if [[ -z "$RELEASE_URL" ]]; then
+            RELEASE_URL="https://github.com/${RELEASE_REPO}/releases/tag/${RELEASE_TAG}"
+          fi
+
+          echo "release_url=$RELEASE_URL" >> $GITHUB_OUTPUT
 
           echo ""
           echo "=========================================="
           echo "Release created"
-          echo "  URL: https://github.com/${RELEASE_REPO}/releases/tag/${RELEASE_TAG}"
+          echo "  URL: $RELEASE_URL"
           echo "=========================================="
 
       - name: Dry-run summary
@@ -1357,6 +1366,7 @@ jobs:
           BUILD_RESULT="${{ needs.build.result }}"
           RELEASE_RESULT="${{ needs.create-release.result }}"
           FLATHUB_RESULT="${{ needs.publish-flathub.result }}"
+          RELEASE_URL="${{ needs.create-release.outputs.release_url }}"
 
           echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -1382,6 +1392,11 @@ jobs:
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| Build | ${BUILD_RESULT} |" >> $GITHUB_STEP_SUMMARY
           echo "| Release | ${RELEASE_RESULT} |" >> $GITHUB_STEP_SUMMARY
+
+          if [[ -n "$RELEASE_URL" ]]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Release:** [${VERSION}](${RELEASE_URL})" >> $GITHUB_STEP_SUMMARY
+          fi
 
           if [[ "$PUBLISH_FLATHUB" == "true" ]]; then
             echo "| Flathub | ${FLATHUB_RESULT} |" >> $GITHUB_STEP_SUMMARY
