@@ -57,6 +57,8 @@ build_component_manifest_cache() {
     [[ -n "$manifest_file" ]] && manifest_files+=("$manifest_file")
   done < <(find_component_files "component_manifest.json")
 
+  mkdir -p "$(dirname $component_manifest_cache_file)"
+
   if [[ ${#manifest_files[@]} -eq 0 ]]; then
     printf '[]' > "$component_manifest_cache_file"
     return
