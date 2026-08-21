@@ -68,6 +68,8 @@ fi
 if [[ ! -f "$rd_conf" ]]; then
   log w "RetroDECK config file not found in $rd_conf, initializing with default values"
 
+  mkdir -p "$(dirname $rd_conf)"
+
   cp "$rd_defaults" "$rd_conf"
   chmod +rw "$rd_conf"
 
