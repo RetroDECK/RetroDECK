@@ -4,16 +4,16 @@ source /app/libexec/cleanup.sh
 
 # Initialize logging
 : "${rd_logging_level:=info}"
-rd_xdg_config_logs_path="$XDG_CONFIG_HOME/retrodeck/logs"
-if [[ -L "$rd_xdg_config_logs_path" && ! -e "$rd_xdg_config_logs_path" ]]; then
-  unlink "$rd_xdg_config_logs_path"
+rd_xdg_data_logs_path="$XDG_DATA_HOME/retrodeck/logs"
+if [[ -L "$rd_xdg_data_logs_path" && ! -e "$rd_xdg_data_logs_path" ]]; then
+  unlink "$rd_xdg_data_logs_path"
 fi
-if [[ ! -d "$rd_xdg_config_logs_path" ]]; then
-  echo "Creating RetroDECK logs directory at $rd_xdg_config_logs_path"
-  mkdir -p "$rd_xdg_config_logs_path"
+if [[ ! -d "$rd_xdg_data_logs_path" ]]; then
+  echo "Creating RetroDECK logs directory at $rd_xdg_data_logs_path"
+  mkdir -p "$rd_xdg_data_logs_path"
 fi
 source /app/libexec/logger.sh
-export rd_logging_level rd_xdg_config_logs_path
+export rd_logging_level rd_xdg_data_logs_path
 rotate_logs
 
 # Handle early multi-user login override
