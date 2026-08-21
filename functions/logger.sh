@@ -73,7 +73,7 @@ log() {
 
   local level="$1"
   local message="$2"
-  local logfile="${3:-$rd_xdg_config_logs_path/retrodeck.log}"
+  local logfile="${3:-$rd_xdg_data_logs_path/retrodeck.log}"
 
   # Fast exit if logging is disabled or message level is below threshold
   local configured_priority=${log_level_priority[${rd_logging_level:-info}]:-3}
@@ -112,7 +112,7 @@ rotate_logs() {
   # Rotate log files, compressing the current log and incrementing older archives.
   # USAGE: rotate_logs ["$logfile"]
 
-  local logfile="${1:-$rd_xdg_config_logs_path/retrodeck.log}"
+  local logfile="${1:-$rd_xdg_data_logs_path/retrodeck.log}"
   local max_logs=3
 
   # Close the persistent fd before rotating
