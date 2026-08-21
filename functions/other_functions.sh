@@ -461,9 +461,9 @@ finit() {
 }
 
 quit_retrodeck() {
-  log i "See you next time"
-  
   prepare_component "shutdown" "all"
+
+  log i "See you soon, space cowboy"
   
   exit
 }
