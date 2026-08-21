@@ -61,7 +61,7 @@ Contributions are welcome from everyone.
 |  Matrix | [Matrix Room](https://matrix.to/#/#retrodeck:matrix.org) | Open Matrix community space |
 | Lemmy | [Lemmy Community](https://lemmy.zip/c/retrodeck) | RetroDECK community on Lemmy |
 |  Reddit | [r/retrodeck](https://reddit.com/r/retrodeck) | RetroDECK subreddit |
-|  Wiki | [RetroDECK Wiki](https://github.com/RetroDECK/RetroDECK/wiki) | Official documentation and guides |
+|  Wiki | [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/) | Official documentation and guides |
 |  Donations | [Donations & Licenses](https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/) | Support the project and view license information |
 
 ---
