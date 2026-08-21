@@ -70,7 +70,14 @@ if [[ ! -f "$rd_conf" ]]; then
 
   mkdir -p "$(dirname $rd_conf)"
 
-  cp "$rd_defaults" "$rd_conf"
+  if ! cp "$rd_defaults" "$rd_conf"; then
+    log error "RetroDECK core config file could not be placed, cannot continue."
+    rd_zenity --error --title="RetroDECK Setup" \
+      --text="The core RetroDECK config file could not be generated, so the setup cannot proceed.\n\nThere may be something wrong with your OS or Flatpak system install, as this failure should never happen." \
+      --width=400
+    exit 1
+  fi
+
   chmod +rw "$rd_conf"
 
   conf_read
