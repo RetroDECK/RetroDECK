@@ -1277,7 +1277,7 @@ update_component_presets() {
         {
           preset: .key,
           path: [$comp_name],
-          default_value: (if .key == "bios_check_on_launch" then "true" else .value[0] end)
+          default_value: .value[0]
         }
       else
         # Nested: core presets (e.g. retroarch cores)

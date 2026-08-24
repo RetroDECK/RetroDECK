@@ -77,7 +77,6 @@ configurator_welcome_dialog() {
 
 configurator_global_presets_and_settings_dialog() {
   log i "Configurator: opening Presets And Settings dialog"
-  update_component_presets # Ensure presets newly added to manifests (e.g. bios_check_on_launch) are registered before building the menu
   build_zenity_menu_array choices settings # Build Zenity bash array for given menu type
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator - Settings and Presets" --cancel-label="Back" --ok-label="OK" \
@@ -1443,7 +1442,7 @@ configurator_toggle_retroengine_event_scripts_dialog() {
 }
 
 configurator_bios_check_toggle_dialog() {
-  if [[ $(jq -r '.presets.bios_check_on_launch.retrodeck // "true"' "$rd_conf") == "true" ]]; then
+  if [[ $(jq -r '.options.bios_check_on_launch // "true"' "$rd_conf") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - BIOS Check on Launch" \
@@ -1451,7 +1450,7 @@ configurator_bios_check_toggle_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      api_set_preset_state "retrodeck" "bios_check_on_launch" "false" > /dev/null
+      jq '.options.bios_check_on_launch = "false"' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
 
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1466,7 +1465,7 @@ configurator_bios_check_toggle_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      api_set_preset_state "retrodeck" "bios_check_on_launch" "true" > /dev/null
+      jq '.options.bios_check_on_launch = "true"' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
 
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

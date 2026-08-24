@@ -12,7 +12,11 @@ rd_get_missing_required_bios() {
   # Only strict manifest values block the launch:
   #   - "Required" / "required"
   #   - "Yes" (bare)
-  #   - "At least one ..." groups (satisfied when any member file is found)
+  #   - "At least one ..." entries
+  # "At least one" strategy: all such entries for the requested systems form one
+  # pool per system. If ANY member file is found, the whole pool is considered
+  # satisfied and its missing files never trigger the warning (descriptions may
+  # differ between members, so grouping by description would be unreliable).
   # Conditional variants are informational only and never trigger the warning:
   #   - "Required, for certain Arcade Boards and Games"
   #   - "Required for some Japanese games." / "Required if ..."
@@ -24,25 +28,26 @@ rd_get_missing_required_bios() {
   local status
   status=$(api_get_bios_file_status "$systems_json") || return 0
 
-  # Determine which "At least one" groups are already satisfied.
-  local satisfied_groups
-  satisfied_groups=$(echo "$status" | jq '
+  # Systems where at least one "At least one" member file was found.
+  local satisfied_systems
+  satisfied_systems=$(echo "$status" | jq '
     [ .[]
-      | ((.required // "") | ascii_downcase | gsub("^\\s+|\\s+$"; "")) as $req
-      | select($req | test("^at least one"))
+      | select(((.required // "") | ascii_downcase | gsub("^\\s+|\\s+$"; "")) | test("^at least one"))
       | select(.file_found == "Yes")
-      | (.systems + "|" + .description)
-    ] | unique')
+      | (.systems | split(", "))
+    ] | flatten | unique')
 
-  # Keep only strictly-required entries that are not found, dropping satisfied groups.
-  echo "$status" | jq --argjson satisfied "$satisfied_groups" '
+  # Keep only strictly-required entries that are not found; drop every
+  # "At least one" entry whose system already has a found pool member.
+  echo "$status" | jq --argjson satisfied "$satisfied_systems" '
     map(. as $it |
       (($it.required // "") | ascii_downcase | gsub("^\\s+|\\s+$"; "")) as $req |
       select(
         ($req == "required" or $req == "yes" or ($req | test("^at least one")))
         and ($it.file_found != "Yes")
         and (if ($req | test("^at least one"))
-             then ($satisfied | any(. == ($it.systems + "|" + $it.description)) | not)
+             then ([ $it.systems | split(", ")[] ] as $ss
+                   | $satisfied | map(select($ss | index(.))) | length == 0)
              else true end)
       ))
   '
@@ -91,11 +96,11 @@ rd_pre_launch_bios_check() {
   logs_path="${logs_path:-$(jq -r '.paths.logs_path // empty' "$rd_conf")}"
   es_systems="${es_systems:-$rd_components/es-de/share/es-de/resources/systems/linux/es_systems.xml}"
 
-  # Skip condition 1: preset disabled?
-  local preset_state
-  preset_state=$(jq -r '.presets.bios_check_on_launch.retrodeck // "true"' "$rd_conf" 2>/dev/null)
-  if [[ "$preset_state" == "false" ]]; then
-    log d "bios_check_on_launch preset disabled, skipping pre-launch BIOS check"
+  # Skip condition 1: setting disabled?
+  local setting_state
+  setting_state=$(jq -r '.options.bios_check_on_launch // "true"' "$rd_conf" 2>/dev/null)
+  if [[ "$setting_state" == "false" ]]; then
+    log d "bios_check_on_launch disabled, skipping pre-launch BIOS check"
     return 0
   fi
 
