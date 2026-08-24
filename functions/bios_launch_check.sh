@@ -7,26 +7,17 @@
 # than re-implementing BIOS detection.
 
 rd_get_missing_required_bios() {
-  # Given a JSON array of systems (e.g. '["gc","wii"]'), returns a JSON array of
-  # unconditionally-required BIOS entries that are currently missing.
-  # Only strict manifest values block the launch:
-  #   - "Required" / "required"
-  #   - "Yes" (bare)
-  #   - "At least one ..." entries
-  # "At least one" strategy: all such entries for the requested systems form one
-  # pool per system. If ANY member file is found, the whole pool is considered
-  # satisfied and its missing files never trigger the warning (descriptions may
-  # differ between members, so grouping by description would be unreliable).
-  # Conditional variants are informational only and never trigger the warning:
-  #   - "Required, for certain Arcade Boards and Games"
-  #   - "Required for some Japanese games." / "Required if ..."
-  #   - "Yes, for certain games" / "Yes for KEGS"
-  #   - "Optional*" (any variant)
-  # USAGE: rd_get_missing_required_bios "$systems_json"
+  # Given a JSON array of systems (e.g. '["gc","wii"]') and an optional component
+  # name, returns a JSON array of unconditionally-required BIOS entries that are
+  # currently missing. Only the manifest of the specified component is scanned;
+  # pass an empty string to scan all components (used by the Configurator BIOS
+  # Checker).
+  # USAGE: rd_get_missing_required_bios "$systems_json" "$launching_component"
 
   local systems_json="$1"
+  local launching_component="${2:-}"
   local status
-  status=$(api_get_bios_file_status "$systems_json") || return 0
+  status=$(api_get_bios_file_status "$systems_json" "$launching_component") || return 0
 
   # Systems where at least one "At least one" member file was found.
   local satisfied_systems
@@ -82,7 +73,13 @@ rd_pre_launch_bios_check() {
   #   Yes        -> continue launching
   #   No         -> abort the launch
   #   Bios Check -> open the existing BIOS checker for the detected system
-  # USAGE: rd_pre_launch_bios_check "$@"   (called with the launcher arguments)
+  # USAGE: rd_pre_launch_bios_check "$launching_component" "$@"
+  #   launching_component: component name of the emulator being launched
+  #   (empty string when called from the Configurator BIOS Checker)
+
+  local launching_component="${1:-}"
+  shift
+  local launcher_args=("$@")
 
   # Ensure core variables are available in the launcher environment.
   if [[ -f /app/libexec/dyn_vars.sh ]]; then
@@ -107,7 +104,7 @@ rd_pre_launch_bios_check() {
   # Skip condition 2: find the ROM argument (a path under the roms directory).
   local rom_path=""
   local arg
-  for arg in "$@"; do
+  for arg in "${launcher_args[@]}"; do
     if [[ "$arg" == *"roms/"* ]]; then
       rom_path="$arg"
       break
@@ -128,10 +125,17 @@ rd_pre_launch_bios_check() {
 
   # Skip condition 4: component manifests have no BIOS section for this system.
   local has_bios
-  has_bios=$(jq --arg sys "$system" '
-    [ .[] | .manifest | .. | objects | select(has("bios")) | .bios ]
-    | flatten | map(select([.system] | flatten | index($sys))) | length > 0
-  ' "$component_manifest_cache_file" 2>/dev/null)
+  if [[ -n "$launching_component" ]]; then
+    has_bios=$(jq --arg sys "$system" --arg comp "$launching_component" '
+      [ .[] | select(.manifest | has($comp)) | .manifest[$comp] | .. | objects | select(has("bios")) | .bios ]
+      | flatten | map(select([.system] | flatten | index($sys))) | length > 0
+    ' "$component_manifest_cache_file" 2>/dev/null)
+  else
+    has_bios=$(jq --arg sys "$system" '
+      [ .[] | .manifest | .. | objects | select(has("bios")) | .bios ]
+      | flatten | map(select([.system] | flatten | index($sys))) | length > 0
+    ' "$component_manifest_cache_file" 2>/dev/null)
+  fi
   if [[ "$has_bios" != "true" ]]; then
     log d "No BIOS entries for system $system, skipping pre-launch BIOS check"
     return 0
@@ -141,7 +145,7 @@ rd_pre_launch_bios_check() {
   local systems_json
   systems_json=$(jq -nc --arg sys "$system" '[$sys]')
   local missing
-  missing=$(rd_get_missing_required_bios "$systems_json")
+  missing=$(rd_get_missing_required_bios "$systems_json" "$launching_component")
   if [[ -z "$missing" || "$missing" == "[]" ]]; then
     log d "All required BIOS files present for system $system"
     return 0
@@ -153,6 +157,7 @@ rd_pre_launch_bios_check() {
   local system_label
   system_label=$(echo "$missing" | jq -r '.[0].systems // empty' 2>/dev/null)
 
+  log w "Missing required BIOS files for $system: $missing_text"
   local choice
   choice=$(rd_zenity --info --no-wrap \
     --title="RetroDECK - Missing BIOS Files" \

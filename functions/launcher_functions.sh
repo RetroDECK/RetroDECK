@@ -15,6 +15,5 @@ source /app/libexec/api_data_processing.sh
 source /app/libexec/configurator_functions.sh
 source /app/libexec/bios_launch_check.sh
 
-# Run the automatic pre-launch BIOS check (skips itself when not applicable).
-# Runs in the launcher's shell, so "exit 0" here aborts the whole launch.
-rd_pre_launch_bios_check "$@"
+_launching_component="$(basename "$(dirname "$(readlink -f "${BASH_SOURCE[1]}")")")"
+rd_pre_launch_bios_check "$_launching_component" "$@"
