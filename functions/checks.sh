@@ -322,7 +322,6 @@ check_for_updates() {
     echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nDeploying helper files..." >&$progress_fd
     deploy_helper_files "retrodeck"
     echo "# RetroDECK is completing the upgrade. Please check for any background windows or pop-ups that may require your attention.\n\nPlease wait while the setup process completes...\n\nApplying RetroDECK icons..." >&$progress_fd
-    rsync -rlD --delete --mkpath "/app/retrodeck/graphics/folder-iconsets/" "$XDG_CONFIG_HOME/retrodeck/graphics/folder-iconsets/"
     handle_folder_iconsets "$iconset"
   
     echo "100" >&$progress_fd
