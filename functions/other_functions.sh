@@ -721,50 +721,91 @@ finit_default_yes() {
 
 handle_folder_iconsets() {
   local iconset="$1"
+  local component="${2:-all}"
 
   if [[ ! "$iconset" == "false" ]]; then
-    if [[ -d "$folder_iconsets_dir/$iconset" ]]; then
-      while read -r icon; do
-        local icon_relative_path="${icon#$folder_iconsets_dir/$iconset/}"
-        local icon_relative_path="${icon_relative_path%.ico}"
-        local icon_relative_root="${icon_relative_path%%/*}"
-        local path_var_name="${icon_relative_root}_path"
-        local path_name=""
+    local iconset_obj component_name component_path iconset_id iconset_source
 
-        if [[ "$icon_relative_path" =~ (sync) ]]; then # If the icon is for a hidden folder, add the leading dot temporarily for searching
-          icon_relative_path=".${icon_relative_path}"
+    if [[ "$iconset" == *"::"* ]]; then
+      component="${iconset#*::}"
+      iconset="${iconset%%::*}"
+    fi
+
+    iconset_obj="$(api_get_iconset "$iconset" "$component" | jq '.[]')"
+
+    if [[ -n "iconset_obj" ]]; then
+      component_name="$(jq -r '.component_name' <<< $iconset_obj)"
+      component_path="$(jq -r '.component_path' <<< $iconset_obj)"
+      iconset_source="$(jq -r '.source' <<< $iconset_obj)"
+
+      if [[ -d "$component_path/$iconset_source/$iconset" ]]; then
+        # Cleanup stale icons from previous set, in case there is no replacement icon
+        while read -r path; do
+          find -L "$path" -maxdepth 2 -type f -iname '.directory' -exec rm {} \;
+        done < <(jq -r 'del(.paths.downloaded_media_path, .paths.themes_path, .paths.sdcard) | .paths[]' "$rd_conf")
+
+        # Cleanup previous cached iconsets
+        local prev_iconset_id="$(api_get_iconset "$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")" | jq -r '.[].id')"
+        if [[ -n "$prev_iconset_id" && -d "$folder_iconsets_dir/$prev_iconset_id" ]]; then
+          log d "Removing old iconset directory $folder_iconsets_dir/$prev_iconset_id"
+          rm -rf "$folder_iconsets_dir/$prev_iconset_id"
         fi
 
-        if [[ -v "$path_var_name" ]]; then
-          path_name="${!path_var_name}"
-          if [[ ! "$icon_relative_path" == "$icon_relative_root" ]]; then
-            path_name="$path_name/${icon_relative_path#$icon_relative_root/}"
+        # Sync new iconset
+        rsync -rlD --delete --mkpath "$component_path/$iconset_source/$iconset/" "$folder_iconsets_dir/$iconset/"
+
+        while read -r icon; do
+          local icon_relative_path="${icon#$folder_iconsets_dir/$iconset/}"
+          local icon_relative_path="${icon_relative_path%.ico}"
+          local icon_relative_root="${icon_relative_path%%/*}"
+          local path_var_name="${icon_relative_root}_path"
+          local path_name=""
+
+          if [[ "$icon_relative_path" =~ (sync) ]]; then # If the icon is for a hidden folder, add the leading dot temporarily for searching
+            icon_relative_path=".${icon_relative_path}"
           fi
-          if [[ ! -d "$path_name" ]]; then
+
+          if [[ -v "$path_var_name" ]]; then
+            path_name="${!path_var_name}"
+            if [[ ! "$icon_relative_path" == "$icon_relative_root" ]]; then
+              path_name="$path_name/${icon_relative_path#$icon_relative_root/}"
+            fi
+            if [[ ! -d "$path_name" ]]; then
+              log w "Path for icon $icon could not be found, skipping..."
+              continue
+            fi
+          elif [[ -d "$rd_home_path/$icon_relative_path" ]]; then
+            path_name="$rd_home_path/$icon_relative_path"
+            icon_relative_path="${icon_relative_path#.}" # Remove leading dot from actual icon name reference
+          else
             log w "Path for icon $icon could not be found, skipping..."
             continue
           fi
-        elif [[ -d "$rd_home_path/$icon_relative_path" ]]; then
-          path_name="$rd_home_path/$icon_relative_path"
-          icon_relative_path="${icon_relative_path#.}" # Remove leading dot from actual icon name reference
-        else
-          log w "Path for icon $icon could not be found, skipping..."
-          continue
-        fi
 
-        log d "Creating file $path_name/.directory"
-        echo '[Desktop Entry]' > "$path_name/.directory"
-        echo "Icon=$folder_iconsets_dir/$iconset/$icon_relative_path.ico" >> "$path_name/.directory"
-      done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
-      set_setting_value "$rd_conf" "iconset" "$iconset" retrodeck "options"
+          log d "Creating file $path_name/.directory"
+          echo '[Desktop Entry]' > "$path_name/.directory"
+          echo "Icon=$folder_iconsets_dir/$iconset/$icon_relative_path.ico" >> "$path_name/.directory"
+        done < <(find "$folder_iconsets_dir/$iconset" -maxdepth 2 -type f -iname "*.ico")
+        set_setting_value "$rd_conf" "iconset" "$iconset::$component_name" retrodeck "options"
+      else
+        configurator_generic_dialog "RetroDeck Configurator - Choose Folder Iconsets" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> from the component $component could not be found."
+        return 1
+      fi
     else
-      configurator_generic_dialog "RetroDeck Configurator - Toggle Folder Iconsets" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> could not be found in the RetroDECK assets."
+      configurator_generic_dialog "RetroDeck Configurator - Choose Folder Iconsets" "The chosen iconset <span foreground='$purple'><b>$iconset</b></span> could not be found in the $component assets."
       return 1
     fi
   else
     while read -r path; do
       find -L "$path" -maxdepth 2 -type f -iname '.directory' -exec rm {} \;
     done < <(jq -r 'del(.paths.downloaded_media_path, .paths.themes_path, .paths.sdcard) | .paths[]' "$rd_conf")
+
+    # Cleanup previous cached iconsets
+    local prev_iconset_id="$(api_get_iconset "$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")" | jq -r '.[].id')"
+    if [[ -n "$prev_iconset_id" && -d "$folder_iconsets_dir/$prev_iconset_id" ]]; then
+      rm -rf "$folder_iconsets_dir/$prev_iconset_id"
+    fi
+
     set_setting_value "$rd_conf" "iconset" "false" retrodeck "options"
   fi
 }
