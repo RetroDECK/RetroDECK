@@ -297,3 +297,37 @@ build_zenity_component_paths_menu_array() {
       .key
   ' "$component_manifest_cache_file")
 }
+
+build_zenity_iconset_menu_array() {
+  # Build a Bash array of iconset entries for use in a Zenity radiolist dialog.
+  # Each entry consists of four consecutive elements: selected, reference, friendly_name, description.
+  # A trailing "Disable" entry carries the reference "false".
+  # USAGE: build_zenity_iconset_menu_array "$dest_array_name"
+
+  local -n dest_array="$1"
+  local disable_selected="TRUE"
+
+  local current_iconset="$(get_setting_value "$rd_conf" "iconset" "retrodeck" "options")" || current_iconset="false"
+
+  if [[ -n "$current_iconset" && "$current_iconset" != "false" ]]; then
+    if api_get_iconset "$current_iconset" > /dev/null 2>&1; then
+      disable_selected="FALSE"
+    else
+      log w "Configured iconset \"$current_iconset\" was not found in any component manifest, treating as disabled"
+      current_iconset="false"
+    fi
+  fi
+
+  mapfile -t dest_array < <(api_get_iconset "all" | jq -r --arg current "$current_iconset" '
+    sort_by(.component_name, (.name // .id))
+    | .[]
+    | "\(.id)::\(.component_name)" as $reference
+    | (if $reference == $current then "TRUE" else "FALSE" end),
+      $reference,
+      (.name // .id // "" | gsub("\\s+"; " ")),
+      (.desc // "" | gsub("\\s+"; " "))
+  ')
+
+  [[ -z "$current_iconset" || "$current_iconset" == "false" ]] && disable_selected="TRUE"
+  dest_array+=("$disable_selected" "false" "Disable" "Do not use a custom folder iconset")
+}
