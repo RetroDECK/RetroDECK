@@ -6,3 +6,15 @@
 source /app/libexec/cleanup.sh
 source /app/libexec/logger.sh
 source /app/libexec/zenity_processing.sh
+
+# Shared helpers used by both the main shell and the launchers.
+source /app/libexec/system_detection.sh
+
+# BIOS status scanning + the pre-launch BIOS check hook.
+source /app/libexec/api_data_processing.sh
+source /app/libexec/configurator_functions.sh
+source /app/libexec/bios_launch_check.sh
+
+# Run the automatic pre-launch BIOS check (skips itself when not applicable).
+# Runs in the launcher's shell, so "exit 0" here aborts the whole launch.
+rd_pre_launch_bios_check "$@"
