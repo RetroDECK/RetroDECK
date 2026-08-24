@@ -1343,7 +1343,7 @@ configurator_iconset_dialog() {
 
   choice=$(rd_zenity --list --radiolist --title="RetroDECK Configurator - Iconsets" --cancel-label="Back" --ok-label="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="status" --column="id" --column="Name" --column="Description" --hide-column=2 --print-column=2 \
+  --column="Enabled" --column="id" --column="Name" --column="Description" --hide-column=2 --print-column=2 \
   "${choices[@]}")
 
   local rc="$?"
