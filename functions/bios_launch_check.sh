@@ -162,12 +162,6 @@ rd_pre_launch_bios_check() {
   local rc=$?
   log d "Pre-launch BIOS prompt outcome: rc=$rc choice='${choice:-<empty>}'"
 
-  if [[ "$rc" -eq 1 || "$choice" == "No" ]]; then
-    # "No" or dialog closed -> abort the launch.
-    log i "User aborted launch due to missing required BIOS files for $system"
-    exit 0
-  fi
-
   if [[ "$choice" == "Bios Check" ]]; then
     # Open the existing BIOS checker for this system, then ask again.
     log i "User opened BIOS Checker for system $system"
@@ -181,6 +175,12 @@ rd_pre_launch_bios_check() {
     fi
     rd_pre_launch_bios_check_continue_prompt "$system_label"
     return $?
+  fi
+
+  if [[ "$rc" -eq 1 || "$choice" == "No" ]]; then
+    # "No" or dialog closed -> abort the launch.
+    log i "User aborted launch due to missing required BIOS files for $system"
+    exit 0
   fi
 
   # "Yes" -> continue launching.
