@@ -65,6 +65,14 @@ get_system_fullname() {
   echo "$fullname"
 }
 
+system_exists() {
+  # Checks whether a system name actually exists in es_systems.xml.
+  # Guards against mistyped folder names being treated as valid systems.
+  # USAGE: system_exists "$system_name"
+
+  xmllint --recover --xpath "//system[name='$1']" "$es_systems" &>/dev/null
+}
+
 resolve_emulator_path() {
   # Resolves an emulator name (e.g. "RETROARCH", "MAME") to its actual binary path by searching es_find_rules.xml.
   # USAGE: resolve_emulator_path "$emulator_name"
@@ -251,10 +259,16 @@ detect_system() {
   # Method 1: Extract system from the ROM path structure.
   system=$(echo "$game_path" | grep -oP '(?<=roms/)[^/]+')
 
-  if [[ -n "$system" ]]; then
+  # Only trust the folder name if it is a real system in es_systems.xml:
+  # a mistyped folder (e.g. "meagadrive") must not be treated as a system.
+  if [[ -n "$system" ]] && system_exists "$system"; then
     log d "Detected system=$system from path"
     echo "$system"
     return 0
+  fi
+
+  if [[ -n "$system" ]]; then
+    log w "System '$system' from path not found in es_systems.xml, falling back to extension matching"
   fi
 
   # Method 2: Fall back to extension-based detection with user dialog.
@@ -292,7 +306,9 @@ detect_system_by_extension() {
   fi
 
   local formatted_systems
-  formatted_systems=$(echo "$matching_systems" | tr '|' '\n')
+  # Deduplicate while preserving order: several <system> entries can share the
+  # same <fullname> (e.g. megacd/megacdjp, megadrive/genesis).
+  formatted_systems=$(echo "$matching_systems" | tr '|' '\n' | awk '!seen[$0]++')
 
   local chosen_system
   chosen_system=$(rd_zenity --list \
@@ -347,7 +363,13 @@ resolve_command_template() {
   if [[ "$manual_mode" == "true" ]]; then
     log d "Manual mode, showing emulator selection dialog"
     local selected
+    local rc
     selected=$(select_command_manual "$system")
+    rc=$?
+    if [[ "$rc" -eq 2 ]]; then
+      # User pressed Back: propagate so the caller can restart from system selection
+      return 2
+    fi
     if [[ -z "$selected" ]]; then
       log e "No emulator selected in manual mode"
       return 1
@@ -388,6 +410,7 @@ select_command_manual() {
   # Presents a Zenity dialog listing all available emulator commands for the
   # given system, extracted from es_systems.xml. If only one command exists,
   # it is returned directly without showing a dialog.
+  # Return codes: 0 = command selected, 1 = error, 2 = user pressed Back.
   # USAGE: select_command_manual "$system"
 
   local system_name="$1"
@@ -434,11 +457,12 @@ select_command_manual() {
     --column="Emulator" --column="command" \
     "${command_list[@]}" \
     --width=800 --height=400 \
-    --print-column=2 --hide-column=2)
+    --print-column=2 --hide-column=2 \
+    --cancel-label="Back")
 
   if [[ -z "$selected" ]]; then
-    log e "User cancelled emulator selection"
-    return 1
+    log d "User pressed Back in the emulator selection"
+    return 2
   fi
 
   echo "$selected"
@@ -852,27 +876,80 @@ run_game() {
   local game_basename="./$(basename "$game")"
 
   # Detect system
-  if [[ -z "$system" ]]; then
-    if ! system=$(detect_system "$game"); then
-      log e "Could not determine system for: $game"
-      return 1
-    fi
-  fi
-  log d "system=$system"
+  local path_system
+  path_system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+' || true)
 
-  # Derive event script arguments from resolved game and system info.
+  # A system provided via --system must also be a real one in es_systems.xml
+  if [[ -n "$system" ]] && ! system_exists "$system"; then
+    log w "Provided system '$system' not found in es_systems.xml, re-detecting"
+    system=""
+  fi
+
+  # Derive event script arguments that only depend on the game itself.
   local game_name
   game_name=$(basename "$game")
   game_name="${game_name%%.*}"
-  local system_fullname
-  system_fullname=$(get_system_fullname "$system") || system_fullname="$system"
 
-  # Resolve command template
-  local command_template
-  if ! command_template=$(resolve_command_template "$system" "$game_basename" "$emulator" "$manual_mode"); then
-    log e "Could not resolve an emulator command for system=$system"
+  # Resolve system + emulator command. Pressing Back in the emulator picker
+  # returns to the system picker; cancelling the system picker aborts.
+  local command_template=""
+  local resolve_rc=0
+  local system_fullname
+
+  while true; do
+    if [[ -z "$system" ]]; then
+      if ! system=$(detect_system "$game"); then
+        log e "Could not determine system for: $game"
+        return 1
+      fi
+
+      # The system had to be guessed (mistyped folder or unknown --system):
+      # ask the user which emulator to use as well.
+      if [[ "$system" != "$path_system" ]]; then
+        log i "System '$path_system' is unknown, asking which emulator to use"
+        manual_mode=true
+      fi
+    fi
+    log d "system=$system"
+
+    system_fullname=$(get_system_fullname "$system") || system_fullname="$system"
+
+    command_template=""
+    resolve_rc=0
+    command_template=$(resolve_command_template "$system" "$game_basename" "$emulator" "$manual_mode") || resolve_rc=$?
+
+    if [[ -n "$command_template" ]]; then
+      break
+    fi
+
+    if [[ "$resolve_rc" -eq 2 ]]; then
+      # Back pressed in the emulator picker: restart from system selection
+      log i "Back requested, returning to system selection"
+      system=""
+      manual_mode=true
+      continue
+    fi
+
+    # Resolution failed for another reason: offer the emulator list as a fallback
+    log w "Could not resolve an emulator command for system=$system"
+    log i "Falling back to manual emulator selection for system=$system"
+    command_template=$(select_command_manual "$system")
+    resolve_rc=$?
+
+    if [[ -n "$command_template" ]]; then
+      break
+    fi
+
+    if [[ "$resolve_rc" -eq 2 ]]; then
+      log i "Back requested, returning to system selection"
+      system=""
+      manual_mode=true
+      continue
+    fi
+
+    log e "No emulator selected by user, aborting launch"
     return 1
-  fi
+  done
 
   # Substitute placeholders
   local final_command
