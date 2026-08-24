@@ -1350,7 +1350,28 @@ configurator_iconset_dialog() {
 
   if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
     log d "choice: $choice"
+    
+    local progress_pipe
+    progress_pipe=$(mktemp -u)
+    mkfifo "$progress_pipe"
+    
+    rd_zenity --progress \
+    --title="RetroDECK Configurator - Updating RetroDECK Folder Iconset" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="<span foreground='$purple'><b>Updating RetroDECK folder iconset, please wait</b></span>" \
+    --pulsate --width=500 --height=150 --auto-close --no-cancel < "$progress_pipe" &
+    local zenity_pid=$!
+
+    local progress_fd
+    exec {progress_fd}>"$progress_pipe"
+
     handle_folder_iconsets "$choice"
+
+    echo "100" >&$progress_fd
+
+    exec {progress_fd}>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
   fi
 }
 
