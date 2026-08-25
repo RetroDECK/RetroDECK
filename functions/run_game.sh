@@ -854,11 +854,17 @@ run_game() {
   local game
   game=$(realpath "$game_arg" 2>/dev/null) || true
 
-  # Handle "directory as a file"
+  # Handle "directory as a file": if a directory ends with an extension-like suffix,
+  # check whether a file with the same name exists inside it.
   if [[ -d "$game" ]]; then
-    log d "Game path is a directory, looking for inner file"
-    game="$game/$(basename "$game")"
-    log d "Resolved inner file: $game"
+    log d "Game path is a directory, looking for inner file with same name"
+    local inner="$game/$(basename "$game")"
+    if [[ -f "$inner" ]]; then
+      game="$inner"
+      log d "Resolved inner file: $game"
+    else
+      log d "No inner file with same name found in directory: $game"
+    fi
   fi
 
   # Validate the game file exists
