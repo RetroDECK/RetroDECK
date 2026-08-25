@@ -329,8 +329,8 @@ modules:
           rm -rf ${FLATPAK_DEST}/usr
         fi
 
-      # Include all iconsets
-      - cp -rf res/folder-iconsets ${FLATPAK_DEST}/retrodeck/graphics
+      # Include all iconsets - Commented as was breaking the build
+      # - cp -rf res/folder-iconsets ${FLATPAK_DEST}/retrodeck/graphics
 
       # Tools
       - mkdir -p ${FLATPAK_DEST}/tools
