@@ -29,7 +29,7 @@
     "update_ignore": "",
     "developer_options": "false",
     "rd_logging_level": "info",
-    "iconset": "lahrs-main",
+    "iconset": "lahrs-main::retrodeck",
     "max_backups": 3
   },
   "component_versions": {},

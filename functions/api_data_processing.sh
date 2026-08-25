@@ -477,6 +477,55 @@ api_get_retrodeck_changelog() {
   echo "$changelogs"
 }
 
+api_get_iconset() {
+  local requested_iconset="${1:-all}" requested_component="${2:-all}"
+  local iconsets match_count
+
+  # Accept a concatenated "component_name::iconset_id" reference in place of the id
+  if [[ "$requested_iconset" == *"::"* ]]; then
+    if [[ "$requested_component" != "all" && "$requested_component" != "${requested_iconset%%::*}" ]]; then
+      log e "Iconset reference \"$requested_iconset\" conflicts with requested component \"$requested_component\""
+      return 1
+    fi
+    requested_component="${requested_iconset#*::}"
+    requested_iconset="${requested_iconset%%::*}"
+    if [[ -z "$requested_component" || -z "$requested_iconset" ]]; then
+      log e "Malformed iconset reference \"$1\", expected \"component_name::iconset_id\""
+      return 1
+    fi
+  fi
+
+  iconsets="$(jq --arg requested_iconset "$requested_iconset" --arg requested_component "$requested_component" '
+    [ .[]
+      | .component_path as $component_path
+      | .manifest
+      | to_entries[]
+      | .key as $component_name
+      | select($requested_component == "all" or $component_name == $requested_component)
+      | .value
+      | .. | objects | select(has("iconsets")) | .iconsets
+      | select(type == "array") | .[]
+      | select($requested_iconset == "all" or .id == $requested_iconset)
+      | . + {component_name: $component_name, component_path: $component_path}
+    ]
+  ' "$component_manifest_cache_file")" || return 1
+
+  if [[ "$iconsets" == "[]" ]]; then
+    log d "No iconset found matching id \"$requested_iconset\" in component \"$requested_component\""
+    return 1
+  fi
+
+  if [[ "$requested_iconset" != "all" && "$requested_component" != "all" ]]; then
+    match_count="$(jq 'length' <<< "$iconsets")"
+    if (( match_count > 1 )); then
+      log e "Component \"$requested_component\" declares iconset id \"$requested_iconset\" $match_count times, refusing to guess"
+      return 1
+    fi
+  fi
+
+  echo "$iconsets"
+}
+
 api_set_preset_state() {
   # Set the state of a preset for a given component, applying all associated config changes.
   # Validates the requested state, checks for conflicting presets and prerequisites, then applies changes.

@@ -192,7 +192,7 @@ get_altemulator_label() {
   local label
   label=$(awk -v path="$game_basename" '
     /<game>/,/<\/game>/ {
-      if ($0 ~ "<path>" path "</path>") found = 1
+      if (index($0, "<path>" path "</path>") > 0) found = 1
       if (found && $0 ~ /<altemulator>/) {
         gsub(/.*<altemulator>|<\/altemulator>.*/, "")
         print

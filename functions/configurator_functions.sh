@@ -1337,73 +1337,41 @@ configurator_usb_import_dialog() {
   esac
 }
 
-configurator_iconset_toggle_dialog() {
-  if [[ ! $(get_setting_value "$rd_conf" "iconset" "retrodeck" "options") == "false" ]]; then
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Folder Iconsets" \
-    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to remove them?"
+configurator_iconset_dialog() {
+  log i "Configurator: opening RetroDECK folder iconset dialog"
+  build_zenity_iconset_menu_array choices
+
+  choice=$(rd_zenity --list --radiolist --title="RetroDECK Configurator - Iconsets" --cancel-label="Back" --ok-label="OK" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Enabled" --column="id" --column="Name" --column="Description" --hide-column=2 --print-column=2 \
+  "${choices[@]}")
+
+  local rc="$?"
+
+  if [[ "$rc" -eq 0 && -n "$choice" ]]; then # User made a selection
+    log d "choice: $choice"
     
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      local progress_pipe
-      progress_pipe=$(mktemp -u)
-      mkfifo "$progress_pipe"
+    local progress_pipe
+    progress_pipe=$(mktemp -u)
+    mkfifo "$progress_pipe"
+    
+    rd_zenity --progress \
+    --title="RetroDECK Configurator - Updating RetroDECK Folder Iconset" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="<span foreground='$purple'><b>Updating RetroDECK folder iconset, please wait</b></span>" \
+    --pulsate --width=500 --height=150 --auto-close --no-cancel < "$progress_pipe" &
+    local zenity_pid=$!
 
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
-      local zenity_pid=$!
+    local progress_fd
+    exec {progress_fd}>"$progress_pipe"
 
-      local progress_fd
-      exec {progress_fd}>"$progress_pipe"
+    handle_folder_iconsets "$choice"
 
-      handle_folder_iconsets "false"
+    echo "100" >&$progress_fd
 
-      echo "100" >&$progress_fd
-
-      exec {progress_fd}>&-
-      wait "$zenity_pid" 2>/dev/null
-      rm -f "$progress_pipe"
-      
-      rd_zenity --info \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Folder Iconsets" \
-      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Disabled</b></span>."
-    fi
-  else
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Folder Iconsets" \
-    --text="RetroDECK folder icons are currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      
-      local progress_pipe
-      progress_pipe=$(mktemp -u)
-      mkfifo "$progress_pipe"
-
-      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --pulsate --no-cancel --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator - Toggle Folder Iconsets In Progress" < "$progress_pipe" &
-      local zenity_pid=$!
-
-      local progress_fd
-      exec {progress_fd}>"$progress_pipe"
-
-      handle_folder_iconsets "lahrs-main"
-      echo "100" >&$progress_fd
-
-      exec {progress_fd}>&-
-      wait "$zenity_pid" 2>/dev/null
-      rm -f "$progress_pipe"
-
-      rd_zenity --info \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - Toggle Folder Iconsets" \
-      --text="RetroDECK folder icons are now <span foreground='$purple'><b>Enabled</b></span>."
-    fi
+    exec {progress_fd}>&-
+    wait "$zenity_pid" 2>/dev/null
+    rm -f "$progress_pipe"
   fi
 }
 
