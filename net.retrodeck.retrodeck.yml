@@ -61,14 +61,14 @@ finish-args:
   # Filesystem: Discord (For the components that has an option for Discord Rich Presence)
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
 
-  # Filesystem: GTK‑3 configuration (read‑only)
+  # Filesystem: GTK-3 configuration (read-only)
   - --filesystem=xdg-config/gtk-3.0:ro
 
   # Filesystem: Steam ROM Manager / Steam Integration
   - --filesystem=xdg-data/Steam:rw
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
 
-  # Filesystem: Udev information (read‑only, for inputs)
+  # Filesystem: Udev information (read-only, for inputs)
   - --filesystem=/run/udev:ro
 
   # GStreamer integration
@@ -78,7 +78,7 @@ finish-args:
   - --filesystem=xdg-run/gamescope-0:ro
   # - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
   
-  # Multi‑arch support (32‑bit libs on 64‑bit)
+  # Multi-arch support (32-bit libs on 64-bit)
   - --allow=multiarch
 
   # Network 
@@ -91,12 +91,12 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=xdg-run/pipewire-0
 
-  # Wayland: Display server access, SDL window‑class, Qt platform selection
+  # Wayland: Display server access, SDL window-class, Qt platform selection
   - --socket=wayland
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
 
-  # X11: Display server access, SDL window‑class
+  # X11: Display server access, SDL window-class
   - --socket=x11
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
 
@@ -131,14 +131,14 @@ modules:
   # -------------------------------------------------------------------------
   # RetroDECK version module
   #
-  # • If `version` is set to “cooker”, the build will automatically generate a
+  # - If `version` is set to "cooker", the build will automatically generate a
   #   version tag based on the current date.
-  # • Otherwise the exact string placed in the `version` file will be used.
-  #   Do **not** prepend a leading “v”.
-  # • The version number is stored in `/app/retrodeck/version`.
+  # - Otherwise the exact string placed in the `version` file will be used.
+  #   Do **not** prepend a leading "v".
+  # - The version number is stored in `/app/retrodeck/version`.
   #
   # UPDATE STEPS FOR MAIN REPOSITORY
-  #   ☐ Update `net.retrodeck.retrodeck.metainfo.xml` with the new version,
+  #   - Update `net.retrodeck.retrodeck.metainfo.xml` with the new version,
   #      release date, and changelog notes.
   # -------------------------------------------------------------------------
 
@@ -198,7 +198,7 @@ modules:
           url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
 
   # -------------------------------------------------------------------------
-  # p7zip - 7‑Zip compression utilities.
+  # p7zip - 7-Zip compression utilities.
   # -------------------------------------------------------------------------
 
   - name: p7zip
@@ -314,7 +314,7 @@ modules:
       - components-sources.json
       
   # -------------------------------------------------------------------------
-  # finisher - final tidy‑up steps: move files, create icons, install desktop
+  # finisher - final tidy-up steps: move files, create icons, install desktop
   #            entries, copy resources, and clean up temporary bits.
   # -------------------------------------------------------------------------
 
