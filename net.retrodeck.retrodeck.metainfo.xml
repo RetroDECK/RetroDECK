@@ -101,6 +101,19 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.10.10b" date="2026-09-05">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.10b/</url>
+            <description>
+                <p>FIXED/CHANGED:</p>
+                <ul>
+                    <li>TEST.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>Azahar, Dolphin, MAME, SRM, Xemu, PCSX2, Solarus, Ruffle, RPCS3</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.9b" date="2026-05-30">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.9b/</url>
             <description>
