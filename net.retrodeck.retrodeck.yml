@@ -10,7 +10,7 @@
 
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: '6.10'
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 command: retrodeck
 
