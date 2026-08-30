@@ -106,11 +106,12 @@
             <description>
                 <p>FIXED/CHANGED:</p>
                 <ul>
-                    <li>TEST.</li>
+                    <li>Framework: Fixed Flatpak library pathing error in manifest.</li>
+                    <li>ES-DE: Prevented helper templates from overwriting custom Rules and Systems.</li>
                 </ul>
                 <p>UPDATED:</p>
                 <ul>
-                    <li>Azahar, Dolphin, MAME, SRM, Xemu, PCSX2, Solarus, Ruffle, RPCS3</li>
+                    <li>Azahar, Dolphin, MAME, PCSX2, Ruffle, RPCS3, Solarus, SRM, Xemu, XRoar</li>
                 </ul>
             </description>
         </release>
