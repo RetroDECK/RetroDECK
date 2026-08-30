@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+Custom System in RetroDECK
+
+Custom systems typically do not work by default in RetroDECK. To enable this functionality, follow the instructions provided in the official documentation.
+
+This is an example of several custom rules.
+
+For further details, refer to the following resources:
+- https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md - Under the Game System Customizations section.
+- https://retrodeck.readthedocs.io/en/latest/ - Under the experiments section. 
+-->
+<ruleList>
+  <!--
+
+    <emulator name="RETROARCH">
+        <rule type="systempath">
+            <entry>retroarch</entry>
+            <entry>org.libretro.RetroArch</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/RetroArch-Linux*.AppImage</entry>
+            <entry>~/.local/share/applications/RetroArch-Linux*.AppImage</entry>
+            <entry>~/.local/bin/RetroArch-Linux*.AppImage</entry>
+            <entry>~/bin/RetroArch-Linux*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.libretro.RetroArch</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.libretro.RetroArch</entry>
+        </rule>
+    </emulator>
+    <core name="RETROARCH">
+        <rule type="corepath">
+             RetroDECK
+            <entry>/var/config/retroarch/cores</entry>
+             Non-portable AppImage and compiled from source
+            <entry>~/.config/retroarch/cores</entry>
+             Alternative location used on some distributions such as Debian
+            <entry>~/.config/retroarch/libretro</entry>
+             Portable AppImage
+            <entry>~/Applications/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores</entry>
+            <entry>
+                ~/.local/share/applications/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores</entry>
+            <entry>~/.local/bin/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores</entry>
+            <entry>~/bin/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores</entry>
+             Flatpak package
+            <entry>~/.var/app/org.libretro.RetroArch/config/retroarch/cores</entry>
+             Snap package
+            <entry>~/snap/retroarch/common/.config/retroarch/cores</entry>
+            <entry>~/snap/retroarch/current/.config/retroarch/cores</entry>
+             Ubuntu and Linux Mint repository
+            <entry>/usr/lib/x86_64-linux-gnu/libretro</entry>
+             Fedora repository
+            <entry>/usr/lib64/libretro</entry>
+             Manjaro repository
+            <entry>/usr/lib/libretro</entry>
+        </rule>
+    </core>
+    <emulator name="AZAHAR">
+         Nintendo 3DS emulator Azahar
+        <rule type="systempath">
+            <entry>azahar</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/azahar*.AppImage</entry>
+            <entry>~/.local/share/applications/azahar*.AppImage</entry>
+            <entry>~/.local/bin/azahar*.AppImage</entry>
+            <entry>~/bin/azahar*.AppImage</entry>
+            <entry>~/Applications/Azahar-Enhanced*.AppImage</entry>
+            <entry>~/.local/share/applications/Azahar-Enhanced*.AppImage</entry>
+            <entry>~/.local/bin/Azahar-Enhanced*.AppImage</entry>
+            <entry>~/bin/Azahar-Enhanced*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.azahar_emu.Azahar</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.azahar_emu.Azahar</entry>
+             RetroDECK
+            <entry>/app/retrodeck/components/azahar/component_launcher.sh</entry>
+        </rule>
+    </emulator>
+    -->
+</ruleList>
