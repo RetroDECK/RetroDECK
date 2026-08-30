@@ -316,17 +316,9 @@
       "holiday_type": "dynamic",
       "filename": "rd-monkey-festival-splash.svg"
     },
-    "chanukah_start": {
+    "chanukah": {
       "start_date": "1205",
       "end_date": "1205",
-      "start_time": "0000",
-      "end_time": "2359",
-      "holiday_type": "dynamic",
-      "filename": "rd-chanukah-splash.svg"
-    },
-    "chanukah_end": {
-      "start_date": "1212",
-      "end_date": "1212",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "dynamic",
