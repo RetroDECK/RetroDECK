@@ -316,17 +316,9 @@
       "holiday_type": "dynamic",
       "filename": "rd-monkey-festival-splash.svg"
     },
-    "chanukah_start": {
+    "chanukah": {
       "start_date": "1205",
       "end_date": "1205",
-      "start_time": "0000",
-      "end_time": "2359",
-      "holiday_type": "dynamic",
-      "filename": "rd-chanukah-splash.svg"
-    },
-    "chanukah_end": {
-      "start_date": "1212",
-      "end_date": "1212",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "dynamic",
@@ -354,11 +346,11 @@
   },
   "helper_files": {
     "custom_systems_es_find_rules": {
-      "filename": "es_find_rules.xml",
+      "filename": "es_find_rules_template.xml",
       "location": "$rd_home_path/ES-DE/custom_systems"
     },
     "custom_systems_es_systems": {
-      "filename": "es_systems.xml",
+      "filename": "es_systems_template.xml",
       "location": "$rd_home_path/ES-DE/custom_systems"
     },
     "doom_guide": {
