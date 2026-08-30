@@ -345,14 +345,6 @@
     "borders": "widescreen"
   },
   "helper_files": {
-    "custom_systems_es_find_rules": {
-      "filename": "es_find_rules.xml",
-      "location": "$rd_home_path/ES-DE/custom_systems"
-    },
-    "custom_systems_es_systems": {
-      "filename": "es_systems.xml",
-      "location": "$rd_home_path/ES-DE/custom_systems"
-    },
     "doom_guide": {
       "filename": "doom_guide.txt",
       "location": "$roms_path/doom"
