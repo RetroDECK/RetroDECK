@@ -106,12 +106,16 @@
             <description>
                 <p>FIXED/CHANGED:</p>
                 <ul>
-                    <li>Framework: Fixed Flatpak library pathing error in manifest.</li>
+                    <li>BIOS CHECKER: Added and corrected MD5 hash values.</li>
                     <li>ES-DE: Prevented helper templates from overwriting custom Rules and Systems.</li>
+                    <li>FRAMEWORK: Fixed Flatpak library pathing error in manifest.</li>
+                    <li>FRAMEWORK: Upgraded to org.kde.Platform 6.11.</li>
+                    <li>RETROARCH: Resolved compatibility issue with genesis_plus_gx_paprium_libretro core.</li>
+                    <li>VITA3K: Resolved longstanding org.kde.Platform compatibility issue blocking updates.</li>
                 </ul>
                 <p>UPDATED:</p>
                 <ul>
-                    <li>Azahar, Dolphin, MAME, PCSX2, Ruffle, RPCS3, Solarus, SRM, Xemu, XRoar</li>
+                    <li>Azahar, Dolphin, MAME, PCSX2, Ruffle, RPCS3, Solarus, SRM, Xemu, Vita3K, XRoar</li>
                 </ul>
             </description>
         </release>
