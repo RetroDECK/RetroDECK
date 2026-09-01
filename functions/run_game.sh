@@ -296,7 +296,7 @@ substitute_placeholders() {
     cmd="${cmd//"%ROM%"/"'$rom_path'"}"
     cmd="${cmd//"%GAMEDIR%"/"'$rom_dir'"}"
     cmd="${cmd//"%GAMEDIRRAW%"/"'$rom_dir_raw'"}"
-    cmd="${cmd//"%CORE_RETROARCH%"/"$ra_cores_path"}"
+    cmd="${cmd//"%CORE_RETROARCH%"/"$XDG_CONFIG_HOME/retroarch/cores"}"
 
     # Log the result
     log d "Command after placeholders substitutions: $cmd"
