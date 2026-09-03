@@ -24,7 +24,7 @@
    inkscape:pagecheckerboard="0"
    inkscape:deskcolor="#d1d1d1"
    inkscape:zoom="2.33"
-   inkscape:cx="400.21459"
+   inkscape:cx="348.71245"
    inkscape:cy="400"
    inkscape:window-width="3840"
    inkscape:window-height="2082"
@@ -46,7 +46,7 @@
         <g
    id="Central-Icons"
    serif:id="Central Icons"
-   transform="matrix(0.34040781,0,0,0.33136599,-16.975245,-2.9006917)">
+   transform="matrix(0.32551562,0,0,0.31686937,-11.835472,3.0829839)">
             <use
    xlink:href="#_Image1"
    x="173.23"
@@ -63,7 +63,18 @@
    style="fill:white;fill-rule:nonzero;"
    id="path2" />
         </g>
-    </g>
+    <g
+   id="g3"
+   serif:id="Central Icons"
+   transform="matrix(0.32551562,0,0,0.31686937,-11.835472,3.0829839)">
+            <use
+   xlink:href="#_Image1"
+   x="173.23"
+   y="255.20799"
+   width="249"
+   height="290"
+   id="use2" />
+        </g></g>
     <defs
    id="defs2">
         <image
