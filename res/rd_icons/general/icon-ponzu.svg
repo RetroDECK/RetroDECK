@@ -8,7 +8,7 @@
    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
    id="svg2"
    sodipodi:docname="icon-ponzu.svg"
-   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -24,7 +24,7 @@
    inkscape:pagecheckerboard="0"
    inkscape:deskcolor="#d1d1d1"
    inkscape:zoom="2.33"
-   inkscape:cx="400"
+   inkscape:cx="400.21459"
    inkscape:cy="400"
    inkscape:window-width="3840"
    inkscape:window-height="2082"
@@ -40,7 +40,7 @@
    id="g1">
             <path
    d="M140,37.25C140,18.347 124.765,3 106,3L38,3C19.235,3 4,18.347 4,37.25L4,105.75C4,124.653 19.235,140 38,140L106,140C124.765,140 140,124.653 140,105.75L140,37.25Z"
-   style="fill:rgb(17,17,17);"
+   style="fill:#000000"
    id="path1" />
         </g>
         <g
