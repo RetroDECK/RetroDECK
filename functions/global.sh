@@ -35,7 +35,7 @@ source /app/libexec/static_vars.sh
 # Load core libraries
 for file in /app/libexec/*.sh; do
   case "$(basename "$file")" in
-    cleanup.sh|dyn_vars.sh|global.sh|launcher_functions.sh|logger.sh|static_vars.sh) continue ;;
+    cleanup.sh|dyn_vars.sh|global.sh|launcher_functions.sh|logger.sh|retrodeck.sh|static_vars.sh) continue ;;
   esac
   log d "Sourcing $file"
   source "$file"

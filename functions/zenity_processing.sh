@@ -31,7 +31,7 @@ build_zenity_menu_array() {
         [.[] | .preset_name as $preset_name | {
           name: ($defs[$preset_name].name // $preset_name),
           description: ($defs[$preset_name].desc // ""),
-          command: ("configurator_change_preset_dialog " + $preset_name),
+          command: ($defs[$preset_name].command // ("configurator_change_preset_dialog " + $preset_name)),
           priority: ($defs[$preset_name].priority // null)
         }]
         | (map(select(.priority != null)) | sort_by(.priority, .name))

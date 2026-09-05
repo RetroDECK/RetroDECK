@@ -209,9 +209,11 @@ api_get_current_preset_state() {
 api_get_bios_file_status() {
   # Check the status of BIOS files for given systems, including file presence and MD5 validation.
   # Returns a sorted JSON array of BIOS file status objects.
-  # USAGE: api_get_bios_file_status ["$systems_json_array"]
+  # USAGE: api_get_bios_file_status ["$systems_json_array"] "$launching_component(optional)"
+  #   launching_component: when non-empty, only this component's manifest is scanned
 
   local systems_to_check="${1:-[]}"
+  local launching_component="${2:-}"
 
   # Handle list-systems request
   if [[ $(echo "$systems_to_check" | jq -r 'if length == 1 and .[0] == "list-systems" then "true" else "false" end') == "true" ]]; then
@@ -236,17 +238,30 @@ api_get_bios_file_status() {
   local tmp_bios
   tmp_bios=$(mktemp)
 
-  # Merge BIOS info from cache
-  jq --argjson systems "$systems_to_check" \
-  '
-    {bios: (
-      [.[] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
-      if ($systems | length) == 0
-      then .
-      else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
-      end
-    )}
-  ' "$component_manifest_cache_file" | envsubst > "$tmp_bios"
+  # Merge BIOS info from cache, scoped to the launching component when provided
+  if [[ -n "$launching_component" ]]; then
+    jq --argjson systems "$systems_to_check" --arg component "$launching_component" \
+    '
+      {bios: (
+        [ .[] | select(.manifest | has($component)) | .manifest[$component] | .. | objects | select(has("bios")) | .bios ] | flatten |
+        if ($systems | length) == 0
+        then .
+        else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
+        end
+      )}
+    ' "$component_manifest_cache_file" | envsubst > "$tmp_bios"
+  else
+    jq --argjson systems "$systems_to_check" \
+    '
+      {bios: (
+        [.[] | .manifest | .. | objects | select(has("bios")) | .bios] | flatten |
+        if ($systems | length) == 0
+        then .
+        else map(select([.system] | flatten | any(. as $s | $systems | index($s))))
+        end
+      )}
+    ' "$component_manifest_cache_file" | envsubst > "$tmp_bios"
+  fi
 
   # Find all files in BIOS directories
   mapfile -t files_to_check < <(
