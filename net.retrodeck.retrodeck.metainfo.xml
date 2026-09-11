@@ -104,6 +104,12 @@
         <release version="0.10.10b" date="2026-09-05">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.10b/</url>
             <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>PPSSPP: Exposed PSP/GAME to retrodeck/storage/PPSSPP/GAME.</li>
+                    <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/GAME to  retrodeck/storage/retroarch-core/PPSSPP/GAME.</li>
+                    <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/shaders to retrodeck/shaders/retroarch-core/PPSSPP/shaders.</li>
+                </ul>
                 <p>FIXED/CHANGED:</p>
                 <ul>
                     <li>BIOS CHECKER: Added and corrected MD5 hash values.</li>
