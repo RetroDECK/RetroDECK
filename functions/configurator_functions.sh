@@ -1408,3 +1408,37 @@ configurator_toggle_retroengine_event_scripts_dialog() {
     fi
   fi
 }
+
+configurator_bios_check_toggle_dialog() {
+  if [[ $(jq -r '.options.bios_check_on_launch // "true"' "$rd_conf") == "true" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - BIOS Check on Launch" \
+    --text="The BIOS check on game launch is currently <span foreground='$purple'><b>Enabled</b></span>. Do you want to disable it?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      jq '.options.bios_check_on_launch = "false"' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - BIOS Check on Launch" \
+      --text="The BIOS check on game launch is now <span foreground='$purple'><b>Disabled</b></span>."
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - BIOS Check on Launch" \
+    --text="The BIOS check on game launch is currently <span foreground='$purple'><b>Disabled</b></span>. Do you want to enable it?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      jq '.options.bios_check_on_launch = "true"' "$rd_conf" > "$rd_conf.tmp" && mv "$rd_conf.tmp" "$rd_conf"
+
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - BIOS Check on Launch" \
+      --text="The BIOS check on game launch is now <span foreground='$purple'><b>Enabled</b></span>."
+    fi
+  fi
+}
