@@ -68,10 +68,9 @@ finish-args:
   # Filesystem: lsfg-vk, Steam for Lossless.dll
 
   - --filesystem=xdg-config/lsfg-vk:rw
-  - --filesystem=/home/$USER/.config/lsfg-vk:rw
-  - --filesystem=/home/$USER/.local/share/Steam/steamapps/common:ro
+  - --filesystem=~/.local/share/Steam/steamapps/common:ro
   - --env=LSFGVK_FLATPAK=1
-  - --env=LSFGVK_CONFIG=/home/$USER/.config/lsfg-vk/conf.toml
+
 
   # Filesystem: Steam ROM Manager / Steam Integration
   - --filesystem=xdg-data/Steam:rw
