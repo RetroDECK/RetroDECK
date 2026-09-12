@@ -17,7 +17,7 @@ component_libs='[]'
 
 retrodeck_runtime_version="25.08"
 latest_kde5_runtime_version="5.15-25.08"
-latest_kde6_runtime_version="6.10"
+latest_kde6_runtime_version="6.11"
 default_dest="shared-libs"
 
 while [[ $# -gt 1 ]]; do
