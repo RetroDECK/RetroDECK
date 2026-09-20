@@ -270,14 +270,14 @@
     },
     "tsukimi_mid_autumn": {
       "start_date": "0925",
-      "end_date": "0926",
+      "end_date": "0925",
       "start_time": "0000",
       "end_time": "2359",
       "holiday_type": "dynamic",
       "filename": "placeholder.svg"
     },
     "halloween": {
-      "start_date": "1028",
+      "start_date": "1030",
       "end_date": "1031",
       "start_time": "0000",
       "end_time": "2359",
@@ -333,7 +333,7 @@
       "filename": "rd-lucia-splash.svg"
     },
     "xmas": {
-      "start_date": "1222",
+      "start_date": "1224",
       "end_date": "1225",
       "start_time": "0000",
       "end_time": "2359",
