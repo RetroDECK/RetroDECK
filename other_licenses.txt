@@ -355,7 +355,83 @@ Approval Date:
 ################################################################################
 ################################################################################
 
+
 ===============================================================================
+                            JNEXT
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://github.com/jorgegv/jnext/blob/main/LICENSE
+
+===============================================================================
+                            Cranked
+===============================================================================
+
+https://github.com/TheLogicMaster/Cranked/blob/master/LICENSE
+
+MIT License
+
+Copyright (c) 2023 Justin Marentette
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+                            SM2-Emu
+===============================================================================
+
+BSD 3-Clause License
+
+Copyright (c) 2026, The sm2-emu Authors
+All rights reserved.
+
+Portions of this software are derived from the MAME project and are used
+under the same BSD 3-Clause terms. See the NOTICE file for per-component
+attribution and the original copyright holders.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 ===============================================================================
                             KEGS - Kent's Emulated GS
@@ -679,25 +755,25 @@ Fabrice Bellard and the QEMU team
 
 
 ===============================================================================
-                             Pico-8
+                      Pico-8, Voxatron & Picotron
 ===============================================================================
 
 
 Product:       PICO-8 “Fantasy Console”
+Product:       Voxatron “Fantasy Console”
+Product:       Picotron “Fantasy Workstation” 
 Developer:     Joseph White (Lexaloffle Games)
 Website:       https://www.lexaloffle.com
-Purchase:      https://www.lexaloffle.com/pico-8
-Alternate:     Also available on itch.io
 
 A valid license must be purchased from the official website or authorized
 storefront before use.
 
 RetroDECK provides integration support only.
 
-RetroDECK does NOT include the PICO-8 binary.
+RetroDECK does NOT include the binaries.
 
-Users must legally purchase PICO-8 from Lexaloffle Games and supply their
-own licensed PICO-8 files for use with RetroDECK.
+Users must legally purchase the products from Lexaloffle Games and supply their
+own licensed files for use with RetroDECK.
 
 ===============================================================================
 
@@ -2423,6 +2499,7 @@ Yabause	GPLv2
 
 Mednafen is distributed under the terms of the GNU GPLv2. 
 
+https://mednafen.github.io/
 
 ===============================================================================
 
@@ -2434,11 +2511,37 @@ Mednafen is distributed under the terms of the GNU GPLv2.
 ################################################################################
 ################################################################################
 
-===============================================================================
-
-
 
 ===============================================================================
+                               Pyxel
+===============================================================================
+
+https://github.com/kitao/pyxel/blob/main/LICENSE
+
+
+MIT License
+
+Copyright (c) 2018-2026 Takashi Kitao
+
+This license applies to Pyxel - https://github.com/kitao/pyxel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ===============================================================================
                                Raze
@@ -3365,6 +3468,118 @@ Neither the name of the Senile Team, OpenBOR Team nor the names of its contribut
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+################################################################################
+################################################################################
+##############################                             #####################
+##############################         Rythm               #####################
+##############################                             #####################
+################################################################################
+################################################################################
+
+
+===============================================================================
+                        Quaver
+===============================================================================
+
+https://github.com/Quaver/Quaver/blob/develop/LICENSE
+
+Mozilla Public License Version 2.0
+
+
+===============================================================================
+                        Frets on Fire X - FoFiX
+===============================================================================
+
+
+		    GNU GENERAL PUBLIC LICENSE
+		       Version 2, June 1991
+
+https://github.com/fofix/fofix/blob/master/COPYING
+
+For details regarding other included elements (such as the fonts), please see https://fofix.readthedocs.io/en/latest/misc/licenses.html
+
+
+===============================================================================
+                           osu!
+===============================================================================
+
+https://github.com/ppy/osu/blob/master/LICENCE
+
+Copyright (c) 2025 ppy Pty Ltd <contact@ppy.sh>.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+===============================================================================
+                           Etterna
+===============================================================================
+
+https://github.com/etternagame/etterna/blob/master/LICENSE
+
+Copyright (c) 2016-2023 Etterna <etternadev@gmail.com>.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+===============================================================================
+                        USDX - UltraStar Deluxe
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 2, June 1991
+
+https://github.com/UltraStar-Deluxe/USDX/blob/master/LICENSE
+
+===============================================================================
+                             YARG 
+===============================================================================
+
+                   GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://github.com/YARC-Official/YARG/blob/master/LICENSE
+
+===============================================================================
+                             Performous 
+===============================================================================
+
+Performous is Copyright (C) 2006-2026 The Performous Team
+
+Performous is GNU GPLv2 or later. Some parts of the project may have more liberal licenses, see docs/license for details. 
+See docs/Authors.txt for information on copyright holders and licenses of specific parts.
+
+https://github.com/performous/performous/blob/master/LICENSE.md
+https://github.com/performous/performous/blob/master/docs/Authors.txt
 
 
 ################################################################################
@@ -3376,8 +3591,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ################################################################################
 
 
+===============================================================================
+                             RAOfflineProxy 
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
 
 
+https://github.com/misantronic/RAOfflineProxy/blob/main/LICENSE
 
 ===============================================================================
                              Ludusavi 
@@ -3534,6 +3756,37 @@ https://github.com/SteamGridDB/steam-rom-manager/blob/master/LICENSE
 
 
 ===============================================================================
+                              GROUT
+===============================================================================
+
+https://github.com/rommapp/grout/blob/main/LICENSE
+
+
+MIT License
+
+Copyright (c) 2025 Brandon T. Kowalski, Grout Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+
+
 
 
 ################################################################################
