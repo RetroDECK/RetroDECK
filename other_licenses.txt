@@ -41,7 +41,7 @@ https://github.com/RetroDECK/components/
 
 RetroDECK does not generate or execute any game code on its own, nor does it run BIOS or firmware files; 
 all game functionality is provided exclusively by third-party modules ("components") that are fully open-source software, 
-including but not limited to RetroArch, UZDoom, OpenSurge, and various other emulators, clients, 
+including but not limited to RetroArch, UZDoom, Open Surge, and various other emulators, clients, 
 multi-emulators, game engines, ports, and systems, each of which operates as an independent module ("component"). 
 
 RetroDECK functions solely as a platform and as a curated collection of software components that 
@@ -357,6 +357,17 @@ Approval Date:
 
 ===============================================================================
 
+===============================================================================
+                            KEGS - Kent's Emulated GS
+===============================================================================
+
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+COPYING.txt
+
+https://kegs.sourceforge.net/
 
 ===============================================================================
                              Ruffle
@@ -692,7 +703,7 @@ own licensed PICO-8 files for use with RetroDECK.
 
 
 ===============================================================================
-                           SAM Coupé emulator
+                    SimCoupe - A SAM Coupé Emulator
 ===============================================================================
 
 		    GNU GENERAL PUBLIC LICENSE
@@ -712,7 +723,7 @@ License: GNU GPL version 3 or later <http://www.gnu.org/licenses/gpl-3.0.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-
+https://www.6809.org.uk/xroar/
 
 
 
@@ -950,6 +961,16 @@ https://github.com/pete-gordon/oricutron/blob/master/LICENSE.txt
 ##############################                        ##########################
 ################################################################################
 ################################################################################
+
+
+===============================================================================
+                          dhewm 3
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://github.com/dhewm/dhewm3/blob/master/COPYING.txt                       
 
 ===============================================================================
                           MAME
@@ -2542,7 +2563,7 @@ Raze special thanks:
 
 
 ===============================================================================
-                             OpenSurge 
+                             Open Surge 
 ===============================================================================
 
                     GNU GENERAL PUBLIC LICENSE
@@ -2555,7 +2576,7 @@ https://github.com/alemart/opensurge/blob/master/LICENSE
 
 
 ===============================================================================
-                        Adventure Game Studio (AGS
+                        Adventure Game Studio (AGS)
 ===============================================================================
 
 Adventure Game Studio Source Code
