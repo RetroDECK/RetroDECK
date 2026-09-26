@@ -57,7 +57,7 @@ adaptation required for proper operation within the RetroDECK platform's Flatpak
 
 RetroDECK may include additional files, such as BIOS or system files, only if they are open-source, 
 freely released by the official rights holders, or otherwise provided with the express permission or blessing 
-of the respective developers. Such files are distributed separately from RetroDECK’s core components 
+of the respective developers. Such files are distributed separately from RetroDECK's core components 
 to ensure clear distinction and legal compliance.
 
 In specific rare cases, RetroDECK may include proprietary or closed-source software only where such inclusion is expressly permitted under the terms of the applicable developer or license holder agreement.
