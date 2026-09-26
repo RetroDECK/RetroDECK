@@ -103,6 +103,248 @@ Use of such external content is entirely at the user's own risk.
 https://github.com/RetroDECK/RetroVERSE/blob/main/retroverse_licences.txt
 
 
+
+
+################################################################################
+################################################################################
+##############################                        ##########################
+##############################         CLIENTS         #########################
+##############################                        ##########################
+################################################################################
+################################################################################
+
+
+===============================================================================
+                             Quake3e
+===============================================================================
+
+		    GNU GENERAL PUBLIC LICENSE
+		       Version 2, June 1991
+
+https://github.com/ec-/Quake3e/blob/main/COPYING.txt
+
+===============================================================================
+                             Mudlet
+===============================================================================
+
+
+Mudlet is built upon the shoulders of other projects in the FOSS world; as well as using many GPL components we also make use of some third-party software with other licences:
+
+Communi IRC Library
+Copyright © 2008-2020 The Communi Project
+The [3-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+Neither the name of the Communi Project nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Parts of irctextformat.cpp code come from Konversation and are copyrighted to:
+Copyright © 2002 Dario Abatianni <eisfuchs@tigress.com>
+Copyright © 2004 Peter Simonsson <psn@linux.se>
+Copyright © 2006-2008 Eike Hein <hein@kde.org>
+Copyright © 2004-2009 Eli Mackenzie <argonel@gmail.com>
+
+Lua - Lua 5.1
+Copyright © 1994–2017 Lua.org, PUC-Rio.
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+LuaFileSystem
+Copyright © 2003-2020, Kepler Project
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Lua_yajl - Lua 5.1 interface to yajl
+Author: Brian Maher <maherb at brimworks dot com>
+Copyright © 2009 Brian Maher
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Luautf8 - A UTF-8 support module for Lua.
+Copyright © 2018 Xavier Wang
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+LuaSql-Sqlite3 - Database connectivity for the Lua programming language (Sqlite3 component).
+Copyright © 2003-2019, The Kepler Project
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Lrexlib-pcre - Regular expression library binding (PCRE flavour).
+Copyright © Reuben Thomas 2000-2020
+Copyright © Shmuel Zeigerman 2004-2020
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Edbee - multi-feature editor widget
+Copyright © 2012-2014 by Reliable Bits Software by Blommers IT
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+The edbee-lib widget itself incorporates other components with licences that must be noted as well, they are:
+Onigmo (Oniguruma-mod) LICENCE
+Copyright © 2002-2009 K.Kosako <sndgk393 AT ybb DOT ne DOT jp>
+Copyright © 2011-2014 K.Takata <kentkt AT csc DOT jp>
+All rights reserved.
+The [2-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Oniguruma LICENCE
+Copyright © 2002-2009 K.Kosako <sndgk393 AT ybb DOT ne DOT jp>
+All rights reserved.
+The [2-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Ruby BSDL
+Copyright © 1993-2013 Yukihiro Matsumoto.
+All rights reserved.
+The [2-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Qt-Components, QsLog
+(https://bitbucket.org/razvapetru/qt-components [broken link]
+ {"Wayback Machine" archived version})
+Copyright © 2013, Razvan Petru
+All rights reserved.
+The [3-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+The name of the contributors may not be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Dblsqd
+Copyright © 2017 Philipp Medien
+Apache Licence
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+UBUNTU FONT LICENCE Version 1.0
+PREAMBLE
+This licence allows the licensed fonts to be used, studied, modified and redistributed freely. The fonts, including any derivative works, can be bundled, embedded, and redistributed provided the terms of this licence are met. The fonts and derivatives, however, cannot be released under any other licence. The requirement for fonts to remain under this licence does not require any document created using the fonts or their derivatives to be published under this licence, as long as the primary purpose of the document is not to be a vehicle for the distribution of the fonts.
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright Holder(s) under this licence and clearly marked as such. This may include source files, build scripts and documentation.
+"Original Version" refers to the collection of Font Software components as received under this licence.
+"Modified Version" refers to any derivative made by adding to, deleting, or substituting -- in part or in whole -- any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.
+"Copyright Holder(s)" refers to all individuals and companies who have a copyright ownership of the Font Software.
+"Substantially Changed" refers to Modified Versions which can be easily identified as dissimilar to the Font Software by users of the Font Software comparing the Original Version with the Modified Version.
+To "Propagate" a work means to do anything with it that, without permission, would make you directly or secondarily liable for infringement under applicable copyright law, except executing it on a computer or modifying a private copy. Propagation includes copying, distribution (with or without modification and with or without charging a redistribution fee), making available to the public, and in some countries other activities as well.
+PERMISSION & CONDITIONS
+This licence does not grant any rights under trademark law and all such rights are reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to propagate the Font Software, subject to the below conditions:
+Each copy of the Font Software must contain the above copyright notice and this licence. These can be included either as stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files as long as those fields can be easily viewed by the user.
+The font name complies with the following:
+The Original Version must retain its name, unmodified.
+Modified Versions which are Substantially Changed must be renamed to avoid use of the name of the Original Version or similar names entirely.
+Modified Versions which are not Substantially Changed must be renamed to both (i) retain the name of the Original Version and (ii) add additional naming elements to distinguish the Modified Version from the Original Version. The name of such Modified Versions must be the name of the Original Version, with "derivative X" where X represents the name of the new work, appended to that name.
+The name(s) of the Copyright Holder(s) and any contributor to the Font Software shall not be used to promote, endorse or advertise any Modified Version, except (i) as required by this licence, (ii) to acknowledge the contribution(s) of the Copyright Holder(s) or (iii) with their explicit written permission.
+The Font Software, modified or unmodified, in part or in whole, must be distributed entirely under this licence, and must not be distributed under any other licence. The requirement for fonts to remain under this licence does not affect any document created using the Font Software, except any version of the Font Software extracted from a document created using the Font Software may only be distributed under this licence.
+TERMINATION
+This licence becomes null and void if any of the above conditions are not met.
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide development of collaborative font projects, to support the font creation efforts of academic and linguistic communities, and to provide a free and open framework in which fonts may be shared and improved in partnership with others.
+The OFL allows the licensed fonts to be used, studied, modified and redistributed freely as long as they are not sold by themselves. The fonts, including any derivative works, can be bundled, embedded, redistributed and/or sold with any software provided that any reserved names are not used by derivative works. The fonts and derivatives, however, cannot be released under any other type of license. The requirement for fonts to remain under this license does not apply to any document created using the fonts or their derivatives.
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright Holder(s) under this licence and clearly marked as such. This may include source files, build scripts and documentation.
+"Reserved Font Name" refers to any names specified as such after the copyright statement(s).
+"Original Version" refers to the collection of Font Software components as distributed by the Copyright Holder(s).
+"Modified Version" refers to any derivative made by adding to, deleting, or substituting -- in part or in whole -- any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.
+"Author(s)" refers to any designer, engineer, programmer, technical writer or other person who contributed to the Font Software.
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to use, study, copy, merge, embed, modify, redistribute, and sell modified and unmodified copies of the Font Software, subject to the following conditions:
+Neither the Font Software nor any of its individual components, in Original or Modified Versions, may be sold by itself.
+Original or Modified Versions of the Font Software may be bundled, redistributed and/or sold with any software, provided that each copy contains the above copyright notice and this license. These can be included either as stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files as long as those fields can be easily viewed by the user.
+No Modified Version of the Font Software may use the Reserved Font Name(s) unless explicit written permission is granted by the corresponding Copyright Holder. This restriction only applies to the primary font name as presented to the users.
+The name(s) of the Copyright Holder(s) or the Author(s) of the Font Software shall not be used to promote, endorse or advertise any Modified Version, except to acknowledge the contribution(s) of the Copyright Holder(s) and the Author(s) or with their explicit written permission.
+The Font Software, modified or unmodified, in part or in whole, must be distributed entirely under this license, and must not be distributed under any other license. The requirement for fonts to remain under this license does not apply to any document created using the Font Software
+TERMINATION
+This licence becomes null and void if any of the above conditions are not met.
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+
+
+Discord - Rich Presence - RPC library
+Copyright © 2017 Discord, Inc.
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+QtKeyChain - Platform-independent Qt API for storing passwords securely
+Copyright © 2011-2019 Frank Osterfeld <frank.osterfeld@gmail.com>.
+The [2-Clause] BSD Licence
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+singleshot_connect.h - part of KDToolBox
+Github: KDToolBox
+Copyright © 2020-2021 Klarälvdalens Datakonsult AB, a KDAB Group company, <info@kdab.comF>.
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+utf8_filenames.lua - modifies standard Lua functions so that they work with UTF-8 filenames on Windows
+Github GIST
+Copyright © 2019 Egor-Skriptunoff
+The MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+
+https://github.com/Mudlet/Mudlet/blob/development/COPYING
+
+
+===============================================================================
+
+===============================================================================
+                           Satellaview+
+===============================================================================
+
+RetroDECK has received explicit permission from the Satellaview+ developers
+to implement and distribute Satellaview+ as part of the RetroDECK platform.
+
+Approval Date:
+    2025-02-13
+
+===============================================================================
+
+
+
 ################################################################################
 ################################################################################
 ##############################                        ##########################
@@ -448,72 +690,88 @@ own licensed PICO-8 files for use with RetroDECK.
 
 ===============================================================================
 
-################################################################################
-################################################################################
-##############################                        ##########################
-##############################        ENGINES         ##########################
-##############################                        ##########################
-################################################################################
-################################################################################
+
+===============================================================================
+                           SAM Coupé emulator
+===============================================================================
+
+		    GNU GENERAL PUBLIC LICENSE
+		       Version 2, June 1991
+
+https://github.com/simonowen/simcoupe/blob/main/License.txt
 
 ===============================================================================
 
+===============================================================================
+                           XRoar
+===============================================================================
+
+Redistribution
+
+License: GNU GPL version 3 or later <http://www.gnu.org/licenses/gpl-3.0.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+
+
 
 
 ===============================================================================
-                              Visual Pinball X
+                         MVEM (MB Microvision Emulator)
 ===============================================================================
 
+-------------------------------------------------------------------------------
+Original Author
+-------------------------------------------------------------------------------
 
-https://github.com/vpinball/vpinball?tab=License-1-ov-file#readme
+Paul Robson (2014)
+https://mbmicrovision.blogspot.com/
 
-IMPORTANT NOTE:
----------------
+"It all is open source - do what you wish with it, 
+ please keep attributions however."
 
-As of October 2020, we, the Visual Pinball team, are working on replacing
-the inherited 'old MAME'-like license (listed directly below) by
-the GPLv3+ License (listed at the very end of this file).
+-------------------------------------------------------------------------------
+Additional Development and Art Overlays
+-------------------------------------------------------------------------------
 
-Each source file/snippet that is already under GPLv3+ will have its
-very first line marked with
-// license:GPLv3+
-Every file/snippet that doesn't, will stay (for now) under the 'old MAME'-like license.
+Raph Koster (2017)
+https://www.raphkoster.com/
 
+"If anyone out there wants to build a Mac version or keep working on the 
+ emulator, here is a ZIP of the source code and Code::Blocks project that I 
+ put together.
 
+ I make no guarantees that it's pretty, but I did try to comment where I 
+ added things. It may take some work to even get the project set up; the 
+ project file was missing from Paul's original upload and I had to 
+ reconstruct it. Paths to things like SDL are sure to need changed, and in 
+ zipping it up I actually rearranged the directories a bit, so it probably 
+ doesn't open out of the box."
+
+ ===============================================================================
+                              SDLTRS / SDL2TRS
 ===============================================================================
-===============================================================================
-===============================================================================
 
+BSD 2-Clause License
 
-Unless otherwise explicitly stated (e.g. external libraries/code),
-all code in Visual Pinball is released under the following license
-(derived from the MAME license):
-
-Copyright Randy Davis and the Visual Pinball development team and contributors
+Copyright (C) 2006-2011, Mark Grebe
+Copyright (C) 2018-2026, Jens Guenther
 All rights reserved.
 
-Redistribution and use of this code or any derivative works are permitted
-provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-* Redistributions may not be sold, nor may they be used in a commercial
-product or activity.
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
 
-* Redistributions that are modified from the original source must include the
-complete source code, including the source code for all components used by a
-binary built from the modified sources. However, as a special exception, the
-source code distributed need not include anything that is normally distributed
-(in either source or binary form) with the major components (compiler, kernel,
-and so on) of the operating system on which the executable runs, unless that
-component itself accompanies the executable.
-
-* Redistributions must reproduce the above copyright notice, this list of
-conditions and the following disclaimer in the documentation and/or other
-materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
 SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
@@ -524,547 +782,85 @@ POSSIBILITY OF SUCH DAMAGE.
 
 
 ===============================================================================
-===============================================================================
-===============================================================================
-
-Thirdparty licenses:
 
 ===============================================================================
+                            simcoupe
+===============================================================================
 
-This software uses the FreeImage open source image library. See http://freeimage.sourceforge.net for details.
-FreeImage is used under the (GNU GPL or FIPL), version (license version), see http://freeimage.sourceforge.net/freeimage-license.txt for details.
-The contents of this file are subject to the FreeImage Public License Version 1.0 (the "License"); you may not use this file except in compliance with the License.
-Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the specific language governing rights and limitations under the License.
+		    GNU GENERAL PUBLIC LICENSE
+		       Version 2, June 1991
+
+ https://github.com/simonowen/simcoupe/blob/main/License.txt
 
 ===============================================================================
 
-It also uses BASS.DLL for loading and playing sound effects and music.
-From the website https://www.un4seen.com/bass.html :
-BASS is free for non-commercial use.
-If you are a non-commercial entity (eg. an individual) and you are not making any money from your product (through sales, advertising, etc),
-then you can use BASS in it for free. Otherwise, one of the following licences will be required (see website for current prices).
-
+===============================================================================
+                        SuperModel Emulator
 ===============================================================================
 
-License for OpenVR (https://github.com/ValveSoftware/openvr) used in the GL/VR version of VPX:
-Copyright (c) 2015, Valve Corporation
-All rights reserved.
+License: GNU General Public License (GPL)
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
+The SuperModel source code is freely available under the terms of the
+GNU General Public License.
 
-1. Redistributions of source code must retain the above copyright notice, this
-list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-this list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-===============================================================================
-
-Simple DirectMedia Layer/SDL (used in the GL/VR version of VPX):
-Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
-
-This software is provided 'as-is', without any express or implied
-warranty.  In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not
-   claim that you wrote the original software. If you use this software
-   in a product, an acknowledgment in the product documentation would be
-   appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-
-===============================================================================
-
-                    The FreeType Project LICENSE
-                    ----------------------------
-
-                            2006-Jan-27
-
-                    Copyright 1996-2002, 2006 by
-          David Turner, Robert Wilhelm, and Werner Lemberg
-
-Introduction
-============
-
-  The FreeType  Project is distributed in  several archive packages;
-  some of them may contain, in addition to the FreeType font engine,
-  various tools and  contributions which rely on, or  relate to, the
-  FreeType Project.
-
-  This  license applies  to all  files found  in such  packages, and
-  which do not  fall under their own explicit  license.  The license
-  affects  thus  the  FreeType   font  engine,  the  test  programs,
-  documentation and makefiles, at the very least.
-
-  This  license   was  inspired  by  the  BSD,   Artistic,  and  IJG
-  (Independent JPEG  Group) licenses, which  all encourage inclusion
-  and  use of  free  software in  commercial  and freeware  products
-  alike.  As a consequence, its main points are that:
-
-    o We don't promise that this software works. However, we will be
-      interested in any kind of bug reports. (`as is' distribution)
-
-    o You can  use this software for whatever you  want, in parts or
-      full form, without having to pay us. (`royalty-free' usage)
-
-    o You may not pretend that  you wrote this software.  If you use
-      it, or  only parts of it,  in a program,  you must acknowledge
-      somewhere  in  your  documentation  that  you  have  used  the
-      FreeType code. (`credits')
-
-  We  specifically  permit  and  encourage  the  inclusion  of  this
-  software, with  or without modifications,  in commercial products.
-  We  disclaim  all warranties  covering  The  FreeType Project  and
-  assume no liability related to The FreeType Project.
-
-  Finally,  many  people  asked  us  for  a  preferred  form  for  a
-  credit/disclaimer to use in compliance with this license.  We thus
-  encourage you to use the following text:
-
-   """
-    Portions of this software are copyright © <year> The FreeType
-    Project (www.freetype.org).  All rights reserved.
-   """
-
-  Please replace <year> with the value from the FreeType version you
-  actually use.
-
-Legal Terms
-===========
-
-0. Definitions
---------------
-
-  Throughout this license,  the terms `package', `FreeType Project',
-  and  `FreeType  archive' refer  to  the  set  of files  originally
-  distributed  by the  authors  (David Turner,  Robert Wilhelm,  and
-  Werner Lemberg) as the `FreeType Project', be they named as alpha,
-  beta or final release.
-
-  `You' refers to  the licensee, or person using  the project, where
-  `using' is a generic term including compiling the project's source
-  code as  well as linking it  to form a  `program' or `executable'.
-  This  program is  referred to  as  `a program  using the  FreeType
-  engine'.
-
-  This  license applies  to all  files distributed  in  the original
-  FreeType  Project,   including  all  source   code,  binaries  and
-  documentation,  unless  otherwise  stated   in  the  file  in  its
-  original, unmodified form as  distributed in the original archive.
-  If you are  unsure whether or not a particular  file is covered by
-  this license, you must contact us to verify this.
-
-  The FreeType  Project is copyright (C) 1996-2000  by David Turner,
-  Robert Wilhelm, and Werner Lemberg.  All rights reserved except as
-  specified below.
-
-1. No Warranty
---------------
-
-  THE FREETYPE PROJECT  IS PROVIDED `AS IS' WITHOUT  WARRANTY OF ANY
-  KIND, EITHER  EXPRESS OR IMPLIED,  INCLUDING, BUT NOT  LIMITED TO,
-  WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR
-  PURPOSE.  IN NO EVENT WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE  FOR ANY DAMAGES CAUSED  BY THE USE OR  THE INABILITY TO
-  USE, OF THE FREETYPE PROJECT.
-
-2. Redistribution
------------------
-
-  This  license  grants  a  worldwide, royalty-free,  perpetual  and
-  irrevocable right  and license to use,  execute, perform, compile,
-  display,  copy,   create  derivative  works   of,  distribute  and
-  sublicense the  FreeType Project (in  both source and  object code
-  forms)  and  derivative works  thereof  for  any  purpose; and  to
-  authorize others  to exercise  some or all  of the  rights granted
-  herein, subject to the following conditions:
-
-    o Redistribution of  source code  must retain this  license file
-      (`FTL.TXT') unaltered; any  additions, deletions or changes to
-      the original  files must be clearly  indicated in accompanying
-      documentation.   The  copyright   notices  of  the  unaltered,
-      original  files must  be  preserved in  all  copies of  source
-      files.
-
-    o Redistribution in binary form must provide a  disclaimer  that
-      states  that  the software is based in part of the work of the
-      FreeType Team,  in  the  distribution  documentation.  We also
-      encourage you to put an URL to the FreeType web page  in  your
-      documentation, though this isn't mandatory.
-
-  These conditions  apply to any  software derived from or  based on
-  the FreeType Project,  not just the unmodified files.   If you use
-  our work, you  must acknowledge us.  However, no  fee need be paid
-  to us.
-
-3. Advertising
---------------
-
-  Neither the  FreeType authors and  contributors nor you  shall use
-  the name of the  other for commercial, advertising, or promotional
-  purposes without specific prior written permission.
-
-  We suggest,  but do not require, that  you use one or  more of the
-  following phrases to refer  to this software in your documentation
-  or advertising  materials: `FreeType Project',  `FreeType Engine',
-  `FreeType library', or `FreeType Distribution'.
-
-  As  you have  not signed  this license,  you are  not  required to
-  accept  it.   However,  as  the FreeType  Project  is  copyrighted
-  material, only  this license, or  another one contracted  with the
-  authors, grants you  the right to use, distribute,  and modify it.
-  Therefore,  by  using,  distributing,  or modifying  the  FreeType
-  Project, you indicate that you understand and accept all the terms
-  of this license.
-
-4. Contacts
------------
-
-  There are two mailing lists related to FreeType:
-
-    o freetype@nongnu.org
-
-      Discusses general use and applications of FreeType, as well as
-      future and  wanted additions to the  library and distribution.
-      If  you are looking  for support,  start in  this list  if you
-      haven't found anything to help you in the documentation.
-
-    o freetype-devel@nongnu.org
-
-      Discusses bugs,  as well  as engine internals,  design issues,
-      specific licenses, porting, etc.
-
-  Our home page can be found at
-
-    http://www.freetype.org
-
-===============================================================================
-
-OpenGL used in the GL/VR version of VPX
-
-Copyright (c) 2008-2018 The Khronos Group Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and/or associated documentation files (the
-"Materials"), to deal in the Materials without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Materials, and to
-permit persons to whom the Materials are furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Materials.
-
-THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
-
-===============================================================================
-
-OpenGL glad headers are Public Domain/WTFPL/CC0 https://github.com/Dav1dde/glad/issues/101
-
-===============================================================================
-
-OpenGL Stereo Rendering with less DrawCalls based on https://github.com/kondrak/oculusvr_samples used in the GL/VR version of VPX
-
-Copyright (c) 2016 Krzysztof Kondrak
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-
-
-The GPLv3+ License:
-
-Copyright (C) 2000-2024 Visual Pinball development team and contributors
-                        (unless specifically noted differently in a respective source file)
-
-Visual Pinball is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Visual Pinball is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details: <https://www.gnu.org/licenses/>.
-
-
-https://docs.mamedev.org/license.html
-
-The MAME project as a whole is distributed under the terms of the GNU General Public License, version 2 or later (GPL-2.0+), since it contains code made available under multiple GPL-compatible licenses. A great majority of files (over 90% including core files) are under the 3-Clause BSD License and we would encourage new contributors to distribute files under this license.
-
-Please note that MAME is a registered trademark of Gregory Ember, and permission is required to use the “MAME” name, logo, or wordmark.
-
-    Copyright (c) 1997-2024 MAMEDev and contributors
-
-    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-Please see the license information for further details.
-
-
-PinMAME
-
-
-IMPORTANT NOTE:
----------------
-
-As of May 2019, we, the PinMAME team, are working on replacing
-the inherited 'old MAME' license (listed directly below) by
-the 3-Clause BSD License (which is listed at the very end of this file),
-similar to the achievement of the current MAME team.
-
-Each source file that is already under the BSD-3-Clause will have its
-very first line marked with
-// license:BSD-3-Clause
-Every file that doesn't, will stay (for now) under the 'old MAME' license.
-
-Some sub-directories will also feature their own license file, if necessary,
-that overrides this file here.
-
-
-I. Purpose
-----------
-   PinMAME is strictly a non-profit project. Its main purpose is to be a reference
-   to the inner workings of the emulated arcade machines. This is done for
-   educational purposes and to prevent many historical games from sinking into
-   oblivion once the hardware they run on stops working. Of course to preserve
-   the games, you must also be able to actually play them; you can consider
-   that a nice side effect.
-   It is not our intention to infringe on any copyrights or patents on the
-   original games. All of PinMAME's source code is either our own or freely
-   available. To operate, the emulator requires images of the original ROMs
-   from the arcade machines, which must be provided by the user. No portion of
-   the original ROM codes are included in the executable.
-
-II. Cost
---------
-   PinMAME is free. Its source code is free. Selling either is not allowed.
-
-III. ROM Images
----------------
-   ROM images are copyrighted material. Most of them cannot be distributed
-   freely. Distribution of PinMAME on the same physical medium as illegal copies
-   of ROM images is strictly forbidden.
-   You are not allowed to distribute PinMAME in any form if you sell, advertise,
-   or publicize illegal CD-ROMs or other media containing ROM images. This
-   restriction applies even if you don't make money, directly or indirectly,
-   from those activities. You are allowed to make ROMs and PinMAME available for
-   download on the same website, but only if you warn users about the ROMs's
-   copyright status, and make it clear that users must not download ROMs unless
-   they are legally entitled to do so.
-
-IV. Source Code Distribution
-----------------------------
-   If you distribute the binary (compiled) version of PinMAME, you should also
-   distribute the source code. If you can't do that, you must provide a link
-   to a site where the source can be obtained. https://github.com/vpinball/pinmame
-
-V. Distribution Integrity
--------------------------
-   This chapter applies to the official PinMAME distribution. See below for
-   limitations on the distribution of derivative works.
-   PinMAME must be distributed only in the original archives. You are not allowed
-   to distribute a modified version, nor to remove and/or add files to the
-   archive.
-
-VI. Reuse of Source Code
---------------------------
-   This chapter might not apply to specific portions of PinMAME (e.g. CPU
-   emulators, or the files featuring already the new BSD-3-Clause) which bear
-   different copyright notices.
-   The source code cannot be used in a commercial product without the written
-   authorization of the authors. Use in non-commercial products is allowed, and
-   indeed encouraged.  If you use portions of the PinMAME source code in your
-   program, however, you must make the full source code freely available as
-   well (note again: not for the files featuring already the new BSD-3-Clause).
-   Usage of the _information_ contained in the source code is free for any use.
-   However, given the amount of time and energy it took to collect this
-   information, if you find new information we would appreciate if you made it
-   freely available as well.
-
-VII. Derivative Works
----------------------
-   Derivative works are allowed, provided their source code is freely
-   available. However, these works are discouraged. PinMAME is a continuously-
-   -evolving project. It is in your best interests to submit your contributions
-   to the PinMAME development team, so they may be integrated into the main
-   distribution.
-   There are some specific modifications to the source code which go against
-   the spirit of the project. They are NOT considered a derivative work, and
-   distribution of executables containing them is strictly forbidden. Such
-   modifications include, but are not limited to:
-   - enabling games that are disabled
-   - changing the ROM verification commands so that they report missing games
-   - removing the startup information screens
-   If you make a derivative work, you are not allowed to call it PinMAME. You must
-   use a different name to make clear that it is a PinMAME derivative, not an
-   official distribution from the PinMAME team. Simply calling it PinMAME followed or
-   preceded by a punctuation mark (e.g. PinMAME+) is not sufficient. The name must
-   be clearly distinct (e.g. REPinMAME). The version number must also match the
-   number of the official PinMAME version from which you derived your version.
-
-
-The 3-Clause BSD License:
-
-Copyright (C) 1999-2025 PinMAME development team and contributors
-                        (unless specifically noted differently in a respective source file)
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice,
-   this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation and/or
-   other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may
-   be used to endorse or promote products derived from this software without specific
-   prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
-OF SUCH DAMAGE.
+https://www.gnu.org/licenses/gpl-3.0.html
 
 
 
 ===============================================================================
 
 
+
 ===============================================================================
-                           GZDOOM / UZDOOM
+                      Commander X16 Emulator
 ===============================================================================
 
-            GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+Copyright (c) 2019 Michael Steil
 
-https://github.com/UZDoom/UZDoom/blob/trunk/LICENSE
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-UZDoom default brightmaps
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-Copyright 1998-2016 ZDoom Maintainers and Contributors Copyright 2005-2025 GZDoom Maintainers and Contributors Copyright 2025-2026 UZDoom Maintainers and Contributors
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
-The content in here is based on original game content, i.e.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-    You may not sell this work - this also means that this file may not be distributed with commercial standalone games based on the UZDoom engine.
-
-    Your work must comply with id Software's original licenses (i.e. they must only work on the game from which they originated)
-
-    All derivative works must credit the original authors (id Software (Doom), Raven Software (Hexen/Heretic), Rogue Software (Strife)
 
 ===============================================================================
 
+
 ===============================================================================
-                           ScummVM
+                             Amiberry
 ===============================================================================
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
-https://github.com/scummvm/scummvm/blob/master/COPYING
 
+https://github.com/BlitterStudio/amiberry/blob/master/LICENSE
 
 
 
 ===============================================================================
-
-===============================================================================
-                           Solarus
+                             FS-UEA
 ===============================================================================
 
                     GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+                       Version 2, June 1991
 
-https://gitlab.com/solarus-games/solarus/-/blob/dev/license
+https://github.com/FrodeSolheim/fs-uae?tab=GPL-2.0-1-ov-file
+
 
 ===============================================================================
 
+
 ===============================================================================
-                           IKEMAN GO
+                            GameTank Emulator
 ===============================================================================
 
 MIT License
 
-Copyright (c) 2016 Suehiro
-Copyright (c) 2018 K4thos
-Copyright (c) 2018 ShinLucho
-Copyright (c) 2018 NeatUnsou
-Copyright (c) 2019 Windblade
-Copyright (c) 2019 Dan
-Copyright (c) 2019 Kidcy
-Copyright (c) 2020 Wintermourn
-Copyright (c) 2020 Shiyo Kakuge
-Copyright (c) 2021 Kamekaze
-Copyright (c) 2021 two4teezee
-Copyright (c) 2021 Super
-Copyright (c) 2022 Eiton
-Copyright (c) 2022 Sam Hocevar
-Copyright (c) 2022 GaryCXJk
-Copyright (c) 2022 Lazin3ss
-Copyright (c) 2022 potsmugen
-Copyright (c) 2023 BwdYeti
-Copyright (c) 2023 fantasma
-Copyright (c) 2023 Wftk
+Copyright (c) 2020 Clyde Shaffer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1084,93 +880,65 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-The MIT License applies to the Ikemen GO engine and the scripts in this repo.
-
-----------------------------------------------------------------------------
-
-以下に定める条件に従い、本ソフトウェアおよび関連文書のファイル（以下「ソフトウェア」）
-の複製を取得するすべての人に対し、ソフトウェアを無制限に扱うことを無償で許可します。
-これには、ソフトウェアの複製を使用、複写、変更、結合、掲載、頒布、サブライセンス、および
-または販売する権利、およびソフトウェアを提供する相手に同じことを許可する権利も無制限に含まれます。
-
-上記の著作権表示および本許諾表示を、ソフトウェアのすべての複製または重要な部分に記載するものとします。
-
-ソフトウェアは「現状のまま」で、明示であるか暗黙であるかを問わず、何らの保証もなく提供されます。
-ここでいう保証とは、商品性、特定の目的への適合性、および権利非侵害についての保証も含みますが、
-それに限定されるものではありません。 作者または著作権者は、契約行為、不法行為、またはそれ以外であろうと、
-ソフトウェアに起因または関連し、あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、
-その他の義務について何らの責任も負わないものとします。
-
-----------------------------------------------------------------------------
-
-Work contributed to Ikemen GO by various artists is licensed under a Creative Commons Attribution 3.0 Unported License.
-http://creativecommons.org/licenses/by/3.0/deed.en_US
-The license applies to following assets:
-- The "default-3x5" font by Gacel.
-- The icon/logo of the engine by Cylia Margatroid.
-
-----------------------------------------------------------------------------
-
-On release builds the engine is packed with more assets that could have different licences.
-If you are using a release build check the "ScreenpackLicence.txt" file for more info.
-
-
-===============================================================================
-
-
-===============================================================================
-                              Ironwail
-===============================================================================
-
-
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 2, June 1991
-
-https://github.com/andrei-drexler/ironwail/blob/master/LICENSE.txt
-
-
-===============================================================================
-
 
 ===============================================================================
 
 ===============================================================================
-                            ECWolf
-===============================================================================
-
-The code in ECWolf is licensed under a variety of licenses. The zlib code uses it's own license and a few dependencies are LGPL. If not compiling for the GPL, the MAME license also applies.
-
-All new code, be it from ZDoom or ECWolf itself, falls under a 3-point BSD.
-
-Wolfenstein 3D License
-
-ECWolf is dual licensed under both the original non-commercial license or the GNU GPL. The GPL but can be switched off with -DGPL=OFF in cmake. The two versions are identical except the OPL emulator is changed to MAME's from the one from Dosbox.
-
-It is important to note that id Software has not done any packaged re-releases of the Wolf3D source under the GPL, but Doom has not been officially re-released either. The following quote from John Carmack dated March 20th, 2009 seems to indicate that use of the GPL has been allowed since Doom was re-licensed.
-
-    I released the original source for Wolfenstein 3D many years ago, originally under a not-for-commercial purposes license, then later under the GPL.
-
-The Wolf4SDL debian packages also confirms the GPL re-release of Wolfenstein 3D.
-
-
-===============================================================================
-                           OpenBOR
+                            Tsugaru /  TOWNSEMU
 ===============================================================================
 
 
-Copyright (c) 2003, Roel van Mastbergen & Senile Team
-Copyright (c) 2004, OpenBOR Team
-All rights reserved.
+Copyright 2020 Soji Yamakawa (CaptainYS, http://www.ysflight.com)
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
-Neither the name of the Senile Team, OpenBOR Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+===============================================================================
+
+
+===============================================================================
+                            Hypseus
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://github.com/DirtBagXon/hypseus-singe/blob/master/LICENSE
+
+===============================================================================
+
+
+===============================================================================
+                            Lindbergh Loader
+===============================================================================
+
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License
+
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+
+===============================================================================
+
+
+===============================================================================
+                             oricutron 
+===============================================================================
+
+GNU GENERAL PUBLIC LICENSE
+
+Version 2, June 1991
+
+https://github.com/pete-gordon/oricutron/blob/master/LICENSE.txt
+
+===============================================================================
 
 
 
@@ -2624,267 +2392,9 @@ Yabause	GPLv2
 ===============================================================================
 
 
-===============================================================================
-                           SAM Coupé emulator
-===============================================================================
-
-		    GNU GENERAL PUBLIC LICENSE
-		       Version 2, June 1991
-
-https://github.com/simonowen/simcoupe/blob/main/License.txt
 
 ===============================================================================
 
-===============================================================================
-                           XRoar
-===============================================================================
-
-Redistribution
-
-License: GNU GPL version 3 or later <http://www.gnu.org/licenses/gpl-3.0.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-
-
-
-
-===============================================================================
-                         MVEM (MB Microvision Emulator)
-===============================================================================
-
--------------------------------------------------------------------------------
-Original Author
--------------------------------------------------------------------------------
-
-Paul Robson (2014)
-https://mbmicrovision.blogspot.com/
-
-"It all is open source - do what you wish with it, 
- please keep attributions however."
-
--------------------------------------------------------------------------------
-Additional Development and Art Overlays
--------------------------------------------------------------------------------
-
-Raph Koster (2017)
-https://www.raphkoster.com/
-
-"If anyone out there wants to build a Mac version or keep working on the 
- emulator, here is a ZIP of the source code and Code::Blocks project that I 
- put together.
-
- I make no guarantees that it's pretty, but I did try to comment where I 
- added things. It may take some work to even get the project set up; the 
- project file was missing from Paul's original upload and I had to 
- reconstruct it. Paths to things like SDL are sure to need changed, and in 
- zipping it up I actually rearranged the directories a bit, so it probably 
- doesn't open out of the box."
-
-
-
-===============================================================================
-
-===============================================================================
-                        Adventure Game Studio (AGS
-===============================================================================
-
-Adventure Game Studio Source Code
-------------------------------------------------------
-
-The AGS Source Code is provided under the Artistic License 2.0, which is
-included below.
-
-For the avoidance of doubt, in the license text below:
-
-"Package" means the Adventure Game Studio Source Code, which must always be
-accompanied by this license.
-
-"Copyright Holder" means the copyright holders listed in the file Copyright.txt.
-The original author of the AGS Source Code is Chris Jones.
-
-
-------------------------------------------------------
-Artistic License 2.0
-http://www.opensource.org/licenses/artistic-license-2.0.php
-
-
-
-===============================================================================
-
-
-
-===============================================================================
-                      Commander X16 Emulator
-===============================================================================
-
-Copyright (c) 2019 Michael Steil
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-===============================================================================
-
-
-===============================================================================
-                             Amiberry
-===============================================================================
-
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
-
-
-https://github.com/BlitterStudio/amiberry/blob/master/LICENSE
-
-
-
-===============================================================================
-                             FS-UEA
-===============================================================================
-
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 2, June 1991
-
-https://github.com/FrodeSolheim/fs-uae?tab=GPL-2.0-1-ov-file
-
-
-===============================================================================
-
-
-===============================================================================
-                            GameTank Emulator
-===============================================================================
-
-MIT License
-
-Copyright (c) 2020 Clyde Shaffer
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
-===============================================================================
-
-===============================================================================
-                            Gargoyle
-===============================================================================
-
-Gargoyle contains several components, aggregated together to form a package. Parts of this package are distributed under the terms of the GNU General Public License (GPL). Redistribution of this package is freely allowed, provided that the terms of the GPL are adhered to, including the requirement that the source code for all GPL licensed parts of this package be available from the same location as any binary package.
-
-The Gargoyle Glk library is copyright 2009 Tor Andersson. It is released under the terms of the GNU General Public License.
-
-AdvSys is copyright (c) David Michael Betz. It is released under the terms of the BSD license.
-
-AGiliTy is copyright (c) Robert Masenten. It is released under the terms of the GNU General Public License.
-
-Alan is copyright (c) Thomas Nilsson. It is released under the terms of the Artistic License 2.0.
-
-Bocfel is copyright (c) Chris Spiegel. It is released under the terms of the GNU General Public License.
-
-The FrankenDrift Glk frontend is copyright (c) Adrian Welcker. It is released under the terms of the MIT license.
-ADRIFT 5 (part of FrankenDrift) is copyright (c) Campbell Wild. It is released under the terms of the 3-Clause BSD license.
-
-Git is copyright (c) Iain Merrick. It is released under the terms of the MIT License.
-
-Glulxe is copyright (c) Andrew Plotkin. It is released under the terms of the MIT License.
-
-Hugo is copyright (c) Kent Tessman. It is released with permission under the terms of the Simplified 2-Clause BSD license.
-
-JACL is copyright (c) Stuart Allen. It is released under the terms of the GNU General Public License.
-
-Level 9 is copyright (c) Glen Summers, David Kinder, Alan Staniforth, Simon Baldwin and Dieter Baron. It is released under the terms of the GNU General Public License.
-
-Magnetic is copyright (c) Niclas Karlsson, David Kinder, Stefan Meier and Paul David Doherty. It is released under the terms of the GNU General Public License.
-
-SCARE is copyright (c) Simon Baldwin. It is released under the terms of the GNU General Public License.
-
-ScottFree is copyright (c) Alan Cox. It is released under the terms of the GNU General Public License.
-
-TADS is copyright (c) Michael J. Roberts. It is released under the terms of the GNU General Public License.
-
-The Go Mono fonts (Gargoyle Mono) are copyright (c) 2016 Bigelow & Holmes Inc. They are released under the terms of the 3-clause BSD license.
-
-The Charis SIL fonts (Gargoyle Serif) are copyright (c) 1997-2014 SIL International. They are released under the terms of the SIL Open Font License version 1.1.
-
-The authors assume no liability for damages or loss of revenue resulting from the use of any of the software herein. The software is supplied "as is" and carries no warranty, actual or implied. 
-
-
-===============================================================================
-
-===============================================================================
-                            Hypseus
-===============================================================================
-
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
-
-https://github.com/DirtBagXon/hypseus-singe/blob/master/LICENSE
-
-===============================================================================
-
-
-===============================================================================
-                            Lindbergh Loader
-===============================================================================
-
-Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License
-
-https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-
-
-
-===============================================================================
-
-===============================================================================
-                             Ludusavi 
-===============================================================================
-
-MIT License
-
-Copyright (c) 2020 Matthew T. Kennerly (mtkennerly)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
-===============================================================================
 
 ===============================================================================
                              Mednafen 
@@ -2895,33 +2405,16 @@ Mednafen is distributed under the terms of the GNU GPLv2.
 
 ===============================================================================
 
-
-
-===============================================================================
-
-===============================================================================
-                             OpenSurge 
-===============================================================================
-
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
-
-https://github.com/alemart/opensurge/blob/master/LICENSE
-
+################################################################################
+################################################################################
+##############################                        ##########################
+##############################        ENGINES         ##########################
+##############################                        ##########################
+################################################################################
+################################################################################
 
 ===============================================================================
 
-===============================================================================
-                             oricutron 
-===============================================================================
-
-GNU GENERAL PUBLIC LICENSE
-
-Version 2, June 1991
-
-https://github.com/pete-gordon/oricutron/blob/master/LICENSE.txt
-
-===============================================================================
 
 
 ===============================================================================
@@ -3046,30 +2539,153 @@ Raze special thanks:
 
 ===============================================================================
 
+
+
 ===============================================================================
-                              SDLTRS / SDL2TRS
+                             OpenSurge 
 ===============================================================================
 
-BSD 2-Clause License
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
 
-Copyright (C) 2006-2011, Mark Grebe
-Copyright (C) 2018-2026, Jens Guenther
+https://github.com/alemart/opensurge/blob/master/LICENSE
+
+
+===============================================================================
+
+
+===============================================================================
+                        Adventure Game Studio (AGS
+===============================================================================
+
+Adventure Game Studio Source Code
+------------------------------------------------------
+
+The AGS Source Code is provided under the Artistic License 2.0, which is
+included below.
+
+For the avoidance of doubt, in the license text below:
+
+"Package" means the Adventure Game Studio Source Code, which must always be
+accompanied by this license.
+
+"Copyright Holder" means the copyright holders listed in the file Copyright.txt.
+The original author of the AGS Source Code is Chris Jones.
+
+
+------------------------------------------------------
+Artistic License 2.0
+http://www.opensource.org/licenses/artistic-license-2.0.php
+
+
+
+===============================================================================
+
+
+
+===============================================================================
+                            Gargoyle
+===============================================================================
+
+Gargoyle contains several components, aggregated together to form a package. Parts of this package are distributed under the terms of the GNU General Public License (GPL). Redistribution of this package is freely allowed, provided that the terms of the GPL are adhered to, including the requirement that the source code for all GPL licensed parts of this package be available from the same location as any binary package.
+
+The Gargoyle Glk library is copyright 2009 Tor Andersson. It is released under the terms of the GNU General Public License.
+
+AdvSys is copyright (c) David Michael Betz. It is released under the terms of the BSD license.
+
+AGiliTy is copyright (c) Robert Masenten. It is released under the terms of the GNU General Public License.
+
+Alan is copyright (c) Thomas Nilsson. It is released under the terms of the Artistic License 2.0.
+
+Bocfel is copyright (c) Chris Spiegel. It is released under the terms of the GNU General Public License.
+
+The FrankenDrift Glk frontend is copyright (c) Adrian Welcker. It is released under the terms of the MIT license.
+ADRIFT 5 (part of FrankenDrift) is copyright (c) Campbell Wild. It is released under the terms of the 3-Clause BSD license.
+
+Git is copyright (c) Iain Merrick. It is released under the terms of the MIT License.
+
+Glulxe is copyright (c) Andrew Plotkin. It is released under the terms of the MIT License.
+
+Hugo is copyright (c) Kent Tessman. It is released with permission under the terms of the Simplified 2-Clause BSD license.
+
+JACL is copyright (c) Stuart Allen. It is released under the terms of the GNU General Public License.
+
+Level 9 is copyright (c) Glen Summers, David Kinder, Alan Staniforth, Simon Baldwin and Dieter Baron. It is released under the terms of the GNU General Public License.
+
+Magnetic is copyright (c) Niclas Karlsson, David Kinder, Stefan Meier and Paul David Doherty. It is released under the terms of the GNU General Public License.
+
+SCARE is copyright (c) Simon Baldwin. It is released under the terms of the GNU General Public License.
+
+ScottFree is copyright (c) Alan Cox. It is released under the terms of the GNU General Public License.
+
+TADS is copyright (c) Michael J. Roberts. It is released under the terms of the GNU General Public License.
+
+The Go Mono fonts (Gargoyle Mono) are copyright (c) 2016 Bigelow & Holmes Inc. They are released under the terms of the 3-clause BSD license.
+
+The Charis SIL fonts (Gargoyle Serif) are copyright (c) 1997-2014 SIL International. They are released under the terms of the SIL Open Font License version 1.1.
+
+The authors assume no liability for damages or loss of revenue resulting from the use of any of the software herein. The software is supplied "as is" and carries no warranty, actual or implied. 
+
+
+===============================================================================
+
+
+
+
+===============================================================================
+                              Visual Pinball X
+===============================================================================
+
+
+https://github.com/vpinball/vpinball?tab=License-1-ov-file#readme
+
+IMPORTANT NOTE:
+---------------
+
+As of October 2020, we, the Visual Pinball team, are working on replacing
+the inherited 'old MAME'-like license (listed directly below) by
+the GPLv3+ License (listed at the very end of this file).
+
+Each source file/snippet that is already under GPLv3+ will have its
+very first line marked with
+// license:GPLv3+
+Every file/snippet that doesn't, will stay (for now) under the 'old MAME'-like license.
+
+
+===============================================================================
+===============================================================================
+===============================================================================
+
+
+Unless otherwise explicitly stated (e.g. external libraries/code),
+all code in Visual Pinball is released under the following license
+(derived from the MAME license):
+
+Copyright Randy Davis and the Visual Pinball development team and contributors
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+Redistribution and use of this code or any derivative works are permitted
+provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice,
-   this list of conditions and the following disclaimer.
+* Redistributions may not be sold, nor may they be used in a commercial
+product or activity.
 
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+* Redistributions that are modified from the original source must include the
+complete source code, including the source code for all components used by a
+binary built from the modified sources. However, as a special exception, the
+source code distributed need not include anything that is normally distributed
+(in either source or binary form) with the major components (compiler, kernel,
+and so on) of the operating system on which the executable runs, unless that
+component itself accompanies the executable.
+
+* Redistributions must reproduce the above copyright notice, this list of
+conditions and the following disclaimer in the documentation and/or other
+materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
 SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
@@ -3080,286 +2696,653 @@ POSSIBILITY OF SUCH DAMAGE.
 
 
 ===============================================================================
-
 ===============================================================================
-                            simcoupe
 ===============================================================================
 
-		    GNU GENERAL PUBLIC LICENSE
-		       Version 2, June 1991
-
- https://github.com/simonowen/simcoupe/blob/main/License.txt
+Thirdparty licenses:
 
 ===============================================================================
 
-===============================================================================
-                        SuperModel Emulator
-===============================================================================
-
-License: GNU General Public License (GPL)
-
-The SuperModel source code is freely available under the terms of the
-GNU General Public License.
-
-https://www.gnu.org/licenses/gpl-3.0.html
-
-
+This software uses the FreeImage open source image library. See http://freeimage.sourceforge.net for details.
+FreeImage is used under the (GNU GPL or FIPL), version (license version), see http://freeimage.sourceforge.net/freeimage-license.txt for details.
+The contents of this file are subject to the FreeImage Public License Version 1.0 (the "License"); you may not use this file except in compliance with the License.
+Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the specific language governing rights and limitations under the License.
 
 ===============================================================================
 
-
-
-===============================================================================
-                            Tsugaru /  TOWNSEMU
-===============================================================================
-
-
-Copyright 2020 Soji Yamakawa (CaptainYS, http://www.ysflight.com)
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+It also uses BASS.DLL for loading and playing sound effects and music.
+From the website https://www.un4seen.com/bass.html :
+BASS is free for non-commercial use.
+If you are a non-commercial entity (eg. an individual) and you are not making any money from your product (through sales, advertising, etc),
+then you can use BASS in it for free. Otherwise, one of the following licences will be required (see website for current prices).
 
 ===============================================================================
 
-
-
-
-################################################################################
-################################################################################
-##############################                        ##########################
-##############################         CLIENTS         #########################
-##############################                        ##########################
-################################################################################
-################################################################################
-
-
-===============================================================================
-                             Mudlet
-===============================================================================
-
-
-Mudlet is built upon the shoulders of other projects in the FOSS world; as well as using many GPL components we also make use of some third-party software with other licences:
-
-Communi IRC Library
-Copyright © 2008-2020 The Communi Project
-The [3-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the Communi Project nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Parts of irctextformat.cpp code come from Konversation and are copyrighted to:
-Copyright © 2002 Dario Abatianni <eisfuchs@tigress.com>
-Copyright © 2004 Peter Simonsson <psn@linux.se>
-Copyright © 2006-2008 Eike Hein <hein@kde.org>
-Copyright © 2004-2009 Eli Mackenzie <argonel@gmail.com>
-
-Lua - Lua 5.1
-Copyright © 1994–2017 Lua.org, PUC-Rio.
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-LuaFileSystem
-Copyright © 2003-2020, Kepler Project
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Lua_yajl - Lua 5.1 interface to yajl
-Author: Brian Maher <maherb at brimworks dot com>
-Copyright © 2009 Brian Maher
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Luautf8 - A UTF-8 support module for Lua.
-Copyright © 2018 Xavier Wang
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-LuaSql-Sqlite3 - Database connectivity for the Lua programming language (Sqlite3 component).
-Copyright © 2003-2019, The Kepler Project
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Lrexlib-pcre - Regular expression library binding (PCRE flavour).
-Copyright © Reuben Thomas 2000-2020
-Copyright © Shmuel Zeigerman 2004-2020
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Edbee - multi-feature editor widget
-Copyright © 2012-2014 by Reliable Bits Software by Blommers IT
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-The edbee-lib widget itself incorporates other components with licences that must be noted as well, they are:
-Onigmo (Oniguruma-mod) LICENCE
-Copyright © 2002-2009 K.Kosako <sndgk393 AT ybb DOT ne DOT jp>
-Copyright © 2011-2014 K.Takata <kentkt AT csc DOT jp>
+License for OpenVR (https://github.com/ValveSoftware/openvr) used in the GL/VR version of VPX:
+Copyright (c) 2015, Valve Corporation
 All rights reserved.
-The [2-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Oniguruma LICENCE
-Copyright © 2002-2009 K.Kosako <sndgk393 AT ybb DOT ne DOT jp>
-All rights reserved.
-The [2-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-Ruby BSDL
-Copyright © 1993-2013 Yukihiro Matsumoto.
-All rights reserved.
-The [2-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+1. Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
 
-Qt-Components, QsLog
-(https://bitbucket.org/razvapetru/qt-components [broken link]
- {"Wayback Machine" archived version})
-Copyright © 2013, Razvan Petru
-All rights reserved.
-The [3-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-The name of the contributors may not be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
 
-Dblsqd
-Copyright © 2017 Philipp Medien
-Apache Licence
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission.
 
-UBUNTU FONT LICENCE Version 1.0
-PREAMBLE
-This licence allows the licensed fonts to be used, studied, modified and redistributed freely. The fonts, including any derivative works, can be bundled, embedded, and redistributed provided the terms of this licence are met. The fonts and derivatives, however, cannot be released under any other licence. The requirement for fonts to remain under this licence does not require any document created using the fonts or their derivatives to be published under this licence, as long as the primary purpose of the document is not to be a vehicle for the distribution of the fonts.
-DEFINITIONS
-"Font Software" refers to the set of files released by the Copyright Holder(s) under this licence and clearly marked as such. This may include source files, build scripts and documentation.
-"Original Version" refers to the collection of Font Software components as received under this licence.
-"Modified Version" refers to any derivative made by adding to, deleting, or substituting -- in part or in whole -- any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.
-"Copyright Holder(s)" refers to all individuals and companies who have a copyright ownership of the Font Software.
-"Substantially Changed" refers to Modified Versions which can be easily identified as dissimilar to the Font Software by users of the Font Software comparing the Original Version with the Modified Version.
-To "Propagate" a work means to do anything with it that, without permission, would make you directly or secondarily liable for infringement under applicable copyright law, except executing it on a computer or modifying a private copy. Propagation includes copying, distribution (with or without modification and with or without charging a redistribution fee), making available to the public, and in some countries other activities as well.
-PERMISSION & CONDITIONS
-This licence does not grant any rights under trademark law and all such rights are reserved.
-Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to propagate the Font Software, subject to the below conditions:
-Each copy of the Font Software must contain the above copyright notice and this licence. These can be included either as stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files as long as those fields can be easily viewed by the user.
-The font name complies with the following:
-The Original Version must retain its name, unmodified.
-Modified Versions which are Substantially Changed must be renamed to avoid use of the name of the Original Version or similar names entirely.
-Modified Versions which are not Substantially Changed must be renamed to both (i) retain the name of the Original Version and (ii) add additional naming elements to distinguish the Modified Version from the Original Version. The name of such Modified Versions must be the name of the Original Version, with "derivative X" where X represents the name of the new work, appended to that name.
-The name(s) of the Copyright Holder(s) and any contributor to the Font Software shall not be used to promote, endorse or advertise any Modified Version, except (i) as required by this licence, (ii) to acknowledge the contribution(s) of the Copyright Holder(s) or (iii) with their explicit written permission.
-The Font Software, modified or unmodified, in part or in whole, must be distributed entirely under this licence, and must not be distributed under any other licence. The requirement for fonts to remain under this licence does not affect any document created using the Font Software, except any version of the Font Software extracted from a document created using the Font Software may only be distributed under this licence.
-TERMINATION
-This licence becomes null and void if any of the above conditions are not met.
-DISCLAIMER
-THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
-PREAMBLE
-The goals of the Open Font License (OFL) are to stimulate worldwide development of collaborative font projects, to support the font creation efforts of academic and linguistic communities, and to provide a free and open framework in which fonts may be shared and improved in partnership with others.
-The OFL allows the licensed fonts to be used, studied, modified and redistributed freely as long as they are not sold by themselves. The fonts, including any derivative works, can be bundled, embedded, redistributed and/or sold with any software provided that any reserved names are not used by derivative works. The fonts and derivatives, however, cannot be released under any other type of license. The requirement for fonts to remain under this license does not apply to any document created using the fonts or their derivatives.
-DEFINITIONS
-"Font Software" refers to the set of files released by the Copyright Holder(s) under this licence and clearly marked as such. This may include source files, build scripts and documentation.
-"Reserved Font Name" refers to any names specified as such after the copyright statement(s).
-"Original Version" refers to the collection of Font Software components as distributed by the Copyright Holder(s).
-"Modified Version" refers to any derivative made by adding to, deleting, or substituting -- in part or in whole -- any of the components of the Original Version, by changing formats or by porting the Font Software to a new environment.
-"Author(s)" refers to any designer, engineer, programmer, technical writer or other person who contributed to the Font Software.
-PERMISSION & CONDITIONS
-Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to use, study, copy, merge, embed, modify, redistribute, and sell modified and unmodified copies of the Font Software, subject to the following conditions:
-Neither the Font Software nor any of its individual components, in Original or Modified Versions, may be sold by itself.
-Original or Modified Versions of the Font Software may be bundled, redistributed and/or sold with any software, provided that each copy contains the above copyright notice and this license. These can be included either as stand-alone text files, human-readable headers or in the appropriate machine-readable metadata fields within text or binary files as long as those fields can be easily viewed by the user.
-No Modified Version of the Font Software may use the Reserved Font Name(s) unless explicit written permission is granted by the corresponding Copyright Holder. This restriction only applies to the primary font name as presented to the users.
-The name(s) of the Copyright Holder(s) or the Author(s) of the Font Software shall not be used to promote, endorse or advertise any Modified Version, except to acknowledge the contribution(s) of the Copyright Holder(s) and the Author(s) or with their explicit written permission.
-The Font Software, modified or unmodified, in part or in whole, must be distributed entirely under this license, and must not be distributed under any other license. The requirement for fonts to remain under this license does not apply to any document created using the Font Software
-TERMINATION
-This licence becomes null and void if any of the above conditions are not met.
-DISCLAIMER
-THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.
+===============================================================================
+
+Simple DirectMedia Layer/SDL (used in the GL/VR version of VPX):
+Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+
+This software is provided 'as-is', without any express or implied
+warranty.  In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+
+===============================================================================
+
+                    The FreeType Project LICENSE
+                    ----------------------------
+
+                            2006-Jan-27
+
+                    Copyright 1996-2002, 2006 by
+          David Turner, Robert Wilhelm, and Werner Lemberg
+
+Introduction
+============
+
+  The FreeType  Project is distributed in  several archive packages;
+  some of them may contain, in addition to the FreeType font engine,
+  various tools and  contributions which rely on, or  relate to, the
+  FreeType Project.
+
+  This  license applies  to all  files found  in such  packages, and
+  which do not  fall under their own explicit  license.  The license
+  affects  thus  the  FreeType   font  engine,  the  test  programs,
+  documentation and makefiles, at the very least.
+
+  This  license   was  inspired  by  the  BSD,   Artistic,  and  IJG
+  (Independent JPEG  Group) licenses, which  all encourage inclusion
+  and  use of  free  software in  commercial  and freeware  products
+  alike.  As a consequence, its main points are that:
+
+    o We don't promise that this software works. However, we will be
+      interested in any kind of bug reports. (`as is' distribution)
+
+    o You can  use this software for whatever you  want, in parts or
+      full form, without having to pay us. (`royalty-free' usage)
+
+    o You may not pretend that  you wrote this software.  If you use
+      it, or  only parts of it,  in a program,  you must acknowledge
+      somewhere  in  your  documentation  that  you  have  used  the
+      FreeType code. (`credits')
+
+  We  specifically  permit  and  encourage  the  inclusion  of  this
+  software, with  or without modifications,  in commercial products.
+  We  disclaim  all warranties  covering  The  FreeType Project  and
+  assume no liability related to The FreeType Project.
+
+  Finally,  many  people  asked  us  for  a  preferred  form  for  a
+  credit/disclaimer to use in compliance with this license.  We thus
+  encourage you to use the following text:
+
+   """
+    Portions of this software are copyright © <year> The FreeType
+    Project (www.freetype.org).  All rights reserved.
+   """
+
+  Please replace <year> with the value from the FreeType version you
+  actually use.
+
+Legal Terms
+===========
+
+0. Definitions
+--------------
+
+  Throughout this license,  the terms `package', `FreeType Project',
+  and  `FreeType  archive' refer  to  the  set  of files  originally
+  distributed  by the  authors  (David Turner,  Robert Wilhelm,  and
+  Werner Lemberg) as the `FreeType Project', be they named as alpha,
+  beta or final release.
+
+  `You' refers to  the licensee, or person using  the project, where
+  `using' is a generic term including compiling the project's source
+  code as  well as linking it  to form a  `program' or `executable'.
+  This  program is  referred to  as  `a program  using the  FreeType
+  engine'.
+
+  This  license applies  to all  files distributed  in  the original
+  FreeType  Project,   including  all  source   code,  binaries  and
+  documentation,  unless  otherwise  stated   in  the  file  in  its
+  original, unmodified form as  distributed in the original archive.
+  If you are  unsure whether or not a particular  file is covered by
+  this license, you must contact us to verify this.
+
+  The FreeType  Project is copyright (C) 1996-2000  by David Turner,
+  Robert Wilhelm, and Werner Lemberg.  All rights reserved except as
+  specified below.
+
+1. No Warranty
+--------------
+
+  THE FREETYPE PROJECT  IS PROVIDED `AS IS' WITHOUT  WARRANTY OF ANY
+  KIND, EITHER  EXPRESS OR IMPLIED,  INCLUDING, BUT NOT  LIMITED TO,
+  WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR
+  PURPOSE.  IN NO EVENT WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE  FOR ANY DAMAGES CAUSED  BY THE USE OR  THE INABILITY TO
+  USE, OF THE FREETYPE PROJECT.
+
+2. Redistribution
+-----------------
+
+  This  license  grants  a  worldwide, royalty-free,  perpetual  and
+  irrevocable right  and license to use,  execute, perform, compile,
+  display,  copy,   create  derivative  works   of,  distribute  and
+  sublicense the  FreeType Project (in  both source and  object code
+  forms)  and  derivative works  thereof  for  any  purpose; and  to
+  authorize others  to exercise  some or all  of the  rights granted
+  herein, subject to the following conditions:
+
+    o Redistribution of  source code  must retain this  license file
+      (`FTL.TXT') unaltered; any  additions, deletions or changes to
+      the original  files must be clearly  indicated in accompanying
+      documentation.   The  copyright   notices  of  the  unaltered,
+      original  files must  be  preserved in  all  copies of  source
+      files.
+
+    o Redistribution in binary form must provide a  disclaimer  that
+      states  that  the software is based in part of the work of the
+      FreeType Team,  in  the  distribution  documentation.  We also
+      encourage you to put an URL to the FreeType web page  in  your
+      documentation, though this isn't mandatory.
+
+  These conditions  apply to any  software derived from or  based on
+  the FreeType Project,  not just the unmodified files.   If you use
+  our work, you  must acknowledge us.  However, no  fee need be paid
+  to us.
+
+3. Advertising
+--------------
+
+  Neither the  FreeType authors and  contributors nor you  shall use
+  the name of the  other for commercial, advertising, or promotional
+  purposes without specific prior written permission.
+
+  We suggest,  but do not require, that  you use one or  more of the
+  following phrases to refer  to this software in your documentation
+  or advertising  materials: `FreeType Project',  `FreeType Engine',
+  `FreeType library', or `FreeType Distribution'.
+
+  As  you have  not signed  this license,  you are  not  required to
+  accept  it.   However,  as  the FreeType  Project  is  copyrighted
+  material, only  this license, or  another one contracted  with the
+  authors, grants you  the right to use, distribute,  and modify it.
+  Therefore,  by  using,  distributing,  or modifying  the  FreeType
+  Project, you indicate that you understand and accept all the terms
+  of this license.
+
+4. Contacts
+-----------
+
+  There are two mailing lists related to FreeType:
+
+    o freetype@nongnu.org
+
+      Discusses general use and applications of FreeType, as well as
+      future and  wanted additions to the  library and distribution.
+      If  you are looking  for support,  start in  this list  if you
+      haven't found anything to help you in the documentation.
+
+    o freetype-devel@nongnu.org
+
+      Discusses bugs,  as well  as engine internals,  design issues,
+      specific licenses, porting, etc.
+
+  Our home page can be found at
+
+    http://www.freetype.org
+
+===============================================================================
+
+OpenGL used in the GL/VR version of VPX
+
+Copyright (c) 2008-2018 The Khronos Group Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and/or associated documentation files (the
+"Materials"), to deal in the Materials without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Materials, and to
+permit persons to whom the Materials are furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Materials.
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+
+===============================================================================
+
+OpenGL glad headers are Public Domain/WTFPL/CC0 https://github.com/Dav1dde/glad/issues/101
+
+===============================================================================
+
+OpenGL Stereo Rendering with less DrawCalls based on https://github.com/kondrak/oculusvr_samples used in the GL/VR version of VPX
+
+Copyright (c) 2016 Krzysztof Kondrak
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
 
 
-Discord - Rich Presence - RPC library
-Copyright © 2017 Discord, Inc.
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The GPLv3+ License:
 
-QtKeyChain - Platform-independent Qt API for storing passwords securely
-Copyright © 2011-2019 Frank Osterfeld <frank.osterfeld@gmail.com>.
-The [2-Clause] BSD Licence
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Copyright (C) 2000-2024 Visual Pinball development team and contributors
+                        (unless specifically noted differently in a respective source file)
 
-singleshot_connect.h - part of KDToolBox
-Github: KDToolBox
-Copyright © 2020-2021 Klarälvdalens Datakonsult AB, a KDAB Group company, <info@kdab.comF>.
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Visual Pinball is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-utf8_filenames.lua - modifies standard Lua functions so that they work with UTF-8 filenames on Windows
-Github GIST
-Copyright © 2019 Egor-Skriptunoff
-The MIT License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Visual Pinball is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details: <https://www.gnu.org/licenses/>.
+
+
+https://docs.mamedev.org/license.html
+
+The MAME project as a whole is distributed under the terms of the GNU General Public License, version 2 or later (GPL-2.0+), since it contains code made available under multiple GPL-compatible licenses. A great majority of files (over 90% including core files) are under the 3-Clause BSD License and we would encourage new contributors to distribute files under this license.
+
+Please note that MAME is a registered trademark of Gregory Ember, and permission is required to use the “MAME” name, logo, or wordmark.
+
+    Copyright (c) 1997-2024 MAMEDev and contributors
+
+    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+Please see the license information for further details.
+
+
+PinMAME
+
+
+IMPORTANT NOTE:
+---------------
+
+As of May 2019, we, the PinMAME team, are working on replacing
+the inherited 'old MAME' license (listed directly below) by
+the 3-Clause BSD License (which is listed at the very end of this file),
+similar to the achievement of the current MAME team.
+
+Each source file that is already under the BSD-3-Clause will have its
+very first line marked with
+// license:BSD-3-Clause
+Every file that doesn't, will stay (for now) under the 'old MAME' license.
+
+Some sub-directories will also feature their own license file, if necessary,
+that overrides this file here.
+
+
+I. Purpose
+----------
+   PinMAME is strictly a non-profit project. Its main purpose is to be a reference
+   to the inner workings of the emulated arcade machines. This is done for
+   educational purposes and to prevent many historical games from sinking into
+   oblivion once the hardware they run on stops working. Of course to preserve
+   the games, you must also be able to actually play them; you can consider
+   that a nice side effect.
+   It is not our intention to infringe on any copyrights or patents on the
+   original games. All of PinMAME's source code is either our own or freely
+   available. To operate, the emulator requires images of the original ROMs
+   from the arcade machines, which must be provided by the user. No portion of
+   the original ROM codes are included in the executable.
+
+II. Cost
+--------
+   PinMAME is free. Its source code is free. Selling either is not allowed.
+
+III. ROM Images
+---------------
+   ROM images are copyrighted material. Most of them cannot be distributed
+   freely. Distribution of PinMAME on the same physical medium as illegal copies
+   of ROM images is strictly forbidden.
+   You are not allowed to distribute PinMAME in any form if you sell, advertise,
+   or publicize illegal CD-ROMs or other media containing ROM images. This
+   restriction applies even if you don't make money, directly or indirectly,
+   from those activities. You are allowed to make ROMs and PinMAME available for
+   download on the same website, but only if you warn users about the ROMs's
+   copyright status, and make it clear that users must not download ROMs unless
+   they are legally entitled to do so.
+
+IV. Source Code Distribution
+----------------------------
+   If you distribute the binary (compiled) version of PinMAME, you should also
+   distribute the source code. If you can't do that, you must provide a link
+   to a site where the source can be obtained. https://github.com/vpinball/pinmame
+
+V. Distribution Integrity
+-------------------------
+   This chapter applies to the official PinMAME distribution. See below for
+   limitations on the distribution of derivative works.
+   PinMAME must be distributed only in the original archives. You are not allowed
+   to distribute a modified version, nor to remove and/or add files to the
+   archive.
+
+VI. Reuse of Source Code
+--------------------------
+   This chapter might not apply to specific portions of PinMAME (e.g. CPU
+   emulators, or the files featuring already the new BSD-3-Clause) which bear
+   different copyright notices.
+   The source code cannot be used in a commercial product without the written
+   authorization of the authors. Use in non-commercial products is allowed, and
+   indeed encouraged.  If you use portions of the PinMAME source code in your
+   program, however, you must make the full source code freely available as
+   well (note again: not for the files featuring already the new BSD-3-Clause).
+   Usage of the _information_ contained in the source code is free for any use.
+   However, given the amount of time and energy it took to collect this
+   information, if you find new information we would appreciate if you made it
+   freely available as well.
+
+VII. Derivative Works
+---------------------
+   Derivative works are allowed, provided their source code is freely
+   available. However, these works are discouraged. PinMAME is a continuously-
+   -evolving project. It is in your best interests to submit your contributions
+   to the PinMAME development team, so they may be integrated into the main
+   distribution.
+   There are some specific modifications to the source code which go against
+   the spirit of the project. They are NOT considered a derivative work, and
+   distribution of executables containing them is strictly forbidden. Such
+   modifications include, but are not limited to:
+   - enabling games that are disabled
+   - changing the ROM verification commands so that they report missing games
+   - removing the startup information screens
+   If you make a derivative work, you are not allowed to call it PinMAME. You must
+   use a different name to make clear that it is a PinMAME derivative, not an
+   official distribution from the PinMAME team. Simply calling it PinMAME followed or
+   preceded by a punctuation mark (e.g. PinMAME+) is not sufficient. The name must
+   be clearly distinct (e.g. REPinMAME). The version number must also match the
+   number of the official PinMAME version from which you derived your version.
+
+
+The 3-Clause BSD License:
+
+Copyright (C) 1999-2025 PinMAME development team and contributors
+                        (unless specifically noted differently in a respective source file)
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation and/or
+   other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may
+   be used to endorse or promote products derived from this software without specific
+   prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+OF SUCH DAMAGE.
+
+
+
+===============================================================================
+
+
+===============================================================================
+                           GZDOOM / UZDOOM
+===============================================================================
+
+            GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://github.com/UZDoom/UZDoom/blob/trunk/LICENSE
+
+UZDoom default brightmaps
+
+Copyright 1998-2016 ZDoom Maintainers and Contributors Copyright 2005-2025 GZDoom Maintainers and Contributors Copyright 2025-2026 UZDoom Maintainers and Contributors
+
+The content in here is based on original game content, i.e.
+
+    You may not sell this work - this also means that this file may not be distributed with commercial standalone games based on the UZDoom engine.
+
+    Your work must comply with id Software's original licenses (i.e. they must only work on the game from which they originated)
+
+    All derivative works must credit the original authors (id Software (Doom), Raven Software (Hexen/Heretic), Rogue Software (Strife)
+
+===============================================================================
+
+===============================================================================
+                           ScummVM
+===============================================================================
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
+https://github.com/scummvm/scummvm/blob/master/COPYING
 
-https://github.com/Mudlet/Mudlet/blob/development/COPYING
+
+
+
+===============================================================================
+
+===============================================================================
+                           Solarus
+===============================================================================
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+https://gitlab.com/solarus-games/solarus/-/blob/dev/license
+
+===============================================================================
+
+===============================================================================
+                           IKEMAN GO
+===============================================================================
+
+MIT License
+
+Copyright (c) 2016 Suehiro
+Copyright (c) 2018 K4thos
+Copyright (c) 2018 ShinLucho
+Copyright (c) 2018 NeatUnsou
+Copyright (c) 2019 Windblade
+Copyright (c) 2019 Dan
+Copyright (c) 2019 Kidcy
+Copyright (c) 2020 Wintermourn
+Copyright (c) 2020 Shiyo Kakuge
+Copyright (c) 2021 Kamekaze
+Copyright (c) 2021 two4teezee
+Copyright (c) 2021 Super
+Copyright (c) 2022 Eiton
+Copyright (c) 2022 Sam Hocevar
+Copyright (c) 2022 GaryCXJk
+Copyright (c) 2022 Lazin3ss
+Copyright (c) 2022 potsmugen
+Copyright (c) 2023 BwdYeti
+Copyright (c) 2023 fantasma
+Copyright (c) 2023 Wftk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+The MIT License applies to the Ikemen GO engine and the scripts in this repo.
+
+----------------------------------------------------------------------------
+
+以下に定める条件に従い、本ソフトウェアおよび関連文書のファイル（以下「ソフトウェア」）
+の複製を取得するすべての人に対し、ソフトウェアを無制限に扱うことを無償で許可します。
+これには、ソフトウェアの複製を使用、複写、変更、結合、掲載、頒布、サブライセンス、および
+または販売する権利、およびソフトウェアを提供する相手に同じことを許可する権利も無制限に含まれます。
+
+上記の著作権表示および本許諾表示を、ソフトウェアのすべての複製または重要な部分に記載するものとします。
+
+ソフトウェアは「現状のまま」で、明示であるか暗黙であるかを問わず、何らの保証もなく提供されます。
+ここでいう保証とは、商品性、特定の目的への適合性、および権利非侵害についての保証も含みますが、
+それに限定されるものではありません。 作者または著作権者は、契約行為、不法行為、またはそれ以外であろうと、
+ソフトウェアに起因または関連し、あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、
+その他の義務について何らの責任も負わないものとします。
+
+----------------------------------------------------------------------------
+
+Work contributed to Ikemen GO by various artists is licensed under a Creative Commons Attribution 3.0 Unported License.
+http://creativecommons.org/licenses/by/3.0/deed.en_US
+The license applies to following assets:
+- The "default-3x5" font by Gacel.
+- The icon/logo of the engine by Cylia Margatroid.
+
+----------------------------------------------------------------------------
+
+On release builds the engine is packed with more assets that could have different licences.
+If you are using a release build check the "ScreenpackLicence.txt" file for more info.
+
+
+===============================================================================
+
+
+===============================================================================
+                              Ironwail
+===============================================================================
+
+
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 2, June 1991
+
+https://github.com/andrei-drexler/ironwail/blob/master/LICENSE.txt
+
+
+===============================================================================
 
 
 ===============================================================================
 
 ===============================================================================
-                           Satellaview+
+                            ECWolf
 ===============================================================================
 
-RetroDECK has received explicit permission from the Satellaview+ developers
-to implement and distribute Satellaview+ as part of the RetroDECK platform.
+The code in ECWolf is licensed under a variety of licenses. The zlib code uses it's own license and a few dependencies are LGPL. If not compiling for the GPL, the MAME license also applies.
 
-Approval Date:
-    2025-02-13
+All new code, be it from ZDoom or ECWolf itself, falls under a 3-point BSD.
+
+Wolfenstein 3D License
+
+ECWolf is dual licensed under both the original non-commercial license or the GNU GPL. The GPL but can be switched off with -DGPL=OFF in cmake. The two versions are identical except the OPL emulator is changed to MAME's from the one from Dosbox.
+
+It is important to note that id Software has not done any packaged re-releases of the Wolf3D source under the GPL, but Doom has not been officially re-released either. The following quote from John Carmack dated March 20th, 2009 seems to indicate that use of the GPL has been allowed since Doom was re-licensed.
+
+    I released the original source for Wolfenstein 3D many years ago, originally under a not-for-commercial purposes license, then later under the GPL.
+
+The Wolf4SDL debian packages also confirms the GPL re-release of Wolfenstein 3D.
+
 
 ===============================================================================
+                           OpenBOR
+===============================================================================
+
+
+Copyright (c) 2003, Roel van Mastbergen & Senile Team
+Copyright (c) 2004, OpenBOR Team
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+Neither the name of the Senile Team, OpenBOR Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
@@ -3374,8 +3357,35 @@ Approval Date:
 
 
 
+
+===============================================================================
+                             Ludusavi 
 ===============================================================================
 
+MIT License
+
+Copyright (c) 2020 Matthew T. Kennerly (mtkennerly)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+===============================================================================
 
 ===============================================================================
                             Floating IPS (Flips)
