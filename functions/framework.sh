@@ -283,6 +283,27 @@ add_setting_line() {
 
   case $3 in
 
+  "es_settings" ) # For es_settings.xml, wrap "name=... value=..." in the correct self-closing XML tag for the value's type
+    local setting_value=$(echo "$current_setting_line" | grep -o -P '(?<=value=").*(?=")')
+    local xml_tag
+    if [[ "$setting_value" == "true" || "$setting_value" == "false" ]]; then
+      xml_tag="bool"
+    elif [[ "$setting_value" =~ ^-?[0-9]+$ ]]; then
+      xml_tag="int"
+    elif [[ "$setting_value" =~ ^-?[0-9]+\.[0-9]+$ ]]; then
+      xml_tag="float"
+    else
+      xml_tag="string"
+    fi
+    current_setting_line="<$xml_tag $current_setting_line />"
+
+    if [[ -f "$1" ]]; then
+      sed -i '$ a '"$current_setting_line"'' "$1"
+    else # If the file doesn't exist, sed add doesn't work for the first line
+      echo "$current_setting_line" > "$1"
+    fi
+    ;;
+
   * )
     if [[ -z $current_section_name ]]; then
       if [[ -f "$1" ]]; then
