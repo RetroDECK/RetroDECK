@@ -101,6 +101,34 @@
     <project_license>GPL-3.0</project_license>
     <metadata_license>CC0-1.0</metadata_license>
     <releases>
+        <release version="0.10.10b" date="2026-10-03">
+            <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.10b/</url>
+            <description>
+                <p>ADDED:</p>
+                <ul>
+                    <li>PPSSPP: Exposed PSP/GAME to retrodeck/storage/PPSSPP/GAME.</li>
+                    <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/GAME to retrodeck/storage/retroarch-core/PPSSPP/GAME.</li>
+                    <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/shaders to retrodeck/shaders/retroarch-core/PPSSPP/shaders.</li>
+                </ul>
+                <p>FIXED/CHANGED:</p>
+                <ul>
+                    <li>BIOS CHECKER: Added and corrected MD5 hash values.</li>
+                    <li>ES-DE: Prevented helper templates from overwriting custom Rules and Systems.</li>
+                    <li>EASTER EGGS: Corrected some Easter Egg Splash dates.</li>
+                    <li>FRAMEWORK: Fixed Flatpak library pathing error in manifest.</li>
+                    <li>FRAMEWORK: Upgraded to org.kde.Platform 6.11.</li>
+                    <li>ICONS: Resolved multiple icon alignment and background issues.</li>
+                    <li>MELONDS: Reset Configuration reset due to changes in the toml structure.</li>
+                    <li>RETROARCH: Resolved compatibility issue with genesis_plus_gx_paprium_libretro core.</li>
+                    <li>RETROARCH: Resolved configuration issues with the MelonDS DS cores OpenGL renderer and the number of selectable layouts.</li>
+                    <li>VITA3K: Resolved longstanding org.kde.Platform compatibility issue blocking updates.</li>
+                </ul>
+                <p>UPDATED:</p>
+                <ul>
+                    <li>Azahar, Dolphin, ES-DE, MAME, PCSX2, Ruffle, RPCS3, Solarus, SRM, Xemu, Vita3K, XRoar</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.10.9b" date="2026-05-30">
             <url>https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version_0.10.0b/0.10.9b/</url>
             <description>

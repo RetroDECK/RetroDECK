@@ -7,8 +7,8 @@
    xml:space="preserve"
    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
    id="svg17"
-   sodipodi:docname="icon (pride).svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="icon-pride.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -25,20 +25,20 @@
    inkscape:deskcolor="#d1d1d1"
    showgrid="false"
    inkscape:zoom="3.3398438"
-   inkscape:cx="147.31228"
+   inkscape:cx="147.7614"
    inkscape:cy="177.85263"
-   inkscape:window-width="1920"
-   inkscape:window-height="1009"
-   inkscape:window-x="-8"
-   inkscape:window-y="-8"
+   inkscape:window-width="3840"
+   inkscape:window-height="2082"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
    inkscape:window-maximized="1"
-   inkscape:current-layer="Left-Symbol" />
+   inkscape:current-layer="svg17" />
     <g
    transform="matrix(1.88235,0,0,1.86861,-7.52941,-5.60584)"
    id="g4">
         <path
    d="M140,37.25C140,18.347 124.765,3 106,3L38,3C19.235,3 4,18.347 4,37.25L4,105.75C4,124.653 19.235,140 38,140L106,140C124.765,140 140,124.653 140,105.75L140,37.25Z"
-   style="fill:rgb(17,17,17);"
+   style="fill:#000000"
    id="path2" />
     </g>
     <g
