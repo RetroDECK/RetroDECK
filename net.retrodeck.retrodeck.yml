@@ -25,7 +25,7 @@ add-extensions:
   # FFmpeg libraries and extra codecs, replaces org.freedesktop.Platform.ffmpeg-full
   org.freedesktop.Platform.codecs_extra.i386:
     directory: lib/i386-linux-gnu/codecs-extra
-    version: '25.08-extra'
+    version: 25.08-extra
     autodelete: false
     add-ld-path: lib
 
@@ -77,13 +77,13 @@ finish-args:
   # Gamescope integration
   - --filesystem=xdg-run/gamescope-0:ro
   # - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
-  
+
   # Multi-arch support (32-bit libs on 64-bit)
   - --allow=multiarch
 
   # Network 
   - --share=network
-  
+
   # Environmental Paths: MangoHud, JRE (Java based Systems), Gamescope and OBS (Disabled for now) 
   # - --env=PATH=/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
 
@@ -98,7 +98,7 @@ finish-args:
 
   # X11: Display server access, SDL window-class
   - --socket=x11
-  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
 
   # Xemu: openSUSE QEMU_AUDIO_DRV fix
   - --unset-env=QEMU_AUDIO_DRV
@@ -203,8 +203,8 @@ modules:
       - --disable-debug
     sources:
       - type: archive
-        url: https://download.samba.org/pub/rsync/src/rsync-3.4.3.tar.gz
-        sha256: c72e63ca3021cbc80ba86ec30102773f4c5631fbc492b52e773b3958f82a53d3
+        url: https://download.samba.org/pub/rsync/src/rsync-3.5.1.tar.gz
+        sha256: c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef
         x-checker-data:
           type: anitya
           project-id: 4217
@@ -219,8 +219,8 @@ modules:
         sources:
           - type: git
             url: https://github.com/Cyan4973/xxHash/
-            tag: v0.8.3
-            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
+            tag: v0.8.4
+            commit: c87183a77d67f7d37e3d2d1b7eaac5e7c695e4f0
             x-checker-data:
               type: anitya
               project-id: 17583
@@ -259,9 +259,9 @@ modules:
         url: https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.9.tar.xz
         sha256: a2c9ae7b770da34860050c309f903221c67830c86e4a7e760692b803df95143a
     cleanup:
-    - /compat/xmlstarlet/include
-    - /compat/xmlstarlet/lib/pkgconfig
-    - /compat/xmlstarlet/share
+      - /compat/xmlstarlet/include
+      - /compat/xmlstarlet/lib/pkgconfig
+      - /compat/xmlstarlet/share
 
   - name: xmlstarlet
     config-opts:
