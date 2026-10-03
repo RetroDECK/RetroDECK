@@ -529,8 +529,8 @@ https://github.com/shadps4-emu/shadPS4/blob/main/LICENSE
                              azahar
 ===============================================================================
 
-		    GNU GENERAL PUBLIC LICENSE
-		       Version 2, June 1991
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
 
 https://github.com/azahar-emu/azahar/blob/master/license.txt           
 
