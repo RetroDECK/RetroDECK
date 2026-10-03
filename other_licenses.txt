@@ -113,7 +113,7 @@ COMMUNITY AND THIRD-PARTY COMPONENTS
 
 RetroDECK assumes no responsibility or liability for community-created, user-created, or other third-party modifications, additions, modules, plugins, patches, extensions, scripts, or other external components (collectively, "Third-Party Components") that are developed, distributed, installed, or used outside the official RetroDECK distribution.
 
-The installation via RetroLACE or other method, modification, execution, or use of Third-Party Components is undertaken entirely at the user's own risk including those. RetroDECK does not warrant, endorse, maintain, or guarantee the functionality, security, compatibility, legality, availability, or continued support of Third-Party Components that are not part of the official RetroDECK distribution.
+The installation via RetroLACE or other method, modification, execution, or use of Third-Party Components is undertaken entirely at the user's own risk. RetroDECK does not warrant, endorse, maintain, or guarantee the functionality, security, compatibility, legality, availability, or continued support of Third-Party Components that are not part of the official RetroDECK distribution.
 
 To the maximum extent permitted by applicable law, RetroDECK and its contributors shall not be responsible or liable for any damage, loss, malfunction, data loss, security issue, compatibility issue, legal claim, or other consequence arising from the installation or use of such Third-Party Components.
 
