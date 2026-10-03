@@ -136,6 +136,7 @@
                     <li>PPSSPP: Exposed PSP/GAME to retrodeck/storage/PPSSPP/GAME.</li>
                     <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/GAME to retrodeck/storage/retroarch-core/PPSSPP/GAME.</li>
                     <li>PPSSPP-Core: Exposed retroarch/saves/PPSSPP/PSP/shaders to retrodeck/shaders/retroarch-core/PPSSPP/shaders.</li>
+                    <li>MELONDS: Added and mapped new cheats directory retrodeck/cheats/MelonDS/.</li>
                 </ul>
                 <p>FIXED/CHANGED:</p>
                 <ul>
