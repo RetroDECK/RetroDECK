@@ -25,7 +25,7 @@ add-extensions:
   # FFmpeg libraries and extra codecs, replaces org.freedesktop.Platform.ffmpeg-full
   org.freedesktop.Platform.codecs_extra.i386:
     directory: lib/i386-linux-gnu/codecs-extra
-    version: '25.08-extra'
+    version: 25.08-extra
     autodelete: false
     add-ld-path: lib
 
@@ -64,11 +64,9 @@ finish-args:
   # Filesystem: GTK-3 configuration (read-only)
   - --filesystem=xdg-config/gtk-3.0:ro
 
-
   # Filesystem: lsfg-vk, Steam for Lossless.dll
 
   - --filesystem=xdg-config/lsfg-vk:rw
-  - --filesystem=~/.local/share/Steam/steamapps/common:ro
   - --env=LSFGVK_FLATPAK=1
   - --env=LSFGVK_CONFIG=~/.config/lsfg-vk/conf.toml
 
@@ -85,13 +83,13 @@ finish-args:
   # Gamescope integration
   - --filesystem=xdg-run/gamescope-0:ro
   # - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
-  
+
   # Multi-arch support (32-bit libs on 64-bit)
   - --allow=multiarch
 
   # Network 
   - --share=network
-  
+
   # Environmental Paths: MangoHud, JRE (Java based Systems), Gamescope and OBS (Disabled for now) 
   # - --env=PATH=/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
 
@@ -106,7 +104,7 @@ finish-args:
 
   # X11: Display server access, SDL window-class
   - --socket=x11
-  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck      
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
 
   # Xemu: openSUSE QEMU_AUDIO_DRV fix
   - --unset-env=QEMU_AUDIO_DRV
@@ -197,8 +195,8 @@ modules:
       - --disable-debug
     sources:
       - type: archive
-        url: https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz
-        sha256: 2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
+        url: https://download.samba.org/pub/rsync/src/rsync-3.5.1.tar.gz
+        sha256: c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef
         x-checker-data:
           type: anitya
           project-id: 4217
@@ -236,9 +234,9 @@ modules:
         url: https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.9.tar.xz
         sha256: a2c9ae7b770da34860050c309f903221c67830c86e4a7e760692b803df95143a
     cleanup:
-    - /compat/xmlstarlet/include
-    - /compat/xmlstarlet/lib/pkgconfig
-    - /compat/xmlstarlet/share
+      - /compat/xmlstarlet/include
+      - /compat/xmlstarlet/lib/pkgconfig
+      - /compat/xmlstarlet/share
 
   - name: xmlstarlet
     config-opts:
