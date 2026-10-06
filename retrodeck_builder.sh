@@ -18,6 +18,7 @@ APPLICATION_REPO="RetroDECK/RetroDECK"
 APPLICATION_SOURCES_FILE="application-sources.json"
 VERSION_FILE="version"
 OUT_FOLDER="output"
+CI="${CI:-}"
 
 COUNTERTOP_CORE_COMPONENTS=(
   "framework"
@@ -189,7 +190,7 @@ sanitize_branch() {
 }
 
 is_ci() {
-    [[ "$CI" == "true" ]]
+  [[ "$CI" == "true" ]]
 }
 
 # =============================================================================
