@@ -447,16 +447,6 @@ build_flatpak() {
 }
 
 # =============================================================================
-# CI Variable Export
-# =============================================================================
-
-export_ci_variables() {
-  if is_ci; then
-    echo "version=$VERSION_STRING" >> "$GITHUB_OUTPUT"
-  fi
-}
-
-# =============================================================================
 # Main
 # =============================================================================
 
@@ -543,8 +533,10 @@ main() {
   echo "=== Building Flatpak ==="
   build_flatpak "$VERSION_STRING"
 
-  echo "=== Exporting CI variables ==="
-  export_ci_variables
+  if is_ci; then
+    echo "=== Exporting CI variables ==="
+    echo "version=$VERSION_STRING" >> "$GITHUB_OUTPUT"
+  fi
 
   echo "=== Build complete ==="
 }
