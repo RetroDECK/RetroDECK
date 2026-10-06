@@ -32,6 +32,7 @@ COUNTERTOP_CORE_COMPONENTS=(
 parse_args() {
   local build_type=""
   local use_ccache=false
+  local use_fuse=true
   local no_bundle=false
   local dry_run=false
   local extra_builder_args=""
@@ -45,6 +46,10 @@ parse_args() {
         ;;
       --ccache)
         use_ccache=true
+        shift
+        ;;
+      --no-fuse)
+        use_fuse=false
         shift
         ;;
       --no-bundle)
@@ -104,6 +109,7 @@ parse_args() {
 
   BUILD_TYPE="$build_type"
   USE_CCACHE="$use_ccache"
+  USE_FUSE="$use_fuse"
   NO_BUNDLE="$no_bundle"
   DRY_RUN="$dry_run"
   EXTRA_BUILDER_ARGS="$extra_builder_args"
@@ -116,6 +122,7 @@ call_help() {
     echo "Options:"
     echo "  --build-flatpak <type>       Specify the build type (full, epicure, countertop)"
     echo "  --ccache                    Enable ccache for faster rebuilds"
+    echo "  --no-fuse                   Disables the use for fuse for systems which do not support it"
     echo "  --no-bundle                 Skip bundle creation step"
     echo "  --dry-run                   Print build commands without executing"
     echo "  --flatpak-builder-args <args> Extra arguments to pass to flatpak-builder"
@@ -391,6 +398,10 @@ build_flatpak() {
 
   if [[ "$USE_CCACHE" == true ]]; then
     builder_cmd+=" --ccache"
+  fi
+
+  if [[ ! "$USE_FUSE" == true ]]; then
+    builder_cmd+=" --disable-rofiles-fuse"
   fi
 
   if [[ -n "$EXTRA_BUILDER_ARGS" ]]; then
