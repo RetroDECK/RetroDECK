@@ -301,6 +301,40 @@ modules:
             project-id: 4848
             url-template: http://www.dest-unreach.org/socat/download/socat-$version.tar.gz
 
+  # -------------------------------------------------------------------------
+  # yad - Zenity-alternative dialog.
+  # -------------------------------------------------------------------------
+
+  - name: yad
+    config-opts:
+      - --enable-standalone
+      - --disable-icon-browser
+      - --disable-tools
+    sources:
+      - type: archive
+        url: https://github.com/v1cont/yad/releases/download/v15.0/yad-15.0.tar.xz
+        sha256: 7cf4dc136a643bf484ceab27d9b28a513624dffe38a08731132c0e4e24073772
+        x-checker-data:
+          type: anitya
+          project-id: 5280
+          stable-only: true
+          url-template: https://github.com/v1cont/yad/releases/download/v$version/yad-$version.tar.xz
+    cleanup:
+      - /share/icons
+    modules:
+      - name: intltool
+        cleanup:
+          - '*'
+        sources:
+          - type: archive
+            url: https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
+            sha256: 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd
+        x-checker-data:
+          type: anitya
+          project-id: 1385
+          stable-only: true
+          url-template: https://launchpad.net/intltool/trunk/$version/+download/intltool-$version.tar.gz
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #                     RetroDECK: Internal Modules
