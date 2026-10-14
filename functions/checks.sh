@@ -222,26 +222,18 @@ check_version_is_older_than() {
   local current_version="$1"
   local new_version="$2"
 
-  # Extract the version number by finding the segment containing dots (e.g. "0.10.1b")
-  local current_extracted new_extracted
+  # Extract the version number by finding the segment containing dots (e.g. "0.10.1b"), without its trailing non-numeric suffix (e.g. "b")
+  local current_clean new_clean
 
-  if [[ "$current_version" =~ ([0-9]+\.[0-9]+[0-9.]*[a-z]*) ]]; then
-    current_extracted="${BASH_REMATCH[1]}"
-  else
+  if ! rd_version_number "$current_version" current_clean; then
     log e "Could not extract version from: $current_version"
     return 1
   fi
 
-  if [[ "$new_version" =~ ([0-9]+\.[0-9]+[0-9.]*[a-z]*) ]]; then
-    new_extracted="${BASH_REMATCH[1]}"
-  else
+  if ! rd_version_number "$new_version" new_clean; then
     log e "Could not extract version from: $new_version"
     return 1
   fi
-
-  # Strip trailing non-numeric suffix (e.g. "b")
-  local current_clean="${current_extracted%%[!0-9.]*}"
-  local new_clean="${new_extracted%%[!0-9.]*}"
 
   if [[ "$current_clean" == "$new_clean" ]]; then
     # Pre-production builds (any prefix present) always run updates for their matching version

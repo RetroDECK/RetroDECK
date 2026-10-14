@@ -925,3 +925,156 @@ detect_host() {
   log i "Resolution: ${system_display_width:-unknown} x ${system_display_height:-unknown}"
   [[ "$sd_native_resolution" == true ]] && log i "Steam Deck native resolution detected"
 }
+
+rd_version_parse() {
+  # USAGE: rd_version_parse "$version" "$number_var" "$type_var" "$stamp_var"
+  # Splits a version string into its number ("0.11.0"), build type and build timestamp
+  # Returns 1 when no version number can be found
+
+  local raw="$1"
+  local -n number_ref="$2"
+  local -n type_ref="$3"
+  local -n stamp_ref="$4"
+
+  # Strip surrounding whitespace
+  raw="${raw#"${raw%%[![:space:]]*}"}"
+  raw="${raw%"${raw##*[![:space:]]}"}"
+
+  local number
+  if ! rd_version_number "$raw" number; then
+    return 1
+  fi
+  # The segment as written, letters included, to find what comes before it
+  [[ "$raw" =~ ([0-9]+\.[0-9]+[0-9.]*[a-z]*) ]]
+  local extracted="${BASH_REMATCH[1]}"
+
+  # Validate numbers can be parsed cleanly
+  while [[ "$number" == *. ]]; do
+    number="${number%.}"
+  done
+  if [[ ! "$number" =~ ^[0-9]+(\.[0-9]+)+$ ]]; then
+    return 1
+  fi
+  number_ref="$number"
+
+  # Validate build timestamp, accomodating cooker codenames and countertop build suffix
+  stamp_ref=""
+  if [[ "$raw" =~ -([0-9]{4})-([0-9]{2})-([0-9]{2})(-([0-9]{6}))?(-[a-z]+)?$ ]]; then
+    stamp_ref="${BASH_REMATCH[1]}${BASH_REMATCH[2]}${BASH_REMATCH[3]}${BASH_REMATCH[5]:-000000}"
+  fi
+
+  # Validate build type prefix, if any
+  local before="${raw%%"$extracted"*}"
+  local type="${before%%-*}"
+
+  case "$type" in
+    "")
+      local after="${raw#*"$extracted"}"
+      if [[ -z "$after" ]]; then
+        type_ref="$RD_TYPE_RELEASE"
+      else
+        # A bare number with something after it, some kind of pre-release
+        type_ref="$RD_TYPE_PRERELEASE"
+      fi
+      ;;
+    cooker | countertop | branch)
+      type_ref="$RD_TYPE_PRERELEASE"
+      ;;
+    epicure)
+      type_ref="$RD_TYPE_EPICURE"
+      ;;
+    *)
+      type_ref="$RD_TYPE_UNKNOWN"
+      ;;
+  esac
+
+  return 0
+}
+
+rd_version_compare_numbers() {
+  # USAGE: rd_version_compare_numbers "$number_a" "$number_b"
+  # Compares dotted numbers field by field, the shorter padded with zeros, so "0.11" equals "0.11.0"
+  # Returns RD_VERSION_EQUAL / NEWER / OLDER codes, see static_vars.sh
+
+  local -a parts_a
+  local -a parts_b
+  IFS='.' read -r -a parts_a <<< "$1"
+  IFS='.' read -r -a parts_b <<< "$2"
+
+  local length="${#parts_a[@]}"
+  if [[ "${#parts_b[@]}" -gt "$length" ]]; then
+    length="${#parts_b[@]}"
+  fi
+
+  local index=0
+  while [[ "$index" -lt "$length" ]]; do
+    local field_a="${parts_a[index]:-0}"
+    local field_b="${parts_b[index]:-0}"
+
+    # Strip leading zeros and compare as strings by length, then value
+    field_a="${field_a#"${field_a%%[!0]*}"}"
+    field_b="${field_b#"${field_b%%[!0]*}"}"
+
+    if [[ "${#field_a}" -gt "${#field_b}" ]]; then
+      return "$RD_VERSION_NEWER"
+    elif [[ "${#field_a}" -lt "${#field_b}" ]]; then
+      return "$RD_VERSION_OLDER"
+    elif [[ "$field_a" > "$field_b" ]]; then
+      return "$RD_VERSION_NEWER"
+    elif [[ "$field_a" < "$field_b" ]]; then
+      return "$RD_VERSION_OLDER"
+    fi
+
+    index=$((index + 1))
+  done
+
+  return "$RD_VERSION_EQUAL"
+}
+
+compare_versions() {
+  # USAGE: compare_versions "$version_a" "$version_b"
+  # Returns RD_VERSION_* code, see static_vars.sh
+
+  local number_a type_a stamp_a
+  local number_b type_b stamp_b
+
+  if ! rd_version_parse "$1" number_a type_a stamp_a || ! rd_version_parse "$2" number_b type_b stamp_b; then
+    return "$RD_VERSION_UNPARSEABLE"
+  fi
+
+  rd_version_compare_numbers "$number_a" "$number_b"
+  local by_number=$?
+  if [[ "$by_number" -ne "$RD_VERSION_EQUAL" ]]; then
+    return "$by_number"
+  fi
+
+  if [[ "$1" == "$2" ]]; then
+    return "$RD_VERSION_EQUAL"
+  fi
+
+  # A build type this function does not know cannot be parsed reliably
+  if [[ "$type_a" -eq "$RD_TYPE_UNKNOWN" || "$type_b" -eq "$RD_TYPE_UNKNOWN" ]]; then
+    return "$RD_VERSION_INCOMPARABLE"
+  fi
+
+  if [[ "$type_a" -gt "$type_b" ]]; then
+    return "$RD_VERSION_NEWER"
+  elif [[ "$type_a" -lt "$type_b" ]]; then
+    return "$RD_VERSION_OLDER"
+  fi
+
+  # Validate if one provided version carries a "b" suffix, but is otherwise the same version number
+  if [[ "$type_a" -eq "$RD_TYPE_RELEASE" ]]; then
+    return "$RD_VERSION_EQUAL"
+  fi
+
+  # If same build type and version number, validate that both contain build timestamps
+  if [[ -z "$stamp_a" || -z "$stamp_b" || "$stamp_a" == "$stamp_b" ]]; then
+    return "$RD_VERSION_INCOMPARABLE"
+  fi
+
+  if [[ "$stamp_a" > "$stamp_b" ]]; then
+    return "$RD_VERSION_NEWER"
+  fi
+  return "$RD_VERSION_OLDER"
+}
