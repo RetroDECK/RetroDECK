@@ -32,6 +32,11 @@ set -- "${args[@]}"
 # Load application static variables
 source /app/libexec/static_vars.sh
 
+if [[ ! -n "$hard_version" ]]; then
+  log e "hard_version could not be read, something has gone horribly wrong, exiting before more damage to install occurs"
+  exit 1
+fi
+
 # Load core libraries
 for file in /app/libexec/*.sh; do
   case "$(basename "$file")" in
@@ -115,6 +120,11 @@ else
   log i "Loading RetroDECK config file from $rd_conf"
 
   conf_read
+
+  if [[ ! -n "$version" ]]; then
+    log e "version cannot be read, something has gone horribly wrong, exiting before more damage to install occurs"
+    exit 1
+  fi
 
   build_component_manifest_cache
 
