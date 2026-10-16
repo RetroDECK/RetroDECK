@@ -1078,3 +1078,19 @@ compare_versions() {
   fi
   return "$RD_VERSION_OLDER"
 }
+
+rd_yad() {
+  # USAGE: rd_yad <args>
+  # Filters expected Gtk-related warnings from logs, passes everything else along normally
+  
+  yad --window-icon="net.retrodeck.retrodeck" --center --borders=12 "$@" 2> >(grep -v -E 'Gtk-(WARNING|CRITICAL|Message)|GLib-GObject|dbind-WARNING|Fontconfig' >&2)
+}
+
+
+rd_yad_backed_out() {
+  # USAGE: rd_yad_backed_out "$exit_code"
+  # Returns 0 when the exit code means the user cancelled or closed the dialog
+
+  local code="$1"
+  [[ "$code" -eq "$RD_YAD_CANCEL" || "$code" -eq "$RD_YAD_ESCAPE" ]]
+}

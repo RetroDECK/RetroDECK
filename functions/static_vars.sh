@@ -37,11 +37,13 @@ export DEFAULT_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 # Specialty return codes
 
 export RD_VERSION_EQUAL=0
-export RD_VERSION_NEWER=1          # first argument is newer
-export RD_VERSION_OLDER=2          # first argument is older
-export RD_VERSION_INCOMPARABLE=3   # same number and release type, nothing orders them
+export RD_VERSION_NEWER=1
+export RD_VERSION_OLDER=2
+export RD_VERSION_INCOMPARABLE=3
 export RD_VERSION_UNPARSEABLE=4
 export RD_TYPE_PRERELEASE=0
 export RD_TYPE_RELEASE=1
 export RD_TYPE_EPICURE=2
 export RD_TYPE_UNKNOWN=9
+export RD_YAD_CANCEL=1
+export RD_YAD_ESCAPE=252
