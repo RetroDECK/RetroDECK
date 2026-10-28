@@ -4,19 +4,87 @@ body:
   - type: markdown
     attributes:
       value: |
+
+        # Before Submitting
+
         Check the wiki for tips before submitting your issue:
 
         - [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/)
         - [Known Issues](https://retrodeck.readthedocs.io/en/latest/wiki_general/known-issues/)
 
-        Each component page on the wiki also has its own 'Known Issues' section. 
+        Each component page on the wiki also has its own **Known Issues** section. 
 
-        **Support scope:** 
-        
-        RetroDECK can help with general issues affecting the application. 
-        We cannot provide support for issues specific to individual games unless it's part of a bigger issue.
+        ## Support scope
 
-        Also do not ask upstream projects for help with issues related to RetroDECK.
+        - RetroDECK can help with general issues affecting the application and the components. 
+        - We cannot provide support for issues specific to individual games unless it's part of a bigger issue.
+        - Do not contact upstream projects for RetroDECK-related issues. If you are unsure, reach out on our social channels instead.
+
+        ---
+
+  - type: markdown
+    attributes:
+      value: |
+
+        ## Hardware 
+
+        Enter details about the device you are using RetroDECK on.
+
+  - type: dropdown
+    id: device
+    validations:
+      required: true
+    attributes:
+      label: Device
+      options:
+        - Steam Deck
+        - Steam Machine
+        - Steam Frame
+        - Linux PC / HTPC
+        - Linux Gaming Handheld
+        - Other
+
+  - type: input
+    id: os_description
+    validations:
+      required: true
+    attributes:
+      label: Operating System
+      placeholder: SteamOS, Bazzite, CachyOS, Linux Mint
+      description: >
+        Enter your operating system.
+        Examples: SteamOS, Bazzite, ChimeraOS, CachyOS
+        Arch, Fedora, Ubuntu or Linux Mint.
+
+  - type: dropdown
+    id: gpu_vendor
+    attributes:
+      label: GPU Vendor for none Steam devices.
+      description: (Optional) Select your graphics card manufacturer.
+      options:
+        - AMD
+        - Intel
+        - NVIDIA
+        - Other / Don't know
+
+  - type: input
+    id: model
+    attributes:
+      label: GPU or Handheld Device Model for none Steam devices.
+      placeholder: (Optional) NVIDIA GeForce RTX 5090 or ASUS ROG Ally
+      description: >
+        Enter your GPU or handheld gaming device model.
+        Examples: NVIDIA GeForce RTX 5090, Intel Arc A770,
+        AMD Radeon RX 9070 XT, ASUS ROG Ally, ASUS ROG Ally X, 
+        Lenovo Legion Go, MSI Claw.
+
+  - type: markdown
+    attributes:
+      value: |
+
+        ## RetroDECK 
+
+        Describe the problem in RetroDECK
 
   - type: dropdown
     id: component
@@ -26,8 +94,8 @@ body:
       label: Select the affected component
       options:
         - RetroDECK
-        - RetroVERSE
         - RetroDECK Configurator
+        - RetroVERSE
         - Amiberry
         - Azahar
         - Cemu
@@ -77,43 +145,35 @@ body:
         - ZEsarUX
         - ZQuest
 
-  - type: dropdown
-    id: device
-    validations:
-      required: true
-    attributes:
-      label: Device
-      options:
-        - Steam Deck / Steam Machine
-        - Steam Frame
-        - Linux PC / HTPC
-        - Linux Gaming Handheld
-        - Other
-
-  - type: dropdown
-    id: gpu_vendor
-    validations:
-      required: true
-    attributes:
-      label: GPU Vendor
-      description: Select your graphics card manufacturer.
-      options:
-        - AMD
-        - Intel
-        - NVIDIA
-        - Other / Don't know
-
   - type: input
-    id: os_description
+    id: rd_version
     validations:
       required: true
     attributes:
-      label: Operating System
-      placeholder: SteamOS, Bazzite, CachyOS, Linux Mint
+      label: RetroDECK Version
+      placeholder: 1.0, 0.11.0, etc..
       description: >
-        Enter your operating system.
-        Examples: SteamOS, Bazzite, ChimeraOS, CachyOS
-        Arch, Fedora, Ubuntu or Linux Mint.
+        Enter your RetroDECK Version.
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Problem description
+      description: Describe what happened
+      placeholder: |
+        Describe the problem in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: (Optional) Log file or error output
+      description: |
+        Attach a log file or paste the log output
+        from the retrodeck/logs directory if there is.
+      placeholder: |
+        Drag and drop or paste the log output.
 
   - type: checkboxes
     id: check_submit
@@ -123,7 +183,7 @@ body:
       options:
         - label: I have checked the RetroDECK Wiki and known issues for relevant information and troubleshooting steps.
           required: true
-        - label: I have searched [existing GitHub issues](https://github.com/RetroDECK/RetroDECK/issues) to make sure this problem have not already been reported.
+        - label: I have searched existing GitHub issues to make sure this problem have not already been reported.
           required: true
         - label: I have asked the RetroDECK community for help on our social channels (if applicable).
-        - label: I have tried resetting the relevant settings using the RetroDECK Configurator (if applicable).
+        - label: I have tried resetting the relevant settings or factory reset using the RetroDECK Configurator (if applicable).
