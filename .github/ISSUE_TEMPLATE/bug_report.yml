@@ -1,0 +1,129 @@
+name: Bug
+description: Choose this if something isn't working and you've already checked the wiki.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the wiki for tips before submitting your issue:
+
+        - [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/)
+        - [Known Issues](https://retrodeck.readthedocs.io/en/latest/wiki_general/known-issues/)
+
+        Each component page on the wiki also has its own 'Known Issues' section. 
+
+        **Support scope:** 
+        
+        RetroDECK can help with general issues affecting the application. 
+        We cannot provide support for issues specific to individual games unless it's part of a bigger issue.
+
+        Also do not ask upstream projects for help with issues related to RetroDECK.
+
+  - type: dropdown
+    id: component
+    validations:
+      required: true
+    attributes:
+      label: Select the affected component
+      options:
+        - RetroDECK
+        - RetroVERSE
+        - RetroDECK Configurator
+        - Amiberry
+        - Azahar
+        - Cemu
+        - Commander X16
+        - Delta Patcher
+        - dhewm3
+        - Dolphin
+        - DuckStation
+        - ECWolf
+        - ES-DE
+        - FLIPS
+        - Flycast
+        - Framework
+        - GameTank
+        - Gargoyle
+        - Ironwail
+        - KEGS
+        - MAME
+        - melonDS
+        - Mudlet
+        - OpenBOR
+        - OpenSurge
+        - Oricutron
+        - PCSX2
+        - PICO-8
+        - PortMaster
+        - PPSSPP
+        - PrimeHack
+        - Quake3e
+        - RetroArch
+        - RPCS3
+        - Ruffle
+        - ScummVM
+        - SDL2TRS
+        - ShadPS4
+        - SimCoupe
+        - SM2Emu
+        - Solarus
+        - Steam ROM Manager
+        - Tsugaru
+        - UZDoom
+        - Vita3K
+        - Visual Pinball X
+        - Xemu
+        - Xenia Edge
+        - XRoar
+        - ZEsarUX
+        - ZQuest
+
+  - type: dropdown
+    id: device
+    validations:
+      required: true
+    attributes:
+      label: Device
+      options:
+        - Steam Deck / Steam Machine
+        - Steam Frame
+        - Linux PC / HTPC
+        - Linux Gaming Handheld
+        - Other
+
+  - type: dropdown
+    id: gpu_vendor
+    validations:
+      required: true
+    attributes:
+      label: GPU Vendor
+      description: Select your graphics card manufacturer.
+      options:
+        - AMD
+        - Intel
+        - NVIDIA
+        - Other / Don't know
+
+  - type: input
+    id: os_description
+    validations:
+      required: true
+    attributes:
+      label: Operating System
+      placeholder: SteamOS, Bazzite, CachyOS, Linux Mint
+      description: >
+        Enter your operating system.
+        Examples: SteamOS, Bazzite, ChimeraOS, CachyOS
+        Arch, Fedora, Ubuntu or Linux Mint.
+
+  - type: checkboxes
+    id: check_submit
+    attributes:
+      label: Before submitting
+      description: Please complete the required checks.
+      options:
+        - label: I have checked the RetroDECK Wiki and known issues for relevant information and troubleshooting steps.
+          required: true
+        - label: I have searched [existing GitHub issues](https://github.com/RetroDECK/RetroDECK/issues) to make sure this problem have not already been reported.
+          required: true
+        - label: I have asked the RetroDECK community for help on our social channels (if applicable).
+        - label: I have tried resetting the relevant settings using the RetroDECK Configurator (if applicable).
