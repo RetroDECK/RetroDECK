@@ -59,18 +59,18 @@ body:
   - type: dropdown
     id: gpu_vendor
     attributes:
-      label: GPU Vendor for none Steam devices.
+      label: GPU Vendor
       description: (Optional) Select your graphics card manufacturer.
       options:
         - AMD
         - Intel
         - NVIDIA
-        - Other / Don't know
+        - Other
 
   - type: input
     id: model
     attributes:
-      label: GPU or Handheld Device Model for none Steam devices.
+      label: GPU or Handheld Device Model
       placeholder: (Optional) NVIDIA GeForce RTX 5090 or ASUS ROG Ally
       description: >
         Enter your GPU or handheld gaming device model.
