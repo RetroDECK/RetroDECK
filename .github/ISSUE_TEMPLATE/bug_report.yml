@@ -34,13 +34,13 @@ body:
         **Don't say:** "Plz fix, RetroDECK broken."
 
         Some issues only require a short description, while others need a more detailed in-depth report. 
-        Try to convey: 
+
+        **Try to convey:** 
         
         - How it happened.
         - Whether it happens every time.
         - Whether it can be replicated.
-
-        Attach a log or log entry found under `retrodeck/logs` in the **"Log file or error output"** field.
+        - If you can, attach a log found under `retrodeck/logs` in the **"Log file or error output"** field.
 
         **Example of a shorter issue:**
 
@@ -50,7 +50,7 @@ body:
 
         In the password field, type special characters like `#!"¤€£@}]` that are part of your password. 
         
-        The login will fail.
+        The login will fail, see submitted log.
 
         ## LLM Reporting
 
@@ -59,8 +59,8 @@ body:
         - You may use an LLM as a light writing assistant to help report an issue to:
             - Overcome language barriers.
             - Correct grammar, spelling, punctuation, sentence structure and capitalisation.
-            - Communicate more effectively,for example: by helping you with markdown formatting.
-        - **The most important of them all:** you need to understand what you are reporting.
+            - Communicate more effectively, for example: by helping you with markdown formatting.
+        - **The most important of them all:** You need to understand what you are reporting.
 
 
         ---
