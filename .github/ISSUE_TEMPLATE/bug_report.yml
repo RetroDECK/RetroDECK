@@ -1,6 +1,8 @@
-name: Bug
+name: Report a bug or issue
 description: Choose this if something isn't working and you've already checked the wiki.
+title: "[Bug]: "
 body:
+
   - type: markdown
     attributes:
       value: |
@@ -20,13 +22,54 @@ body:
         - We cannot provide support for issues specific to individual games unless it's part of a bigger issue.
         - Do not contact upstream projects for RetroDECK-related issues. If you are unsure, reach out on our social channels instead.
 
+        ## A Good Report 
+
+        ### Keep your titles short and descriptive
+
+        - **Don't say:** "RetroDECK does not work." / "RetroAchievements broken." / "Crash!"
+        - **Say:** "RetroAchievements login: special characters don't work"
+
+        ### Describe the problem and how to reproduce it
+
+        **Don't say:** "Plz fix, RetroDECK broken."
+
+        Some issues only require a short description, while others need a more detailed in-depth report. 
+        Try to convey: 
+        
+        - How it happened.
+        - Whether it happens every time.
+        - Whether it can be replicated.
+
+        Attach a log or log entry found under `retrodeck/logs` in the **"Log file or error output"** field.
+
+        **Example of a shorter issue:**
+
+        The RetroAchievements login via the RetroDECK Configurator does not seem to work when adding special characters in the password field.
+
+        Open RetroDECK Configurator → Settings → RetroAchievements.
+
+        In the password field, type special characters like `#!"¤€£@}]` that are part of your password. 
+        
+        The login will fail.
+
+        ## LLM Reporting
+
+        - Fully automated issue reporting through external agents is prohibited.
+        - You need to disclose your use of the LLM.
+        - You may use an LLM as a light writing assistant to help report an issue to:
+            - Overcome language barriers.
+            - Correct grammar, spelling, punctuation, sentence structure and capitalisation.
+            - Communicate more effectively,for example: by helping you with markdown formatting.
+        - **The most important of them all:** you need to understand what you are reporting.
+
+
         ---
 
   - type: markdown
     attributes:
       value: |
 
-        ## Hardware 
+        ## Device Details
 
         Enter details about the device you are using RetroDECK on.
 
@@ -70,7 +113,7 @@ body:
   - type: input
     id: model
     attributes:
-      label: GPU or Handheld Device Model
+      label: GPU or Handheld Device Model.
       placeholder: (Optional) NVIDIA GeForce RTX 5090 or ASUS ROG Ally
       description: >
         Enter your GPU or handheld gaming device model.
@@ -81,7 +124,8 @@ body:
   - type: markdown
     attributes:
       value: |
-
+        --- 
+        
         ## RetroDECK 
 
         Describe the problem in RetroDECK
@@ -171,7 +215,7 @@ body:
       label: (Optional) Log file or error output
       description: |
         Attach a log file or paste the log output
-        from the retrodeck/logs directory if there is.
+        from the retrodeck/logs directory.
       placeholder: |
         Drag and drop or paste the log output.
 
