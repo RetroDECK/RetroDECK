@@ -218,15 +218,18 @@ substitute_placeholders() {
     local base_name=$(basename "$rom_path")
     base_name="${base_name%%.*}"
     local file_name=$(basename "$rom_path")
-    local rom_raw="$rom_path"
-    local rom_dir_raw="$rom_dir"
+    # The raw forms are the paths without the escaping above, and ES-DE substitutes them unquoted
+    local rom_raw="${rom_path//"'\\''"/"'"}"
+    local rom_dir_raw="${rom_dir//"'\\''"/"'"}"
+    # ES-DE's %ROMPATH% is the ROM directory root, not the game's own folder
+    local roms_root="${roms_path:-$rom_dir}"
     local es_path=""
     local emulator_path=""
     local start_dir=""
 
     # Substitute placeholders with the absolute path and other variables
     cmd="${cmd//"%ROM%"/"'$rom_path'"}"
-    cmd="${cmd//"%ROMPATH%"/"'$rom_dir'"}"
+    cmd="${cmd//"%ROMPATH%"/"$roms_root"}"
 
     # Manually replace %EMULATOR_*% placeholders
     while [[ "$cmd" =~ (%EMULATOR_[A-Z0-9_]+%) ]]; do
@@ -287,15 +290,15 @@ substitute_placeholders() {
     # Substitute %BASENAME% and other placeholders
     cmd="${cmd//"%BASENAME%"/"'$base_name'"}"
     cmd="${cmd//"%FILENAME%"/"'$file_name'"}"
-    cmd="${cmd//"%ROMRAW%"/"'$rom_raw'"}"
-    cmd="${cmd//"%ROMPATH%"/"'$rom_dir'"}"
+    cmd="${cmd//"%ROMRAW%"/"$rom_raw"}"
+    cmd="${cmd//"%ROMPATH%"/"$roms_root"}"
     cmd="${cmd//"%ENABLESHORTCUTS%"/""}"
     cmd="${cmd//"%EMULATOR_OS-SHELL%"/"/bin/sh"}"
     
     # Ensure paths are quoted correctly
     cmd="${cmd//"%ROM%"/"'$rom_path'"}"
     cmd="${cmd//"%GAMEDIR%"/"'$rom_dir'"}"
-    cmd="${cmd//"%GAMEDIRRAW%"/"'$rom_dir_raw'"}"
+    cmd="${cmd//"%GAMEDIRRAW%"/"$rom_dir_raw"}"
     cmd="${cmd//"%CORE_RETROARCH%"/"$ra_cores_path"}"
 
     # Log the result
