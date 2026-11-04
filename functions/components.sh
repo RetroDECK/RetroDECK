@@ -925,6 +925,37 @@ extract_release_info() {
   esac
 }
 
+upgrade_external_component() {
+  # Upgrade an installed external component from a local archive, then run its post-update handler
+  # USAGE: upgrade_external_component "$archive_path"
+
+  local archive="$1"
+
+  local component_name
+  component_name=$(get_component_name_from_archive "$archive")
+  if [[ -z "$component_name" ]]; then
+    log e "Could not determine component name from archive $archive"
+    return 1
+  fi
+
+  local previous_version
+  previous_version=$(get_installed_component_version "$component_name")
+
+  if ! install_external_component "$archive"; then
+    log e "Failed to upgrade component $component_name"
+    return 1
+  fi
+
+  local handler="_post_update::${component_name}"
+  if declare -F "$handler" > /dev/null; then
+    log d "Running post-update handler for $component_name (previous version: $previous_version)"
+    "$handler" "$previous_version"
+  fi
+
+  log i "Component $component_name upgraded from $previous_version to $(get_component_version "$component_name")"
+  return 0
+}
+
 update_external_component() {
   # Update an external component by downloading and installing a new version.
   # USAGE: update_external_component "$component_name"
