@@ -957,15 +957,13 @@ upgrade_external_component() {
 }
 
 update_external_component() {
-  # Update an external component by downloading and installing a new version.
+  # Update an external component by downloading a new version from its update source and upgrading to it.
   # USAGE: update_external_component "$component_name"
 
   local component_name="$1"
 
   local download_url
-  download_url=$(check_component_for_update "$component_name")
-
-  if [[ $? -ne 0 || -z "$download_url" ]]; then
+  if ! download_url=$(check_component_for_update "$component_name") || [[ -z "$download_url" ]]; then
     log d "No update available or no download URL for $component_name"
     return 1
   fi
@@ -975,36 +973,16 @@ update_external_component() {
   local tmp_archive
   tmp_archive=$(mktemp --suffix=".tar.gz")
 
-  if ! curl --silent --location --output "$tmp_archive" "$download_url"; then
+  if ! curl --silent --fail --location --output "$tmp_archive" "$download_url"; then
     log e "Failed to download update for $component_name"
     rm -f "$tmp_archive"
     return 1
   fi
 
-  # install_external_component handles upgrading existing components
-  if install_external_component "$tmp_archive"; then
-    log i "Component $component_name updated successfully"
-    rm -f "$tmp_archive"
-
-    # Run post-update handler
-    local previous_version
-    previous_version=$(get_installed_component_version "$component_name")
-    local handler="_post_update::${component_name}"
-    if declare -F "$handler" > /dev/null; then
-      "$handler" "$previous_version"
-    fi
-
-    # Record new version
-    local new_version
-    new_version=$(get_component_version "$component_name")
-    set_installed_component_version "$component_name" "$new_version"
-
-    return 0
-  else
-    log e "Failed to update component $component_name"
-    rm -f "$tmp_archive"
-    return 1
-  fi
+  local rc=0
+  upgrade_external_component "$tmp_archive" || rc=1
+  rm -f "$tmp_archive"
+  return "$rc"
 }
 
 check_all_external_component_updates() {
