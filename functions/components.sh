@@ -556,8 +556,8 @@ get_component_name_from_archive() {
 }
 
 install_external_component() {
-  # Install an external component from a tar.gz archive into the external components directory.
-  # Validates the archive, checks compatibility, handles shared libs/data, sources functions, and runs initialization.
+  # Install or upgrade an external component from  archive into the external components directory
+  # A component with no recorded version in component_versions gets a finit, including a reset
   # USAGE: install_external_component "$archive_path"
 
   local archive="$1"
@@ -578,29 +578,100 @@ install_external_component() {
     return 1
   fi
 
-  # Check if component already exists (internal or external)
-  local existing_path
-  existing_path=$(find_component_files "component_manifest.json" "$component_name")
+  # Read before anything changes; "0" means the component has never been initialized
+  local previous_version
+  previous_version=$(get_installed_component_version "$component_name")
 
-  if [[ -n "$existing_path" ]]; then
-    local existing_dir
-    existing_dir=$(dirname "$existing_path")
-    if [[ "$existing_dir" == "$rd_components/"* ]]; then
-      log w "Component $component_name is already installed as an internal component and will be overridden"
-    else
-      log i "Component $component_name is already installed externally, upgrading"
-      remove_external_component_files "$component_name"
+  if [[ -f "$rd_components/$component_name/component_manifest.json" && ! -d "$rd_external_components_path/$component_name" ]]; then
+    log w "Component $component_name is already installed as an internal component and will be overridden"
+  fi
+
+  if ! deploy_external_component_files "$archive" "$component_name"; then
+    log e "Failed to install component $component_name"
+    return 1
+  fi
+
+  # Rebuild the manifest cache to include the new component
+  build_component_manifest_cache
+
+  # Source the component's functions
+  local component_path="$rd_external_components_path/$component_name"
+  if [[ -f "$component_path/component_functions.sh" ]]; then
+    log d "Sourcing component functions for $component_name"
+    source "$component_path/component_functions.sh"
+  fi
+
+  # Add any new paths and options from manifest defaults, preserving existing values
+  init_component_paths "$component_name"
+  init_component_options "$component_name"
+
+  # Add preset entries for any new component or cores
+  update_component_presets
+
+  local component_version
+  component_version=$(get_component_version "$component_name")
+
+  if [[ "$previous_version" == "0" ]]; then
+    log d "Running initial setup for $component_name"
+    prepare_component "reset" "$component_name"
+  else
+    log i "Upgrading component $component_name from $previous_version to $component_version"
+    local handler="_post_update::${component_name}"
+    if declare -F "$handler" > /dev/null; then
+      log d "Running post-update handler for $component_name"
+      "$handler" "$previous_version"
+    fi
+    deploy_helper_files "$component_name"
+  fi
+
+  # Record the installed version
+  set_installed_component_version "$component_name" "$component_version"
+
+  log i "Component $component_name installed successfully"
+  return 0
+}
+
+deploy_external_component_files() {
+  # Extract a component archive into the external components directory, replacing any existing copy
+  # An existing copy is moved aside first and restored if extraction fails, so a failed upgrade leaves the old version in place
+  # USAGE: deploy_external_component_files "$archive_path" "$component_name"
+
+  local archive="$1"
+  local component_name="$2"
+  local component_path="$rd_external_components_path/$component_name"
+  local backup_dir=""
+
+  create_dir "$rd_external_components_path"
+
+  if [[ -d "$component_path" ]]; then
+    log i "Component $component_name is already installed externally, replacing its files"
+    if ! backup_dir=$(mktemp -d -p "$rd_external_components_path" ".${component_name}.previous.XXXXXX"); then
+      log e "Could not create a backup directory for $component_name"
+      return 1
+    fi
+    if ! mv "$component_path" "$backup_dir/component"; then
+      log e "Could not move the existing $component_name files aside"
+      rm -rf "$backup_dir"
+      return 1
     fi
   fi
 
-  local component_path="$rd_external_components_path/$component_name"
   log d "Extracting $archive to $component_path"
   create_dir "$component_path"
 
   if ! tar -xzf "$archive" -C "$component_path"; then
     log e "Failed to extract archive"
     rm -rf "$component_path"
+    if [[ -n "$backup_dir" ]]; then
+      log i "Restoring previous $component_name files"
+      mv "$backup_dir/component" "$component_path"
+      rm -rf "$backup_dir"
+    fi
     return 1
+  fi
+
+  if [[ -n "$backup_dir" ]]; then
+    rm -rf "$backup_dir"
   fi
 
   # Handle shared libs
@@ -618,34 +689,6 @@ install_external_component() {
     cp -a --no-clobber "$component_path/shared-data/." "$rd_external_components_path/shared-data/"
     rm -rf "$component_path/shared-data"
   fi
-
-  # Rebuild the manifest cache to include the new component
-  build_component_manifest_cache
-
-  # Source the component's functions
-  if [[ -f "$component_path/component_functions.sh" ]]; then
-    log d "Sourcing component functions for $component_name"
-    source "$component_path/component_functions.sh"
-  fi
-
-  # Initialize component options and paths from manifest defaults
-  init_component_paths "$component_name"
-  init_component_options "$component_name"
-
-  # Update presets for the new component
-  update_component_presets
-
-  # Run initialization
-  log d "Running initial setup for $component_name"
-  prepare_component "reset" "$component_name"
-
-  # Record the installed version
-  local component_version
-  component_version=$(get_component_version "$component_name")
-  set_installed_component_version "$component_name" "$component_version"
-
-  log i "Component $component_name installed successfully"
-  return 0
 }
 
 remove_external_component_files() {
@@ -925,37 +968,6 @@ extract_release_info() {
   esac
 }
 
-upgrade_external_component() {
-  # Upgrade an installed external component from a local archive, then run its post-update handler
-  # USAGE: upgrade_external_component "$archive_path"
-
-  local archive="$1"
-
-  local component_name
-  component_name=$(get_component_name_from_archive "$archive")
-  if [[ -z "$component_name" ]]; then
-    log e "Could not determine component name from archive $archive"
-    return 1
-  fi
-
-  local previous_version
-  previous_version=$(get_installed_component_version "$component_name")
-
-  if ! install_external_component "$archive"; then
-    log e "Failed to upgrade component $component_name"
-    return 1
-  fi
-
-  local handler="_post_update::${component_name}"
-  if declare -F "$handler" > /dev/null; then
-    log d "Running post-update handler for $component_name (previous version: $previous_version)"
-    "$handler" "$previous_version"
-  fi
-
-  log i "Component $component_name upgraded from $previous_version to $(get_component_version "$component_name")"
-  return 0
-}
-
 update_external_component() {
   # Update an external component by downloading a new version from its update source and upgrading to it.
   # USAGE: update_external_component "$component_name"
@@ -980,7 +992,7 @@ update_external_component() {
   fi
 
   local rc=0
-  upgrade_external_component "$tmp_archive" || rc=1
+  install_external_component "$tmp_archive" || rc=1
   rm -f "$tmp_archive"
   return "$rc"
 }
