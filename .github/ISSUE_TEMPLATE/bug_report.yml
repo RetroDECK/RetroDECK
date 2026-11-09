@@ -139,55 +139,29 @@ body:
       options:
         - RetroDECK
         - RetroDECK Configurator
-        - RetroVERSE
-        - Amiberry
         - Azahar
         - Cemu
-        - Commander X16
-        - Delta Patcher
-        - dhewm3
         - Dolphin
-        - DuckStation
-        - ECWolf
+        - DuckStation (Legacy)
         - ES-DE
         - FLIPS
-        - Flycast
-        - Framework
-        - GameTank
-        - Gargoyle
-        - Ironwail
-        - KEGS
         - MAME
         - melonDS
-        - Mudlet
         - OpenBOR
-        - OpenSurge
-        - Oricutron
         - PCSX2
         - PICO-8
         - PortMaster
         - PPSSPP
         - PrimeHack
-        - Quake3e
         - RetroArch
         - RPCS3
         - Ruffle
-        - ScummVM
-        - SDL2TRS
-        - ShadPS4
-        - SimCoupe
-        - SM2Emu
         - Solarus
         - Steam ROM Manager
-        - Tsugaru
-        - UZDoom
+        - UZDoom  / GZDoom
         - Vita3K
-        - Visual Pinball X
         - Xemu
-        - Xenia Edge
         - XRoar
-        - ZEsarUX
-        - ZQuest
 
   - type: input
     id: rd_version
