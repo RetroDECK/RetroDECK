@@ -147,12 +147,11 @@ body:
         - Delta Patcher
         - dhewm3
         - Dolphin
-        - DuckStation
+        - DuckStation (Legacy)
         - ECWolf
         - ES-DE
         - FLIPS
         - Flycast
-        - Framework
         - GameTank
         - Gargoyle
         - Ironwail
@@ -187,7 +186,7 @@ body:
         - Xenia Edge
         - XRoar
         - ZEsarUX
-        - ZQuest
+        - ZQuest Classic
 
   - type: input
     id: rd_version
