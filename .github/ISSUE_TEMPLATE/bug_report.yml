@@ -1,0 +1,233 @@
+name: Report a bug or issue
+description: Choose this if something isn't working and you've already checked the wiki.
+title: "[Bug]: "
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+
+        # Before Submitting
+
+        Check the wiki for tips before submitting your issue:
+
+        - [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/)
+        - [Known Issues](https://retrodeck.readthedocs.io/en/latest/wiki_general/known-issues/)
+
+        Each component page on the wiki also has its own **Known Issues** section. 
+
+        ## Support scope
+
+        - RetroDECK can help with general issues affecting the application and the components. 
+        - We cannot provide support for issues specific to individual games unless it's part of a bigger issue.
+        - Do not contact upstream projects for RetroDECK-related issues. If you are unsure, reach out on our social channels instead.
+
+        ## A Good Report 
+
+        ### Keep your titles short and descriptive
+
+        - **Don't say:** "RetroDECK does not work." / "RetroAchievements broken." / "Crash!"
+        - **Say:** "RetroAchievements login: special characters don't work"
+
+        ### Describe the problem and how to reproduce it
+
+        **Don't say:** "Plz fix, RetroDECK broken."
+
+        Some issues only require a short description, while others need a more detailed in-depth report. 
+
+        **Try to convey:** 
+        
+        - How it happened.
+        - Whether it happens every time.
+        - Whether it can be replicated.
+        - If you can, attach a log found under `retrodeck/logs` in the **"Log file or error output"** field.
+
+        **Example of a shorter issue:**
+
+        The RetroAchievements login via the RetroDECK Configurator does not seem to work when adding special characters in the password field.
+
+        Open RetroDECK Configurator → Settings → RetroAchievements.
+
+        In the password field, type special characters like `#!"¤€£@}]` that are part of your password. 
+        
+        The login will fail, see submitted log.
+
+        ## LLM Reporting
+
+        - Fully automated issue reporting through external agents is prohibited.
+        - You need to disclose your use of the LLM.
+        - You may use an LLM as a light writing assistant to help report an issue to:
+            - Overcome language barriers.
+            - Correct grammar, spelling, punctuation, sentence structure and capitalisation.
+            - Communicate more effectively, for example: by helping you with markdown formatting.
+        - **The most important of them all:** You need to understand what you are reporting.
+
+
+        ---
+
+  - type: markdown
+    attributes:
+      value: |
+
+        ## Device Details
+
+        Enter details about the device you are using RetroDECK on.
+
+  - type: dropdown
+    id: device
+    validations:
+      required: true
+    attributes:
+      label: Device
+      options:
+        - Steam Deck
+        - Steam Machine
+        - Steam Frame
+        - Linux PC / HTPC
+        - Linux Gaming Handheld
+        - Other
+
+  - type: input
+    id: os_description
+    validations:
+      required: true
+    attributes:
+      label: Operating System
+      placeholder: SteamOS, Bazzite, CachyOS, Linux Mint
+      description: >
+        Enter your operating system.
+        Examples: SteamOS, Bazzite, ChimeraOS, CachyOS
+        Arch, Fedora, Ubuntu or Linux Mint.
+
+  - type: dropdown
+    id: gpu_vendor
+    attributes:
+      label: GPU Vendor
+      description: (Optional) Select your graphics card manufacturer.
+      options:
+        - AMD
+        - Intel
+        - NVIDIA
+        - Other
+
+  - type: input
+    id: model
+    attributes:
+      label: GPU or Handheld Device Model.
+      placeholder: (Optional) NVIDIA GeForce RTX 5090 or ASUS ROG Ally
+      description: >
+        Enter your GPU or handheld gaming device model.
+        Examples: NVIDIA GeForce RTX 5090, Intel Arc A770,
+        AMD Radeon RX 9070 XT, ASUS ROG Ally, ASUS ROG Ally X, 
+        Lenovo Legion Go, MSI Claw.
+
+  - type: markdown
+    attributes:
+      value: |
+        --- 
+        
+        ## RetroDECK 
+
+        Describe the problem in RetroDECK
+
+  - type: dropdown
+    id: component
+    validations:
+      required: true
+    attributes:
+      label: Select the affected component
+      options:
+        - RetroDECK
+        - RetroDECK Configurator
+        - RetroVERSE
+        - Amiberry
+        - Azahar
+        - Cemu
+        - Commander X16
+        - Delta Patcher
+        - dhewm3
+        - Dolphin
+        - DuckStation
+        - ECWolf
+        - ES-DE
+        - FLIPS
+        - Flycast
+        - Framework
+        - GameTank
+        - Gargoyle
+        - Ironwail
+        - KEGS
+        - MAME
+        - melonDS
+        - Mudlet
+        - OpenBOR
+        - OpenSurge
+        - Oricutron
+        - PCSX2
+        - PICO-8
+        - PortMaster
+        - PPSSPP
+        - PrimeHack
+        - Quake3e
+        - RetroArch
+        - RPCS3
+        - Ruffle
+        - ScummVM
+        - SDL2TRS
+        - ShadPS4
+        - SimCoupe
+        - SM2Emu
+        - Solarus
+        - Steam ROM Manager
+        - Tsugaru
+        - UZDoom
+        - Vita3K
+        - Visual Pinball X
+        - Xemu
+        - Xenia Edge
+        - XRoar
+        - ZEsarUX
+        - ZQuest
+
+  - type: input
+    id: rd_version
+    validations:
+      required: true
+    attributes:
+      label: RetroDECK Version
+      placeholder: 1.0, 0.11.0, etc..
+      description: >
+        Enter your RetroDECK Version.
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Problem description
+      description: Describe what happened
+      placeholder: |
+        Describe the problem in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: (Optional) Log file or error output
+      description: |
+        Attach a log file or paste the log output
+        from the retrodeck/logs directory.
+      placeholder: |
+        Drag and drop or paste the log output.
+
+  - type: checkboxes
+    id: check_submit
+    attributes:
+      label: Before submitting
+      description: Please complete the required checks.
+      options:
+        - label: I have checked the RetroDECK Wiki and known issues for relevant information and troubleshooting steps.
+          required: true
+        - label: I have searched existing GitHub issues to make sure this problem have not already been reported.
+          required: true
+        - label: I have asked the RetroDECK community for help on our social channels (if applicable).
+        - label: I have tried resetting the relevant settings or factory reset using the RetroDECK Configurator (if applicable).
