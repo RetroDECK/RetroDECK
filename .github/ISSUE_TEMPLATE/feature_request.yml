@@ -1,0 +1,110 @@
+name: Feature Request
+description: Choose this if you want to suggest new functionallity or have an idea.
+title: "[Feature]: "
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+
+        # Before Submitting
+
+        Check the following (to make sure this feature request is not already planned or suggested): 
+        
+        - [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/)
+        - [RetroDECK Blog](https://retrodeck.readthedocs.io/en/latest/blog/)
+        - Existing GitHub issues.
+
+        ## Rules
+
+        - You understand that the RetroDECK Team can reject your idea under any circumstances.
+        - You understand that the RetroDECK Team has the final say on the matter.
+        - You understand that you must be respectful and kind.
+        - You understand that your idea must follow current RetroDECK social and ethical rules.
+
+        ## A Good Idea 
+
+        ### Keep your titles short and descriptive
+
+        - **Don't say:** "Improve RetroDECK." / "Add support for something useful, ya n00bs."
+        - **Say:** "Add VCMI to the RetroVERSE" / "Add preset for Discord Rich Presence."
+
+        ### Describe the idea
+
+        **Don't say:** "I think all these systems suck, I want this system instead."
+
+        Some ideas only require a short description, while others need a more detailed in-depth report. 
+
+        **Try to convey:**
+
+        - What functionality is being requested and how you want it to work.
+        - Where it fits into RetroDECK.
+        - If it's a new component, where is it available, in what format, what license and for what OS and architecture?
+        - Examples of other projects that have implemented something similar (if there are any).
+
+        **Example of a shorter feature request:**
+
+        I think you should add VCMI the FOSS Heroes of Might and Magic III Engine into the RetroVERSE.
+
+        VCMI is a enables cross-platform online multiplayer with enhanced features like higher resolutions and built-in mod support.
+
+        I want it selectable in the ports menu in ES-DE, if possible I would like to launch specific Heroes 3 mods as seperate ES-DE entries.
+
+        It already exists in projects like PortMaster. It can be downloaded for Linux as a flatpak from Flathub or AppImage on their GitHub.
+
+        There are both ARM64 and x64 versions.
+
+        **VCMI Links:**
+        
+        - [VCMI Flathub](https://flathub.org/eu/apps/eu.vcmi.VCMI)
+        - [VCMI PortMaster](https://portmaster.games/detail.html?name=vcmi)
+        - [VCMI Webpage](https://vcmi.eu/)
+        - [VCMI GitHub](https://github.com/vcmi/vcmi)
+        - [VCMI License](https://github.com/vcmi/vcmi/blob/develop/license.txt) GPL-2.0
+
+        ## LLM Submitted Ideas
+
+        - Fully automated feature requests through external agents is prohibited.
+        - You need to disclose your use of the LLM.
+        - You may use an LLM as a light writing assistant to write your ideas to:
+            - Overcome language barriers.
+            - Correct grammar, spelling, punctuation, sentence structure and capitalisation.
+            - Communicate more effectively, for example: by helping you with markdown formatting.
+        - **The most important of them all:** You need to understand what your idea is.
+
+        ---
+
+  - type: dropdown
+    id: feature_class
+    validations:
+      required: true
+    attributes:
+      label: Categorize your idea
+      description: Choose a broad category
+      options:
+        - New Component - Built-in to RetroDECK
+        - New Item on the RetroVERSE
+        - New Feature
+        - Other
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Feature Request Description
+      description: Describe your idea
+      placeholder: |
+        Describe the idea in detail.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: check_submit
+    attributes:
+      label: Before submitting
+      description: Please complete the required checks.
+      options:
+        - label: I have checked the RetroDECK Wiki and blog to make sure this feature request is not already planned.
+          required: true
+        - label: I have searched existing GitHub issues to make sure this feature request have not already been suggested.
+          required: true
+        - label: I have asked the RetroDECK community for guidence or feedback on our social channels (if applicable).
